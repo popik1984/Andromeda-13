@@ -1,10 +1,20 @@
-
 /obj/structure/chair/e_chair
 	name = "electric chair"
-	desc = "Looks absolutely SHOCKING!"
+	desc = "Результат ШОКИРУЕТ!"
+	gender = MALE
 	icon_state = "echair0"
 	var/last_time = 1
 	item_chair = null
+
+/obj/structure/chair/e_chair/get_ru_names()
+	return list(
+		NOMINATIVE = "электрический стул",
+		GENITIVE = "электрического стула",
+		DATIVE = "электрическому стулу",
+		ACCUSATIVE = "электрический стул",
+		INSTRUMENTAL = "электрическим стулом",
+		PREPOSITIONAL = "электрическом стуле",
+	)
 
 /obj/structure/chair/e_chair/Initialize(mapload)
 	. = ..()
