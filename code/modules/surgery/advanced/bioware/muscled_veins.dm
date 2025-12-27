@@ -5,8 +5,8 @@
 	possible_locs = list(BODY_ZONE_CHEST)
 	steps = list(
 		/datum/surgery_step/incise,
-		/datum/surgery_step/retract_skin,
-		/datum/surgery_step/clamp_bleeders,
+		/datum/surgery_step/retract/skin,
+		/datum/surgery_step/clamp/vessels,
 		/datum/surgery_step/incise,
 		/datum/surgery_step/incise,
 		/datum/surgery_step/apply_bioware/muscled_veins,
@@ -31,7 +31,7 @@
 	)
 
 /datum/surgery_step/apply_bioware/muscled_veins
-	name = "формирование мышцы вен (рука)"
+	name = "формирование мышцы вен"
 
 /datum/surgery_step/apply_bioware/muscled_veins/preop(mob/user, mob/living/carbon/target, target_zone, obj/item/tool, datum/surgery/surgery)
 	display_results(

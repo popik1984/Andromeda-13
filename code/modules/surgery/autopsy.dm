@@ -4,7 +4,7 @@
 	possible_locs = list(BODY_ZONE_CHEST)
 	steps = list(
 		/datum/surgery_step/incise,
-		/datum/surgery_step/retract_skin,
+		/datum/surgery_step/retract/skin,
 		/datum/surgery_step/autopsy,
 		/datum/surgery_step/close,
 	)
@@ -29,7 +29,7 @@
 	return TRUE
 
 /datum/surgery_step/autopsy
-	name = "Проведите вскрытие (сканер аутопсии)"
+	name = "Проведите сканирование"
 	implements = list(/obj/item/autopsy_scanner = 100)
 	time = 10 SECONDS
 	success_sound = 'sound/machines/printer.ogg'
@@ -38,8 +38,8 @@
 	display_results(
 		user,
 		target,
-		span_notice("Вы приступаете к вскрытию [target]..."),
-		span_notice("[user] использует [tool.declent_ru(ACCUSATIVE)] для вскрытия [target]."),
+		span_notice("Вы приступаете к сканированию [target]..."),
+		span_notice("[user] использует [tool.declent_ru(ACCUSATIVE)] для сканирования [target]."),
 		span_notice("[user] использует [tool.declent_ru(ACCUSATIVE)] на груди у [target]."),
 	)
 	display_pain(target, "Вы чувствуете жжение в груди!")

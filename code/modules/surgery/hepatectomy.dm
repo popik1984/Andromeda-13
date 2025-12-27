@@ -5,9 +5,9 @@
 	possible_locs = list(BODY_ZONE_CHEST)
 	steps = list(
 		/datum/surgery_step/incise,
-		/datum/surgery_step/retract_skin,
+		/datum/surgery_step/retract/skin,
 		/datum/surgery_step/saw,
-		/datum/surgery_step/clamp_bleeders,
+		/datum/surgery_step/clamp/vessels,
 		/datum/surgery_step/incise,
 		/datum/surgery_step/hepatectomy,
 		/datum/surgery_step/close,
@@ -34,7 +34,7 @@
 ////hepatectomy, removes damaged parts of the liver so that the liver may regenerate properly
 //95% chance of success, not 100 because organs are delicate
 /datum/surgery_step/hepatectomy
-	name = "удалите поврежденный участок печени (скальпель)"
+	name = "удалите поврежденный участок печени"
 	implements = list(
 		TOOL_SCALPEL = 95,
 		/obj/item/melee/energy/sword = 65,

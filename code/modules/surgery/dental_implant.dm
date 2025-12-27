@@ -88,7 +88,7 @@
 	return TRUE
 
 /datum/surgery_step/search_teeth
-	name = "осмотрите зубы (рука)"
+	name = "осмотрите зубы"
 	accept_hand = TRUE
 	time = 2 SECONDS
 	repeatable = TRUE

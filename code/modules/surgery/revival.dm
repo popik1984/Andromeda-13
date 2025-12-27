@@ -7,9 +7,9 @@
 	surgery_flags = SURGERY_REQUIRE_RESTING | SURGERY_MORBID_CURIOSITY
 	steps = list(
 		/datum/surgery_step/incise,
-		/datum/surgery_step/retract_skin,
+		/datum/surgery_step/retract/skin,
 		/datum/surgery_step/saw,
-		/datum/surgery_step/clamp_bleeders,
+		/datum/surgery_step/clamp/vessels,
 		/datum/surgery_step/incise,
 		/datum/surgery_step/revive,
 		/datum/surgery_step/close,
@@ -55,12 +55,12 @@
 	return TRUE
 
 /datum/surgery_step/revive
-	name = "шокируйте мозг (дефибриллятор)"
+	name = "шокируйте мозг"
 	implements = list(
 		/obj/item/shockpaddles = 100,
 		/obj/item/melee/touch_attack/shock = 100,
 		/obj/item/melee/baton/security = 75,
-		/obj/item/gun/energy = 60)
+		/obj/item/gun/energy = 20)
 	repeatable = TRUE
 	time = 5 SECONDS
 	success_sound = 'sound/effects/magic/lightningbolt.ogg'

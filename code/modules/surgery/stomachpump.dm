@@ -3,9 +3,9 @@
 	possible_locs = list(BODY_ZONE_CHEST)
 	steps = list(
 		/datum/surgery_step/incise,
-		/datum/surgery_step/retract_skin,
+		/datum/surgery_step/retract/skin,
 		/datum/surgery_step/incise,
-		/datum/surgery_step/clamp_bleeders,
+		/datum/surgery_step/clamp/vessels,
 		/datum/surgery_step/stomach_pump,
 		/datum/surgery_step/close,
 	)
@@ -32,7 +32,7 @@
 
 //Working the stomach by hand in such a way that you induce vomiting.
 /datum/surgery_step/stomach_pump
-	name = "промойте желудок (рука)"
+	name = "промойте желудок"
 	accept_hand = TRUE
 	repeatable = TRUE
 	time = 2 SECONDS

@@ -5,9 +5,9 @@
 	possible_locs = list(BODY_ZONE_HEAD)
 	steps = list(
 		/datum/surgery_step/incise,
-		/datum/surgery_step/retract_skin,
+		/datum/surgery_step/retract/skin,
 		/datum/surgery_step/saw,
-		/datum/surgery_step/clamp_bleeders,
+		/datum/surgery_step/clamp/vessels,
 		/datum/surgery_step/lobotomize,
 		/datum/surgery_step/close,
 	)
@@ -35,7 +35,7 @@
 	return TRUE
 
 /datum/surgery_step/lobotomize
-	name = "выполнить лоботомию (скальпель)"
+	name = "выполнить лоботомию"
 	implements = list(
 		TOOL_SCALPEL = 85,
 		/obj/item/melee/energy/sword = 55,

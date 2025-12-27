@@ -5,8 +5,8 @@
 	possible_locs = list(BODY_ZONE_CHEST)
 	steps = list(
 		/datum/surgery_step/incise,
-		/datum/surgery_step/retract_skin,
-		/datum/surgery_step/clamp_bleeders,
+		/datum/surgery_step/retract/skin,
+		/datum/surgery_step/clamp/vessels,
 		/datum/surgery_step/incise,
 		/datum/surgery_step/incise,
 		/datum/surgery_step/apply_bioware/splice_nerves,
@@ -31,7 +31,7 @@
 	)
 
 /datum/surgery_step/apply_bioware/splice_nerves
-	name = "сращивание нервов (рука)"
+	name = "сращивание нервов"
 	time = 15.5 SECONDS
 
 /datum/surgery_step/apply_bioware/splice_nerves/preop(mob/user, mob/living/carbon/target, target_zone, obj/item/tool, datum/surgery/surgery)

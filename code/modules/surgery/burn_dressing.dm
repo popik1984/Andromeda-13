@@ -33,7 +33,7 @@
 
 ///// Debride
 /datum/surgery_step/debride
-	name = "удалите инфекцию (гемостат)"
+	name = "удалите инфекцию"
 	implements = list(
 		TOOL_HEMOSTAT = 100,
 		TOOL_SCALPEL = 85,
@@ -130,7 +130,7 @@
 
 ///// Dressing burns
 /datum/surgery_step/dress
-	name = "перебинтуйте ожоги (марля/хирургическая лента)"
+	name = "перебинтуйте ожоги"
 	implements = list(
 		/obj/item/stack/medical/gauze = 100,
 		/obj/item/stack/sticky_tape/surgical = 100)

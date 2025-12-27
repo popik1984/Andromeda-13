@@ -5,8 +5,8 @@
 	possible_locs = list(BODY_ZONE_HEAD)
 	steps = list(
 		/datum/surgery_step/incise,
-		/datum/surgery_step/retract_skin,
-		/datum/surgery_step/clamp_bleeders,
+		/datum/surgery_step/retract/skin,
+		/datum/surgery_step/clamp/vessels,
 		/datum/surgery_step/incise,
 		/datum/surgery_step/incise,
 		/datum/surgery_step/apply_bioware/imprint_cortex,
@@ -38,7 +38,7 @@
 	return ..()
 
 /datum/surgery_step/apply_bioware/imprint_cortex
-	name = "отпечаток коры (рука)"
+	name = "отпечаток коры"
 
 /datum/surgery_step/apply_bioware/imprint_cortex/preop(mob/user, mob/living/carbon/target, target_zone, obj/item/tool, datum/surgery/surgery)
 	display_results(

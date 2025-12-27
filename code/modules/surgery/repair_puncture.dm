@@ -39,7 +39,7 @@
 
 ///// realign the blood vessels so we can reweld them
 /datum/surgery_step/repair_innards
-	name = "восстановление кровеносных сосудов (гемостат)"
+	name = "восстановление кровеносных сосудов"
 	implements = list(
 		TOOL_HEMOSTAT = 100,
 		TOOL_SCALPEL = 85,
@@ -99,7 +99,7 @@
 
 ///// Sealing the vessels back together
 /datum/surgery_step/seal_veins
-	name = "проведите венозное сваривание (коагулятор)" // if your doctor says they're going to weld your blood vessels back together, you're either A) on SS13, or B) in grave mortal peril
+	name = "проведите венозное соединение" // if your doctor says they're going to weld your blood vessels back together, you're either A) on SS13, or B) in grave mortal peril
 	implements = list(
 		TOOL_CAUTERY = 100,
 		/obj/item/gun/energy/laser = 90,

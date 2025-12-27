@@ -4,9 +4,9 @@
 	possible_locs = list(BODY_ZONE_CHEST)
 	steps = list(
 		/datum/surgery_step/incise,
-		/datum/surgery_step/retract_skin,
+		/datum/surgery_step/retract/skin,
 		/datum/surgery_step/saw,
-		/datum/surgery_step/clamp_bleeders,
+		/datum/surgery_step/clamp/vessels,
 		/datum/surgery_step/incise_heart,
 		/datum/surgery_step/coronary_bypass,
 		/datum/surgery_step/close,
@@ -34,7 +34,7 @@
 
 //an incision but with greater bleed, and a 90% base success chance
 /datum/surgery_step/incise_heart
-	name = "надрежьте сердце (скальпель)"
+	name = "надрежьте сердце"
 	implements = list(
 		TOOL_SCALPEL = 90,
 		/obj/item/melee/energy/sword = 45,
@@ -102,7 +102,7 @@
 
 //grafts a coronary bypass onto the individual's heart, success chance is 90% base again
 /datum/surgery_step/coronary_bypass
-	name = "проведите коронарное шунтирование (гемостат)"
+	name = "проведите коронарное шунтирование"
 	implements = list(
 		TOOL_HEMOSTAT = 90,
 		TOOL_WIRECUTTER = 35,

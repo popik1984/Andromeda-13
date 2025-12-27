@@ -6,8 +6,8 @@
 	possible_locs = list(BODY_ZONE_CHEST)
 	steps = list(
 		/datum/surgery_step/incise,
-		/datum/surgery_step/retract_skin,
-		/datum/surgery_step/clamp_bleeders,
+		/datum/surgery_step/retract/skin,
+		/datum/surgery_step/clamp/vessels,
 		/datum/surgery_step/incise,
 		/datum/surgery_step/incise,
 		/datum/surgery_step/apply_bioware/reinforce_ligaments,
@@ -33,7 +33,7 @@
 	)
 
 /datum/surgery_step/apply_bioware/reinforce_ligaments
-	name = "укрепить связки (рука)"
+	name = "укрепить связки"
 
 /datum/surgery_step/apply_bioware/reinforce_ligaments/preop(mob/user, mob/living/carbon/target, target_zone, obj/item/tool, datum/surgery/surgery)
 	display_results(

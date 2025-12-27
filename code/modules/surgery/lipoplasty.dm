@@ -3,7 +3,7 @@
 	possible_locs = list(BODY_ZONE_CHEST)
 	steps = list(
 		/datum/surgery_step/incise,
-		/datum/surgery_step/clamp_bleeders,
+		/datum/surgery_step/clamp/vessels,
 		/datum/surgery_step/cut_fat,
 		/datum/surgery_step/remove_fat,
 		/datum/surgery_step/close,
@@ -30,9 +30,10 @@
 
 //cut fat
 /datum/surgery_step/cut_fat
-	name = "срежьте лишний жир (циркулярная пила)"
+	name = "срежьте лишний жир"
 	implements = list(
 		TOOL_SAW = 100,
+		TOOL_SCALPEL = 100,
 		/obj/item/shovel/serrated = 75,
 		/obj/item/hatchet = 35,
 		/obj/item/knife/butcher = 25,

@@ -6,8 +6,8 @@
 	possible_locs = list(BODY_ZONE_CHEST)
 	steps = list(
 		/datum/surgery_step/incise,
-		/datum/surgery_step/retract_skin,
-		/datum/surgery_step/clamp_bleeders,
+		/datum/surgery_step/retract/skin,
+		/datum/surgery_step/clamp/vessels,
 		/datum/surgery_step/incise,
 		/datum/surgery_step/expand_windpipe,
 		/datum/surgery_step/close,
@@ -22,7 +22,7 @@
 	return (patient.has_quirk(/datum/quirk/item_quirk/asthma))
 
 /datum/surgery_step/expand_windpipe
-	name = "расширте трахею (ретрактор)"
+	name = "расширте трахею"
 	implements = list(
 		TOOL_RETRACTOR = 80,
 		TOOL_WIRECUTTER = 45,

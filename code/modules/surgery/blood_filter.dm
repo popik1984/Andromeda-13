@@ -3,7 +3,7 @@
 	possible_locs = list(BODY_ZONE_CHEST)
 	steps = list(
 		/datum/surgery_step/incise,
-		/datum/surgery_step/retract_skin,
+		/datum/surgery_step/retract/skin,
 		/datum/surgery_step/incise,
 		/datum/surgery_step/filter_blood,
 		/datum/surgery_step/close,
@@ -67,7 +67,7 @@
 	return FALSE
 
 /datum/surgery_step/filter_blood
-	name = "Проведите фильтрацию крови (фильтр крови)"
+	name = "Проведите фильтрацию крови"
 	implements = list(/obj/item/blood_filter = 95)
 	repeatable = TRUE
 	time = 2.5 SECONDS

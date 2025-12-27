@@ -1,35 +1,146 @@
+/**
+ * MARK: Ампутация/органики
+ */
 
+// Голова
 /datum/surgery/amputation
 	name = "Ампутация"
 	surgery_flags = SURGERY_REQUIRE_RESTING | SURGERY_REQUIRE_LIMB | SURGERY_MORBID_CURIOSITY
 	possible_locs = list(
-		BODY_ZONE_R_ARM,
-		BODY_ZONE_L_ARM,
-		BODY_ZONE_L_LEG,
-		BODY_ZONE_R_LEG,
 		BODY_ZONE_HEAD,
 	)
 	steps = list(
 		/datum/surgery_step/incise,
-		/datum/surgery_step/retract_skin,
-		/datum/surgery_step/clamp_bleeders,
-		/datum/surgery_step/saw,
-		/datum/surgery_step/clamp_bleeders,
+		/datum/surgery_step/retract/skin,
+		/datum/surgery_step/cauterize/vessels,
+		/datum/surgery_step/incise,
+		/datum/surgery_step/retract/tissues,
+		/datum/surgery_step/find/artery,
+		/datum/surgery_step/clamp/artery,
+		/datum/surgery_step/incise/artery,
+		/datum/surgery_step/cauterize/artery,
+		/datum/surgery_step/find/artery,
+		/datum/surgery_step/clamp/artery,
+		/datum/surgery_step/incise/artery,
+		/datum/surgery_step/retract/tissues,
+		/datum/surgery_step/find/vein,
+		/datum/surgery_step/clamp/vein,
+		/datum/surgery_step/incise/vein,
+		/datum/surgery_step/cauterize/vein,
+		/datum/surgery_step/find/nerve,
+		/datum/surgery_step/incise,
 		/datum/surgery_step/sever_limb,
 	)
 
+// Руки
+/datum/surgery/amputation/arm
+	possible_locs = list(
+		BODY_ZONE_R_ARM,
+		BODY_ZONE_L_ARM,
+	)
+	steps = list(
+		/datum/surgery_step/incise,
+		/datum/surgery_step/retract/skin,
+		/datum/surgery_step/cauterize/vessels,
+		/datum/surgery_step/find/vein,
+		/datum/surgery_step/clamp/vein,
+		/datum/surgery_step/incise/vein,
+		/datum/surgery_step/cauterize/vein,
+		/datum/surgery_step/incise,
+		/datum/surgery_step/retract/tissues,
+		/datum/surgery_step/incise,
+		/datum/surgery_step/retract/tissues,
+		/datum/surgery_step/find/artery,
+		/datum/surgery_step/clamp/artery,
+		/datum/surgery_step/incise/artery,
+		/datum/surgery_step/cauterize/artery,
+		/datum/surgery_step/find/nerve,
+		/datum/surgery_step/incise,
+		/datum/surgery_step/retract/tissues,
+		/datum/surgery_step/sever_limb,
+	)
+
+// Ноги
+/datum/surgery/amputation/leg
+	possible_locs = list(
+		BODY_ZONE_L_LEG,
+		BODY_ZONE_R_LEG,
+	)
+	steps = list(
+		/datum/surgery_step/incise,
+		/datum/surgery_step/retract/skin,
+		/datum/surgery_step/cauterize/vessels,
+		/datum/surgery_step/find/vein,
+		/datum/surgery_step/clamp/vein,
+		/datum/surgery_step/incise/vein,
+		/datum/surgery_step/cauterize/vein,
+		/datum/surgery_step/incise,
+		/datum/surgery_step/retract/tissues,
+		/datum/surgery_step/find/artery,
+		/datum/surgery_step/clamp/artery,
+		/datum/surgery_step/incise/artery,
+		/datum/surgery_step/cauterize/artery,
+		/datum/surgery_step/find/nerve,
+		/datum/surgery_step/incise,
+		/datum/surgery_step/retract/tissues,
+		/datum/surgery_step/sever_limb,
+	)
+
+/**
+ * MARK: Ампутация/силиконы
+ */
+
+// Голова
 /datum/surgery/amputation/mechanic
 	name = "Разбор"
+	possible_locs = list(
+		BODY_ZONE_HEAD,
+	)
 	requires_bodypart_type = BODYTYPE_ROBOTIC
 	steps = list(
 		/datum/surgery_step/mechanic_open,
 		/datum/surgery_step/open_hatch,
-		/datum/surgery_step/sever_limb/mechanic, //The benefit of being robotic; people can pull you apart in an instant! Wait, that's not a benefit...
+		/datum/surgery_step/sever_limb/mechanic,
 	)
+
+// Руки
+/datum/surgery/amputation/mechanic/arm
+	possible_locs = list(
+		BODY_ZONE_R_ARM,
+		BODY_ZONE_L_ARM,
+	)
+	steps = list(
+		/datum/surgery_step/mechanic_open,
+		/datum/surgery_step/open_hatch,
+		/datum/surgery_step/sever_limb/mechanic,
+	)
+
+// Ноги
+/datum/surgery/amputation/mechanic/leg
+	possible_locs = list(
+		BODY_ZONE_L_LEG,
+		BODY_ZONE_R_LEG,
+	)
+	steps = list(
+		/datum/surgery_step/mechanic_open,
+		/datum/surgery_step/open_hatch,
+		/datum/surgery_step/sever_limb/mechanic,
+	)
+
+/**
+ * MARK: Пиратские приколы
+ */
 
 /datum/surgery/amputation/peg
 	name = "Отсоединить"
 	requires_bodypart_type = BODYTYPE_PEG
+	possible_locs = list(
+		BODY_ZONE_HEAD,
+		BODY_ZONE_R_ARM,
+		BODY_ZONE_L_ARM,
+		BODY_ZONE_L_LEG,
+		BODY_ZONE_R_LEG,
+	)
 	steps = list(
 		/datum/surgery_step/sever_limb/peg,	//Easy come, easy go
 	)
@@ -40,9 +151,8 @@
 	return ..()
 
 /datum/surgery_step/sever_limb
-	name = "отрежьте конечность (циркулярная пила)"
+	name = "отрежьте конечность"
 	implements = list(
-		TOOL_SCALPEL = 100,
 		TOOL_SAW = 100,
 		/obj/item/shovel/serrated = 75,
 		/obj/item/melee/arm_blade = 80,
@@ -50,7 +160,7 @@
 		/obj/item/hatchet = 40,
 		/obj/item/knife/butcher = 25,
 	)
-	time = 6.4 SECONDS
+	time = 5 SECONDS
 	preop_sound = 'sound/items/handling/surgery/scalpel1.ogg'
 	success_sound = 'sound/items/handling/surgery/organ2.ogg'
 	surgery_effects_mood = TRUE

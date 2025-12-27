@@ -25,12 +25,12 @@
 
 /obj/item/retractor/get_ru_names()
 	return list(
-		NOMINATIVE = "щипцы",
-		GENITIVE = "щипцов",
-		DATIVE = "щипцам",
-		ACCUSATIVE = "щипцы",
-		INSTRUMENTAL = "щипцами",
-		PREPOSITIONAL = "щипцах",
+		NOMINATIVE = "расширитель",
+		GENITIVE = "расширителя",
+		DATIVE = "расширителю",
+		ACCUSATIVE = "расширитель",
+		INSTRUMENTAL = "расширителем",
+		PREPOSITIONAL = "расширителе",
 	)
 
 
@@ -733,13 +733,13 @@
 	SIGNAL_HANDLER
 
 	tool_behaviour = (active ? TOOL_HEMOSTAT : TOOL_RETRACTOR)
-	balloon_alert(user, "режим [active ? "зажима" : "ретракции"]")
+	balloon_alert(user, "режим [active ? "зажима" : "расширения"]")
 	playsound(user ? user : src, 'sound/items/tools/change_drill.ogg', 50, TRUE)
 	return COMPONENT_NO_DEFAULT_MESSAGE
 
 /obj/item/retractor/advanced/examine()
 	. = ..()
-	. += span_notice("Установлен в режиме [tool_behaviour == TOOL_RETRACTOR ? "ретрактора" : "зажима"].")
+	. += span_notice("Установлен в режиме [tool_behaviour == TOOL_RETRACTOR ? "расширителя" : "зажима"].")
 
 /**
  * MARK: ПОД ВОПРОСОМ!

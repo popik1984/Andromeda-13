@@ -3,9 +3,9 @@
 	possible_locs = list(BODY_ZONE_HEAD)
 	steps = list(
 		/datum/surgery_step/incise,
-		/datum/surgery_step/retract_skin,
+		/datum/surgery_step/retract/skin,
 		/datum/surgery_step/saw,
-		/datum/surgery_step/clamp_bleeders,
+		/datum/surgery_step/clamp/vessels,
 		/datum/surgery_step/fix_brain,
 		/datum/surgery_step/close,
 	)
@@ -24,7 +24,7 @@
 	)
 
 /datum/surgery_step/fix_brain
-	name = "проведите коррекцию мозговой функции (гемостат)"
+	name = "проведите коррекцию мозговой функции"
 	implements = list(
 		TOOL_HEMOSTAT = 85,
 		TOOL_SCREWDRIVER = 35,

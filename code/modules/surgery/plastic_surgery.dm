@@ -20,7 +20,7 @@
 	possible_locs = list(BODY_ZONE_HEAD)
 	steps = list(
 		/datum/surgery_step/incise,
-		/datum/surgery_step/retract_skin,
+		/datum/surgery_step/retract/skin,
 		/datum/surgery_step/reshape_face,
 		/datum/surgery_step/close,
 	)
@@ -31,7 +31,7 @@
 	requires_tech = TRUE
 	steps = list(
 		/datum/surgery_step/incise,
-		/datum/surgery_step/retract_skin,
+		/datum/surgery_step/retract/skin,
 		/datum/surgery_step/insert_plastic,
 		/datum/surgery_step/reshape_face,
 		/datum/surgery_step/close,
@@ -64,7 +64,7 @@
 
 //reshape_face
 /datum/surgery_step/reshape_face
-	name = "измените форму лица (скальпель)"
+	name = "измените форму лица"
 	implements = list(
 		TOOL_SCALPEL = 100,
 		/obj/item/knife = 50,

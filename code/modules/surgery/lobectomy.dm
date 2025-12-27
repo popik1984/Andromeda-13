@@ -4,9 +4,9 @@
 	possible_locs = list(BODY_ZONE_CHEST)
 	steps = list(
 		/datum/surgery_step/incise,
-		/datum/surgery_step/retract_skin,
+		/datum/surgery_step/retract/skin,
 		/datum/surgery_step/saw,
-		/datum/surgery_step/clamp_bleeders,
+		/datum/surgery_step/clamp/vessels,
 		/datum/surgery_step/lobectomy,
 		/datum/surgery_step/close,
 	)
@@ -29,11 +29,10 @@
 		return FALSE
 	return ..()
 
-//lobectomy, removes the most damaged lung lobe with a 95% base success chance
 /datum/surgery_step/lobectomy
-	name = "удалите поврежденный участок легкого (скальпель)"
+	name = "удалите поврежденный участок легкого"
 	implements = list(
-		TOOL_SCALPEL = 95,
+		TOOL_SCALPEL = 100,
 		/obj/item/melee/energy/sword = 65,
 		/obj/item/knife = 45,
 		/obj/item/shard = 35)

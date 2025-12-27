@@ -5,15 +5,15 @@
 	possible_locs = list(BODY_ZONE_PRECISE_EYES)
 	steps = list(
 		/datum/surgery_step/incise,
-		/datum/surgery_step/retract_skin,
-		/datum/surgery_step/clamp_bleeders,
+		/datum/surgery_step/retract/skin,
+		/datum/surgery_step/clamp/vessels,
 		/datum/surgery_step/fix_eyes,
 		/datum/surgery_step/close,
 	)
 
 //fix eyes
 /datum/surgery_step/fix_eyes
-	name = "восстановите глаза (гемостат)"
+	name = "восстановите глаза"
 	implements = list(
 		TOOL_HEMOSTAT = 100,
 		TOOL_SCREWDRIVER = 45,

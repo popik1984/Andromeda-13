@@ -35,8 +35,8 @@
 	)
 	steps = list(
 		/datum/surgery_step/incise,
-		/datum/surgery_step/retract_skin,
-		/datum/surgery_step/clamp_bleeders,
+		/datum/surgery_step/retract/skin,
+		/datum/surgery_step/clamp/vessels,
 		/datum/surgery_step/reset_compound_fracture,
 		/datum/surgery_step/repair_bone_compound,
 		/datum/surgery_step/close,
@@ -46,7 +46,7 @@
 
 ///// Repair Hairline Fracture (Severe)
 /datum/surgery_step/repair_bone_hairline
-	name = "Устраните закрытый перелом кости (костоправ/костный гель/хирургическая лента)"
+	name = "Устраните закрытый перелом кости"
 	implements = list(
 		TOOL_BONESET = 100,
 		/obj/item/stack/medical/bone_gel = 100,
@@ -96,7 +96,7 @@
 
 ///// Reset Compound Fracture (Crticial)
 /datum/surgery_step/reset_compound_fracture
-	name = "восстановите кость (костоправ)"
+	name = "восстановите кость"
 	implements = list(
 		TOOL_BONESET = 100,
 		/obj/item/stack/sticky_tape/surgical = 60,
@@ -150,7 +150,7 @@
 
 ///// Repair Compound Fracture (Crticial)
 /datum/surgery_step/repair_bone_compound
-	name = "Устраните открытый перелом кости (костный гель/хирургическая лента)"
+	name = "Устраните открытый перелом кости"
 	implements = IMPLEMENTS_THAT_FIX_BONES
 	time = 4 SECONDS
 
@@ -200,12 +200,12 @@
 		BODY_ZONE_HEAD,
 	)
 	steps = list(
-		/datum/surgery_step/clamp_bleeders/discard_skull_debris,
+		/datum/surgery_step/clamp/vessels/discard_skull_debris,
 		/datum/surgery_step/repair_skull
 	)
 
-/datum/surgery_step/clamp_bleeders/discard_skull_debris
-	name = "избавьтесь от обломков черепа (гемостат)"
+/datum/surgery_step/clamp/vessels/discard_skull_debris
+	name = "избавьтесь от обломков черепа"
 	implements = list(
 		TOOL_HEMOSTAT = 100,
 		TOOL_WIRECUTTER = 40,
@@ -214,7 +214,7 @@
 	time = 2.4 SECONDS
 	preop_sound = 'sound/items/handling/surgery/hemostat1.ogg'
 
-/datum/surgery_step/clamp_bleeders/discard_skull_debris/preop(mob/user, mob/living/carbon/target, target_zone, obj/item/tool, datum/surgery/surgery)
+/datum/surgery_step/clamp/vessels/discard_skull_debris/preop(mob/user, mob/living/carbon/target, target_zone, obj/item/tool, datum/surgery/surgery)
 	display_results(
 		user,
 		target,
@@ -226,7 +226,7 @@
 	display_pain(target, "Ваш мозг словно пронзают мелкие осколки стекла!")
 
 /datum/surgery_step/repair_skull
-	name = "восстановите череп (костный гель/хирургическая лента)"
+	name = "восстановите череп"
 	implements = IMPLEMENTS_THAT_FIX_BONES
 	time = 4 SECONDS
 

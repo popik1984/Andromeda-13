@@ -5,15 +5,15 @@
 	surgery_flags = SURGERY_REQUIRE_RESTING
 	steps = list(
 		/datum/surgery_step/incise,
-		/datum/surgery_step/clamp_bleeders,
-		/datum/surgery_step/retract_skin,
+		/datum/surgery_step/clamp/vessels,
+		/datum/surgery_step/retract/skin,
 		/datum/surgery_step/extract_implant,
 		/datum/surgery_step/close,
 	)
 
 //extract implant
 /datum/surgery_step/extract_implant
-	name = "извлеките имплант (гемостат)"
+	name = "извлеките имплант"
 	implements = list(
 		TOOL_HEMOSTAT = 100,
 		TOOL_CROWBAR = 65,

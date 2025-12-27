@@ -6,9 +6,9 @@
 	possible_locs = list(BODY_ZONE_CHEST)
 	steps = list(
 		/datum/surgery_step/incise,
-		/datum/surgery_step/retract_skin,
+		/datum/surgery_step/retract/skin,
 		/datum/surgery_step/incise,
-		/datum/surgery_step/clamp_bleeders,
+		/datum/surgery_step/clamp/vessels,
 		/datum/surgery_step/heal,
 		/datum/surgery_step/close,
 	)
@@ -34,7 +34,7 @@
 		)
 
 /datum/surgery_step/heal
-	name = "восстановите тело (гемостат)"
+	name = "восстановите тело"
 	implements = list(
 		TOOL_HEMOSTAT = 100,
 		TOOL_SCREWDRIVER = 65,
@@ -189,7 +189,7 @@
 	return progress_text
 
 /datum/surgery_step/heal/brute/basic
-	name = "обработайте ушибы (гемостат)"
+	name = "обработайте ушибы"
 	brutehealing = 5
 	brute_multiplier = 0.07
 
@@ -254,7 +254,7 @@
 	return progress_text
 
 /datum/surgery_step/heal/burn/basic
-	name = "обработайте ожоги (гемостат)"
+	name = "обработайте ожоги"
 	burnhealing = 5
 	burn_multiplier = 0.07
 
@@ -325,7 +325,7 @@
 	return progress_text
 
 /datum/surgery_step/heal/combo
-	name = "обработайте телесные раны (гемостат)"
+	name = "обработайте телесные раны"
 	brutehealing = 3
 	burnhealing = 3
 	brute_multiplier = 0.07

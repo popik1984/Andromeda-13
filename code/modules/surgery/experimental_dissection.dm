@@ -6,7 +6,7 @@
 	desc = "Хирургическая процедура, которая анализирует биологические особенности трупа и автоматически добавляет новые находки в базу данных исследований."
 	steps = list(
 		/datum/surgery_step/incise,
-		/datum/surgery_step/retract_skin,
+		/datum/surgery_step/retract/skin,
 		/datum/surgery_step/experimental_dissection,
 		/datum/surgery_step/close,
 	)

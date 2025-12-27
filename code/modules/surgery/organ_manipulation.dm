@@ -4,9 +4,9 @@
 	possible_locs = list(BODY_ZONE_CHEST, BODY_ZONE_HEAD)
 	steps = list(
 		/datum/surgery_step/incise,
-		/datum/surgery_step/retract_skin,
+		/datum/surgery_step/retract/skin,
 		/datum/surgery_step/saw,
-		/datum/surgery_step/clamp_bleeders,
+		/datum/surgery_step/clamp/vessels,
 		/datum/surgery_step/incise,
 		/datum/surgery_step/manipulate_organs/internal,
 		/datum/surgery_step/close,
@@ -57,8 +57,8 @@
 	possible_locs = list(BODY_ZONE_PRECISE_GROIN, BODY_ZONE_PRECISE_EYES, BODY_ZONE_PRECISE_MOUTH, BODY_ZONE_L_ARM, BODY_ZONE_R_ARM)
 	steps = list(
 		/datum/surgery_step/incise,
-		/datum/surgery_step/retract_skin,
-		/datum/surgery_step/clamp_bleeders,
+		/datum/surgery_step/retract/skin,
+		/datum/surgery_step/clamp/vessels,
 		/datum/surgery_step/incise,
 		/datum/surgery_step/manipulate_organs/internal,
 		/datum/surgery_step/close,
@@ -77,7 +77,7 @@
 	)
 	steps = list(
 		/datum/surgery_step/incise,
-		/datum/surgery_step/retract_skin,
+		/datum/surgery_step/retract/skin,
 		/datum/surgery_step/manipulate_organs/external,
 		/datum/surgery_step/close,
 	)
@@ -89,7 +89,7 @@
 	steps = list(
 		/datum/surgery_step/saw,
 		/datum/surgery_step/incise,
-		/datum/surgery_step/retract_skin,
+		/datum/surgery_step/retract/skin,
 		/datum/surgery_step/saw,
 		/datum/surgery_step/manipulate_organs/any,
 		/datum/surgery_step/close,
@@ -319,7 +319,7 @@
 
 /datum/surgery_step/manipulate_organs/any
 	time = 6.4 SECONDS
-	name = "манипуляция с органами (гемостат/орган)"
+	name = "манипуляция с органами"
 
 /datum/surgery_step/manipulate_organs/any/can_use_organ(obj/item/organ/organ)
 	return TRUE
@@ -327,7 +327,7 @@
 ///Surgery step for internal organs, like hearts and brains
 /datum/surgery_step/manipulate_organs/internal
 	time = 6.4 SECONDS
-	name = "манипуляция с органами (гемостат/орган)"
+	name = "манипуляция с органами"
 
 ///only operate on internal organs
 /datum/surgery_step/manipulate_organs/internal/can_use_organ(obj/item/organ/organ)
@@ -341,7 +341,7 @@
 ///Surgery step for external organs/features, like tails, frills, wings etc
 /datum/surgery_step/manipulate_organs/external
 	time = 3.2 SECONDS
-	name = "измените особенность (гемостат/особенность)"
+	name = "измените особенность"
 
 ///Only operate on external organs
 /datum/surgery_step/manipulate_organs/external/can_use_organ(obj/item/organ/organ)
