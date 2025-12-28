@@ -17,6 +17,8 @@
 	var/preop_sound //Sound played when the step is started
 	var/success_sound //Sound played if the step succeeded
 	var/failure_sound //Sound played if the step fails
+	/// Информация о результате последнего этапа хирургического вмешательства
+	var/feedback_value = null
 	///If the surgery causes mood changes if the patient is conscious.
 	var/surgery_effects_mood = FALSE
 	///Which mood event to give the patient when surgery is starting while they're conscious. This should be permanent/not have a timer until the surgery either succeeds or fails, as those states will immediately replace it. Mostly just flavor text.
@@ -107,8 +109,11 @@
 
 	surgery.step_in_progress = TRUE
 	var/speed_mod = 1
-	var/fail_prob = 0//100 - fail_prob = success_prob
+	var/fail_prob = 0//100 - fail_prob = success_pro
 	var/advance = FALSE
+
+	var/sterility_risk = 0
+	var/list/sterility_warnings = list()
 
 	update_surgery_mood(target, SURGERY_STATE_STARTED)
 	play_preop_sound(user, target, target_zone, tool, surgery) // Here because most steps overwrite preop
@@ -122,8 +127,47 @@
 	if(check_morbid_curiosity(user, tool, surgery))
 		speed_mod *= SURGERY_SPEED_MORBID_CURIOSITY
 
-	if(HAS_TRAIT(target, TRAIT_ANALGESIA))
+	if((HAS_TRAIT(target, TRAIT_ANALGESIA) && !(HAS_TRAIT(target, TRAIT_STASIS))) || target.stat == DEAD)
 		speed_mod *= SURGERY_SPEED_TRAIT_ANALGESIA
+
+	if(ishuman(user))
+		var/mob/living/carbon/human/surgeon = user
+		if(is_surgeon_clothing_bloody(surgeon))
+			sterility_risk += 2
+			sterility_warnings += "одежда"
+		if(!has_proper_surgical_gloves(surgeon))
+			if(!surgeon.gloves)
+				sterility_risk += 3
+				sterility_warnings += "не в перчатках"
+			else
+				sterility_risk += 2
+				sterility_warnings += "перчатки"
+		if(are_bare_hands_bloody(surgeon))
+			sterility_risk += 3
+			sterility_warnings += "руки в крови"
+
+	if(tool && is_item_bloody(tool))
+		sterility_risk += 5
+		sterility_warnings += "инструмент"
+
+	if(check_area_cleanliness(get_turf(target)))
+		sterility_risk += 3
+		sterility_warnings += "зона"
+
+	// Показываем ОДИН баллон со всеми нарушениями
+	if(length(sterility_warnings) > 0)
+		var/warning_text = "нестерильно: [english_list(sterility_warnings)]"
+		user.balloon_alert(user, warning_text)
+
+	if(sterility_risk > 0)
+		surgery.sterility_risk_total += sterility_risk
+
+		var/current_total = surgery.sterility_risk_total
+		var/display_risk = min(current_total, 100)
+		var/risk_level = get_risk_level_text(display_risk)
+
+		// Сообщение хирургу
+		to_chat(user, span_danger("Нарушение стерильности! [risk_level] риск осложнений."))
 
 	var/implement_speed_mod = 1
 	if(implement_type) //this means it isn't a require hand or any item step.
@@ -165,6 +209,11 @@
 				else
 					update_surgery_mood(target, SURGERY_STATE_SUCCESS)
 				play_success_sound(user, target, target_zone, tool, surgery)
+				var/feedback_bubble = get_feedback_message(user, target, speed_mod)
+				if(!isnull(feedback_bubble))
+					user.balloon_alert(user, feedback_bubble)
+				else
+					user.balloon_alert(user, "[round(1 / speed_mod, 0.1)]x скорость")
 				advance = TRUE
 		else
 			if(failure(user, target, target_zone, tool, surgery, fail_prob))
@@ -250,11 +299,6 @@
 			span_notice("[user] удалось!"),
 			span_notice("[user] заканчивает."),
 		)
-	if(ishuman(user))
-		var/mob/living/carbon/human/surgeon = user
-		surgeon.add_blood_DNA_to_items(target.get_blood_dna_list(), ITEM_SLOT_GLOVES)
-	else
-		user.add_mob_blood(target)
 	return TRUE
 
 /datum/surgery_step/proc/play_success_sound(mob/user, mob/living/carbon/target, target_zone, obj/item/tool, datum/surgery/surgery)
@@ -278,6 +322,11 @@
 		span_warning("Вы ошибаетесь![screwedmessage]"),
 		span_warning("[user] ошибается!"),
 		span_notice("[user] ошибается."), TRUE) //By default the patient will notice if the wrong thing has been cut
+	if(ishuman(user))
+		var/mob/living/carbon/human/surgeon = user
+		surgeon.add_blood_DNA_to_items(target.get_blood_dna_list(), ITEM_SLOT_GLOVES)
+	else
+		user.add_mob_blood(target)
 	return FALSE
 
 /datum/surgery_step/proc/play_failure_sound(mob/user, mob/living/carbon/target, target_zone, obj/item/tool, datum/surgery/surgery)

@@ -108,5 +108,10 @@
  */
 #define SURGERY_CHECK_TOOL_BEHAVIOUR (1<<6)
 
+/// Модификатор от наличия компьютера у стола
+#define OPERATING_COMPUTER_MODIFIER 1.3
+/// Флаг (item_flags) для перчаток, которые могут считаться пригодными для хирургии
+#define SURGICAL_GLOVES (1<<7)
+
 ///Return true if target is not in a valid body position for the surgery
 #define IS_IN_INVALID_SURGICAL_POSITION(target, surgery) ((surgery.surgery_flags & SURGERY_REQUIRE_RESTING) && (target.mobility_flags & MOBILITY_LIEDOWN && target.body_position != LYING_DOWN))

@@ -40,6 +40,8 @@
 	var/replaced_by
 	///Орган, которым непосредственно манипулируют, используется для проверки, остался ли орган в теле после начала операции.
 	var/organ_to_manipulate
+	/// Количество нарушений стерильности во время операции
+	var/sterility_risk_total = 0
 
 /datum/surgery/New(atom/surgery_target, surgery_location, surgery_bodypart)
 	. = ..()
@@ -144,10 +146,89 @@
 		return new step_type
 	return null
 
+// Завершение операции
 /datum/surgery/proc/complete(mob/surgeon)
 	SSblackbox.record_feedback("tally", "surgeries_completed", 1, type)
 	surgeon.add_mob_memory(/datum/memory/surgery, deuteragonist = surgeon, surgery_type = name)
+
+	// По завершению операции, проверяется общий "штраф" за не соблюдение стерильности
+	// Если общая сумма больше 0, то вызывает apply_sterility_consequences, где считается шанс на выпадение осложнения
+	if(sterility_risk_total > 0)
+		apply_sterility_consequences()
+
 	qdel(src)
+
+// Функция расчёта шанса осложнения при не соблюдении стерильнрсти
+/datum/surgery/proc/apply_sterility_consequences()
+	// Проверка на null и нулевой риск
+	if(!target || sterility_risk_total <= 0)
+		return
+	// Ограничиваем максимум 100%, пациент не сможет получить 110% шанс на осложнение
+	// Просто я уверен, что будет врач, что хуй клал на эту ваши санитарию
+	// От чего шанс будет  +100500 и тут пациент в любом случае получит осложнение
+	var/final_risk = min(sterility_risk_total, 100)
+	// Базовый шанс = риск.  Сделал, чтоб не дёргать final_risk
+	var/base_chance = final_risk
+	// Модификатор иммунитета пациента. Персонаж и его состояние будет влиять на шанс получение осложнения.
+	var/immunity_bonus = 0
+	if(ishuman(target))
+		var/mob/living/carbon/human/human_target = target
+		// Если здоровье больше/меньше, то получает очки имунитета
+		if(human_target.health > 90)
+			immunity_bonus += 15
+		else if(human_target.health > 70) // Сработает ТОЛЬКО если здоровье ≤ 90, если делать просто через if, он даст баф и за > 90 и за > 70, сумарно 25 очков имунитета
+			immunity_bonus += 10
+		// Как я это оправдываю? Ну блять, имунка хреново работает, от этого и шанс на осложнение выше, чем у здорового
+		if(human_target.health < 20)
+			immunity_bonus -= 5
+		else if(human_target.health < 10)
+			immunity_bonus -= 10
+		// Старые уязвимее. Аналогично очкам за здоровье
+		if(human_target.age > 60)
+			immunity_bonus -= 10
+		else if(human_target.age > 45)
+			immunity_bonus -= 5
+	// Итоговый шанс. Мы берём общий штраф после завершения операции и считаем с бонусами (или дебафами) от имунитета пациента
+	var/final_chance = clamp(base_chance - immunity_bonus, 0, 100)
+	// Тут уже выбирается, повезёт пациенту или нет
+	// Если у пациента штраф в 80%, то у него может прокнуть 20%, ибо зачем ему страдать от Лобанова на хирурге
+	if(prob(final_chance))
+		// Если не повезло, вызывает функцию по выбору осложнения
+		select_and_apply_complication(target, final_risk)
+
+/datum/surgery/proc/select_and_apply_complication(mob/living/patient, risk_percent)
+	if(!patient || !ishuman(patient))
+		return
+	// Назначаем пациента на human_patient
+	var/mob/living/carbon/human/human_patient = patient
+	// Выбор осложнения в зависимости от штрафа за несоблюдение стерильности. Чем выше штраф, тем страшнее болячка.
+	var/complication_type
+	if(risk_percent <= 50)
+		// Лёгкие осложнения
+		complication_type = pick(
+			/datum/wound/pierce/bleed/moderate,
+		)
+	else if(risk_percent <= 70)
+		// Средние осложнения
+		complication_type = pick(
+			/datum/wound/pierce/bleed/moderate,
+		)
+	else if(risk_percent <= 90)
+		// Тяжёлые осложнения
+		complication_type = pick(
+			/datum/wound/pierce/bleed/moderate,
+		)
+	// Задержка: 3-7 минут (180-420 секунд)
+	var/delay = rand(1800, 4200)
+	// spawn создаёт отдельную легковесную задачу
+	spawn(delay)
+		// Проверяем что пациент ещё жив и доступен
+		if(!human_patient || human_patient.stat == DEAD || QDELETED(human_patient))
+			return
+		var/obj/item/bodypart/limb = human_patient.get_bodypart(location)
+		if(!limb)
+			return
+		limb.force_wound_upwards(complication_type)
 
 /// Возвращает ближайший операционный компьютер, связанный с операционным столом
 /datum/surgery/proc/locate_operating_computer(turf/patient_turf)

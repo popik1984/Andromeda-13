@@ -354,3 +354,42 @@
 		target_detailed = TRUE,
 	)
 	target.take_bodypart_damage(5,5)
+
+/datum/surgery_step/proc/get_feedback_message(mob/living/user, mob/living/target, speed_mod = 1)
+	return
+
+/datum/surgery_step/heal/brute/get_feedback_message(mob/living/user, mob/living/target, speed_mod = 1)
+	var/show_message = FALSE
+	if(HAS_TRAIT(user, TRAIT_MEDICAL_HUD))
+		show_message = TRUE
+	else if(locate(/obj/item/healthanalyzer) in user.held_items)
+		show_message = TRUE
+	else if(get_location_modifier(target) == OPERATING_COMPUTER_MODIFIER)
+		show_message = TRUE
+
+	if(show_message)
+		return "[round(1 / speed_mod, 0.1)]x (<font color='#F0197D'>[target.get_brute_loss()]</font>) <font color='#7DF9FF'>[feedback_value]</font>"
+
+/datum/surgery_step/heal/burn/get_feedback_message(mob/living/user, mob/living/target, speed_mod = 1)
+	var/show_message = FALSE
+	if(HAS_TRAIT(user, TRAIT_MEDICAL_HUD))
+		show_message = TRUE
+	else if(locate(/obj/item/healthanalyzer) in user.held_items)
+		show_message = TRUE
+	else if(get_location_modifier(target) == OPERATING_COMPUTER_MODIFIER)
+		show_message = TRUE
+
+	if(show_message)
+		return "[round(1 / speed_mod, 0.1)]x (<font color='#FF7F50'>[target.get_fire_loss()]</font>) <font color='#7DF9FF'>[feedback_value]</font>"
+
+/datum/surgery_step/heal/combo/get_feedback_message(mob/living/user, mob/living/target, speed_mod = 1)
+	var/show_message = FALSE
+	if(HAS_TRAIT(user, TRAIT_MEDICAL_HUD))
+		show_message = TRUE
+	else if(locate(/obj/item/healthanalyzer) in user.held_items)
+		show_message = TRUE
+	else if(get_location_modifier(target) == OPERATING_COMPUTER_MODIFIER)
+		show_message = TRUE
+
+	if(show_message)
+		return "[round(1 / speed_mod, 0.1)]x (<font color='#F0197D'>[target.get_brute_loss()]</font>/<font color='#FF7F50'>[target.get_fire_loss()]</font>) <font color='#7DF9FF'>[feedback_value]</font>"
