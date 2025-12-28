@@ -8,7 +8,7 @@
 	icon = 'icons/obj/pipes_n_cables/atmos.dmi'
 	icon_state = "electrolyzer-off"
 	name = "space electrolyzer"
-	desc = "Thanks to the fast and dynamic response of our electrolyzers, on-site hydrogen production is guaranteed. Warranty void if used by clowns"
+	desc = "Благодаря быстрой и динамичной реакции наших электролизёров производство водорода на месте гарантировано. Гарантия аннулируется при использовании клоунами."
 	max_integrity = 250
 	armor_type = /datum/armor/machinery_electrolyzer
 	circuit = /obj/item/circuitboard/machine/electrolyzer
@@ -29,6 +29,16 @@
 	fire = 80
 	acid = 10
 
+/obj/machinery/electrolyzer/get_ru_names()
+	return list(
+		NOMINATIVE = "космический электролизёр",
+		GENITIVE = "космического электролизёра",
+		DATIVE = "космическому электролизёру",
+		ACCUSATIVE = "космический электролизёр",
+		INSTRUMENTAL = "космическим электролизёром",
+		PREPOSITIONAL = "космическом электролизере",
+	)
+
 /obj/machinery/electrolyzer/get_cell()
 	return cell
 
@@ -42,14 +52,14 @@
 
 /obj/machinery/electrolyzer/add_context(atom/source, list/context, obj/item/held_item, mob/user)
 	. = ..()
-	context[SCREENTIP_CONTEXT_ALT_LMB] = "Turn [on ? "off" : "on"]"
+	context[SCREENTIP_CONTEXT_ALT_LMB] = "[on ? "Выключить" : "Включить"]"
 	if(!held_item)
 		return CONTEXTUAL_SCREENTIP_SET
 	switch(held_item.tool_behaviour)
 		if(TOOL_SCREWDRIVER)
-			context[SCREENTIP_CONTEXT_LMB] = "[panel_open ? "Close" : "Open"] panel"
+			context[SCREENTIP_CONTEXT_LMB] = "[panel_open ? "Закрыть" : "Открыть"] панель"
 		if(TOOL_WRENCH)
-			context[SCREENTIP_CONTEXT_LMB] = "[anchored ? "Unan" : "An"]chor"
+			context[SCREENTIP_CONTEXT_LMB] = "[anchored ? "Открутить" : "Прикрутить"]"
 	return CONTEXTUAL_SCREENTIP_SET
 
 /obj/machinery/electrolyzer/Destroy()
@@ -65,16 +75,16 @@
 
 /obj/machinery/electrolyzer/examine(mob/user)
 	. = ..()
-	. += "\The [src] is [on ? "on" : "off"], and the panel is [panel_open ? "open" : "closed"]."
+	. += "[declent_ru(NOMINATIVE)] [on ? "включён" : "выключен"], а панель [panel_open ? "открыта" : "закрыта"]."
 
 	if(cell)
-		. += "The charge meter reads [cell ? round(cell.percent(), 1) : 0]%."
+		. += "Индикатор заряда показывает [cell ? round(cell.percent(), 1) : 0]%."
 	else
-		. += "There is no power cell installed."
+		. += "Энергоячейка отсутствует."
 	if(in_range(user, src) || isobserver(user))
-		. += span_notice("<b>Alt-click</b> to toggle [on ? "off" : "on"].")
-		. += span_notice("<b>Anchor</b> to drain power from APC instead of cell")
-	. += span_notice("It will drain power from the [anchored ? "area's APC" : "internal power cell"].")
+		. += span_notice("<b>Альт-клик</b>, чтобы [on ? "выключить" : "включить"].")
+		. += span_notice("<b>Прикрутите</b>, чтобы питать от ЛКП вместо ячейки.")
+	. += span_notice("Он будет потреблять энергию от [anchored ? "ЛКП отсека" : "внутренней энергоячейки"].")
 
 
 /obj/machinery/electrolyzer/update_icon_state()
@@ -148,7 +158,7 @@
 /obj/machinery/electrolyzer/screwdriver_act(mob/living/user, obj/item/tool)
 	tool.play_tool_sound(src, 50)
 	toggle_panel_open()
-	balloon_alert(user, "[panel_open ? "opened" : "closed"] panel")
+	balloon_alert(user, "панель [panel_open ? "открыта" : "закрыта"]")
 	update_appearance(UPDATE_ICON)
 	return TRUE
 
@@ -164,16 +174,16 @@
 	add_fingerprint(user)
 	if(istype(I, /obj/item/stock_parts/power_store/cell))
 		if(!panel_open)
-			balloon_alert(user, "open panel!")
+			balloon_alert(user, "откройте панель!")
 			return
 		if(cell)
-			balloon_alert(user, "cell inside!")
+			balloon_alert(user, "ячейка уже внутри!")
 			return
 		if(!user.transferItemToLoc(I, src))
 			return
 		cell = I
 		I.add_fingerprint(usr)
-		balloon_alert(user, "inserted cell")
+		balloon_alert(user, "ячейка вставлена")
 		SStgui.update_uis(src)
 
 		return
@@ -181,19 +191,19 @@
 
 /obj/machinery/electrolyzer/click_alt(mob/user)
 	if(panel_open)
-		balloon_alert(user, "close panel!")
+		balloon_alert(user, "закройте панель!")
 		return CLICK_ACTION_BLOCKING
 	toggle_power(user)
 	return CLICK_ACTION_SUCCESS
 
 /obj/machinery/electrolyzer/proc/toggle_power(mob/user)
 	if(!anchored && !cell)
-		balloon_alert(user, "insert cell or anchor!")
+		balloon_alert(user, "вставьте ячейку или прикрутите!")
 		return
 	on = !on
 	mode = ELECTROLYZER_MODE_STANDBY
 	update_appearance(UPDATE_ICON)
-	balloon_alert(user, "turned [on ? "on" : "off"]")
+	balloon_alert(user, "[on ? "включено" : "выключено"]")
 	if(on)
 		SSair.start_processing_machine(src)
 

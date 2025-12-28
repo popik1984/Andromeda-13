@@ -1,5 +1,5 @@
 /*
-It's like a regular ol' straight pipe, but you can turn it on and off.
+Это как обычная прямая труба, но её можно включать и выключать.
 */
 #define MANUAL_VALVE "m"
 #define DIGITAL_VALVE "d"
@@ -7,19 +7,29 @@ It's like a regular ol' straight pipe, but you can turn it on and off.
 /obj/machinery/atmospherics/components/binary/valve
 	icon_state = "mvalve_map-3"
 	name = "manual valve"
-	desc = "A pipe with a valve that can be used to disable flow of gas through it."
+	desc = "Труба с вентилем, который можно использовать для перекрытия потока газа."
 	can_unwrench = TRUE
 	shift_underlay_only = FALSE
-	interaction_flags_machine = INTERACT_MACHINE_OFFLINE | INTERACT_MACHINE_OPEN //Intentionally no allow_silicon flag
+	interaction_flags_machine = INTERACT_MACHINE_OFFLINE | INTERACT_MACHINE_OPEN //Намеренно нет флага allow_silicon
 	pipe_flags = PIPING_CARDINAL_AUTONORMALIZE | PIPING_BRIDGE
 	construction_type = /obj/item/pipe/binary
 	pipe_state = "mvalve"
 	custom_reconcilation = TRUE
 	use_power = NO_POWER_USE
-	///Type of valve (manual or digital), used to set the icon of the component in update_icon_nopipes()
+	///Тип вентиля (ручной или цифровой), используется для установки иконки компонента в update_icon_nopipes()
 	var/valve_type = MANUAL_VALVE
-	///Bool to stop interactions while the opening/closing animation is going
+	///Переменная для блокировки взаимодействий во время анимации открытия/закрытия
 	var/switching = FALSE
+
+/obj/machinery/atmospherics/components/binary/valve/get_ru_names()
+	return list(
+		NOMINATIVE = "ручной вентиль",
+		GENITIVE = "ручного вентиля",
+		DATIVE = "ручному вентилю",
+		ACCUSATIVE = "ручной вентиль",
+		INSTRUMENTAL = "ручным вентилем",
+		PREPOSITIONAL = "ручном вентиле",
+	)
 
 /obj/machinery/atmospherics/components/binary/valve/update_icon_nopipes(animation = FALSE)
 	normalize_cardinal_directions()
@@ -29,7 +39,7 @@ It's like a regular ol' straight pipe, but you can turn it on and off.
 	icon_state = "[valve_type]valve_[on ? "on" : "off"]-[set_overlay_offset(piping_layer)]"
 
 /**
- * Called by finish_interact(), switch between open and closed, reconcile the air between two pipelines
+ * Вызывается finish_interact(), переключает между открытым и закрытым состоянием, согласовывает воздух между двумя трубопроводами
  */
 /obj/machinery/atmospherics/components/binary/valve/proc/set_open(to_open)
 	if(on == to_open)
@@ -43,16 +53,15 @@ It's like a regular ol' straight pipe, but you can turn it on and off.
 		var/datum/pipeline/parent1 = parents[1]
 		parent1.reconcile_air()
 		investigate_log("was opened by [usr ? key_name(usr) : "a remote signal"]", INVESTIGATE_ATMOS)
-		balloon_alert_to_viewers("valve opened")
+		balloon_alert_to_viewers("[declent_ru(NOMINATIVE)] открыт", "[declent_ru(NOMINATIVE)] открыт")
 		vent_movement |= VENTCRAWL_ALLOWED
 	else
 		investigate_log("was closed by [usr ? key_name(usr) : "a remote signal"]", INVESTIGATE_ATMOS)
-		balloon_alert_to_viewers("valve closed")
+		balloon_alert_to_viewers("[declent_ru(NOMINATIVE)] закрыт", "[declent_ru(NOMINATIVE)] закрыт")
 		vent_movement &= ~VENTCRAWL_ALLOWED
 
-
-// This is what handles the actual functionality of combining 2 pipenets when the valve is open
-// Basically when a pipenet updates it will consider both sides to be the same for the purpose of the gas update
+// Это обрабатывает фактическую функциональность объединения двух сетей труб, когда вентиль открыт
+// По сути, при обновлении сети труб обе стороны будут считаться одинаковыми для целей обновления газа
 /obj/machinery/atmospherics/components/binary/valve/return_pipenets_for_reconcilation(datum/pipeline/requester)
 	. = ..()
 	if(!on)
@@ -69,21 +78,31 @@ It's like a regular ol' straight pipe, but you can turn it on and off.
 	addtimer(CALLBACK(src, PROC_REF(finish_interact)), 1 SECONDS)
 
 /**
- * Called by iteract() after a 1 second timer, calls toggle(), allows another interaction with the component.
+ * Вызывается iteract() после таймера в 1 секунду, вызывает toggle(), позволяет следующее взаимодействие с компонентом.
  */
 /obj/machinery/atmospherics/components/binary/valve/proc/finish_interact()
 	set_open(!on)
 	switching = FALSE
 
-/obj/machinery/atmospherics/components/binary/valve/digital // can be controlled by AI
+/obj/machinery/atmospherics/components/binary/valve/digital // может управляться ИИ
 	icon_state = "dvalve_map-3"
 
 	name = "digital valve"
-	desc = "A digitally controlled valve."
+	desc = "Цифровым образом управляемый вентиль."
 	valve_type = DIGITAL_VALVE
 	pipe_state = "dvalve"
 
 	interaction_flags_machine = INTERACT_MACHINE_ALLOW_SILICON | INTERACT_MACHINE_OFFLINE | INTERACT_MACHINE_OPEN | INTERACT_MACHINE_OPEN_SILICON
+
+/obj/machinery/atmospherics/components/binary/valve/digital/get_ru_names()
+	return list(
+		NOMINATIVE = "цифровой вентиль",
+		GENITIVE = "цифрового вентиля",
+		DATIVE = "цифровому вентилю",
+		ACCUSATIVE = "цифровой вентиль",
+		INSTRUMENTAL = "цифровым вентилем",
+		PREPOSITIONAL = "цифровом вентиле",
+	)
 
 /obj/machinery/atmospherics/components/binary/valve/digital/Initialize(mapload)
 	. = ..()
@@ -91,20 +110,20 @@ It's like a regular ol' straight pipe, but you can turn it on and off.
 
 /obj/item/circuit_component/digital_valve
 	display_name = "Digital Valve"
-	desc = "The interface for communicating with a digital valve."
+	desc = "Интерфейс для связи с цифровым вентилем."
 
 	var/obj/machinery/atmospherics/components/binary/valve/digital/attached_valve
 
-	/// Opens the digital valve
+	/// Открывает цифровой вентиль
 	var/datum/port/input/open
-	/// Closes the digital valve
+	/// Закрывает цифровой вентиль
 	var/datum/port/input/close
 
-	/// Whether the valve is currently open
+	/// Открыт ли вентиль в данный момент
 	var/datum/port/output/is_open
-	/// Sent when the valve is opened
+	/// Отправляется при открытии вентиля
 	var/datum/port/output/opened
-	/// Sent when the valve is closed
+	/// Отправляется при закрытии вентиля
 	var/datum/port/output/closed
 
 /obj/item/circuit_component/digital_valve/populate_ports()

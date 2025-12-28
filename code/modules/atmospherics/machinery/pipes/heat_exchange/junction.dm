@@ -3,7 +3,8 @@
 	icon_state = "pipe11-3"
 
 	name = "junction"
-	desc = "A one meter junction that connects regular and heat-exchanging pipe."
+	desc = "Метровый стык, соединяющий обычные и теплообменные трубы."
+	gender = MALE
 
 	minimum_temperature_difference = 300
 	thermal_conductivity = WALL_HEAT_TRANSFER_COEFFICIENT
@@ -16,6 +17,16 @@
 	pipe_state = "junction"
 
 	has_gas_visuals = FALSE
+
+/obj/machinery/atmospherics/pipe/heat_exchanging/junction/get_ru_names()
+	return list(
+		NOMINATIVE = "стык",
+		GENITIVE = "стыка",
+		DATIVE = "стыку",
+		ACCUSATIVE = "стык",
+		INSTRUMENTAL = "стыком",
+		PREPOSITIONAL = "стыке",
+	)
 
 /obj/machinery/atmospherics/pipe/heat_exchanging/junction/set_init_directions()
 	switch(dir)

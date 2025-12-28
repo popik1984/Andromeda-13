@@ -3,7 +3,7 @@
 
 /obj/machinery/atmospherics/components/binary/circulator
 	name = "circulator/heat exchanger"
-	desc = "A gas circulator pump and heat exchanger."
+	desc = "Насос циркуляции газа и теплообменник."
 	icon_state = "circ_base"
 	pipe_flags = PIPING_ONE_PER_TURF | PIPING_DEFAULT_LAYER_ONLY
 	vent_movement = VENTCRAWL_CAN_SEE
@@ -17,6 +17,16 @@
 	var/mode = CIRCULATOR_HOT
 	///The generator we are connected to.
 	var/obj/machinery/power/thermoelectric_generator/generator
+
+/obj/machinery/atmospherics/components/binary/circulator/get_ru_names()
+	return list(
+		NOMINATIVE = "циркулятор",
+		GENITIVE = "циркулятора",
+		DATIVE = "циркулятору",
+		ACCUSATIVE = "циркулятор",
+		INSTRUMENTAL = "циркулятором",
+		PREPOSITIONAL = "циркуляторе",
+	)
 
 /obj/machinery/atmospherics/components/binary/circulator/Initialize(mapload)
 	. = ..()
@@ -81,13 +91,13 @@
 
 /obj/machinery/atmospherics/components/binary/circulator/wrench_act(mob/living/user, obj/item/I)
 	if(!panel_open)
-		balloon_alert(user, "open the panel!")
+		balloon_alert(user, "откройте панель!")
 		return
 	set_anchored(!anchored)
 	I.play_tool_sound(src)
 	if(generator)
 		disconnectFromGenerator()
-	balloon_alert(user, "[anchored ? "secure" : "unsecure"]")
+	balloon_alert(user, "[anchored ? "прикручено" : "откручено"]")
 
 	var/obj/machinery/atmospherics/node1 = nodes[1]
 	var/obj/machinery/atmospherics/node2 = nodes[2]
@@ -140,16 +150,16 @@
 	if(generator)
 		disconnectFromGenerator()
 	mode = !mode
-	balloon_alert(user, "set to [mode ? "cold" : "hot"]")
+	balloon_alert(user, "режим: [mode ? "холод" : "тепло"]")
 	return TRUE
 
 /obj/machinery/atmospherics/components/binary/circulator/screwdriver_act(mob/user, obj/item/I)
 	if(!anchored)
-		balloon_alert(user, "anchor it down!")
+		balloon_alert(user, "прикрутите!")
 		return
 	toggle_panel_open()
 	I.play_tool_sound(src)
-	balloon_alert(user, "panel [panel_open ? "open" : "closed"]")
+	balloon_alert(user, "панель [panel_open ? "открыта" : "закрыта"]")
 	return TRUE
 
 /obj/machinery/atmospherics/components/binary/circulator/crowbar_act(mob/user, obj/item/I)

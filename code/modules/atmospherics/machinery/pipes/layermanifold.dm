@@ -2,7 +2,8 @@
 	name = "layer adaptor"
 	icon = 'icons/obj/pipes_n_cables/manifold.dmi'
 	icon_state = "manifoldlayer"
-	desc = "A special pipe to bridge pipe layers with."
+	desc = "Специальная труба для соединения слоёв трубопровода."
+	gender = MALE
 	dir = SOUTH
 	initialize_directions = NORTH|SOUTH
 	pipe_flags = PIPING_ALL_LAYER | PIPING_DEFAULT_LAYER_ONLY | PIPING_CARDINAL_AUTONORMALIZE | PIPING_BRIDGE
@@ -18,6 +19,16 @@
 	var/list/front_nodes
 	///Reference to all the nodes in the back
 	var/list/back_nodes
+
+/obj/machinery/atmospherics/pipe/layer_manifold/get_ru_names()
+	return list(
+		NOMINATIVE = "адаптер слоёв",
+		GENITIVE = "адаптера слоёв",
+		DATIVE = "адаптеру слоёв",
+		ACCUSATIVE = "адаптер слоёв",
+		INSTRUMENTAL = "адаптером слоёв",
+		PREPOSITIONAL = "адаптере слоёв",
+	)
 
 /obj/machinery/atmospherics/pipe/layer_manifold/Initialize(mapload)
 	front_nodes = list()
@@ -135,7 +146,7 @@
 		user.ventcrawl_layer = clamp(user.ventcrawl_layer + 1, PIPING_LAYER_MIN, PIPING_LAYER_MAX)
 	if((SOUTH|WEST) & direction)
 		user.ventcrawl_layer = clamp(user.ventcrawl_layer - 1, PIPING_LAYER_MIN, PIPING_LAYER_MAX)
-	to_chat(user, "You align yourself with the [user.ventcrawl_layer]\th output.")
+	to_chat(user, "Вы выравниваетесь с [user.ventcrawl_layer]-м выходом.")
 
 /obj/machinery/atmospherics/pipe/layer_manifold/visible
 	hide = FALSE

@@ -8,7 +8,7 @@
 	icon_state = "crystallizer-off"
 	base_icon_state = "crystallizer"
 	name = "crystallizer"
-	desc = "Used to crystallize or solidify gases."
+	desc = "Используется для кристаллизации или отверждения газов."
 	layer = ABOVE_MOB_LAYER
 	density = TRUE
 	max_integrity = 300
@@ -35,6 +35,16 @@
 	fire = 80
 	acid = 30
 
+/obj/machinery/atmospherics/components/binary/crystallizer/get_ru_names()
+	return list(
+		NOMINATIVE = "кристаллизатор",
+		GENITIVE = "кристаллизатора",
+		DATIVE = "кристаллизатору",
+		ACCUSATIVE = "кристаллизатор",
+		INSTRUMENTAL = "кристаллизатором",
+		PREPOSITIONAL = "кристаллизаторе",
+	)
+
 /obj/machinery/atmospherics/components/binary/crystallizer/Initialize(mapload)
 	. = ..()
 	internal = new
@@ -48,14 +58,14 @@
 
 /obj/machinery/atmospherics/components/binary/crystallizer/add_context(atom/source, list/context, obj/item/held_item, mob/user)
 	. = ..()
-	context[SCREENTIP_CONTEXT_CTRL_LMB] = "Turn [on ? "off" : "on"]"
+	context[SCREENTIP_CONTEXT_CTRL_LMB] = "[on ? "Выключить" : "Включить"]"
 	if(!held_item)
 		return CONTEXTUAL_SCREENTIP_SET
 	switch(held_item.tool_behaviour)
 		if(TOOL_SCREWDRIVER)
-			context[SCREENTIP_CONTEXT_LMB] = "[panel_open ? "Close" : "Open"] panel"
+			context[SCREENTIP_CONTEXT_LMB] = "[panel_open ? "Закрыть" : "Открыть"] панель"
 		if(TOOL_WRENCH)
-			context[SCREENTIP_CONTEXT_RMB] = "Rotate"
+			context[SCREENTIP_CONTEXT_RMB] = "Вращать"
 	return CONTEXTUAL_SCREENTIP_SET
 
 /obj/machinery/atmospherics/components/binary/crystallizer/attackby(obj/item/I, mob/user, list/modifiers, list/attack_modifiers)
@@ -91,10 +101,10 @@
 	if(!is_operational)
 		return CLICK_ACTION_BLOCKING
 	if(panel_open)
-		balloon_alert(user, "close panel!")
+		balloon_alert(user, "закройте панель!")
 		return CLICK_ACTION_BLOCKING
 	set_on(!on)
-	balloon_alert(user, "turned [on ? "on" : "off"]")
+	balloon_alert(user, "[on ? "включено" : "выключено"]")
 	investigate_log("was turned [on ? "on" : "off"] by [key_name(user)]", INVESTIGATE_ATMOS)
 	return CLICK_ACTION_SUCCESS
 
@@ -200,25 +210,25 @@
 	var/quality_control
 	switch(total_quality)
 		if(100)
-			quality_control = "Masterwork"
+			quality_control = "Шедевральный"
 		if(95 to 99)
-			quality_control = "Supreme"
+			quality_control = "Превосходный"
 		if(75 to 94)
-			quality_control = "Good"
+			quality_control = "Хороший"
 		if(65 to 74)
-			quality_control = "Decent"
+			quality_control = "Приличный"
 		if(55 to 64)
-			quality_control = "Average"
+			quality_control = "Средний"
 		if(35 to 54)
-			quality_control = "Ok"
+			quality_control = "Нормальный"
 		if(15 to 34)
-			quality_control = "Poor"
+			quality_control = "Плохой"
 		if(5 to 14)
-			quality_control = "Ugly"
+			quality_control = "Ужасный"
 		if(1 to 4)
-			quality_control = "Cracked"
+			quality_control = "Треснутый"
 		if(0)
-			quality_control = "Oh God why"
+			quality_control = "бля че за хуйня"
 
 	for(var/path in selected_recipe.products)
 		var/amount_produced = selected_recipe.products[path]
@@ -241,7 +251,7 @@
 
 /obj/machinery/atmospherics/components/binary/crystallizer/ui_static_data()
 	var/data = list()
-	data["selected_recipes"] = list(list("name" = "Nothing", "id" = ""))
+	data["selected_recipes"] = list(list("name" = "Ничего", "id" = ""))
 	for(var/path in GLOB.gas_recipe_meta)
 		var/datum/gas_recipe/recipe = GLOB.gas_recipe_meta[path]
 		if(recipe.machine_type != "Crystallizer")
@@ -277,15 +287,15 @@
 
 	var/list/requirements
 	if(!selected_recipe)
-		requirements = list("Select a recipe to see the requirements")
+		requirements = list("Выберите рецепт, чтобы увидеть требования")
 	else
-		requirements = list("To create [selected_recipe.name] you will need:")
+		requirements = list("Для создания [selected_recipe.name] вам потребуется:")
 		for(var/gas_type in selected_recipe.requirements)
 			var/datum/gas/gas_required = gas_type
 			var/amount_consumed = selected_recipe.requirements[gas_type]
-			requirements += "-[amount_consumed] moles of [initial(gas_required.name)]"
-		requirements += "In a temperature range between [selected_recipe.min_temp] K and [selected_recipe.max_temp] K"
-		requirements += "The crystallization reaction will be [selected_recipe.energy_release ? (selected_recipe.energy_release > 0 ? "exothermic" : "endothermic") : "thermally neutral"]"
+			requirements += "-[amount_consumed] молей [initial(gas_required.name)]"
+		requirements += "В диапазоне температур от [selected_recipe.min_temp] K до [selected_recipe.max_temp] K"
+		requirements += "Реакция кристаллизации будет [selected_recipe.energy_release ? (selected_recipe.energy_release > 0 ? "экзотермической" : "эндотермической") : "термически нейтральной"]"
 	data["requirements"] = requirements.Join("\n")
 
 	var/temperature

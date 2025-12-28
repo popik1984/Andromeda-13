@@ -1,7 +1,8 @@
 /// This is an atmospherics pipe which can relay air up/down a deck.
 /obj/machinery/atmospherics/pipe/multiz
 	name = "multi deck pipe adapter"
-	desc = "An adapter which allows pipes to connect to other pipenets on different decks."
+	desc = "Адаптер, позволяющий трубам соединяться с другими трубопроводами на разных этажах."
+	gender = MALE
 	icon_state = "adapter-3"
 	icon = 'icons/obj/pipes_n_cables/multiz.dmi'
 
@@ -23,6 +24,16 @@
 	var/mutable_appearance/pipe = null
 	///Reference to the node
 	var/obj/machinery/atmospherics/front_node = null
+
+/obj/machinery/atmospherics/pipe/multiz/get_ru_names()
+	return list(
+		NOMINATIVE = "межпалубный адаптер труб",
+		GENITIVE = "межпалубного адаптера труб",
+		DATIVE = "межпалубному адаптеру труб",
+		ACCUSATIVE = "межпалубный адаптер труб",
+		INSTRUMENTAL = "межпалубным адаптером труб",
+		PREPOSITIONAL = "межпалубном адаптере труб",
+	)
 
 /obj/machinery/atmospherics/pipe/multiz/Initialize(mapload, process, setdir, init_dir)
 	icon_state = ""

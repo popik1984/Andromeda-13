@@ -2,7 +2,7 @@
 
 /obj/machinery/airalarm
 	name = "air alarm"
-	desc = "A machine that monitors atmosphere levels. Goes off if the area is dangerous."
+	desc = "Устройство, отслеживающее состояние атмосферы. Срабатывает при опасных показателях."
 	icon = 'icons/obj/machines/wallmounts.dmi'
 	icon_state = "alarmp"
 	idle_power_usage = BASE_MACHINE_IDLE_CONSUMPTION * 0.05
@@ -14,70 +14,69 @@
 	armor_type = /datum/armor/machinery_airalarm
 	resistance_flags = FIRE_PROOF
 
-	/// Current alert level of our air alarm.
+	/// Текущий уровень опасности воздушной тревоги.
 	/// [AIR_ALARM_ALERT_NONE], [AIR_ALARM_ALERT_MINOR], [AIR_ALARM_ALERT_SEVERE]
 	var/danger_level = AIR_ALARM_ALERT_NONE
-	/// Current alert level of the area of our air alarm.
+	/// Текущий уровень опасности зоны нашей воздушной тревоги.
 	var/area_danger = FALSE
 
-	/// Currently selected mode of the alarm. An instance of [/datum/air_alarm_mode].
+	/// Текущий выбранный режим тревоги. Экземпляр [/datum/air_alarm_mode].
 	var/datum/air_alarm_mode/selected_mode
-	///A reference to the area we are in
+	/// Ссылка на зону, в которой мы находимся
 	var/area/my_area
 
-	/// Boolean for whether the current air alarm can be tweaked by players or not.
+	/// Логическая переменная, указывающая, может ли текущая воздушная тревога быть настроена игроками или нет.
 	var/locked = TRUE
-	/// Boolean to prevent AI from tampering with this alarm.
+	/// Логическая переменная для предотвращения вмешательства ИИ в эту тревогу.
 	var/aidisabled = FALSE
-	/// Boolean of whether alarm is currently shorted. Mess up some functionalities.
+	/// Логическая переменная, указывающая, замкнута ли тревога в данный момент. Нарушает некоторые функции.
 	var/shorted = FALSE
 
-	/// Current build stage. [AIRALARM_BUILD_COMPLETE], [AIRALARM_BUILD_NO_WIRES], [AIRALARM_BUILD_NO_CIRCUIT]
+	/// Текущий этап сборки. [AIRALARM_BUILD_COMPLETE], [AIRALARM_BUILD_NO_WIRES], [AIRALARM_BUILD_NO_CIRCUIT]
 	var/buildstage = AIR_ALARM_BUILD_COMPLETE
 
-	///Represents a signel source of atmos alarms, complains to all the listeners if one of our thresholds is violated
+	///Представляет собой источник сигналов атмосферных тревог, сообщает всем слушателям, если нарушен один из наших порогов
 	var/datum/alarm_handler/alarm_manager
 
 	var/static/list/atmos_connections = list(COMSIG_TURF_EXPOSE = PROC_REF(check_danger))
 
-	/// An assoc list of [datum/tlv]s, indexed by "pressure", "temperature", and [datum/gas] typepaths.
+	/// Ассоциативный список [datum/tlv], индексированный по "pressure", "temperature" и путям [datum/gas].
 	var/list/datum/tlv/tlv_collection
 
-	/// Used for air alarm helper called unlocked to make air alarm unlocked.
+	/// Используется помощником air alarm под названием unlocked для разблокировки воздушной тревоги.
 	var/unlocked = FALSE
-	/// Used for air alarm helper called syndicate_access to make air alarm's required access syndicate_access.
+	/// Используется помощником air alarm под названием syndicate_access для установки требуемого доступа к воздушной тревоге на syndicate_access.
 	var/syndicate_access = FALSE
-	/// Used for air alarm helper called away_general_access to make air alarm's required access away_general_access.
+	/// Используется помощником air alarm под названием away_general_access для установки требуемого доступа к воздушной тревоге на away_general_access.
 	var/away_general_access = FALSE
-	/// Used for air alarm helper called engine_access to make air alarm's required access one of ACCESS_ATMOSPHERICS & ACCESS_ENGINEERING.
+	/// Используется помощником air alarm под названием engine_access для установки требуемого доступа к воздушной тревоге на один из ACCESS_ATMOSPHERICS & ACCESS_ENGINEERING.
 	var/engine_access = FALSE
-	/// Used for air alarm helper called mixingchamber_access to make air alarm's required access one of ACCESS_ATMOSPHERICS & ACCESS_ORDNANCE.
+	/// Используется помощником air alarm под названием mixingchamber_access для установки требуемого доступа к воздушной тревоге на один из ACCESS_ATMOSPHERICS & ACCESS_ORDNANCE.
 	var/mixingchamber_access = FALSE
-	/// Used for air alarm helper called all_access to remove air alarm's required access.
+	/// Используется помощником air alarm под названием all_access для удаления требуемого доступа к воздушной тревоге.
 	var/all_access = FALSE
 
-	/// Used for air alarm helper called tlv_cold_room to adjust alarm thresholds for cold room.
+	/// Используется помощником air alarm под названием tlv_cold_room для настройки порогов тревоги для холодной комнаты.
 	var/tlv_cold_room = FALSE
-	/// Used for air alarm helper called tlv_kitchen to adjust temperature thresholds for kitchen.
+	/// Используется помощником air alarm под названием tlv_kitchen для настройки температурных порогов для кухни.
 	var/tlv_kitchen = FALSE
-	/// Used for air alarm helper called tlv_no_ckecks to remove alarm thresholds.
+	/// Используется помощником air alarm под названием tlv_no_checks для удаления порогов тревоги.
 	var/tlv_no_checks = FALSE
 
-
-	///Warning message spoken by air alarms
+	///Предупреждающее сообщение, произносимое воздушной тревогой
 	var/warning_message = null
 
-	//Stops the air alarm from talking about their atmos problems.
+	//Запрещает воздушной тревоге говорить о своих атмосферных проблемах.
 	var/speaker_enabled = TRUE
 
-	///Cooldown on sending warning messages
+	///Кулдаун на отправку предупреждающих сообщений
 	COOLDOWN_DECLARE(warning_cooldown)
 
-	/// Used for connecting air alarm to a remote tile/zone via air sensor instead of the tile/zone of the air alarm
+	/// Используется для подключения воздушной тревоги к удалённому тайлу/зоне через воздушный датчик вместо тайла/зоны самой воздушной тревоги
 	var/obj/machinery/air_sensor/connected_sensor
-	/// Used to link air alarm to air sensor via map helpers
+	/// Используется для привязки воздушной тревоги к воздушному датчику через помощники карты
 	var/air_sensor_chamber_id = ""
-	/// Whether it is possible to link/unlink this air alarm from a sensor
+	/// Возможно ли привязать/отвязать эту воздушную тревогу от датчика
 	var/allow_link_change = TRUE
 
 GLOBAL_LIST_EMPTY_TYPED(air_alarms, /obj/machinery/airalarm)
@@ -172,7 +171,7 @@ GLOBAL_LIST_EMPTY_TYPED(air_alarms, /obj/machinery/airalarm)
 	return ..()
 
 /obj/machinery/airalarm/on_enter_area(datum/source, area/area_to_register)
-	//were already registered to an area. exit from here first before entering into an new area
+	//уже зарегистрированы в зоне. сначала выйдите отсюда, прежде чем войти в новую зону
 	if(!isnull(my_area))
 		return
 	. = ..()
@@ -185,7 +184,7 @@ GLOBAL_LIST_EMPTY_TYPED(air_alarms, /obj/machinery/airalarm)
 	name = "[get_area_name(my_area)] Air Alarm"
 
 /obj/machinery/airalarm/on_exit_area(datum/source, area/area_to_unregister)
-	//we cannot unregister from an area we never registered to in the first place
+	//нельзя отписаться от зоны, к которой изначально не регистрировались
 	if(my_area != area_to_unregister)
 		return
 	. = ..()
@@ -196,15 +195,15 @@ GLOBAL_LIST_EMPTY_TYPED(air_alarms, /obj/machinery/airalarm)
 	. = ..()
 	switch(buildstage)
 		if(AIR_ALARM_BUILD_NO_CIRCUIT)
-			. += span_notice("It is missing air alarm electronics.")
+			. += span_notice("Отсутствует электроника воздушной тревоги.")
 		if(AIR_ALARM_BUILD_NO_WIRES)
-			. += span_notice("It is missing wiring.")
+			. += span_notice("Отсутствует проводка.")
 		if(AIR_ALARM_BUILD_COMPLETE)
-			. += span_notice("Right-click to [locked ? "unlock" : "lock"] the interface.")
+			. += span_notice("Правый клик, чтобы [locked ? "разблокировать" : "заблокировать"] интерфейс.")
 
 /obj/machinery/airalarm/ui_status(mob/user, datum/ui_state/state)
 	if(HAS_SILICON_ACCESS(user) && aidisabled)
-		to_chat(user, "AI control has been disabled.")
+		to_chat(user, "Управление ИИ отключено.")
 	else if(!shorted)
 		return ..()
 	return UI_CLOSE
@@ -219,14 +218,14 @@ GLOBAL_LIST_EMPTY_TYPED(air_alarms, /obj/machinery/airalarm)
 		var/obj/machinery/air_sensor/sensor = multi_tool.buffer
 
 		if(!allow_link_change)
-			balloon_alert(user, "linking disabled")
+			balloon_alert(user, "привязка отключена")
 			return ITEM_INTERACT_BLOCKING
 		if(connected_sensor || sensor.connected_airalarm)
-			balloon_alert(user, "sensor already connected!")
+			balloon_alert(user, "датчик уже подключён!")
 			return ITEM_INTERACT_BLOCKING
 
 		connect_sensor(sensor)
-		balloon_alert(user, "connected sensor")
+		balloon_alert(user, "датчик подключён")
 		return ITEM_INTERACT_SUCCESS
 
 /obj/machinery/airalarm/ui_interact(mob/user, datum/tgui/ui)
@@ -268,17 +267,17 @@ GLOBAL_LIST_EMPTY_TYPED(air_alarms, /obj/machinery/airalarm)
 	data["envData"] = list()
 	if(connected_sensor)
 		data["envData"] += list(list(
-			"name" = "Linked area",
+			"name" = "Привязанная зона",
 			"value" = my_area.name
 		))
 	data["envData"] += list(list(
-		"name" = "Pressure",
-		"value" = "[round(pressure, 0.01)] kPa",
+		"name" = "Давление",
+		"value" = "[round(pressure, 0.01)] кПа",
 		"danger" = tlv_collection["pressure"].check_value(pressure)
 	))
 	data["envData"] += list(list(
-		"name" = "Temperature",
-		"value" = "[round(temp, 0.01)] Kelvin / [round(temp, 0.01) - T0C] Celcius",
+		"name" = "Температура",
+		"value" = "[round(temp, 0.01)] Кельвин / [round(temp, 0.01) - T0C] Цельсий",
 		"danger" = tlv_collection["temperature"].check_value(temp),
 	))
 	if(total_moles)
@@ -287,7 +286,7 @@ GLOBAL_LIST_EMPTY_TYPED(air_alarms, /obj/machinery/airalarm)
 			var/portion = moles / total_moles
 			data["envData"] += list(list(
 				"name" = GLOB.meta_gas_info[gas_path][META_GAS_NAME],
-				"value" = "[round(moles, 0.01)] moles / [round(100 * portion, 0.01)] % / [round(portion * pressure, 0.01)] kPa",
+				"value" = "[round(moles, 0.01)] моль / [round(100 * portion, 0.01)] % / [round(portion * pressure, 0.01)] кПа",
 				"danger" = tlv_collection[gas_path].check_value(portion * pressure),
 			))
 
@@ -296,14 +295,14 @@ GLOBAL_LIST_EMPTY_TYPED(air_alarms, /obj/machinery/airalarm)
 		var/datum/tlv/tlv = tlv_collection[threshold]
 		var/list/singular_tlv = list()
 		if(threshold == "pressure")
-			singular_tlv["name"] = "Pressure"
-			singular_tlv["unit"] = "kPa"
+			singular_tlv["name"] = "Давление"
+			singular_tlv["unit"] = "кПа"
 		else if (threshold == "temperature")
-			singular_tlv["name"] = "Temperature"
-			singular_tlv["unit"] = "K"
+			singular_tlv["name"] = "Температура"
+			singular_tlv["unit"] = "К"
 		else
 			singular_tlv["name"] = GLOB.meta_gas_info[threshold][META_GAS_NAME]
-			singular_tlv["unit"] = "kPa"
+			singular_tlv["unit"] = "кПа"
 		singular_tlv["id"] = threshold
 		singular_tlv["warning_min"] = tlv.warning_min
 		singular_tlv["hazard_min"] = tlv.hazard_min
@@ -357,7 +356,7 @@ GLOBAL_LIST_EMPTY_TYPED(air_alarms, /obj/machinery/airalarm)
 				"path" = mode.type
 			))
 
-		// forgive me holy father
+		// прости меня, святой отец
 		data["panicSiphonPath"] = /datum/air_alarm_mode/panic_siphon
 		data["filteringPath"] = /datum/air_alarm_mode/filtering
 
@@ -530,11 +529,11 @@ GLOBAL_LIST_EMPTY_TYPED(air_alarms, /obj/machinery/airalarm)
 
 	var/color
 	if(danger_level == AIR_ALARM_ALERT_HAZARD)
-		color = "#FF0022" // red
+		color = "#FF0022" // красный
 	else if(danger_level == AIR_ALARM_ALERT_WARNING || area_danger)
-		color = "#FFAA00" // yellow
+		color = "#FFAA00" // жёлтый
 	else
-		color = "#00FFCC" // teal
+		color = "#00FFCC" // бирюзовый
 
 	set_light(1.5, 1, color)
 
@@ -569,7 +568,7 @@ GLOBAL_LIST_EMPTY_TYPED(air_alarms, /obj/machinery/airalarm)
 	. += mutable_appearance(icon, state)
 	. += emissive_appearance(icon, state, src, alpha = src.alpha)
 
-/// Check the current air and update our danger level.
+/// Проверить текущий воздух и обновить наш уровень опасности.
 /// [/obj/machinery/airalarm/var/danger_level]
 /obj/machinery/airalarm/proc/check_danger(turf/location, datum/gas_mixture/environment, exposed_temperature)
 	SIGNAL_HANDLER
@@ -604,28 +603,28 @@ GLOBAL_LIST_EMPTY_TYPED(air_alarms, /obj/machinery/airalarm)
 		var/is_low_temp = tlv_collection["temperature"].hazard_min != TLV_VALUE_IGNORE && temp <= tlv_collection["temperature"].hazard_min
 
 		if(is_low_pressure && is_low_temp)
-			warning_message = "Danger! Low pressure and temperature detected."
+			warning_message = "Опасность! Обнаружено низкое давление и температура."
 			return
 		if(is_low_pressure && is_high_temp)
-			warning_message = "Danger! Low pressure and high temperature detected."
+			warning_message = "Опасность! Обнаружено низкое давление и высокая температура."
 			return
 		if(is_high_pressure && is_high_temp)
-			warning_message = "Danger! High pressure and temperature detected."
+			warning_message = "Опасность! Обнаружено высокое давление и температура."
 			return
 		if(is_high_pressure && is_low_temp)
-			warning_message = "Danger! High pressure and low temperature detected."
+			warning_message = "Опасность! Обнаружено высокое давление и низкая температура."
 			return
 		if(is_low_pressure)
-			warning_message = "Danger! Low pressure detected."
+			warning_message = "Опасность! Обнаружено низкое давление."
 			return
 		if(is_high_pressure)
-			warning_message = "Danger! High pressure detected."
+			warning_message = "Опасность! Обнаружено высокое давление."
 			return
 		if(is_low_temp)
-			warning_message = "Danger! Low temperature detected."
+			warning_message = "Опасность! Обнаружена низкая температура."
 			return
 		if(is_high_temp)
-			warning_message = "Danger! High temperature detected."
+			warning_message = "Опасность! Обнаружена высокая температура."
 			return
 		else
 			warning_message = null
@@ -662,50 +661,50 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/machinery/airalarm, 27)
 
 	say(warning_message)
 
-/// Used for unlocked air alarm helper, which unlocks the air alarm.
+/// Используется помощником unlocked для воздушной тревоги, который разблокирует воздушную тревогу.
 /obj/machinery/airalarm/proc/unlock()
 	locked = FALSE
 
-/// Used for syndicate_access air alarm helper, which sets air alarm's required access to syndicate_access.
+/// Используется помощником syndicate_access для воздушной тревоги, который устанавливает требуемый доступ к воздушной тревоге на syndicate_access.
 /obj/machinery/airalarm/proc/give_syndicate_access()
 	req_access = list(ACCESS_SYNDICATE)
 
-///Used for away_general_access air alarm helper, which set air alarm's required access to away_general_access.
+///Используется помощником away_general_access для воздушной тревоги, который устанавливает требуемый доступ к воздушной тревоге на away_general_access.
 /obj/machinery/airalarm/proc/give_away_general_access()
 	req_access = list(ACCESS_AWAY_GENERAL)
 
-///Used for engine_access air alarm helper, which set air alarm's required access to away_general_access.
+///Используется помощником engine_access для воздушной тревоги, который устанавливает требуемый доступ к воздушной тревоге на away_general_access.
 /obj/machinery/airalarm/proc/give_engine_access()
 	name = "engine air alarm"
 	locked = FALSE
 	req_access = null
 	req_one_access = list(ACCESS_ATMOSPHERICS, ACCESS_ENGINEERING)
 
-///Used for mixingchamber_access air alarm helper, which set air alarm's required access to away_general_access.
+///Используется помощником mixingchamber_access для воздушной тревоги, который устанавливает требуемый доступ к воздушной тревоге на away_general_access.
 /obj/machinery/airalarm/proc/give_mixingchamber_access()
 	name = "chamber air alarm"
 	locked = FALSE
 	req_access = null
 	req_one_access = list(ACCESS_ATMOSPHERICS, ACCESS_ORDNANCE)
 
-///Used for all_access air alarm helper, which set air alarm's required access to null.
+///Используется помощником all_access для воздушной тревоги, который устанавливает требуемый доступ к воздушной тревоге в null.
 /obj/machinery/airalarm/proc/give_all_access()
 	name = "all-access air alarm"
-	desc = "This particular atmos control unit appears to have no access restrictions."
+	desc = "Эта конкретная атмосферная контрольная панель, похоже, не имеет ограничений доступа."
 	locked = FALSE
 	req_access = null
 	req_one_access = null
 
-///Used for air alarm cold room tlv helper, which sets cold room temperature and pressure alarm thresholds
+///Используется помощником tlv_cold_room для воздушной тревоги, который устанавливает пороги тревоги по температуре и давлению для холодной комнаты
 /obj/machinery/airalarm/proc/set_tlv_cold_room()
 	tlv_collection["temperature"] = new /datum/tlv/cold_room_temperature
 	tlv_collection["pressure"] = new /datum/tlv/cold_room_pressure
 
-///Used for air alarm kitchen tlv helper, which ensures that kitchen air alarm doesn't trigger from cold room air
+///Используется помощником tlv_kitchen для воздушной тревоги, который гарантирует, что кухонная воздушная тревога не срабатывает из-за воздуха из холодной комнаты
 /obj/machinery/airalarm/proc/set_tlv_kitchen()
 	tlv_collection["temperature"] = new /datum/tlv/kitchen_temperature
 
-///Used for air alarm no tlv helper, which removes alarm thresholds
+///Используется помощником tlv_no_checks для воздушной тревоги, который удаляет пороги тревоги
 /obj/machinery/airalarm/proc/set_tlv_no_checks()
 	tlv_collection["temperature"] = new /datum/tlv/no_checks
 	tlv_collection["pressure"] = new /datum/tlv/no_checks
@@ -713,7 +712,7 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/machinery/airalarm, 27)
 	for(var/gas_path in GLOB.meta_gas_info)
 		tlv_collection[gas_path] = new /datum/tlv/no_checks
 
-///Used for air alarm link helper, which connects air alarm to a sensor with corresponding chamber_id
+///Используется помощником link для воздушной тревоги, который подключает воздушную тревогу к датчику с соответствующим chamber_id
 /obj/machinery/airalarm/proc/setup_chamber_link()
 	var/obj/machinery/air_sensor/sensor = null
 	for(var/obj/machinery/air_sensor/target as anything in SSmachines.get_machines_by_type_and_subtypes(/obj/machinery/air_sensor))
@@ -764,3 +763,4 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/machinery/airalarm, 27)
 	update_name()
 
 #undef AIRALARM_WARNING_COOLDOWN
+

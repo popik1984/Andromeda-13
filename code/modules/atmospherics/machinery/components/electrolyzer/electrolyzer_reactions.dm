@@ -14,26 +14,26 @@ GLOBAL_LIST_INIT(electrolyzer_reactions, electrolyzer_reactions_list())
 
 /datum/electrolyzer_reaction
 	var/list/requirements
-	var/name = "reaction"
+	var/name = "реакция"
 	var/id = "r"
 	var/desc = ""
 	var/list/factor
 
 /**
- * Electrolyzer reaction.
- * Args:
- * * air_mixture: The gas_mixture receiving the electrolysis.
- * * working_power: How much energy to put into the electrolysis, in electrolyzer units. A value of 1 is what a tier 1 electrolyzer would put in.
- * * electrolyzer_args: Additional arguments for alternative methods of electrolysis.
+ * Реакция электролизёра.
+ * Аргументы:
+ * * air_mixture: Газовая смесь, подвергающаяся электролизу.
+ * * working_power: Сколько энергии вложить в электролиз, в единицах электролизёра. Значение 1 соответствует электролизёру 1-го тира.
+ * * electrolyzer_args: Дополнительные аргументы для альтернативных методов электролиза.
  */
 /datum/electrolyzer_reaction/proc/react(datum/gas_mixture/air_mixture, working_power, list/electrolyzer_args = list())
 	return
 
 /**
- * Checks whether the requirements are met for a reaction.
- * Args:
- * * air_mixture: The air mixture to check the requirements for.
- * * electrolyzer_args: Additional arguments for alternative methods of electrolysis.
+ * Проверяет, выполнены ли требования для реакции.
+ * Аргументы:
+ * * air_mixture: Газовая смесь для проверки требований.
+ * * electrolyzer_args: Дополнительные аргументы для альтернативных методов электролиза.
  */
 /datum/electrolyzer_reaction/proc/reaction_check(datum/gas_mixture/air_mixture, list/electrolyzer_args = list())
 	var/temp = air_mixture.temperature
@@ -48,17 +48,17 @@ GLOBAL_LIST_INIT(electrolyzer_reactions, electrolyzer_reactions_list())
 	return TRUE
 
 /datum/electrolyzer_reaction/h2o_conversion
-	name = "H2O Conversion"
+	name = "Преобразование H2O"
 	id = "h2o_conversion"
-	desc = "Conversion of H2o into O2 and H2"
+	desc = "Преобразование H2O в O2 и H2"
 	requirements = list(
 		/datum/gas/water_vapor = MINIMUM_MOLE_COUNT
 	)
 	factor = list(
-		/datum/gas/water_vapor = "2 moles of H2O get consumed",
-		/datum/gas/oxygen = "1 mole of O2 gets produced",
-		/datum/gas/hydrogen = "2 moles of H2 get produced",
-		"Location" = "Can only happen on turfs with an active Electrolyzer.",
+		/datum/gas/water_vapor = "Потребляется 2 моля H2O",
+		/datum/gas/oxygen = "Производится 1 моль O2",
+		/datum/gas/hydrogen = "Производится 2 моля H2",
+		"Location" = "Может происходить только на тайлах с активным электролизёром.",
 	)
 
 /datum/electrolyzer_reaction/h2o_conversion/react(datum/gas_mixture/air_mixture, working_power, list/electrolyzer_args = list())
@@ -74,16 +74,16 @@ GLOBAL_LIST_INIT(electrolyzer_reactions, electrolyzer_reactions_list())
 		air_mixture.temperature = max(air_mixture.temperature * old_heat_capacity / new_heat_capacity, TCMB)
 
 /datum/electrolyzer_reaction/nob_conversion
-	name = "Hypernob conversion"
+	name = "Преобразование гиперноблия"
 	id = "nob_conversion"
-	desc = "Conversion of Hypernoblium into Antinoblium"
+	desc = "Преобразование гиперноблия в антиноблий"
 	requirements = list(
 		/datum/gas/hypernoblium = MINIMUM_MOLE_COUNT,
 	)
 	factor = list(
-		/datum/gas/hypernoblium = "1 mole of Hypernoblium gets consumed",
-		/datum/gas/antinoblium = "1 mole of Antinoblium get produced",
-		"Location" = "Can only happen on turfs that are being struck by supermatter zaps with a power level above 5 GeV.",
+		/datum/gas/hypernoblium = "Потребляется 1 моль гиперноблия",
+		/datum/gas/antinoblium = "Производится 1 моль антиноблия",
+		"Location" = "Может происходить только на тайлах, поражаемых разрядами суперматерии с уровнем мощности выше 5 ГэВ.",
 	)
 
 /datum/electrolyzer_reaction/nob_conversion/reaction_check(datum/gas_mixture/air_mixture, list/electrolyzer_args = list())
@@ -92,7 +92,7 @@ GLOBAL_LIST_INIT(electrolyzer_reactions, electrolyzer_reactions_list())
 	. = ..()
 
 /datum/electrolyzer_reaction/nob_conversion/react(datum/gas_mixture/air_mixture, working_power, list/electrolyzer_args = list())
-	/// The supermatter zap power_level.
+	/// Уровень мощности разряда суперматерии.
 	var/supermatter_power = electrolyzer_args[ELECTROLYSIS_ARGUMENT_SUPERMATTER_POWER]
 	var/list/cached_gases = air_mixture.gases
 	var/old_heat_capacity = air_mixture.heat_capacity()
@@ -107,19 +107,19 @@ GLOBAL_LIST_INIT(electrolyzer_reactions, electrolyzer_reactions_list())
 		air_mixture.temperature = max(air_mixture.temperature * old_heat_capacity / new_heat_capacity, TCMB)
 
 /datum/electrolyzer_reaction/halon_generation
-	name = "Halon generation"
+	name = "Генерация галона"
 	id = "halon_generation"
-	desc = "Production of halon from the electrolysis of BZ."
+	desc = "Производство галона путём электролиза BZ."
 	requirements = list(
 		/datum/gas/bz = MINIMUM_MOLE_COUNT,
 	)
 	factor = list(
-		/datum/gas/bz = "Consumed during reaction.",
-		/datum/gas/oxygen = "0.2 moles of oxygen gets produced per mole of BZ consumed.",
-		/datum/gas/halon = "2 moles of Halon gets produced per mole of BZ consumed.",
-		"Energy" = "91.2321 kJ of thermal energy is released per mole of BZ consumed.",
-		"Temperature" = "Reaction efficiency is proportional to temperature.",
-		"Location" = "Can only happen on turfs with an active Electrolyzer.",
+		/datum/gas/bz = "Потребляется в процессе реакции.",
+		/datum/gas/oxygen = "Производится 0.2 моля кислорода на каждый моль потреблённого BZ.",
+		/datum/gas/halon = "Производится 2 моля галона на каждый моль потреблённого BZ.",
+		"Energy" = "Выделяется 91.2321 кДж тепловой энергии на каждый моль потреблённого BZ.",
+		"Temperature" = "Эффективность реакции пропорциональна температуре.",
+		"Location" = "Может происходить только на тайлах с активным электролизёром.",
 	)
 
 /datum/electrolyzer_reaction/halon_generation/react(datum/gas_mixture/air_mixture, working_power, list/electrolyzer_args = list())

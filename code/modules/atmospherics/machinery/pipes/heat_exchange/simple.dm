@@ -3,7 +3,8 @@
 	icon_state = "pipe11-3"
 
 	name = "pipe"
-	desc = "A one meter section of heat-exchanging pipe."
+	desc = "Метровая секция теплообменной трубы."
+	gender = FEMALE
 
 	dir = SOUTH
 	initialize_directions = SOUTH|NORTH
@@ -13,6 +14,16 @@
 
 	construction_type = /obj/item/pipe/binary/bendable
 	pipe_state = "he"
+
+/obj/machinery/atmospherics/pipe/heat_exchanging/simple/get_ru_names()
+	return list(
+		NOMINATIVE = "труба",
+		GENITIVE = "трубы",
+		DATIVE = "трубе",
+		ACCUSATIVE = "трубу",
+		INSTRUMENTAL = "трубой",
+		PREPOSITIONAL = "трубе",
+	)
 
 /obj/machinery/atmospherics/pipe/heat_exchanging/simple/set_init_directions()
 	if(ISDIAGONALDIR(dir))

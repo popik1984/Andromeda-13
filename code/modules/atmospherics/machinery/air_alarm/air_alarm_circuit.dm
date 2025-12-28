@@ -1,22 +1,22 @@
 /obj/item/circuit_component/air_alarm_general
 	display_name = "Air Alarm"
-	desc = "Outputs basic information that the air alarm has recorded"
+	desc = "Выводит базовую информацию, записанную воздушной тревогой."
 
 	var/obj/machinery/airalarm/connected_alarm
 
-	/// Enables the fire alarm
+	/// Включает пожарную тревогу
 	var/datum/port/input/enable_fire_alarm
-	/// Disables the fire alarm
+	/// Выключает пожарную тревогу
 	var/datum/port/input/disable_fire_alarm
 
-	/// The mode to set the air alarm to
+	/// Режим для установки воздушной тревоги
 	var/datum/port/input/option/mode
-	/// The trigger to set the mode
+	/// Триггер для установки режима
 	var/datum/port/input/set_mode
 
-	/// Whether the fire alarm is enabled or not
+	/// Включена ли пожарная тревога или нет
 	var/datum/port/output/fire_alarm_enabled
-	/// The current set mode
+	/// Текущий установленный режим
 	var/datum/port/output/current_mode
 
 	var/static/list/options_map
@@ -100,7 +100,7 @@
 
 /obj/item/circuit_component/air_alarm
 	display_name = "Air Alarm Core Control"
-	desc = "Controls levels of gases and their temperature as well as all vents and scrubbers in the room."
+	desc = "Управляет уровнями газов и их температурой, а также всеми вентилями и скрубберами в помещении."
 
 	var/datum/port/input/option/air_alarm_options
 
@@ -236,38 +236,38 @@
 
 /obj/item/circuit_component/air_alarm_scrubbers
 	display_name = "Air Alarm Scrubber Core Control"
-	desc = "Controls the scrubbers in the room."
+	desc = "Управляет скрубберами в помещении."
 
 	var/datum/port/input/option/scrubbers
 
-	/// Enables the scrubber
+	/// Включает скруббер
 	var/datum/port/input/enable
-	/// Disables the scrubber
+	/// Выключает скруббер
 	var/datum/port/input/disable
 
-	/// Enables siphoning
+	/// Включает сифон
 	var/datum/port/input/enable_siphon
-	/// Disables siphoning
+	/// Выключает сифон
 	var/datum/port/input/disable_siphon
-	/// Enables extended range
+	/// Включает расширенный диапазон
 	var/datum/port/input/enable_extended_range
-	/// Disables extended range
+	/// Выключает расширенный диапазон
 	var/datum/port/input/disable_extended_range
-	/// Gas to filter using the scrubber
+	/// Газ для фильтрации с помощью скруббера
 	var/datum/port/input/gas_filter
-	/// Sets the filter
+	/// Устанавливает фильтр
 	var/datum/port/input/set_gas_filter
-	/// Requests an update of the data
+	/// Запрашивает обновление данных
 	var/datum/port/input/request_update
 
 
-	/// Whether the scrubber is enabled or not
+	/// Включён ли скруббер или нет
 	var/datum/port/output/enabled
-	/// Whether the scrubber is siphoning or not
+	/// Работает ли скруббер в режиме сифона или нет
 	var/datum/port/output/is_siphoning
-	/// Information based on what the scrubber is filtering. Outputs null if the scrubber is siphoning
+	/// Информация о том, что фильтрует скруббер. Выводит null, если скруббер работает в режиме сифона
 	var/datum/port/output/filtering
-	/// Sent when an update is received
+	/// Отправляется при получении обновления
 	var/datum/port/output/update_received
 
 	var/obj/machinery/airalarm/connected_alarm
@@ -445,48 +445,48 @@
 
 /obj/item/circuit_component/air_alarm_vents
 	display_name = "Air Alarm Vent Core Control"
-	desc = "Controls the vents in the room."
+	desc = "Управляет вентилями в помещении."
 
 	var/datum/port/input/option/vents
 
-	/// Enables the vent
+	/// Включает вентиль
 	var/datum/port/input/enable
-	/// Disables the vent
+	/// Выключает вентиль
 	var/datum/port/input/disable
 
-	/// Enables siphoning
+	/// Включает сифон
 	var/datum/port/input/enable_siphon
-	/// Disables siphoning
+	/// Выключает сифон
 	var/datum/port/input/disable_siphon
-	/// Enables external
+	/// Включает внешний
 	var/datum/port/input/enable_external
-	/// Disables external
+	/// Выключает внешний
 	var/datum/port/input/disable_external
-	/// External target pressure
+	/// Целевое внешнее давление
 	var/datum/port/input/external_pressure
-	/// Enables internal
+	/// Включает внутренний
 	var/datum/port/input/enable_internal
-	/// Disables internal
+	/// Выключает внутренний
 	var/datum/port/input/disable_internal
-	/// Internal target pressure
+	/// Целевое внутреннее давление
 	var/datum/port/input/internal_pressure
-	/// Requests an update of the data
+	/// Запрашивает обновление данных
 	var/datum/port/input/request_update
 
 
-	/// Whether the scrubber is enabled or not
+	/// Включён ли скруббер или нет
 	var/datum/port/output/enabled
-	/// Whether the scrubber is siphoning or not
+	/// Работает ли скруббер в режиме сифона или нет
 	var/datum/port/output/is_siphoning
-	/// Whether internal pressure is on or not
+	/// Включено ли внутреннее давление или нет
 	var/datum/port/output/internal_on
-	/// Whether external pressure is on or not
+	/// Включено ли внешнее давление или нет
 	var/datum/port/output/external_on
-	/// Reported external pressure
+	/// Сообщаемое внешнее давление
 	var/datum/port/output/current_external_pressure
-	/// Reported internal pressure
+	/// Сообщаемое внутреннее давление
 	var/datum/port/output/current_internal_pressure
-	/// Sent when an update is received
+	/// Отправляется при получении обновления
 	var/datum/port/output/update_received
 
 	var/obj/machinery/airalarm/connected_alarm

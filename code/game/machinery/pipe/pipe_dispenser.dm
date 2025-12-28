@@ -6,18 +6,18 @@
 	name = "pipe dispenser"
 	icon = 'icons/obj/machines/lathes.dmi'
 	icon_state = "pipe_d"
-	desc = "Dispenses countless types of pipes. Very useful if you need pipes."
+	desc = "Выдаёт бесчисленное множество типов труб. Очень полезно, если вам нужны трубы."
 	density = TRUE
 	interaction_flags_machine = INTERACT_MACHINE_ALLOW_SILICON | INTERACT_MACHINE_OPEN_SILICON | INTERACT_MACHINE_OFFLINE
 	interaction_flags_mouse_drop = NEED_DEXTERITY
 
 	var/wait = 0
 	var/piping_layer = PIPING_LAYER_DEFAULT
-	///color of pipe
+	/// Цвет трубы.
 	var/paint_color = "green"
-	///type of dispenser
+	/// Тип диспенсера.
 	var/category = ATMOS_PIPEDISPENSER
-	///smart pipe directions
+	/// Направления умной трубы.
 	var/p_init_dir = ALL_CARDINALS
 
 /obj/machinery/pipedispenser/attack_paw(mob/user, list/modifiers)
@@ -35,7 +35,7 @@
 		"selected_color" = paint_color,
 	)
 
-	// The get the recipies for this dispenser
+	// Получаем рецепты для этого диспенсера.
 	var/list/recipes
 	switch(category)
 		if(ATMOS_PIPEDISPENSER)
@@ -44,16 +44,16 @@
 			recipes = GLOB.disposal_pipe_recipes
 		if(TRANSIT_PIPEDISPENSER)
 			recipes = GLOB.transit_tube_recipes
-	// Generate pipe categories
+	// Генерируем категории труб.
 	for(var/c in recipes)
 		var/list/cat = recipes[c]
 		var/list/r = list()
 		for(var/i in 1 to cat.len)
 			var/datum/pipe_info/info = cat[i]
 			r += list(list("pipe_name" = info.name, "pipe_index" = i, "all_layers" = info.all_layers, "dir" = NORTH))
-			// if this is bendable, add the bent version of the pipe (disposals)
+			// Если эта труба гнётся, добавляем изогнутую версию трубы (для утилизации).
 			if (info.dirtype == PIPE_BENDABLE)
-				r += list(list("pipe_name" = "Bent " + info.name, "pipe_index" = i, "all_layers" = info.all_layers, "dir" = NORTHEAST))
+				r += list(list("pipe_name" = "Изогнутая " + info.name, "pipe_index" = i, "all_layers" = info.all_layers, "dir" = NORTHEAST))
 		data["categories"] += list(list("cat_name" = c, "recipes" = r))
 	var/list/init_directions = list("north" = FALSE, "south" = FALSE, "east" = FALSE, "west" = FALSE)
 	for(var/direction in GLOB.cardinals)
@@ -77,17 +77,17 @@
 						var/recipe_type = info.type
 						var/p_type = info.id
 
-						// No spawning arbitrary paths (literally 1984)
+						// Нельзя создавать произвольные пути (буквально 1984).
 						if(!verify_recipe(GLOB.atmos_pipe_recipes, p_type))
 							return
 
-						// If this is a meter, make that.
+						// Если это измеритель, создаём его.
 						if(recipe_type == /datum/pipe_info/meter)
 							new /obj/item/pipe_meter(loc)
 							wait = world.time + 1 SECONDS
 							return
 
-						// Otherwise, make a pipe/device
+						// В противном случае создаём трубу/устройство.
 						var/p_dir = params["pipe_dir"]
 						var/obj/item/pipe/pipe_out = new (loc, p_type, p_dir)
 						pipe_out.p_init_dir = p_init_dir
@@ -101,13 +101,13 @@
 						var/datum/pipe_info/info = GLOB.disposal_pipe_recipes[params["category"]][params["pipe_type"]]
 						var/p_type = info.id
 
-						// No spawning arbitrary paths (literally 1984)
+						// Нельзя создавать произвольные пути (буквально 1984).
 						if(!verify_recipe(GLOB.disposal_pipe_recipes, p_type))
 							return
 
 						var/obj/structure/disposalconstruct/disposal_out = new (loc, p_type)
 						if(!disposal_out.can_place())
-							to_chat(usr, span_warning("There's not enough room to build that here!"))
+							to_chat(usr, span_warning("Здесь недостаточно места для постройки!"))
 							qdel(disposal_out)
 							return
 
@@ -120,7 +120,7 @@
 						var/datum/pipe_info/info = GLOB.transit_tube_recipes[params["category"]][params["pipe_type"]]
 						var/p_type = info.id
 
-						// No spawning arbitrary paths (literally 1984)
+						// Нельзя создавать произвольные пути (буквально 1984).
 						if(!verify_recipe(GLOB.transit_tube_recipes, p_type))
 							return
 
@@ -134,11 +134,11 @@
 
 		if("init_dir_setting")
 			var/target_dir = p_init_dir ^ text2dir(params["dir_flag"])
-			// Refuse to create a smart pipe that can only connect in one direction (it would act weirdly and lack an icon)
+			// Отказываемся создавать умную трубу, которая может соединяться только в одном направлении (она будет странно себя вести и у неё не будет иконки).
 			if (ISNOTSTUB(target_dir))
 				p_init_dir = target_dir
 			else
-				to_chat(usr, span_warning("\The [src]'s screen flashes a warning: Can't configure a pipe to only connect in one direction."))
+				to_chat(usr, span_warning("Экран [declent_ru(GENITIVE)] мигает предупреждением: Невозможно настроить трубу для соединения только в одном направлении."))
 
 		if("init_reset")
 			p_init_dir = ALL_CARDINALS
@@ -154,7 +154,7 @@
 /obj/machinery/pipedispenser/attackby(obj/item/W, mob/user, list/modifiers, list/attack_modifiers)
 	add_fingerprint(user)
 	if (istype(W, /obj/item/pipe) || istype(W, /obj/item/pipe_meter))
-		to_chat(usr, span_notice("You put [W] back into [src]."))
+		to_chat(usr, span_notice("Вы кладёте [W] обратно в [declent_ru(ACCUSATIVE)]."))
 		qdel(W)
 		return
 	else
@@ -179,11 +179,11 @@
 	name = "disposal pipe dispenser"
 	icon = 'icons/obj/machines/lathes.dmi'
 	icon_state = "pipe_d"
-	desc = "Dispenses pipes that will ultimately be used to move trash around."
+	desc = "Выдаёт трубы, которые в конечном итоге будут использоваться для перемещения мусора."
 	density = TRUE
 	category = DISPOSAL_PIPEDISPENSER
 
-//Allow you to drag-drop disposal pipes and transit tubes into it
+// Позволяет перетаскивать в него трубы утилизации и транзитные трубы.
 /obj/machinery/pipedispenser/disposal/mouse_drop_receive(obj/structure/pipe, mob/user, params)
 	if (!istype(pipe, /obj/structure/disposalconstruct) && !istype(pipe, /obj/structure/c_transit_tube) && !istype(pipe, /obj/structure/c_transit_tube_pod))
 		return
@@ -196,15 +196,47 @@
 
 	qdel(pipe)
 
-//transit tube dispenser
-//inherit disposal for the dragging proc
+// Диспенсер транзитных труб.
+// Наследуем от утилизации для процедуры перетаскивания.
 /obj/machinery/pipedispenser/disposal/transit_tube
 	name = "transit tube dispenser"
 	icon = 'icons/obj/machines/lathes.dmi'
 	icon_state = "pipe_d"
 	density = TRUE
-	desc = "Dispenses pipes that will move beings around."
+	desc = "Выдаёт трубы, которые будут перемещать существ."
 	category = TRANSIT_PIPEDISPENSER
+
+// Добавляем русские названия для объектов.
+
+/obj/machinery/pipedispenser/get_ru_names()
+	return list(
+		NOMINATIVE = "трубный диспенсер",
+		GENITIVE = "трубного диспенсера",
+		DATIVE = "трубному диспенсеру",
+		ACCUSATIVE = "трубный диспенсер",
+		INSTRUMENTAL = "трубным диспенсером",
+		PREPOSITIONAL = "трубном диспенсере",
+	)
+
+/obj/machinery/pipedispenser/disposal/get_ru_names()
+	return list(
+		NOMINATIVE = "диспенсер труб утилизации",
+		GENITIVE = "диспенсера труб утилизации",
+		DATIVE = "диспенсеру труб утилизации",
+		ACCUSATIVE = "диспенсер труб утилизации",
+		INSTRUMENTAL = "диспенсером труб утилизации",
+		PREPOSITIONAL = "диспенсере труб утилизации",
+	)
+
+/obj/machinery/pipedispenser/disposal/transit_tube/get_ru_names()
+	return list(
+		NOMINATIVE = "диспенсер транзитных труб",
+		GENITIVE = "диспенсера транзитных труб",
+		DATIVE = "диспенсеру транзитных труб",
+		ACCUSATIVE = "диспенсер транзитных труб",
+		INSTRUMENTAL = "диспенсером транзитных труб",
+		PREPOSITIONAL = "диспенсере транзитных труб",
+	)
 
 #undef ATMOS_PIPEDISPENSER
 #undef DISPOSAL_PIPEDISPENSER

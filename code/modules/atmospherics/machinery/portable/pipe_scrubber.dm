@@ -1,6 +1,6 @@
 /obj/machinery/portable_atmospherics/pipe_scrubber
 	name = "pipe scrubber"
-	desc = "A machine for cleaning out pipes of lingering gases. It is a huge tank with a pump attached to it."
+	desc = "Устройство для очистки труб от остаточных газов. Представляет собой большой бак с насосом."
 	icon_state = "pipe_scrubber"
 	density = TRUE
 	max_integrity = 250
@@ -29,6 +29,16 @@
 		/datum/gas/proto_nitrate,
 		/datum/gas/zauker,
 		/datum/gas/halon,
+	)
+
+/obj/machinery/portable_atmospherics/pipe_scrubber/get_ru_names()
+	return list(
+		NOMINATIVE = "трубный скруббер",
+		GENITIVE = "трубного скруббера",
+		DATIVE = "трубному скрубберу",
+		ACCUSATIVE = "трубный скруббер",
+		INSTRUMENTAL = "трубным скруббером",
+		PREPOSITIONAL = "трубном скруббере",
 	)
 
 /obj/machinery/portable_atmospherics/pipe_scrubber/Initialize(mapload)

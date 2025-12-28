@@ -3,7 +3,8 @@
 	density = FALSE
 
 	name = "gas mixer"
-	desc = "Very useful for mixing gasses."
+	desc = "Очень полезен для смешивания газов."
+	gender = MALE
 
 	can_unwrench = TRUE
 	construction_type = /obj/item/pipe/trinary/flippable
@@ -17,6 +18,16 @@
 	var/node2_concentration = 0.5
 	//node 3 is the outlet, nodes 1 & 2 are intakes
 
+/obj/machinery/atmospherics/components/trinary/mixer/get_ru_names()
+	return list(
+		NOMINATIVE = "газовый смеситель",
+		GENITIVE = "газового смесителя",
+		DATIVE = "газовому смесителю",
+		ACCUSATIVE = "газовый смеситель",
+		INSTRUMENTAL = "газовым смесителем",
+		PREPOSITIONAL = "газовом смесителе",
+	)
+
 /obj/machinery/atmospherics/components/trinary/mixer/Initialize(mapload)
 	. = ..()
 	var/datum/gas_mixture/air3 = airs[3]
@@ -26,14 +37,14 @@
 
 /obj/machinery/atmospherics/components/trinary/mixer/add_context(atom/source, list/context, obj/item/held_item, mob/user)
 	. = ..()
-	context[SCREENTIP_CONTEXT_CTRL_LMB] = "Turn [on ? "off" : "on"]"
-	context[SCREENTIP_CONTEXT_ALT_LMB] = "Maximize target pressure"
+	context[SCREENTIP_CONTEXT_CTRL_LMB] = "[on ? "Выключить" : "Включить"]"
+	context[SCREENTIP_CONTEXT_ALT_LMB] = "Максимальное давление"
 	return CONTEXTUAL_SCREENTIP_SET
 
 /obj/machinery/atmospherics/components/trinary/mixer/click_ctrl(mob/user)
 	if(is_operational)
 		set_on(!on)
-		balloon_alert(user, "turned [on ? "on" : "off"]")
+		balloon_alert(user, "[on ? "включено" : "выключено"]")
 		investigate_log("was turned [on ? "on" : "off"] by [key_name(user)]", INVESTIGATE_ATMOS)
 		return CLICK_ACTION_SUCCESS
 	return CLICK_ACTION_BLOCKING
@@ -44,7 +55,7 @@
 
 	target_pressure = MAX_OUTPUT_PRESSURE
 	investigate_log("was set to [target_pressure] kPa by [key_name(user)]", INVESTIGATE_ATMOS)
-	balloon_alert(user, "pressure output on set to [target_pressure] kPa")
+	balloon_alert(user, "выходное давление установлено на [target_pressure] кПа")
 	return CLICK_ACTION_SUCCESS
 
 /obj/machinery/atmospherics/components/trinary/mixer/update_overlays()
@@ -186,7 +197,7 @@
 /obj/machinery/atmospherics/components/trinary/mixer/can_unwrench(mob/user)
 	. = ..()
 	if(. && on && is_operational)
-		to_chat(user, span_warning("You cannot unwrench [src], turn it off first!"))
+		to_chat(user, span_warning("Вы не можете открутить [src], сначала выключите его!"))
 		return FALSE
 
 // mapping
@@ -233,11 +244,22 @@
 
 /obj/machinery/atmospherics/components/trinary/mixer/airmix //For standard airmix to distro
 	name = "air mixer"
+	gender = MALE
 	icon_state = "mixer_on-0"
 	node1_concentration = N2STANDARD
 	node2_concentration = O2STANDARD
 	target_pressure = MAX_OUTPUT_PRESSURE
 	on = TRUE
+
+/obj/machinery/atmospherics/components/trinary/mixer/airmix/get_ru_names()
+	return list(
+		NOMINATIVE = "смеситель воздуха",
+		GENITIVE = "смесителя воздуха",
+		DATIVE = "смесителю воздуха",
+		ACCUSATIVE = "смеситель воздуха",
+		INSTRUMENTAL = "смесителем воздуха",
+		PREPOSITIONAL = "смесителе воздуха",
+	)
 
 /obj/machinery/atmospherics/components/trinary/mixer/airmix/inverse
 	node1_concentration = O2STANDARD

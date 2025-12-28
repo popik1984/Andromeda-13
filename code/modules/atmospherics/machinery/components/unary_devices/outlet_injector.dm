@@ -2,7 +2,7 @@
 	icon_state = "inje_map-3"
 
 	name = "air injector"
-	desc = "Has a valve and pump attached to it."
+	desc = "Имеет клапан и насос."
 
 	use_power = IDLE_POWER_USE
 	can_unwrench = TRUE
@@ -18,6 +18,16 @@
 	///Rate of operation of the device
 	var/volume_rate = 50
 
+/obj/machinery/atmospherics/components/unary/outlet_injector/get_ru_names()
+	return list(
+		NOMINATIVE = "воздушный инжектор",
+		GENITIVE = "воздушного инжектора",
+		DATIVE = "воздушному инжектору",
+		ACCUSATIVE = "воздушный инжектор",
+		INSTRUMENTAL = "воздушным инжектором",
+		PREPOSITIONAL = "воздушном инжекторе",
+	)
+
 /obj/machinery/atmospherics/components/unary/outlet_injector/Initialize(mapload)
 	if(isnull(id_tag))
 		id_tag = assign_random_name()
@@ -27,7 +37,7 @@
 	if(!tool_screentips)
 		tool_screentips = string_assoc_nested_list(list(
 			TOOL_MULTITOOL = list(
-				SCREENTIP_CONTEXT_LMB = "Log to link later with air sensor",
+				SCREENTIP_CONTEXT_LMB = "Запомнить для связи с сенсором",
 			)
 		))
 	AddElement(/datum/element/contextual_screentip_tools, tool_screentips)
@@ -35,13 +45,13 @@
 
 /obj/machinery/atmospherics/components/unary/outlet_injector/add_context(atom/source, list/context, obj/item/held_item, mob/user)
 	. = ..()
-	context[SCREENTIP_CONTEXT_CTRL_LMB] = "Turn [on ? "off" : "on"]"
-	context[SCREENTIP_CONTEXT_ALT_LMB] = "Maximize transfer rate"
+	context[SCREENTIP_CONTEXT_CTRL_LMB] = "[on ? "Выключить" : "Включить"]"
+	context[SCREENTIP_CONTEXT_ALT_LMB] = "Максимизировать подачу"
 	return CONTEXTUAL_SCREENTIP_SET
 
 /obj/machinery/atmospherics/components/unary/outlet_injector/examine(mob/user)
 	. = ..()
-	. += span_notice("You can link it with an air sensor using a multitool.")
+	. += span_notice("Вы можете связать его с воздушным сенсором с помощью мультитула.")
 
 /obj/machinery/atmospherics/components/unary/outlet_injector/multitool_act(mob/living/user, obj/item/multitool/multi_tool)
 	if(istype(multi_tool.buffer, /obj/machinery/air_sensor))
@@ -50,14 +60,14 @@
 		sensor.multitool_act(user, multi_tool)
 		return ITEM_INTERACT_SUCCESS
 
-	balloon_alert(user, "injector saved in buffer")
+	balloon_alert(user, "инжектор сохранён в буфер")
 	multi_tool.set_buffer(src)
 	return ITEM_INTERACT_SUCCESS
 
 /obj/machinery/atmospherics/components/unary/outlet_injector/click_ctrl(mob/user)
 	if(is_operational)
 		set_on(!on)
-		balloon_alert(user, "turned [on ? "on" : "off"]")
+		balloon_alert(user, "[on ? "включено" : "выключено"]")
 		investigate_log("was turned [on ? "on" : "off"] by [key_name(user)]", INVESTIGATE_ATMOS)
 		return CLICK_ACTION_BLOCKING
 	return CLICK_ACTION_SUCCESS
@@ -68,7 +78,7 @@
 
 	volume_rate = MAX_TRANSFER_RATE
 	investigate_log("was set to [volume_rate] L/s by [key_name(user)]", INVESTIGATE_ATMOS)
-	balloon_alert(user, "volume output set to [volume_rate] L/s")
+	balloon_alert(user, "подача установлена на [volume_rate] л/с")
 	update_appearance(UPDATE_ICON)
 	return CLICK_ACTION_SUCCESS
 
@@ -149,7 +159,7 @@
 /obj/machinery/atmospherics/components/unary/outlet_injector/can_unwrench(mob/user)
 	. = ..()
 	if(. && on && is_operational)
-		to_chat(user, span_warning("You cannot unwrench [src], turn it off first!"))
+		to_chat(user, span_warning("Нельзя откручивать [declent_ru(ACCUSATIVE)], сначала выключите его!"))
 		return FALSE
 
 // mapping

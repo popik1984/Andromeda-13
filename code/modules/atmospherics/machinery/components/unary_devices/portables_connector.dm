@@ -2,7 +2,7 @@
 	icon_state = "connector_map-3"
 
 	name = "connector port"
-	desc = "For connecting portables devices related to atmospherics control."
+	desc = "Для подключения переносного атмосферного оборудования."
 
 	can_unwrench = TRUE
 
@@ -19,6 +19,16 @@
 
 	///Reference to the connected device
 	var/obj/machinery/portable_atmospherics/connected_device
+
+/obj/machinery/atmospherics/components/unary/portables_connector/get_ru_names()
+	return list(
+		NOMINATIVE = "соединительный порт",
+		GENITIVE = "соединительного порта",
+		DATIVE = "соединительному порту",
+		ACCUSATIVE = "соединительный порт",
+		INSTRUMENTAL = "соединительным портом",
+		PREPOSITIONAL = "соединительном порте",
+	)
 
 /obj/machinery/atmospherics/components/unary/portables_connector/Initialize(mapload)
 	. = ..()
@@ -54,7 +64,7 @@
 /obj/machinery/atmospherics/components/unary/portables_connector/can_unwrench(mob/user)
 	. = ..()
 	if(. && connected_device)
-		to_chat(user, span_warning("You cannot unwrench [src], detach [connected_device] first!"))
+		to_chat(user, span_warning("Нельзя откручивать [declent_ru(ACCUSATIVE)], сначала отсоедините [connected_device.declent_ru(ACCUSATIVE)]!"))
 		return FALSE
 
 /obj/machinery/atmospherics/components/unary/portables_connector/layer2

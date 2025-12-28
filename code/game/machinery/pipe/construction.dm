@@ -1,15 +1,15 @@
-/*CONTENTS
-Buildable pipes
-Buildable meters
+/*СОДЕРЖИМОЕ
+Собираемые трубы
+Собираемые измерители
 */
 
-//construction defines are in __defines/pipe_construction.dm
-//update those defines ANY TIME an atmos path is changed...
-//...otherwise construction will stop working
+// Определения для строительства находятся в __defines/pipe_construction.dm
+// Обновляйте эти определения ЛЮБОЙ РАЗ, когда меняется атмосферный путь...
+// ...иначе строительство перестанет работать
 
 /obj/item/pipe
 	name = "pipe"
-	desc = "A pipe."
+	desc = "Труба."
 	var/pipe_type
 	var/pipename
 	force = 7
@@ -20,20 +20,20 @@ Buildable meters
 	inhand_icon_state = "buildpipe"
 	w_class = WEIGHT_CLASS_NORMAL
 	custom_materials = list(/datum/material/iron = SHEET_MATERIAL_AMOUNT)
-	///Piping layer that we are going to be on
+	/// Слой трубопровода, на котором мы будем находиться
 	var/piping_layer = PIPING_LAYER_DEFAULT
-	///Type of pipe-object made, selected from the RPD
+	/// Тип создаваемого трубообъекта, выбранный из РПД
 	var/RPD_type
-	///Whether it can be painted
+	/// Можно ли покрасить
 	var/paintable = FALSE
-	///Color of the pipe is going to be made from this pipe-object
+	/// Цвет трубы, который будет создан из этого трубообъекта
 	var/pipe_color
-	///Initial direction of the created pipe (either made from the RPD or after unwrenching the pipe)
+	/// Начальное направление созданной трубы (либо созданной из РПД, либо после откручивания трубы)
 	var/p_init_dir = SOUTH
 
 /obj/item/pipe/on_craft_completion(list/components, datum/crafting_recipe/current_recipe, atom/crafter)
 	. = ..()
-	if(!istype(current_recipe, /datum/crafting_recipe/spec_pipe))
+	if(!istype(current_cipe, /datum/crafting_recipe/spec_pipe))
 		return
 	var/datum/crafting_recipe/spec_pipe/pipe_recipe = current_recipe
 	pipe_type = pipe_recipe.pipe_type
@@ -165,10 +165,10 @@ Buildable meters
 	pixel_x += rand(-5, 5)
 	pixel_y += rand(-5, 5)
 
-	//Flipping handled manually due to custom handling for trinary pipes
+	// Переворот обрабатывается вручную из-за специальной обработки тройных труб.
 	AddComponent(/datum/component/simple_rotation, ROTATION_NO_FLIPPING)
 
-	// Only 'normal' pipes
+	// Только 'обычные' трубы
 	if(type != /obj/item/pipe/quaternary)
 		return ..()
 	var/static/list/slapcraft_recipe_list = list(/datum/crafting_recipe/ghettojetpack, /datum/crafting_recipe/pipegun, /datum/crafting_recipe/smoothbore_disabler, /datum/crafting_recipe/improvised_pneumatic_cannon)
@@ -237,9 +237,9 @@ Buildable meters
 /obj/item/pipe/Move()
 	var/old_dir = dir
 	..()
-	setDir(old_dir) //pipes changing direction when moved is just annoying and buggy
+	setDir(old_dir) // Изменение направления трубы при перемещении просто раздражает и вызывает ошибки.
 
-// Convert dir of fitting into dir of built component
+// Преобразование направления фитинга в направление создаваемого компонента
 /obj/item/pipe/proc/fixed_dir()
 	return dir
 
@@ -258,7 +258,7 @@ Buildable meters
 /obj/item/pipe/attack_self(mob/user)
 	setDir(turn(dir,-90))
 
-///Check if the pipe on the turf and our to be placed binary pipe are perpendicular to each other
+/// Проверяет, перпендикулярны ли труба на тайле и наша двоичная труба, которую нужно разместить.
 /obj/item/pipe/proc/check_ninety_degree_dir(obj/machinery/atmospherics/machine)
 	if(ISDIAGONALDIR(machine.dir))
 		return FALSE
@@ -278,28 +278,28 @@ Buildable meters
 	var/obj/machinery/atmospherics/fakeA = pipe_type
 	var/flags = initial(fakeA.pipe_flags)
 	var/list/potentially_conflicting_machines = list()
-	// Work out which machines we would potentially conflict with
+	// Определяем, с какими машинами мы потенциально можем конфликтовать.
 	for(var/obj/machinery/atmospherics/machine in loc)
-		// Only one dense/requires density object per tile, eg connectors/cryo/heater/coolers.
+		// Только один плотный/требующий плотности объект на тайл, например, коннекторы/крио/нагреватели/охладители.
 		if(machine.pipe_flags & flags & PIPING_ONE_PER_TURF)
-			to_chat(user, span_warning("Something is hogging the tile!"))
+			to_chat(user, span_warning("Что-то занимает этот тайл!"))
 			return TRUE
-		// skip checks if we don't overlap layers, either by being on the same layer or by something being on all layers
+		// Пропускаем проверки, если слои не пересекаются, либо из-за нахождения на одном слое, либо из-за того, что что-то находится на всех слоях.
 		if(machine.piping_layer != piping_layer && !((machine.pipe_flags | flags) & PIPING_ALL_LAYER))
 			continue
 		potentially_conflicting_machines += machine
 
-	// See if we would conflict with any of the potentially interacting machines
+	// Проверяем, не конфликтуем ли мы с какими-либо потенциально взаимодействующими машинами.
 	for(var/obj/machinery/atmospherics/machine as anything in potentially_conflicting_machines)
-		// if the pipes have any directions in common, we can't place it that way.
+		// Если у труб есть общие направления, мы не можем разместить её таким образом.
 		var/our_init_dirs = SSair.get_init_dirs(pipe_type, fixed_dir(), p_init_dir)
 		if(machine.get_init_directions() & our_init_dirs)
-			// We have a conflict!
+			// У нас конфликт!
 			if (length(potentially_conflicting_machines) != 1 || !try_smart_reconfiguration(machine, our_init_dirs, user))
-				// No solutions found
-				to_chat(user, span_warning("There is already a pipe at that location!"))
+				// Решения не найдены.
+				to_chat(user, span_warning("Здесь уже есть труба!"))
 				return TRUE
-	// no conflicts found
+	// Конфликтов не найдено.
 
 	var/obj/machinery/atmospherics/built_machine = new pipe_type(loc, null, fixed_dir(), p_init_dir)
 	build_pipe(built_machine)
@@ -308,9 +308,9 @@ Buildable meters
 
 	wrench.play_tool_sound(src)
 	user.visible_message( \
-		span_notice("[user] fastens \the [src]."), \
-		span_notice("You fasten \the [src]."), \
-		span_hear("You hear ratcheting."))
+		span_notice("[user] закрепляет [declent_ru(ACCUSATIVE)]."), \
+		span_notice("Вы закрепляете [declent_ru(ACCUSATIVE)]."), \
+		span_hear("Слышен звук трещотки."))
 
 	qdel(src)
 
@@ -325,49 +325,49 @@ Buildable meters
 	if(welder.use_tool(src, user, 2 SECONDS, volume=2))
 		new /obj/item/sliced_pipe(drop_location())
 		user.visible_message( \
-			"[user] welds \the [src] in two.", \
-			span_notice("You weld \the [src] in two."), \
-			span_hear("You hear welding."))
+			"[user] разрезает [declent_ru(ACCUSATIVE)] пополам сваркой.", \
+			span_notice("Вы разрезаете [declent_ru(ACCUSATIVE)] пополам сваркой."), \
+			span_hear("Слышен звук сварки."))
 
 		qdel(src)
 
 /**
- * Attempt to automatically resolve a pipe conflict by reconfiguring any smart pipes involved.
+ * Пытается автоматически разрешить конфликт труб путём перенастройки любых задействованных умных труб.
  *
- * Constraints:
- *  - A smart pipe cannot have current connections reconfigured.
- *  - A smart pipe cannot have fewer than two directions in which it will connect.
- *  - A smart pipe, existing or new, will not automatically reconfigure itself to permit directions it was not previously permitting.
+ * Ограничения:
+ *  - Текущие соединения умной трубы не могут быть перенастроены.
+ *  - Умная труба не может иметь менее двух направлений, в которых она будет соединяться.
+ *  - Умная труба, существующая или новая, не будет автоматически перенастраиваться для разрешения направлений, которые она ранее не разрешала.
  */
 /obj/item/pipe/proc/try_smart_reconfiguration(obj/machinery/atmospherics/machine, our_init_dirs, mob/living/user)
-	// If we're a smart pipe, we might be able to solve this by placing down a more constrained version of ourselves.
+	// Если мы умная труба, мы могли бы решить это, разместив более ограниченную версию себя.
 	var/obj/machinery/atmospherics/pipe/smart/other_smart_pipe = machine
 	if(ispath(pipe_type, /obj/machinery/atmospherics/pipe/smart/))
-		// If we're conflicting with another smart pipe, see if we can negotiate.
+		// Если мы конфликтуем с другой умной трубой, посмотрим, можем ли мы договориться.
 		if(istype(other_smart_pipe))
-			// Two smart pipes. This is going to get complicated.
-			// Check to see whether the already placed pipe is bent or not.
+			// Две умные трубы. Это будет сложно.
+			// Проверяем, изогнута ли уже размещённая труба или нет.
 			if (ISDIAGONALDIR(other_smart_pipe.dir))
-				// The other pipe is bent, with at least two current connections. See if we can bounce off it as a bent pipe in the other direction.
+				// Другая труба изогнута, с как минимум двумя текущими соединениями. Посмотрим, можем ли мы отскочить от неё как изогнутая труба в другом направлении.
 				var/opposing_dir = our_init_dirs & ~other_smart_pipe.connections
 				if (ISNOTSTUB(opposing_dir))
-					// We only get here if both smart pipes have two directions.
+					// Мы попадаем сюда только если обе умные трубы имеют два направления.
 					p_init_dir = opposing_dir
 					other_smart_pipe.set_init_directions(other_smart_pipe.connections)
 					other_smart_pipe.update_pipe_icon()
 					return TRUE
-				// We're left with one or no available directions if we look at the complement of the other smart pipe's live connections.
-				// There's nothing further we can do.
+				// У нас остаётся одно или ни одного доступного направления, если мы посмотрим на дополнение к активным соединениям другой умной трубы.
+				// Больше мы ничего не можем сделать.
 				return FALSE
 			else
-				// The other pipe is straight. See if we can go over it in a perpindicular direction.
-				// Note that the other pipe cannot be unconnected, since we have a conflict.
+				// Другая труба прямая. Посмотрим, можем ли мы пройти над ней в перпендикулярном направлении.
+				// Заметим, что другая труба не может быть несоединённой, так как у нас конфликт.
 				if(EWCOMPONENT(other_smart_pipe.dir))
 					if ((NORTH|SOUTH) & ~p_init_dir)
-						// Not allowed to connect this way
+						// Не разрешено соединяться таким образом.
 						return FALSE
 					if (~other_smart_pipe.get_init_directions() & (EAST|WEST))
-						// Not allowed to reconfigure the other pipe this way
+						// Не разрешено перенастраивать другую трубу таким образом.
 						return FALSE
 					p_init_dir = NORTH|SOUTH
 					other_smart_pipe.set_init_directions(EAST|WEST)
@@ -375,46 +375,46 @@ Buildable meters
 					return TRUE
 				if (NSCOMPONENT(other_smart_pipe.dir))
 					if ((EAST|WEST) & ~p_init_dir)
-						// Not allowed to connect this way
+						// Не разрешено соединяться таким образом.
 						return FALSE
 					if (~other_smart_pipe.get_init_directions() & (NORTH|SOUTH))
-						// Not allowed to reconfigure the other pipe this way
+						// Не разрешено перенастраивать другую трубу таким образом.
 						return FALSE
 					p_init_dir = EAST|WEST
 					other_smart_pipe.set_init_directions(NORTH|SOUTH)
 					other_smart_pipe.update_pipe_icon()
 					return TRUE
 			return FALSE
-		// We're not dealing with another smart pipe. See if we can become the complement of the conflicting machine.
+		// Мы не имеем дело с другой умной трубой. Посмотрим, можем ли мы стать дополнением к конфликтующей машине.
 		var/opposing_dir = our_init_dirs & ~machine.get_init_directions()
 		if (ISNOTSTUB(opposing_dir))
-			// We have at least two permitted directions in the complement. Use them.
+			// У нас есть как минимум два разрешённых направления в дополнении. Используем их.
 			p_init_dir = opposing_dir
 			return TRUE
 		return FALSE
 
 	else if(istype(other_smart_pipe))
-		// We're not a smart pipe ourselves, but we are conflicting with a smart pipe. We might be able to solve this by constraining the smart pipe.
+		// Мы сами не умная труба, но мы конфликтуем с умной трубой. Мы могли бы решить это, ограничив умную трубу.
 		if (our_init_dirs & other_smart_pipe.connections)
-			// We needed to go where a smart pipe already had connections, nothing further we can do
+			// Нам нужно было пойти туда, где у умной трубы уже были соединения, больше мы ничего не можем сделать.
 			return FALSE
 		var/opposing_dir = other_smart_pipe.get_init_directions() & ~our_init_dirs
 		if (ISNOTSTUB(opposing_dir))
-			// At least two directions remain for that smart pipe, reconfigure it
+			// Для той умной трубы осталось как минимум два направления, перенастраиваем её.
 			other_smart_pipe.set_init_directions(opposing_dir)
 			other_smart_pipe.update_pipe_icon()
 			return TRUE
 		return FALSE
-	// No smart pipes involved, the conflict can't be solved this way.
+	// Умные трубы не задействованы, конфликт не может быть решен таким образом.
 	return FALSE
 
 /obj/item/pipe/proc/build_pipe(obj/machinery/atmospherics/A)
 	if(pipename)
 		A.name = pipename
 	if(A.on)
-		// Certain pre-mapped subtypes are on by default, we want to preserve
-		// every other aspect of these subtypes (name, pre-set filters, etc.)
-		// but they shouldn't turn on automatically when wrenched.
+		// Некоторые предустановленные подтипы включены по умолчанию, мы хотим сохранить
+		// все другие аспекты этих подтипов (имя, предустановленные фильтры и т.д.)
+		// но они не должны включаться автоматически при закручивании.
 		A.on = FALSE
 
 /obj/item/pipe/trinary/flippable/build_pipe(obj/machinery/atmospherics/components/trinary/T)
@@ -422,7 +422,7 @@ Buildable meters
 	T.flipped = flipped
 
 /obj/item/pipe/suicide_act(mob/living/user)
-	user.visible_message(span_suicide("[user] shoves [src] in [user.p_their()] mouth and turns it on! It looks like [user.p_theyre()] trying to commit suicide!"))
+	user.visible_message(span_suicide("[user] засовывает [declent_ru(ACCUSATIVE)] в рот и включает! Похоже, [user] пытается покончить с собой!"))
 	if(iscarbon(user))
 		var/mob/living/carbon/C = user
 		for(var/i in 1 to 20)
@@ -435,8 +435,8 @@ Buildable meters
 
 /obj/item/pipe/examine(mob/user)
 	. = ..()
-	. += span_notice("The pipe layer is set to [piping_layer].")
-	. += span_notice("You can change the pipe layer by Right-Clicking the device.")
+	. += span_notice("Слой трубы установлен на [piping_layer].")
+	. += span_notice("Вы можете изменить слой трубы, нажав Правой Кнопкой Мыши на устройстве.")
 
 /obj/item/pipe/attack_hand_secondary(mob/user, list/modifiers)
 	. = ..()
@@ -444,25 +444,25 @@ Buildable meters
 		return
 	var/layer_to_set = (piping_layer >= PIPING_LAYER_MAX) ? PIPING_LAYER_MIN : (piping_layer + 1)
 	set_piping_layer(layer_to_set)
-	balloon_alert(user, "pipe layer set to [piping_layer]")
+	balloon_alert(user, "слой трубы [piping_layer]")
 	return SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN
 
 
 /obj/item/pipe/trinary/flippable/examine(mob/user)
 	. = ..()
-	. += span_notice("You can flip the device by Right-Clicking it.")
+	. += span_notice("Вы можете перевернуть устройство, нажав Правой Кнопкой Мыши на нём.")
 
 /obj/item/pipe/trinary/flippable/attack_hand_secondary(mob/user, list/modifiers)
 	. = ..()
 	if(. == SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN)
 		return
 	do_a_flip()
-	balloon_alert(user, "pipe was flipped")
+	balloon_alert(user, "труба перевёрнута")
 	return SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN
 
 /obj/item/pipe_meter
 	name = "meter"
-	desc = "A meter that can be wrenched on pipes, or attached to the floor with screws."
+	desc = "Измеритель, который можно прикрутить к трубам гаечным ключом или прикрепить к полу отвёрткой."
 	icon = 'icons/obj/pipes_n_cables/pipe_item.dmi'
 	icon_state = "meter"
 	inhand_icon_state = "buildpipe"
@@ -477,11 +477,11 @@ Buildable meters
 			pipe = P
 			break
 	if(!pipe)
-		to_chat(user, span_warning("You need to fasten it to a pipe!"))
+		to_chat(user, span_warning("Нужно прикрепить его к трубе!"))
 		return TRUE
 	new /obj/machinery/meter(loc, piping_layer)
 	W.play_tool_sound(src)
-	to_chat(user, span_notice("You fasten the meter to the pipe."))
+	to_chat(user, span_notice("Вы прикрепляете измеритель к трубе."))
 	qdel(src)
 
 /obj/item/pipe_meter/screwdriver_act(mob/living/user, obj/item/S)
@@ -490,12 +490,12 @@ Buildable meters
 		return TRUE
 
 	if(!isturf(loc))
-		to_chat(user, span_warning("You need to fasten it to the floor!"))
+		to_chat(user, span_warning("Нужно прикрепить его к полу!"))
 		return TRUE
 
 	new /obj/machinery/meter/turf(loc, piping_layer)
 	S.play_tool_sound(src)
-	to_chat(user, span_notice("You fasten the meter to \the [loc]."))
+	to_chat(user, span_notice("Вы прикрепляете измеритель к [declent_ru(PREPOSITIONAL, loc)]."))
 	qdel(src)
 
 /obj/item/pipe_meter/dropped()
@@ -506,3 +506,25 @@ Buildable meters
 /obj/item/pipe_meter/proc/setAttachLayer(new_layer = PIPING_LAYER_DEFAULT)
 	piping_layer = new_layer
 	PIPING_LAYER_DOUBLE_SHIFT(src, piping_layer)
+
+// Добавляем русские названия для объектов.
+
+/obj/item/pipe/get_ru_names()
+	return list(
+		NOMINATIVE = "трубный фитинг",
+		GENITIVE = "трубного фитинга",
+		DATIVE = "трубному фитингу",
+		ACCUSATIVE = "трубный фитинг",
+		INSTRUMENTAL = "трубным фитингом",
+		PREPOSITIONAL = "трубном фитинге",
+	)
+
+/obj/item/pipe_meter/get_ru_names()
+	return list(
+		NOMINATIVE = "измеритель",
+		GENITIVE = "измерителя",
+		DATIVE = "измерителю",
+		ACCUSATIVE = "измеритель",
+		INSTRUMENTAL = "измерителем",
+		PREPOSITIONAL = "измерителе",
+	)

@@ -1,30 +1,40 @@
-// Every cycle, the pump uses the air in air_in to try and move a specific volume of gas into air_out.
+// Каждый цикл насос использует воздух в air_in, чтобы попытаться переместить определённый объём газа в air_out.
 //
-// node1, air1, network1 corresponds to input
-// node2, air2, network2 corresponds to output
+// node1, air1, network1 соответствуют входу
+// node2, air2, network2 соответствуют выходу
 //
-// Thus, the two variables affect pump operation are set in New():
+// Таким образом, две переменные, влияющие на работу насоса, устанавливаются в New():
 //   air1.volume
-//     This is the volume of gas available to the pump that may be transferred to the output
+//     Это объём газа, доступный насосу, который может быть передан на выход
 //   air2.volume
-//     Higher quantities of this cause more air to be perfected later
-//     but overall network volume is also increased as this increases...
+//     Большие значения этого параметра вызывают большее совершенствование воздуха позже,
+//     но общий объём сети также увеличивается по мере его роста...
 
 /obj/machinery/atmospherics/components/binary/volume_pump
 	icon_state = "volpump_map-3"
 	name = "volumetric gas pump"
-	desc = "A pump that moves gas by volume."
+	desc = "Насос, перемещающий газ по объёму."
 	can_unwrench = TRUE
 	shift_underlay_only = FALSE
 	construction_type = /obj/item/pipe/directional
 	pipe_state = "volumepump"
 	vent_movement = NONE
-	///Transfer rate of the component in L/s
+	///Скорость переноса компонента в л/с
 	var/transfer_rate = MAX_TRANSFER_RATE
-	///Check if the component has been overclocked
+	///Проверка, был ли компонент разогнан
 	var/overclocked = FALSE
-	///flashing light overlay which appears on multitooled vol pumps
+	///Мигающая световая накладка, появляющаяся на разогнанных объёмных насосах
 	var/mutable_appearance/overclock_overlay
+
+/obj/machinery/atmospherics/components/binary/volume_pump/get_ru_names()
+	return list(
+		NOMINATIVE = "объёмный газовый насос",
+		GENITIVE = "объёмного газового насоса",
+		DATIVE = "объёмному газовому насосу",
+		ACCUSATIVE = "объёмный газовый насос",
+		INSTRUMENTAL = "объёмным газовым насосом",
+		PREPOSITIONAL = "объёмном газовом насосе",
+	)
 
 /obj/machinery/atmospherics/components/binary/volume_pump/Initialize(mapload)
 	. = ..()
@@ -38,7 +48,7 @@
 /obj/machinery/atmospherics/components/binary/volume_pump/click_ctrl(mob/user)
 	if(can_interact(user))
 		set_on(!on)
-		balloon_alert(user, "turned [on ? "on" : "off"]")
+		balloon_alert(user, "[on ? "включено" : "выключено"]")
 		investigate_log("was turned [on ? "on" : "off"] by [key_name(user)]", INVESTIGATE_ATMOS)
 		return CLICK_ACTION_SUCCESS
 	return CLICK_ACTION_BLOCKING
@@ -49,7 +59,7 @@
 
 	transfer_rate = MAX_TRANSFER_RATE
 	investigate_log("was set to [transfer_rate] L/s by [key_name(user)]", INVESTIGATE_ATMOS)
-	balloon_alert(user, "volume output set to [transfer_rate] L/s")
+	balloon_alert(user, "выходной объём [transfer_rate] л/с")
 	update_appearance(UPDATE_ICON)
 	return CLICK_ACTION_SUCCESS
 
@@ -71,16 +81,16 @@
 	var/datum/gas_mixture/air1 = airs[1]
 	var/datum/gas_mixture/air2 = airs[2]
 
-	// Pump mechanism just won't do anything if the pressure is too high/too low unless you overclock it.
+	// Механизм насоса просто не будет ничего делать, если давление слишком высокое/низкое, если только вы его не разогнали.
 
 	var/input_starting_pressure = air1.return_pressure()
 	var/output_starting_pressure = air2.return_pressure()
 
-	// Requires being able to leak air in order to overclock.
+	// Для разгона требуется возможность утечки воздуха.
 	if(overclocked)
 		var/turf/turf = loc
 		if(isclosedturf(turf))
-			balloon_alert_to_viewers("jammed!")
+			balloon_alert_to_viewers("заклинило!")
 			overclocked = FALSE
 			update_appearance(UPDATE_ICON)
 
@@ -94,7 +104,7 @@
 	if(!removed.total_moles())
 		return
 
-	if(overclocked)//Some of the gas from the mixture leaks to the environment when overclocked
+	if(overclocked) // Часть газа из смеси вытекает в окружающую среду при разгоне
 		var/turf/open/T = loc
 		if(istype(T))
 			var/datum/gas_mixture/leaked = removed.remove_ratio(VOLUME_PUMP_LEAK_AMOUNT)
@@ -106,16 +116,16 @@
 
 /obj/machinery/atmospherics/components/binary/volume_pump/examine(mob/user)
 	. = ..()
-	. += span_notice("Its pressure limits could be [overclocked ? "en" : "dis"]abled with a <b>multitool</b>.")
+	. += span_notice("Его ограничения по давлению можно [overclocked ? "в" : "от"]ключить с помощью <b>мультитула</b>.")
 	if(overclocked)
-		. += "Its warning light is on[on ? " and it's spewing gas!" : "."]"
+		. += "Его сигнальная лампа горит[on ? ", и он выбрасывает газ!" : "."]"
 
 /obj/machinery/atmospherics/components/binary/volume_pump/add_context(atom/source, list/context, obj/item/held_item, mob/user)
 	. = ..()
-	context[SCREENTIP_CONTEXT_CTRL_LMB] = "Turn [on ? "off" : "on"]"
-	context[SCREENTIP_CONTEXT_ALT_LMB] = "Maximize transfer rate"
+	context[SCREENTIP_CONTEXT_CTRL_LMB] = "[on ? "Выключить" : "Включить"]"
+	context[SCREENTIP_CONTEXT_ALT_LMB] = "Максимальная скорость переноса"
 	if(held_item && held_item.tool_behaviour == TOOL_MULTITOOL)
-		context[SCREENTIP_CONTEXT_LMB] = "[overclocked ? "En" : "Dis"]able pressure limits"
+		context[SCREENTIP_CONTEXT_LMB] = "[overclocked ? "В" : "От"]ключить ограничения давления"
 	return CONTEXTUAL_SCREENTIP_SET
 
 /obj/machinery/atmospherics/components/binary/volume_pump/ui_interact(mob/user, datum/tgui/ui)
@@ -156,16 +166,16 @@
 /obj/machinery/atmospherics/components/binary/volume_pump/can_unwrench(mob/user)
 	. = ..()
 	if(. && on && is_operational)
-		to_chat(user, span_warning("You cannot unwrench [src], turn it off first!"))
+		to_chat(user, span_warning("Невозможно открутить [declent_ru(ACCUSATIVE)], сначала выключите его!"))
 		return FALSE
 
 /obj/machinery/atmospherics/components/binary/volume_pump/multitool_act(mob/living/user, obj/item/I)
 	if(!overclocked)
 		overclocked = TRUE
-		to_chat(user, "The pump makes a grinding noise and air starts to hiss out as you disable its pressure limits.")
+		to_chat(user, "Насос издаёт скрежещущий звук, и воздух начинает вырываться наружу, пока вы отключаете его ограничения давления.")
 	else
 		overclocked = FALSE
-		to_chat(user, "The pump quiets down as you turn its limiters back on.")
+		to_chat(user, "Насос затихает, когда вы снова включаете его ограничители.")
 	update_appearance(UPDATE_ICON)
 	return TRUE
 
@@ -193,34 +203,34 @@
 
 /obj/item/circuit_component/atmos_volume_pump
 	display_name = "Atmospheric Volume Pump"
-	desc = "The interface for communicating with a volume pump."
+	desc = "Интерфейс для связи с объёмным насосом."
 
-	///Set the transfer rate of the pump
+	///Установить скорость переноса насоса
 	var/datum/port/input/transfer_rate
-	///Activate the pump
+	///Активировать насос
 	var/datum/port/input/on
-	///Deactivate the pump
+	///Деактивировать насос
 	var/datum/port/input/off
-	///Signals the circuit to retrieve the pump's current pressure and temperature
+	///Сигнализирует схеме о необходимости получения текущего давления и температуры насоса
 	var/datum/port/input/request_data
 
-	///Pressure of the input port
+	///Давление входного порта
 	var/datum/port/output/input_pressure
-	///Pressure of the output port
+	///Давление выходного порта
 	var/datum/port/output/output_pressure
-	///Temperature of the input port
+	///Температура входного порта
 	var/datum/port/output/input_temperature
-	///Temperature of the output port
+	///Температура выходного порта
 	var/datum/port/output/output_temperature
 
-	///Whether the pump is currently active
+	///Активен ли насос в данный момент
 	var/datum/port/output/is_active
-	///Send a signal when the pump is turned on
+	///Отправить сигнал при включении насоса
 	var/datum/port/output/turned_on
-	///Send a signal when the pump is turned off
+	///Отправить сигнал при выключении насоса
 	var/datum/port/output/turned_off
 
-	///The component parent object
+	///Родительский объект компонента
 	var/obj/machinery/atmospherics/components/binary/volume_pump/connected_pump
 
 /obj/item/circuit_component/atmos_volume_pump/populate_ports()

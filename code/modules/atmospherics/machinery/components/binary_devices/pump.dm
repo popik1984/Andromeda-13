@@ -1,19 +1,19 @@
-// Every cycle, the pump uses the air in air_in to try and make air_out the perfect pressure.
+// Каждый цикл насос использует воздух из air_in, пытаясь создать идеальное давление в air_out.
 //
-// node1, air1, network1 correspond to input
-// node2, air2, network2 correspond to output
+// node1, air1, network1 соответствуют входу
+// node2, air2, network2 соответствуют выходу
 //
-// Thus, the two variables affect pump operation are set in New():
+// Таким образом, две переменные, влияющие на работу насоса, устанавливаются в New():
 //   air1.volume
-//     This is the volume of gas available to the pump that may be transferred to the output
+//     Это объем газа, доступный насосу, который может быть передан на выход
 //   air2.volume
-//     Higher quantities of this cause more air to be perfected later
-//     but overall network volume is also increased as this increases...
+//     Более высокие значения этого параметра приводят к большему количеству идеально перекачанного воздуха,
+//     но общий объем сети также увеличивается при увеличении этого значения...
 
 /obj/machinery/atmospherics/components/binary/pump
 	icon_state = "pump_map-3"
 	name = "gas pump"
-	desc = "A pump that moves gas by pressure."
+	desc = "Насос, перемещающий газ за счёт давления."
 	can_unwrench = TRUE
 	shift_underlay_only = FALSE
 	construction_type = /obj/item/pipe/directional
@@ -22,6 +22,16 @@
 	///Pressure that the pump will reach when on
 	var/target_pressure = ONE_ATMOSPHERE
 
+/obj/machinery/atmospherics/components/binary/pump/get_ru_names()
+	return list(
+		NOMINATIVE = "газовая помпа",
+		GENITIVE = "газовой помпы",
+		DATIVE = "газовой помпе",
+		ACCUSATIVE = "газовую помпу",
+		INSTRUMENTAL = "газовой помпой",
+		PREPOSITIONAL = "газовой помпе",
+	)
+
 /obj/machinery/atmospherics/components/binary/pump/Initialize(mapload)
 	. = ..()
 	AddComponent(/datum/component/usb_port, typecacheof(list(/obj/item/circuit_component/atmos_pump), only_root_path = TRUE))
@@ -29,14 +39,14 @@
 
 /obj/machinery/atmospherics/components/binary/pump/add_context(atom/source, list/context, obj/item/held_item, mob/user)
 	. = ..()
-	context[SCREENTIP_CONTEXT_CTRL_LMB] = "Turn [on ? "off" : "on"]"
-	context[SCREENTIP_CONTEXT_ALT_LMB] = "Maximize target pressure"
+	context[SCREENTIP_CONTEXT_CTRL_LMB] = "[on ? "Выключить" : "Включить"]"
+	context[SCREENTIP_CONTEXT_ALT_LMB] = "Максимизировать целевое давление"
 	return CONTEXTUAL_SCREENTIP_SET
 
 /obj/machinery/atmospherics/components/binary/pump/click_ctrl(mob/user)
 	if(is_operational)
 		set_on(!on)
-		balloon_alert(user, "turned [on ? "on" : "off"]")
+		balloon_alert(user, "[on ? "включено" : "выключено"]")
 		investigate_log("was turned [on ? "on" : "off"] by [key_name(user)]", INVESTIGATE_ATMOS)
 		return CLICK_ACTION_SUCCESS
 	return CLICK_ACTION_BLOCKING
@@ -47,7 +57,7 @@
 
 	target_pressure = MAX_OUTPUT_PRESSURE
 	investigate_log("was set to [target_pressure] kPa by [key_name(user)]", INVESTIGATE_ATMOS)
-	balloon_alert(user, "pressure output set to [target_pressure] kPa")
+	balloon_alert(user, "давление установлено на [target_pressure] кПа")
 	update_appearance(UPDATE_ICON)
 	return CLICK_ACTION_SUCCESS
 
@@ -103,7 +113,7 @@
 /obj/machinery/atmospherics/components/binary/pump/can_unwrench(mob/user)
 	. = ..()
 	if(. && on && is_operational)
-		to_chat(user, span_warning("You cannot unwrench [src], turn it off first!"))
+		to_chat(user, span_warning("Нельзя откручивать [declent_ru(ACCUSATIVE)], сначала выключите её!"))
 		return FALSE
 
 /obj/machinery/atmospherics/components/binary/pump/layer2
@@ -131,8 +141,8 @@
 	icon_state = "pump_on_map-5"
 
 /obj/item/circuit_component/atmos_pump
-	display_name = "Atmospheric Binary Pump"
-	desc = "The interface for communicating with a pump."
+	display_name = "Атмосферная бинарная помпа"
+	desc = "Интерфейс для взаимодействия с помпой."
 
 	///Set the target pressure of the pump
 	var/datum/port/input/pressure_value
@@ -163,19 +173,19 @@
 	var/obj/machinery/atmospherics/components/binary/pump/connected_pump
 
 /obj/item/circuit_component/atmos_pump/populate_ports()
-	pressure_value = add_input_port("New Pressure", PORT_TYPE_NUMBER, trigger = PROC_REF(set_pump_pressure))
-	on = add_input_port("Turn On", PORT_TYPE_SIGNAL, trigger = PROC_REF(set_pump_on))
-	off = add_input_port("Turn Off", PORT_TYPE_SIGNAL, trigger = PROC_REF(set_pump_off))
-	request_data = add_input_port("Request Port Data", PORT_TYPE_SIGNAL, trigger = PROC_REF(request_pump_data))
+	pressure_value = add_input_port("Новое Давление", PORT_TYPE_NUMBER, trigger = PROC_REF(set_pump_pressure))
+	on = add_input_port("Включить", PORT_TYPE_SIGNAL, trigger = PROC_REF(set_pump_on))
+	off = add_input_port("Выключить", PORT_TYPE_SIGNAL, trigger = PROC_REF(set_pump_off))
+	request_data = add_input_port("Запросить Данные Порта", PORT_TYPE_SIGNAL, trigger = PROC_REF(request_pump_data))
 
-	input_pressure = add_output_port("Input Pressure", PORT_TYPE_NUMBER)
-	output_pressure = add_output_port("Output Pressure", PORT_TYPE_NUMBER)
-	input_temperature = add_output_port("Input Temperature", PORT_TYPE_NUMBER)
-	output_temperature = add_output_port("Output Temperature", PORT_TYPE_NUMBER)
+	input_pressure = add_output_port("Входное Давление", PORT_TYPE_NUMBER)
+	output_pressure = add_output_port("Выходное Давление", PORT_TYPE_NUMBER)
+	input_temperature = add_output_port("Входная Температура", PORT_TYPE_NUMBER)
+	output_temperature = add_output_port("Выходная Температура", PORT_TYPE_NUMBER)
 
-	is_active = add_output_port("Active", PORT_TYPE_NUMBER)
-	turned_on = add_output_port("Turned On", PORT_TYPE_SIGNAL)
-	turned_off = add_output_port("Turned Off", PORT_TYPE_SIGNAL)
+	is_active = add_output_port("Активна", PORT_TYPE_NUMBER)
+	turned_on = add_output_port("Включена", PORT_TYPE_SIGNAL)
+	turned_off = add_output_port("Выключена", PORT_TYPE_SIGNAL)
 
 /obj/item/circuit_component/atmos_pump/register_usb_parent(atom/movable/shell)
 	. = ..()

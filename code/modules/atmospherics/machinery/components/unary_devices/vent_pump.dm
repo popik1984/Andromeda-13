@@ -4,7 +4,7 @@
 	icon_state = "vent_map-3"
 
 	name = "air vent"
-	desc = "Has a valve and pump attached to it."
+	desc = "Имеет клапан и насос."
 	construction_type = /obj/item/pipe/directional/vent
 	use_power = IDLE_POWER_USE
 	idle_power_usage = BASE_MACHINE_IDLE_CONSUMPTION * 0.15
@@ -47,6 +47,16 @@
 	/// Datum for managing the overclock sound loop
 	var/datum/looping_sound/vent_pump_overclock/sound_loop
 
+/obj/machinery/atmospherics/components/unary/vent_pump/get_ru_names()
+	return list(
+		NOMINATIVE = "вентиляция",
+		GENITIVE = "вентиляции",
+		DATIVE = "вентиляции",
+		ACCUSATIVE = "вентиляцию",
+		INSTRUMENTAL = "вентиляцией",
+		PREPOSITIONAL = "вентиляции",
+	)
+
 /obj/machinery/atmospherics/components/unary/vent_pump/Initialize(mapload)
 	if(!id_tag)
 		id_tag = assign_random_name()
@@ -54,10 +64,10 @@
 		if(!tool_screentips)
 			tool_screentips = string_assoc_nested_list(list(
 				TOOL_MULTITOOL = list(
-					SCREENTIP_CONTEXT_LMB = "Log to link later with air sensor",
+					SCREENTIP_CONTEXT_LMB = "Запомнить для связи с сенсором",
 				),
 				TOOL_SCREWDRIVER = list(
-					SCREENTIP_CONTEXT_LMB = "Repair",
+					SCREENTIP_CONTEXT_LMB = "Починить",
 				),
 			))
 		AddElement(/datum/element/contextual_screentip_tools, tool_screentips)
@@ -70,28 +80,31 @@
 	var/condition_string
 	switch(get_integrity_percentage())
 		if(1)
-			condition_string = "perfect"
+			condition_string = "идеальном"
 		if(0.75 to 0.99)
-			condition_string = "good"
+			condition_string = "хорошем"
 		if(0.50 to 0.74)
-			condition_string = "okay"
+			condition_string = "нормальном"
 		if(0.25 to 0.49)
-			condition_string = "bad"
+			condition_string = "плохом"
 		else
-			condition_string = "terrible"
-	examine_condition = "The fan is in [condition_string] condition."
+			condition_string = "ужасном"
+	examine_condition = "Вентилятор в [condition_string] состоянии."
 
 /obj/machinery/atmospherics/components/unary/vent_pump/examine(mob/user)
 	. = ..()
-	. += span_notice("You can link it with an air sensor using a multitool.")
+	. += span_notice("Вы можете связать её с воздушным сенсором с помощью мультитула.")
 
 	if(fan_overclocked)
-		. += span_warning("It is currently overclocked causing it to take damage over time.")
+		. += span_warning("Она разогнана, из-за чего со временем получает повреждения.")
 
 	if(get_integrity() > 0)
 		. += span_notice(examine_condition)
 	else
-		. += span_warning("The fan is broken.")
+		. += span_warning("Вентилятор сломан.")
+
+	if(welded)
+		. += "Похоже, что она заварена."
 
 /obj/machinery/atmospherics/components/unary/vent_pump/multitool_act(mob/living/user, obj/item/multitool/multi_tool)
 	if(istype(multi_tool.buffer, /obj/machinery/air_sensor))
@@ -100,7 +113,7 @@
 		sensor.multitool_act(user, multi_tool)
 		return ITEM_INTERACT_SUCCESS
 
-	balloon_alert(user, "vent saved in buffer")
+	balloon_alert(user, "вентиляция сохранена в буфер")
 	multi_tool.set_buffer(src)
 	return ITEM_INTERACT_SUCCESS
 
@@ -109,13 +122,13 @@
 	if(!time_to_repair)
 		return FALSE
 
-	balloon_alert(user, "repairing vent...")
+	balloon_alert(user, "чиню вентиляцию...")
 	if(do_after(user, time_to_repair, src))
-		balloon_alert(user, "vent repaired")
+		balloon_alert(user, "вентиляция починена")
 		repair_damage(max_integrity)
 
 	else
-		balloon_alert(user, "interrupted!")
+		balloon_alert(user, "прервано!")
 	return ITEM_INTERACT_SUCCESS
 
 /obj/machinery/atmospherics/components/unary/vent_pump/atom_fix()
@@ -319,13 +332,13 @@
 	..()
 	if(!welder.tool_start_check(user, amount=1))
 		return TRUE
-	to_chat(user, span_notice("You begin welding the vent..."))
+	to_chat(user, span_notice("Вы начинаете заваривать вентиляцию..."))
 	if(welder.use_tool(src, user, 20, volume=50))
 		if(!welded)
-			user.visible_message(span_notice("[user] welds the vent shut."), span_notice("You weld the vent shut."), span_hear("You hear welding."))
+			user.visible_message(span_notice("[user] заваривает вентиляцию."), span_notice("Вы заварили вентиляцию."), span_hear("Вы слышите сварку."))
 			welded = TRUE
 		else
-			user.visible_message(span_notice("[user] unwelded the vent."), span_notice("You unweld the vent."), span_hear("You hear welding."))
+			user.visible_message(span_notice("[user] разваривает вентиляцию."), span_notice("Вы разварили вентиляцию."), span_hear("Вы слышите сварку."))
 			welded = FALSE
 		update_appearance(UPDATE_ICON)
 		pipe_vision_img = image(src, loc, dir = dir)
@@ -337,13 +350,8 @@
 /obj/machinery/atmospherics/components/unary/vent_pump/can_unwrench(mob/user)
 	. = ..()
 	if(. && on && is_operational)
-		to_chat(user, span_warning("You cannot unwrench [src], turn it off first!"))
+		to_chat(user, span_warning("Нельзя откручивать [declent_ru(ACCUSATIVE)], сначала выключите её!"))
 		return FALSE
-
-/obj/machinery/atmospherics/components/unary/vent_pump/examine(mob/user)
-	. = ..()
-	if(welded)
-		. += "It seems welded shut."
 
 /obj/machinery/atmospherics/components/unary/vent_pump/power_change()
 	. = ..()
@@ -352,7 +360,7 @@
 /obj/machinery/atmospherics/components/unary/vent_pump/attack_alien(mob/user, list/modifiers)
 	if(!welded || !(do_after(user, 2 SECONDS, target = src)))
 		return
-	user.visible_message(span_warning("[user] furiously claws at [src]!"), span_notice("You manage to clear away the stuff blocking the vent."), span_hear("You hear loud scraping noises."))
+	user.visible_message(span_warning("[user] яростно когтит [declent_ru(ACCUSATIVE)]!"), span_notice("Вам удаётся расчистить то, что блокировало вентиляцию."), span_hear("Вы слышите громкий скрежет."))
 	welded = FALSE
 	update_appearance(UPDATE_ICON)
 	pipe_vision_img = image(src, loc, dir = dir)
@@ -362,6 +370,16 @@
 /obj/machinery/atmospherics/components/unary/vent_pump/high_volume
 	name = "large air vent"
 	power_channel = AREA_USAGE_EQUIP
+
+/obj/machinery/atmospherics/components/unary/vent_pump/high_volume/get_ru_names()
+	return list(
+		NOMINATIVE = "большая вентиляция",
+		GENITIVE = "большой вентиляции",
+		DATIVE = "большой вентиляции",
+		ACCUSATIVE = "большую вентиляцию",
+		INSTRUMENTAL = "большой вентиляцией",
+		PREPOSITIONAL = "большой вентиляции",
+	)
 
 /obj/machinery/atmospherics/components/unary/vent_pump/high_volume/Initialize(mapload)
 	. = ..()

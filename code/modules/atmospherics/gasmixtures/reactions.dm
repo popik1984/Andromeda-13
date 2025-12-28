@@ -90,9 +90,9 @@
  */
 /datum/gas_reaction/water_vapor
 	priority_group = PRIORITY_POST_FORMATION
-	name = "Water Vapor Condensation"
+	name = "Конденсация водяного пара"
 	id = "vapor"
-	desc = "Water vapor condensation that can make things slippery."
+	desc = "Конденсация водяного пара, которая может сделать поверхности скользкими."
 
 /datum/gas_reaction/water_vapor/init_reqs()
 	requirements = list(
@@ -132,9 +132,9 @@
  */
 /datum/gas_reaction/miaster
 	priority_group = PRIORITY_POST_FORMATION
-	name = "Dry Heat Sterilization"
+	name = "Сухая термическая стерилизация"
 	id = "sterilization"
-	desc = "Pathogens cannot survive in a hot environment. Miasma decomposes on high temperature."
+	desc = "Патогены не могут выжить в горячей среде. Миазмы разлагаются при высокой температуре."
 
 /datum/gas_reaction/miaster/init_reqs()
 	requirements = list(
@@ -174,10 +174,10 @@
  */
 /datum/gas_reaction/plasmafire
 	priority_group = PRIORITY_FIRE
-	name = "Plasma Combustion"
+	name = "Горение плазмы"
 	id = "plasmafire"
 	expands_hotspot = TRUE
-	desc = "Combustion of oxygen and plasma. Able to produce tritium or carbon dioxide and water vapor."
+	desc = "Сгорание кислорода и плазмы. Может производить тритий или диоксид углерода и водяной пар."
 
 /datum/gas_reaction/plasmafire/init_reqs()
 	requirements = list(
@@ -254,10 +254,10 @@
  */
 /datum/gas_reaction/h2fire
 	priority_group = PRIORITY_FIRE
-	name = "Hydrogen Combustion"
+	name = "Горение водорода"
 	id = "h2fire"
 	expands_hotspot = TRUE
-	desc = "Combustion of hydrogen with oxygen. Can be extremely fast and energetic if a few conditions are fulfilled."
+	desc = "Сгорание водорода с кислородом. Может быть очень быстрым и энергичным при соблюдении нескольких условий."
 
 /datum/gas_reaction/h2fire/init_reqs()
 	requirements = list(
@@ -311,10 +311,10 @@
  */
 /datum/gas_reaction/tritfire
 	priority_group = PRIORITY_FIRE
-	name = "Tritium Combustion"
+	name = "Горение трития"
 	id = "tritfire"
 	expands_hotspot = TRUE
-	desc = "Combustion of tritium with oxygen. Can be extremely fast and energetic if a few conditions are fulfilled."
+	desc = "Сгорание трития с кислородом. Может быть очень быстрым и энергичным при соблюдении нескольких условий."
 
 /datum/gas_reaction/tritfire/init_reqs()
 	requirements = list(
@@ -376,10 +376,10 @@
  */
 /datum/gas_reaction/freonfire
 	priority_group = PRIORITY_FIRE
-	name = "Freon Combustion"
+	name = "Горение фреона"
 	id = "freonfire"
 	expands_hotspot = TRUE
-	desc = "Reaction between oxygen and freon that consumes a huge amount of energy and can cool things significantly. Also able to produce hot ice."
+	desc = "Реакция между кислородом и фреоном, потребляющая огромное количество энергии и способная значительно охладить предметы. Также может производить горячий лёд."
 
 /datum/gas_reaction/freonfire/init_reqs()
 	requirements = list(
@@ -451,9 +451,9 @@
  */
 /datum/gas_reaction/nitrousformation //formation of n2o, exothermic, requires bz as catalyst
 	priority_group = PRIORITY_FORMATION
-	name = "Nitrous Oxide Formation"
+	name = "Образование оксида азота"
 	id = "nitrousformation"
-	desc = "Production of nitrous oxide with BZ as a catalyst."
+	desc = "Производство оксида азота с использованием BZ в качестве катализатора."
 
 /datum/gas_reaction/nitrousformation/init_reqs()
 	requirements = list(
@@ -494,9 +494,9 @@
  */
 /datum/gas_reaction/nitrous_decomp
 	priority_group = PRIORITY_POST_FORMATION
-	name = "Nitrous Oxide Decomposition"
+	name = "Разложение оксида азота"
 	id = "nitrous_decomp"
-	desc = "Decomposition of nitrous oxide under high temperature."
+	desc = "Разложение оксида азота при высокой температуре."
 
 /datum/gas_reaction/nitrous_decomp/init_reqs()
 	requirements = list(
@@ -538,9 +538,9 @@
  */
 /datum/gas_reaction/bzformation
 	priority_group = PRIORITY_FORMATION
-	name = "BZ Gas Formation"
+	name = "Образование BZ"
 	id = "bzformation"
-	desc = "Production of BZ using plasma and nitrous oxide."
+	desc = "Производство BZ с использованием плазмы и оксида азота."
 
 /datum/gas_reaction/bzformation/init_reqs()
 	requirements = list(
@@ -601,9 +601,9 @@
  */
 /datum/gas_reaction/pluox_formation
 	priority_group = PRIORITY_FORMATION
-	name = "Pluoxium Formation"
+	name = "Образование плюоксиума"
 	id = "pluox_formation"
-	desc = "Alternate production for pluoxium which uses tritium."
+	desc = "Альтернативное производство плюоксиума, использующее тритий."
 
 /datum/gas_reaction/pluox_formation/init_reqs()
 	requirements = list(
@@ -651,9 +651,9 @@
  */
 /datum/gas_reaction/nitrium_formation
 	priority_group = PRIORITY_FORMATION
-	name = "Nitrium Formation"
+	name = "Образование нитриума"
 	id = "nitrium_formation"
-	desc = "Production of nitrium from BZ, tritium, and nitrogen."
+	desc = "Производство нитриума из BZ, трития и азота."
 
 /datum/gas_reaction/nitrium_formation/init_reqs()
 	requirements = list(
@@ -698,9 +698,9 @@
  */
 /datum/gas_reaction/nitrium_decomposition
 	priority_group = PRIORITY_PRE_FORMATION
-	name = "Nitrium Decomposition"
+	name = "Разложение нитриума"
 	id = "nitrium_decomp"
-	desc = "Decomposition of nitrium when exposed to oxygen under normal temperatures."
+	desc = "Разложение нитриума при контакте с кислородом при нормальных температурах."
 
 /datum/gas_reaction/nitrium_decomposition/init_reqs()
 	requirements = list(
@@ -742,9 +742,9 @@
  */
 /datum/gas_reaction/freonformation
 	priority_group = PRIORITY_FORMATION
-	name = "Freon Formation"
+	name = "Образование фреона"
 	id = "freonformation"
-	desc = "Production of freon using plasma, carbon dioxide, and BZ under high temperature."
+	desc = "Производство фреона с использованием плазмы, диоксида углерода и BZ при высокой температуре."
 
 /datum/gas_reaction/freonformation/init_reqs() //minimum requirements for freon formation
 	requirements = list(
@@ -796,9 +796,9 @@
  */
 /datum/gas_reaction/nobliumformation
 	priority_group = PRIORITY_FORMATION
-	name = "Hyper-Noblium Condensation"
+	name = "Конденсация гиперноблия"
 	id = "nobformation"
-	desc = "Production of hyper-noblium from nitrogen and tritium under very low temperatures. Extremely energetic."
+	desc = "Производство гиперноблия из азота и трития при очень низких температурах. Чрезвычайно энергичная реакция."
 
 /datum/gas_reaction/nobliumformation/init_reqs()
 	requirements = list(
@@ -848,9 +848,9 @@
  */
 /datum/gas_reaction/halon_o2removal
 	priority_group = PRIORITY_PRE_FORMATION
-	name = "Halon Oxygen Absorption"
+	name = "Галоновое поглощение кислорода"
 	id = "halon_o2removal"
-	desc = "Halon interaction with oxygen that can be used to snuff fires out."
+	desc = "Взаимодействие галона с кислородом, которое можно использовать для тушения пожаров."
 
 /datum/gas_reaction/halon_o2removal/init_reqs()
 	requirements = list(
@@ -904,9 +904,9 @@
  */
 /datum/gas_reaction/healium_formation
 	priority_group = PRIORITY_FORMATION
-	name = "Healium Formation"
+	name = "Образование хилиума"
 	id = "healium_formation"
-	desc = "Production of healium using BZ and freon."
+	desc = "Производство хилиума с использованием BZ и фреона."
 
 /datum/gas_reaction/healium_formation/init_reqs()
 	requirements = list(
@@ -946,9 +946,9 @@
  */
 /datum/gas_reaction/zauker_formation
 	priority_group = PRIORITY_FORMATION
-	name = "Zauker Formation"
+	name = "Образование заукера"
 	id = "zauker_formation"
-	desc = "Production of zauker using hyper-noblium and nitrium under very high temperatures."
+	desc = "Производство заукера с использованием гиперноблия и нитриума при очень высоких температурах."
 
 /datum/gas_reaction/zauker_formation/init_reqs()
 	requirements = list(
@@ -990,9 +990,9 @@
  */
 /datum/gas_reaction/zauker_decomp
 	priority_group = PRIORITY_POST_FORMATION
-	name = "Zauker Decomposition"
+	name = "Разложение заукера"
 	id = "zauker_decomp"
-	desc = "Decomposition of zauker when exposed to nitrogen."
+	desc = "Разложение заукера при контакте с азотом."
 
 /datum/gas_reaction/zauker_decomp/init_reqs()
 	requirements = list(
@@ -1031,9 +1031,9 @@
  */
 /datum/gas_reaction/proto_nitrate_formation
 	priority_group = PRIORITY_FORMATION
-	name = "Proto Nitrate Formation"
+	name = "Образование протонитрата"
 	id = "proto_nitrate_formation"
-	desc = "Production of proto-nitrate from pluoxium and hydrogen under high temperatures."
+	desc = "Производство протонитрата из плюоксиума и водорода при высоких температурах."
 
 /datum/gas_reaction/proto_nitrate_formation/init_reqs()
 	requirements = list(
@@ -1074,9 +1074,9 @@
  */
 /datum/gas_reaction/proto_nitrate_hydrogen_response
 	priority_group = PRIORITY_PRE_FORMATION
-	name = "Proto Nitrate Hydrogen Response"
+	name = "Протонитратный отклик водорода"
 	id = "proto_nitrate_hydrogen_response"
-	desc = "Conversion of hydrogen into proto nitrate."
+	desc = "Преобразование водорода в протонитрат."
 
 /datum/gas_reaction/proto_nitrate_hydrogen_response/init_reqs()
 	requirements = list(
@@ -1112,9 +1112,9 @@
  */
 /datum/gas_reaction/proto_nitrate_tritium_response
 	priority_group = PRIORITY_PRE_FORMATION
-	name = "Proto Nitrate Tritium Response"
+	name = "Протонитратный отклик трития"
 	id = "proto_nitrate_tritium_response"
-	desc = "Conversion of tritium into hydrogen that consumes a small amount of proto-nitrate."
+	desc = "Преобразование трития в водород, потребляющее небольшое количество протонитрата."
 
 /datum/gas_reaction/proto_nitrate_tritium_response/init_reqs()
 	requirements = list(
@@ -1166,9 +1166,9 @@
  */
 /datum/gas_reaction/proto_nitrate_bz_response
 	priority_group = PRIORITY_PRE_FORMATION
-	name = "Proto Nitrate BZ Response"
+	name = "Протонитратный отклик BZ"
 	id = "proto_nitrate_bz_response"
-	desc = "Breakdown of BZ into nitrogen, helium, and plasma by proto-nitrate under low temperatures."
+	desc = "Расщепление BZ на азот, гелий и плазму протонитратом при низких температурах."
 
 /datum/gas_reaction/proto_nitrate_bz_response/init_reqs()
 	requirements = list(
@@ -1221,9 +1221,9 @@
 
 /datum/gas_reaction/antinoblium_replication
 	priority_group = PRIORITY_FORMATION
-	name = "Antinoblium Replication"
+	name = "Репликация антиноблия"
 	id = "antinoblium_replication"
-	desc = "Antinoblium breaks down all gases into more of itself."
+	desc = "Антиноблий расщепляет все газы, превращая их в самого себя."
 
 /datum/gas_reaction/antinoblium_replication/init_reqs()
 	requirements = list(

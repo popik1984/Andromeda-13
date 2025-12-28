@@ -6,7 +6,8 @@
 	base_icon_state = "manifold4w"
 
 	name = "4-way pipe manifold"
-	desc = "A manifold composed of heat-exchanging pipes."
+	desc = "Манифольд, состоящий из теплообменных труб."
+	gender = MALE
 
 	initialize_directions = ALL_CARDINALS
 
@@ -16,6 +17,16 @@
 	pipe_state = "he_manifold4w"
 
 	has_gas_visuals = FALSE
+
+/obj/machinery/atmospherics/pipe/heat_exchanging/manifold4w/get_ru_names()
+	return list(
+		NOMINATIVE = "4-сторонний манифольд",
+		GENITIVE = "4-стороннего манифольда",
+		DATIVE = "4-стороннему манифольду",
+		ACCUSATIVE = "4-сторонний манифольд",
+		INSTRUMENTAL = "4-сторонним манифольдом",
+		PREPOSITIONAL = "4-стороннем манифольде",
+	)
 
 /obj/machinery/atmospherics/pipe/heat_exchanging/manifold4w/set_init_directions()
 	initialize_directions = initial(initialize_directions)

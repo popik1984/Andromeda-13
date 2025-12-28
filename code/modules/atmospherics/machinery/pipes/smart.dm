@@ -5,7 +5,8 @@ GLOBAL_LIST_INIT(atmos_components, typecacheof(list(/obj/machinery/atmospherics)
 	icon_state = "pipe11-3"
 
 	name = "pipe"
-	desc = "A one meter section of regular pipe."
+	desc = "Метровая секция обычной трубы."
+	gender = FEMALE
 
 	device_type = QUATERNARY
 	construction_type = /obj/item/pipe/quaternary
@@ -14,6 +15,16 @@ GLOBAL_LIST_INIT(atmos_components, typecacheof(list(/obj/machinery/atmospherics)
 
 	///Current active connections
 	var/connections = NONE
+
+/obj/machinery/atmospherics/pipe/smart/get_ru_names()
+	return list(
+		NOMINATIVE = "труба",
+		GENITIVE = "трубы",
+		DATIVE = "трубе",
+		ACCUSATIVE = "трубу",
+		INSTRUMENTAL = "трубой",
+		PREPOSITIONAL = "трубе",
+	)
 
 /obj/machinery/atmospherics/pipe/smart/update_pipe_icon()
 	icon = 'icons/obj/pipes_n_cables/!pipes_bitmask.dmi'

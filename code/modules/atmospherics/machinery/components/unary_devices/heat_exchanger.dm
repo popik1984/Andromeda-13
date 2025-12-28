@@ -3,7 +3,7 @@
 	icon_state = "he1"
 
 	name = "heat exchanger"
-	desc = "Exchanges heat between two input gases. Set up for fast heat transfer."
+	desc = "Обеспечивает теплообмен между двумя газами. Настроен на быструю передачу тепла."
 
 	can_unwrench = TRUE
 	shift_underlay_only = FALSE // not really used
@@ -14,6 +14,16 @@
 	var/update_cycle
 
 	pipe_state = "heunary"
+
+/obj/machinery/atmospherics/components/unary/heat_exchanger/get_ru_names()
+	return list(
+		NOMINATIVE = "теплообменник",
+		GENITIVE = "теплообменника",
+		DATIVE = "теплообменнику",
+		ACCUSATIVE = "теплообменник",
+		INSTRUMENTAL = "теплообменником",
+		PREPOSITIONAL = "теплообменнике",
+	)
 
 /obj/machinery/atmospherics/components/unary/heat_exchanger/layer2
 	piping_layer = 2

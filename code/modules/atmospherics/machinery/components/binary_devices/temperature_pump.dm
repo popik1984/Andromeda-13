@@ -1,16 +1,26 @@
 /obj/machinery/atmospherics/components/binary/temperature_pump
 	icon_state = "tpump_map-3"
 	name = "temperature pump"
-	desc = "A pump that moves heat from one pipeline to another. The input will get cooler, and the output will get hotter."
+	desc = "Насос, перемещающий тепло из одного трубопровода в другой. Входной контур будет охлаждаться, а выходной — нагреваться."
 	can_unwrench = TRUE
 	shift_underlay_only = FALSE
 	construction_type = /obj/item/pipe/directional
 	pipe_state = "tpump"
 	vent_movement = NONE
-	///Percent of the heat delta to transfer
+	///Процент переноса разницы температур
 	var/heat_transfer_rate = 0
-	///Maximum allowed transfer percentage
+	///Максимально допустимый процент переноса
 	var/max_heat_transfer_rate = 100
+
+/obj/machinery/atmospherics/components/binary/temperature_pump/get_ru_names()
+	return list(
+		NOMINATIVE = "тепловой насос",
+		GENITIVE = "теплового насоса",
+		DATIVE = "тепловому насосу",
+		ACCUSATIVE = "тепловой насос",
+		INSTRUMENTAL = "тепловым насосом",
+		PREPOSITIONAL = "тепловом насосе",
+	)
 
 /obj/machinery/atmospherics/components/binary/temperature_pump/Initialize(mapload)
 	. = ..()
@@ -18,14 +28,14 @@
 
 /obj/machinery/atmospherics/components/binary/temperature_pump/add_context(atom/source, list/context, obj/item/held_item, mob/user)
 	. = ..()
-	context[SCREENTIP_CONTEXT_CTRL_LMB] = "Turn [on ? "off" : "on"]"
-	context[SCREENTIP_CONTEXT_ALT_LMB] = "Maximize transfer rate"
+	context[SCREENTIP_CONTEXT_CTRL_LMB] = "[on ? "Выключить" : "Включить"]"
+	context[SCREENTIP_CONTEXT_ALT_LMB] = "Максимальная скорость переноса"
 	return CONTEXTUAL_SCREENTIP_SET
 
 /obj/machinery/atmospherics/components/binary/temperature_pump/click_ctrl(mob/user)
 	if(is_operational)
 		set_on(!on)
-		balloon_alert(user, "turned [on ? "on" : "off"]")
+		balloon_alert(user, "[on ? "включено" : "выключено"]")
 		investigate_log("was turned [on ? "on" : "off"] by [key_name(user)]", INVESTIGATE_ATMOS)
 		return CLICK_ACTION_SUCCESS
 	return CLICK_ACTION_BLOCKING
@@ -36,7 +46,7 @@
 
 	heat_transfer_rate = max_heat_transfer_rate
 	investigate_log("was set to [heat_transfer_rate]% by [key_name(user)]", INVESTIGATE_ATMOS)
-	balloon_alert(user, "transfer rate set to [heat_transfer_rate]%")
+	balloon_alert(user, "скорость переноса [heat_transfer_rate]%")
 	update_appearance(UPDATE_ICON)
 	return CLICK_ACTION_SUCCESS
 
@@ -50,7 +60,7 @@
 	var/datum/gas_mixture/air_input = airs[1]
 	var/datum/gas_mixture/air_output = airs[2]
 
-	if(!QUANTIZE(air_input.total_moles()) || !QUANTIZE(air_output.total_moles())) //Don't transfer if there's no gas
+	if(!QUANTIZE(air_input.total_moles()) || !QUANTIZE(air_output.total_moles())) //Не переносить, если газа нет
 		return
 	var/datum/gas_mixture/remove_input = air_input.remove_ratio(0.9)
 	var/datum/gas_mixture/remove_output = air_output.remove_ratio(0.9)

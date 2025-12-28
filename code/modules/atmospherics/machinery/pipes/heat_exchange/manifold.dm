@@ -6,7 +6,8 @@
 	base_icon_state = "manifold"
 
 	name = "pipe manifold"
-	desc = "A manifold composed of regular pipes."
+	desc = "Манифольд, состоящий из обычных труб."
+	gender = MALE
 
 	dir = SOUTH
 	initialize_directions = EAST|NORTH|WEST
@@ -17,6 +18,16 @@
 	pipe_state = "he_manifold"
 
 	has_gas_visuals = FALSE
+
+/obj/machinery/atmospherics/pipe/heat_exchanging/manifold/get_ru_names()
+	return list(
+		NOMINATIVE = "манифольд",
+		GENITIVE = "манифольда",
+		DATIVE = "манифольду",
+		ACCUSATIVE = "манифольд",
+		INSTRUMENTAL = "манифольдом",
+		PREPOSITIONAL = "манифольде",
+	)
 
 /obj/machinery/atmospherics/pipe/heat_exchanging/manifold/set_init_directions()
 	initialize_directions = ALL_CARDINALS

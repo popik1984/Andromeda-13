@@ -12,6 +12,16 @@
 
 	volume = 1000
 
+/obj/machinery/portable_atmospherics/pump/get_ru_names()
+	return list(
+		NOMINATIVE = "переносной насос",
+		GENITIVE = "переносного насоса",
+		DATIVE = "переносному насосу",
+		ACCUSATIVE = "переносной насос",
+		INSTRUMENTAL = "переносным насосом",
+		PREPOSITIONAL = "переносном насосе",
+	)
+
 /obj/machinery/portable_atmospherics/pump/on_deconstruction(disassembled)
 	var/turf/local_turf = get_turf(src)
 	local_turf.assume_air(air_contents)
@@ -174,12 +184,22 @@
 /obj/machinery/portable_atmospherics/pump/lil_pump
 	name = "Lil' Pump"
 
+/obj/machinery/portable_atmospherics/pump/lil_pump/get_ru_names()
+	return list(
+		NOMINATIVE = "Маленький Насос",
+		GENITIVE = "Маленького Насоса",
+		DATIVE = "Маленькому Насосу",
+		ACCUSATIVE = "Маленький Насос",
+		INSTRUMENTAL = "Маленьким Насосом",
+		PREPOSITIONAL = "Маленьком Насосе",
+	)
+
 /obj/machinery/portable_atmospherics/pump/lil_pump/Initialize(mapload)
 	. = ..()
 	//25% chance to occur
 	if(prob(25))
 		name = "Liler' Pump"
-		desc = "When a Lil' Pump and a portable air pump love each other very much."
+		desc = "Когда Маленький Насос и переносной насос любят друг друга очень сильно ."
 		var/matrix/lil_pump = matrix()
 		lil_pump.Scale(0.8)
 		src.transform = lil_pump

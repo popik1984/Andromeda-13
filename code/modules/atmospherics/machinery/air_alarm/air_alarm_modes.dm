@@ -1,5 +1,5 @@
-/// Keys are [/datum/air_alarm_mode] paths
-/// Values are their respective instances.
+/// Ключи - пути [/datum/air_alarm_mode]
+/// Значения - их соответствующие экземпляры.
 GLOBAL_LIST_INIT(air_alarm_modes, init_air_alarm_modes())
 
 /proc/init_air_alarm_modes()
@@ -8,21 +8,21 @@ GLOBAL_LIST_INIT(air_alarm_modes, init_air_alarm_modes())
 		ret[mode_path] = new mode_path
 	return ret
 
-/// Various modes that an [/obj/machinery/airalarm] can assume.
+/// Различные режимы, которые может принимать [/obj/machinery/airalarm].
 /datum/air_alarm_mode
-	/// Name of the mode.
+	/// Название режима.
 	var/name
-	/// More detail on the mode.
+	/// Подробное описание режима.
 	var/desc
-	/// TRUE if this mode can be dangerous if selected.
+	/// TRUE, если этот режим может быть опасным при выборе.
 	var/danger
-	/// TRUE if the air alarm needs to be emagged for this to be selected.
+	/// TRUE, если воздушная тревога должна быть взломана эмагом для выбора этого режима.
 	var/emag = FALSE
 
-/** The proc that runs when this air alarm mode is selected.
+/** Процедура, которая выполняется при выборе этого режима воздушной тревоги.
  *
- * Arguments:
- * * applied - which area will we apply this mode to.
+ * Аргументы:
+ * * applied - зона, к которой будет применён этот режим.
  */
 /datum/air_alarm_mode/proc/apply(area/applied)
 	return
@@ -30,10 +30,10 @@ GLOBAL_LIST_INIT(air_alarm_modes, init_air_alarm_modes())
 /datum/air_alarm_mode/proc/replace(area/applied, pressure)
 	return
 
-/// The default.
+/// Режим по умолчанию.
 /datum/air_alarm_mode/filtering
 	name = "Filtering"
-	desc = "Scrubs out contaminants"
+	desc = "Очищает от загрязнений"
 	danger = FALSE
 
 /datum/air_alarm_mode/filtering/apply(area/applied)
@@ -52,7 +52,7 @@ GLOBAL_LIST_INIT(air_alarm_modes, init_air_alarm_modes())
 
 /datum/air_alarm_mode/contaminated
 	name = "Contaminated"
-	desc = "Scrubs out ALL contaminants quickly"
+	desc = "Быстро очищает от ВСЕХ загрязнений"
 	danger = FALSE
 
 /datum/air_alarm_mode/contaminated/apply(area/applied)
@@ -73,7 +73,7 @@ GLOBAL_LIST_INIT(air_alarm_modes, init_air_alarm_modes())
 
 /datum/air_alarm_mode/draught
 	name = "Draught"
-	desc = "Siphons out air while replacing"
+	desc = "Откачивает воздух с одновременной заменой"
 	danger = FALSE
 
 /datum/air_alarm_mode/draught/apply(area/applied)
@@ -91,7 +91,7 @@ GLOBAL_LIST_INIT(air_alarm_modes, init_air_alarm_modes())
 
 /datum/air_alarm_mode/refill
 	name = "Refill"
-	desc = "Triple vent output"
+	desc = "Утроенная производительность вентилей"
 	danger = TRUE
 
 /datum/air_alarm_mode/refill/apply(area/applied)
@@ -111,10 +111,10 @@ GLOBAL_LIST_INIT(air_alarm_modes, init_air_alarm_modes())
 
 /datum/air_alarm_mode/cycle
 	name = "Cycle"
-	desc = "Siphons air before replacing"
+	desc = "Откачивает воздух перед заменой"
 	danger = TRUE
 
-/// Same as [/datum/air_alarm_mode/siphon/apply]
+/// То же самое, что и [/datum/air_alarm_mode/siphon/apply]
 /datum/air_alarm_mode/cycle/apply(area/applied)
 	for (var/obj/machinery/atmospherics/components/unary/vent_pump/vent as anything in applied.air_vents)
 		vent.on = FALSE
@@ -125,8 +125,8 @@ GLOBAL_LIST_INIT(air_alarm_modes, init_air_alarm_modes())
 		scrubber.set_widenet(TRUE)
 		scrubber.set_scrubbing(ATMOS_DIRECTION_SIPHONING)
 
-/// Special case for cycles. Cycles need to refill the air again after it's scrubbed out so this proc is called.
-/// Same as [/datum/air_alarm_mode/filtering/apply]
+/// Особый случай для циклического режима. Цикл должен снова наполнить воздухом после очистки, поэтому вызывается эта процедура.
+/// То же самое, что и [/datum/air_alarm_mode/filtering/apply]
 /datum/air_alarm_mode/cycle/replace(area/applied, pressure)
 	if(pressure >= ONE_ATMOSPHERE * 0.05)
 		return
@@ -146,7 +146,7 @@ GLOBAL_LIST_INIT(air_alarm_modes, init_air_alarm_modes())
 
 /datum/air_alarm_mode/siphon
 	name = "Siphon"
-	desc = "Siphons air out of the room"
+	desc = "Откачивает воздух из помещения"
 	danger = TRUE
 
 /datum/air_alarm_mode/siphon/apply(area/applied)
@@ -161,7 +161,7 @@ GLOBAL_LIST_INIT(air_alarm_modes, init_air_alarm_modes())
 
 /datum/air_alarm_mode/panic_siphon
 	name = "Panic Siphon"
-	desc = "Siphons air out of the room quickly"
+	desc = "Быстро откачивает воздух из помещения"
 	danger = TRUE
 
 /datum/air_alarm_mode/panic_siphon/apply(area/applied)
@@ -176,7 +176,7 @@ GLOBAL_LIST_INIT(air_alarm_modes, init_air_alarm_modes())
 
 /datum/air_alarm_mode/off
 	name = "Off"
-	desc = "Shuts off vents and scrubbers"
+	desc = "Отключает вентили и скрубберы"
 	danger = FALSE
 
 /datum/air_alarm_mode/off/apply(area/applied)
@@ -190,7 +190,7 @@ GLOBAL_LIST_INIT(air_alarm_modes, init_air_alarm_modes())
 
 /datum/air_alarm_mode/flood
 	name = "Flood"
-	desc = "Shuts off scrubbers and opens vents"
+	desc = "Отключает скрубберы и открывает вентили"
 	danger = TRUE
 	emag = TRUE
 
@@ -208,9 +208,9 @@ GLOBAL_LIST_INIT(air_alarm_modes, init_air_alarm_modes())
 
 /datum/air_alarm_mode/vent_siphon
 	name = "Vent siphon"
-	desc = "Disables scrubbers and turns vents to siphon"
+	desc = "Отключает скрубберы и переводит вентили в режим откачки"
 	danger = TRUE
-	emag = TRUE // siphoning things with vents can horribly fuck up distro, even if its surprisingly fast
+	emag = TRUE // откачка через вентили может серьёзно нарушить работу распределительной сети, даже несмотря на высокую скорость
 
 /datum/air_alarm_mode/vent_siphon/apply(area/applied)
 	for (var/obj/machinery/atmospherics/components/unary/vent_pump/vent as anything in applied.air_vents)

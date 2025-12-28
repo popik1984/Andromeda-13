@@ -1,6 +1,6 @@
 /obj/machinery/portable_atmospherics/scrubber
 	name = "portable air scrubber"
-	desc = "A portable variant of the station scrubbers, capable of filtering gas from the air around it or inserted tank. May also be wrenched into a port."
+	desc = "Переносной вариант станционных скрубберов, способный фильтровать газ из окружающего воздуха или вставленного баллона. Также может быть прикручен к порту."
 	icon_state = "scrubber"
 	density = TRUE
 	max_integrity = 250
@@ -30,6 +30,16 @@
 		/datum/gas/proto_nitrate,
 		/datum/gas/zauker,
 		/datum/gas/halon,
+	)
+
+/obj/machinery/portable_atmospherics/scrubber/get_ru_names()
+	return list(
+		NOMINATIVE = "переносной скруббер",
+		GENITIVE = "переносного скруббера",
+		DATIVE = "переносному скрубберу",
+		ACCUSATIVE = "переносной скруббер",
+		INSTRUMENTAL = "переносным скруббером",
+		PREPOSITIONAL = "переносном скруббере",
 	)
 
 /obj/machinery/portable_atmospherics/scrubber/on_deconstruction(disassembled)
@@ -205,6 +215,16 @@
 
 	var/movable = FALSE
 	use_overlays = FALSE
+
+/obj/machinery/portable_atmospherics/scrubber/huge/get_ru_names()
+	return list(
+		NOMINATIVE = "огромный скруббер",
+		GENITIVE = "огромного скруббера",
+		DATIVE = "огромному скрубберу",
+		ACCUSATIVE = "огромный скруббер",
+		INSTRUMENTAL = "огромным скруббером",
+		PREPOSITIONAL = "огромном скруббере",
+	)
 
 /obj/machinery/portable_atmospherics/scrubber/huge/movable
 	movable = TRUE

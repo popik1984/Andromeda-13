@@ -44,6 +44,16 @@
 	fire = 60
 	acid = 30
 
+/obj/machinery/portable_atmospherics/get_ru_names()
+	return list(
+		NOMINATIVE = "переносное атмосферное оборудование",
+		GENITIVE = "переносного атмосферного оборудования",
+		DATIVE = "переносному атмосферному оборудованию",
+		ACCUSATIVE = "переносное атмосферное оборудование",
+		INSTRUMENTAL = "переносным атмосферным оборудованием",
+		PREPOSITIONAL = "переносном атмосферном оборудовании",
+	)
+
 /obj/machinery/portable_atmospherics/get_save_vars()
 	. = ..()
 	var/datum/gas_mixture/gasmix = air_contents
@@ -86,9 +96,9 @@
 /obj/machinery/portable_atmospherics/examine(mob/user)
 	. = ..()
 	if(nob_crystal_inserted)
-		. += "There is a hypernoblium crystal inside it that allows for reactions inside to be suppressed."
+		. += "Внутри находится кристалл гиперноблия, позволяющий подавлять реакции."
 	if(suppress_reactions)
-		. += "The hypernoblium crystal inside is glowing with a faint blue colour, indicating reactions inside are currently being suppressed."
+		. += "Кристалл гиперноблия внутри светится тусклым синим светом, показывая, что реакции в данный момент подавлены."
 
 /obj/machinery/portable_atmospherics/ex_act(severity, target)
 	if(resistance_flags & INDESTRUCTIBLE)
@@ -112,13 +122,13 @@
 		return ITEM_INTERACT_SKIP_TO_ATTACK
 	if(atom_integrity >= max_integrity || (machine_stat & BROKEN) || !tool.tool_start_check(user, amount = 1, heat_required = HIGH_TEMPERATURE_REQUIRED))
 		return ITEM_INTERACT_BLOCKING
-	balloon_alert(user, "repairing...")
+	balloon_alert(user, "чиню...")
 	while(tool.use_tool(src, user, 2.5 SECONDS, volume=40))
 		atom_integrity = min(atom_integrity + 25, max_integrity)
 		if(atom_integrity >= max_integrity)
-			balloon_alert(user, "repaired")
+			balloon_alert(user, "починено")
 			return ITEM_INTERACT_SUCCESS
-		balloon_alert(user, "partially repaired...")
+		balloon_alert(user, "частично починено...")
 
 	return ITEM_INTERACT_SUCCESS
 
@@ -127,7 +137,7 @@
 	if(!isliving(user) || !Adjacent(user))
 		return .
 	if(held_item?.tool_behaviour == TOOL_WELDER)
-		context[SCREENTIP_CONTEXT_LMB] = "Repair"
+		context[SCREENTIP_CONTEXT_LMB] = "Починить"
 		return CONTEXTUAL_SCREENTIP_SET
 
 /// Take damage if a variable is exceeded. Damage is equal to temp/limit * heat/limit.
@@ -215,7 +225,7 @@
 /obj/machinery/portable_atmospherics/click_alt(mob/living/user)
 	if(!holding)
 		return CLICK_ACTION_BLOCKING
-	to_chat(user, span_notice("You remove [holding] from [src]."))
+	to_chat(user, span_notice("Вы извлекаете [holding.declent_ru(ACCUSATIVE)] из [declent_ru(GENITIVE)]."))
 	replace_tank(user, TRUE)
 	return CLICK_ACTION_SUCCESS
 
@@ -223,8 +233,8 @@
 	. = ..()
 	if(!holding)
 		return
-	. += span_notice("\The [src] contains [holding]. Alt-click [src] to remove it.")+\
-		span_notice("Click [src] with another gas tank to hot swap [holding].")
+	. += span_notice("[declent_ru(NOMINATIVE)] содержит [holding.declent_ru(ACCUSATIVE)]. [EXAMINE_HINT("Альт-клик")] по [declent_ru(DATIVE)], чтобы извлечь.")+\
+		span_notice("Нажмите на [declent_ru(ACCUSATIVE)] другим баллоном, чтобы быстро заменить [holding.declent_ru(ACCUSATIVE)].")
 
 /**
  * Allow the player to place a tank inside the machine.
@@ -243,7 +253,7 @@
 
 	if(holding && new_tank)//for when we are actually switching tanks
 		investigate_log("had its internal [holding] swapped with [new_tank] by [key_name(user)].", INVESTIGATE_ATMOS)
-		to_chat(user, span_notice("In one smooth motion you pop [holding] out of [src]'s connector and replace it with [new_tank]."))
+		to_chat(user, span_notice("Одним плавным движением вы вынимаете [holding.declent_ru(ACCUSATIVE)] из разъёма [declent_ru(GENITIVE)] и заменяете его на [new_tank.declent_ru(ACCUSATIVE)]."))
 		user.put_in_hands(holding)
 		UnregisterSignal(holding, COMSIG_QDELETING)
 		holding = new_tank
@@ -252,7 +262,7 @@
 		playsound(src, remove_sound, sound_vol)
 	else if(holding)//we remove a tank
 		investigate_log("had its internal [holding] removed by [key_name(user)].", INVESTIGATE_ATMOS)
-		to_chat(user, span_notice("You remove [holding] from [src]."))
+		to_chat(user, span_notice("Вы извлекаете [holding.declent_ru(ACCUSATIVE)] из [declent_ru(GENITIVE)]."))
 		if(Adjacent(user))
 			user.put_in_hands(holding)
 		else
@@ -262,7 +272,7 @@
 		holding = null
 	else if(new_tank)//we insert the tank
 		investigate_log("had [new_tank] inserted into it by [key_name(user)].", INVESTIGATE_ATMOS)
-		to_chat(user, span_notice("You insert [new_tank] into [src]."))
+		to_chat(user, span_notice("Вы вставляете [new_tank.declent_ru(ACCUSATIVE)] в [declent_ru(ACCUSATIVE)]."))
 		holding = new_tank
 		playsound(src, insert_sound, sound_vol)
 		RegisterSignal(holding, COMSIG_QDELETING, PROC_REF(unregister_holding))
@@ -284,23 +294,23 @@
 		disconnect()
 		wrench.play_tool_sound(src)
 		user.visible_message( \
-			"[user] disconnects [src].", \
-			span_notice("You unfasten [src] from the port."), \
-			span_hear("You hear a ratchet."))
+			"[user] отсоединяет [declent_ru(ACCUSATIVE)].", \
+			span_notice("Вы отсоединяете [declent_ru(ACCUSATIVE)] от порта."), \
+			span_hear("Вы слышите звук трещотки."))
 		update_appearance()
 		return TRUE
 	var/obj/machinery/atmospherics/components/unary/portables_connector/possible_port = locate(/obj/machinery/atmospherics/components/unary/portables_connector) in loc
 	if(!possible_port)
-		to_chat(user, span_notice("Nothing happens."))
+		to_chat(user, span_notice("Ничего не происходит."))
 		return FALSE
 	if(!connect(possible_port))
-		to_chat(user, span_notice("[name] failed to connect to the port."))
+		to_chat(user, span_notice("[declent_ru(NOMINATIVE)] не смог подключиться к порту."))
 		return FALSE
 	wrench.play_tool_sound(src)
 	user.visible_message( \
-		"[user] connects [src].", \
-		span_notice("You fasten [src] to the port."), \
-		span_hear("You hear a ratchet."))
+		"[user] подсоединяет [declent_ru(ACCUSATIVE)].", \
+		span_notice("Вы прикручиваете [declent_ru(ACCUSATIVE)] к порту."), \
+		span_hear("Вы слышите звук трещотки."))
 	update_appearance()
 	investigate_log("was connected to [possible_port] by [key_name(user)].", INVESTIGATE_ATMOS)
 	return TRUE

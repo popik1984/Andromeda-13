@@ -3,7 +3,8 @@
 	icon_state = "bridge_center"
 
 	name = "bridge pipe"
-	desc = "A one meter section of regular pipe used to connect pipenets over pipes."
+	desc = "Метровая секция обычной трубы, используемая для соединения трубопроводов над другими трубами."
+	gender = FEMALE
 
 	layer = HIGH_PIPE_LAYER
 	dir = SOUTH
@@ -15,6 +16,16 @@
 	pipe_state = "bridge_center"
 
 	has_gas_visuals = FALSE
+
+/obj/machinery/atmospherics/pipe/bridge_pipe/get_ru_names()
+	return list(
+		NOMINATIVE = "мостовая труба",
+		GENITIVE = "мостовой трубы",
+		DATIVE = "мостовой трубе",
+		ACCUSATIVE = "мостовую трубу",
+		INSTRUMENTAL = "мостовой трубой",
+		PREPOSITIONAL = "мостовой трубе",
+	)
 
 /obj/machinery/atmospherics/pipe/bridge_pipe/set_init_directions()
 	switch(dir)

@@ -3,7 +3,8 @@
 	icon_state = "adapter_map-3"
 
 	name = "color adapter"
-	desc = "A one meter section of regular pipe used to connect different colored pipes."
+	desc = "Метровая секция обычной трубы, используемая для соединения труб разного цвета."
+	gender = MALE
 
 	dir = SOUTH
 	initialize_directions = NORTH | SOUTH
@@ -20,6 +21,16 @@
 
 	///cache for the icons
 	var/static/list/mutable_appearance/center_cache = list()
+
+/obj/machinery/atmospherics/pipe/color_adapter/get_ru_names()
+	return list(
+		NOMINATIVE = "цветовой адаптер",
+		GENITIVE = "цветового адаптера",
+		DATIVE = "цветовому адаптеру",
+		ACCUSATIVE = "цветовой адаптер",
+		INSTRUMENTAL = "цветовым адаптером",
+		PREPOSITIONAL = "цветовом адаптере",
+	)
 
 /obj/machinery/atmospherics/pipe/color_adapter/Initialize(mapload)
 	icon_state = ""

@@ -2,7 +2,7 @@
 	icon_state = "passive_vent_map-3"
 
 	name = "passive vent"
-	desc = "It is an open vent."
+	desc = "Открытая вентиляция."
 
 	can_unwrench = TRUE
 	hide = TRUE
@@ -14,6 +14,15 @@
 	vent_movement = VENTCRAWL_ALLOWED | VENTCRAWL_CAN_SEE | VENTCRAWL_ENTRANCE_ALLOWED
 	interaction_flags_click = NEED_VENTCRAWL
 
+/obj/machinery/atmospherics/components/unary/passive_vent/get_ru_names()
+	return list(
+		NOMINATIVE = "пассивная вентиляция",
+		GENITIVE = "пассивной вентиляции",
+		DATIVE = "пассивной вентиляции",
+		ACCUSATIVE = "пассивную вентиляцию",
+		INSTRUMENTAL = "пассивной вентиляцией",
+		PREPOSITIONAL = "пассивной вентиляции",
+	)
 
 /obj/machinery/atmospherics/components/unary/passive_vent/update_icon_nopipes()
 	cut_overlays()

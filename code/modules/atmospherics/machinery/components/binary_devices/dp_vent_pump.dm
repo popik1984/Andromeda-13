@@ -10,7 +10,7 @@
 	//node1 is input port
 
 	name = "dual-port air vent"
-	desc = "Has a valve and pump attached to it. There are two ports."
+	desc = "Имеет клапан, насос и два порта."
 
 	hide = TRUE
 
@@ -24,6 +24,16 @@
 	var/output_pressure_max = 0
 	///Set the flag for the pressure bound
 	var/pressure_checks = ATMOS_EXTERNAL_BOUND
+
+/obj/machinery/atmospherics/components/binary/dp_vent_pump/get_ru_names()
+	return list(
+		NOMINATIVE = "двухпортовая вентиляция",
+		GENITIVE = "двухпортовой вентиляции",
+		DATIVE = "двухпортовой вентиляции",
+		ACCUSATIVE = "двухпортовую вентиляцию",
+		INSTRUMENTAL = "двухпортовой вентиляцией",
+		PREPOSITIONAL = "двухпортовой вентиляции",
+	)
 
 /obj/machinery/atmospherics/components/binary/dp_vent_pump/update_icon_nopipes()
 	cut_overlays()
@@ -101,6 +111,16 @@
 
 /obj/machinery/atmospherics/components/binary/dp_vent_pump/high_volume
 	name = "large dual-port air vent"
+
+/obj/machinery/atmospherics/components/binary/dp_vent_pump/high_volume/get_ru_names()
+	return list(
+		NOMINATIVE = "большая двухпортовая вентиляция",
+		GENITIVE = "большой двухпортовой вентиляции",
+		DATIVE = "большой двухпортовой вентиляции",
+		ACCUSATIVE = "большую двухпортовую вентиляцию",
+		INSTRUMENTAL = "большой двухпортовой вентиляцией",
+		PREPOSITIONAL = "большой двухпортовой вентиляции",
+	)
 
 /obj/machinery/atmospherics/components/binary/dp_vent_pump/high_volume/Initialize(mapload)
 	. = ..()

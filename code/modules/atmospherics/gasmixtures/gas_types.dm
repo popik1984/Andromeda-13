@@ -39,32 +39,33 @@
 /*||||||||||||||/----------\||||||||||||||*\
 ||||||||||||||||[GAS DATUMS]||||||||||||||||
 ||||||||||||||||\__________/||||||||||||||||
-|||| These should never be instantiated. ||||
-|||| They exist only to make it easier   ||||
-|||| to add a new gas. They are accessed ||||
-|||| only by meta_gas_list().            ||||
+|||| Их никогда не следует инстанцировать.|||
+|||| Они существуют только для облегчения |||
+|||| добавления нового газа. Доступ к ним |||
+|||| осуществляется только через          |||
+|||| meta_gas_list().                     |||
 \*||||||||||||||||||||||||||||||||||||||||*/
 
-//This is a plot created using the values for gas exports. Each gas has a value that works as its kind of soft-cap, which limits you from making billions of credits per sale, based on the base_value variable on the gasses themselves. Most of these gasses as a result have a rather low value when sold, like nitrogen and oxygen at 1500 and 600 respectively at their maximum value. The
+//Это график, созданный с использованием значений экспорта газа. Каждый газ имеет значение, которое работает как своего рода мягкий предел, который ограничивает возможность зарабатывать миллиарды кредитов за продажу, на основе переменной base_value в самих газах. В результате большинство этих газов имеют довольно низкую стоимость при продаже, например, азот и кислород - 1500 и 600 соответственно при их максимальном значении.
 /datum/gas
 	var/id = ""
 	var/specific_heat = 0
 	var/name = ""
-	///icon_state in icons/effects/atmospherics.dmi
+	///icon_state в icons/effects/atmospherics.dmi
 	var/gas_overlay = ""
 	var/moles_visible = null
-	///currently used by canisters
+	///в настоящее время используется канистрами
 	var/dangerous = FALSE
-	///How much the gas accelerates a fusion reaction
+	///Насколько газ ускоряет реакцию синтеза
 	var/fusion_power = 0
-	/// relative rarity compared to other gases, used when setting up the reactions list.
+	/// относительная редкость по сравнению с другими газами, используется при настройке списка реакций.
 	var/rarity = 0
-	///Can gas of this type can purchased through cargo?
+	///Можно ли купить газ этого типа через карго?
 	var/purchaseable = FALSE
-	///How does a single mole of this gas sell for? Formula to calculate maximum value is in code\modules\cargo\exports\large_objects.dm. Doesn't matter for roundstart gasses.
+	///Сколько стоит продажа одного моля этого газа? Формула для расчёта максимального значения находится в code\modules\cargo\exports\large_objects.dm. Не имеет значения для газов, доступных в начале раунда.
 	var/base_value = 0
 	var/desc
-	///RGB code for use when a generic color representing the gas is needed. Colors taken from contants.ts
+	///RGB-код для использования, когда нужен общий цвет, представляющий газ. Цвета взяты из constants.ts
 	var/primary_color
 
 
@@ -75,7 +76,7 @@
 	rarity = 900
 	purchaseable = TRUE
 	base_value = 0.2
-	desc = "The gas most life forms need to be able to survive. Also an oxidizer."
+	desc = "Газ, необходимый большинству форм жизни для выживания. Также окислитель."
 	primary_color = "#0000ff"
 
 /datum/gas/nitrogen
@@ -85,10 +86,10 @@
 	rarity = 1000
 	purchaseable = TRUE
 	base_value = 0.1
-	desc = "A very common gas that used to pad artificial atmospheres to habitable pressure."
+	desc = "Очень распространённый газ, используемый для доведения искусственных атмосфер до обитаемого давления."
 	primary_color = "#ffff00"
 
-/datum/gas/carbon_dioxide //what the fuck is this?
+/datum/gas/carbon_dioxide //что это, блять?
 	id = GAS_CO2
 	specific_heat = 30
 	name = "Carbon Dioxide"
@@ -96,7 +97,7 @@
 	rarity = 700
 	purchaseable = TRUE
 	base_value = 0.2
-	desc = "What the fuck is carbon dioxide?"
+	desc = "Что, блять, такое углекислый газ?"
 	primary_color = COLOR_GRAY
 
 /datum/gas/plasma
@@ -108,7 +109,7 @@
 	dangerous = TRUE
 	rarity = 800
 	base_value = 1.5
-	desc = "A flammable gas with many other curious properties. Its research is one of NT's primary objective."
+	desc = "Горючий газ со многими любопытными свойствами. Его исследование — одна из основных целей NT."
 	primary_color = "#ffc0cb"
 
 /datum/gas/water_vapor
@@ -121,7 +122,7 @@
 	rarity = 500
 	purchaseable = TRUE
 	base_value = 0.5
-	desc = "Water, in gas form. Makes floors slippery and washes items on them."
+	desc = "Вода в газообразной форме. Делает полы скользкими и смывает предметы на них."
 	primary_color = "#b0c4de"
 
 /datum/gas/hypernoblium
@@ -133,7 +134,7 @@
 	fusion_power = 10
 	rarity = 50
 	base_value = 2.5
-	desc = "The most noble gas of them all. High quantities of hyper-noblium actively prevents reactions from occurring."
+	desc = "Самый благородный газ из всех. Большое количество гипер-ноблия активно предотвращает возникновение реакций."
 	primary_color = COLOR_TEAL
 
 /datum/gas/nitrous_oxide
@@ -147,7 +148,7 @@
 	rarity = 600
 	purchaseable = TRUE
 	base_value = 1.5
-	desc = "Causes drowsiness, euphoria, and eventually unconsciousness."
+	desc = "Вызывает сонливость, эйфорию и, в конечном итоге, потерю сознания."
 	primary_color = "#ffe4c4"
 
 /datum/gas/nitrium
@@ -160,7 +161,7 @@
 	dangerous = TRUE
 	rarity = 1
 	base_value = 6
-	desc = "An experimental performance enhancing gas. Nitrium can have amplified effects as more of it gets into your bloodstream."
+	desc = "Экспериментальный газ, улучшающий производительность. Эффекты нитрия могут усиливаться по мере попадания его в кровоток."
 	primary_color = "#a52a2a"
 
 /datum/gas/tritium
@@ -173,7 +174,7 @@
 	fusion_power = 5
 	rarity = 300
 	base_value = 2.5
-	desc = "A highly flammable and radioactive gas."
+	desc = "Сильногорючий и радиоактивный газ."
 	primary_color = "#32cd32"
 
 /datum/gas/bz
@@ -185,7 +186,7 @@
 	rarity = 400
 	purchaseable = TRUE
 	base_value = 1.5
-	desc = "A powerful hallucinogenic nerve agent able to induce cognitive damage."
+	desc = "Мощное галлюциногенное нервно-паралитическое вещество, способное вызывать когнитивные нарушения."
 	primary_color = "#9370db"
 
 /datum/gas/pluoxium
@@ -195,7 +196,7 @@
 	fusion_power = -10
 	rarity = 200
 	base_value = 2.5
-	desc = "A gas that could supply even more oxygen to the bloodstream when inhaled, without being an oxidizer."
+	desc = "Газ, который при вдыхании может поставлять ещё больше кислорода в кровоток, не будучи окислителем."
 	primary_color = "#7b68ee"
 
 /datum/gas/miasma
@@ -207,7 +208,7 @@
 	moles_visible = MOLES_GAS_VISIBLE * 60
 	rarity = 250
 	base_value = 1
-	desc = "Not necessarily a gas, miasma refers to biological pollutants found in the atmosphere."
+	desc = "Не обязательно газ, миазмы относятся к биологическим загрязнителям, обнаруженным в атмосфере."
 	primary_color = COLOR_OLIVE
 
 /datum/gas/freon
@@ -220,7 +221,7 @@
 	fusion_power = -5
 	rarity = 10
 	base_value = 5
-	desc = "A coolant gas. Mainly used for its endothermic reaction with oxygen."
+	desc = "Хладагент. В основном используется из-за его эндотермической реакции с кислородом."
 	primary_color = "#afeeee"
 
 /datum/gas/hydrogen
@@ -231,7 +232,7 @@
 	fusion_power = 2
 	rarity = 600
 	base_value = 1
-	desc = "A highly flammable gas."
+	desc = "Сильногорючий газ."
 	primary_color = "#ffffff"
 
 /datum/gas/healium
@@ -243,7 +244,7 @@
 	moles_visible = MOLES_GAS_VISIBLE
 	rarity = 300
 	base_value = 5.5
-	desc = "Causes deep, regenerative sleep."
+	desc = "Вызывает глубокий восстановительный сон."
 	primary_color = "#fa8072"
 
 /datum/gas/proto_nitrate
@@ -255,7 +256,7 @@
 	moles_visible = MOLES_GAS_VISIBLE
 	rarity = 200
 	base_value = 2.5
-	desc = "A very volatile gas that reacts differently with various gases."
+	desc = "Очень летучий газ, который по-разному реагирует с различными газами."
 	primary_color = "#adff2f"
 
 /datum/gas/zauker
@@ -267,7 +268,7 @@
 	moles_visible = MOLES_GAS_VISIBLE
 	rarity = 1
 	base_value = 7
-	desc = "A highly toxic gas, its production is highly regulated on top of being difficult. It also breaks down when in contact with nitrogen."
+	desc = "Высокотоксичный газ, его производство строго регулируется, помимо того, что оно сложно. Также распадается при контакте с азотом."
 	primary_color = "#006400"
 
 /datum/gas/halon
@@ -279,7 +280,7 @@
 	moles_visible = MOLES_GAS_VISIBLE
 	rarity = 300
 	base_value = 4
-	desc = "A potent fire suppressant. Removes oxygen from high temperature fires and cools down the area"
+	desc = "Мощное огнетушащее вещество. Удаляет кислород из высокотемпературных пожаров и охлаждает область."
 	primary_color = COLOR_PURPLE
 
 /datum/gas/helium
@@ -289,7 +290,7 @@
 	fusion_power = 7
 	rarity = 50
 	base_value = 3.5
-	desc = "A very inert gas produced by the fusion of hydrogen and its derivatives."
+	desc = "Очень инертный газ, производимый синтезом водорода и его производных."
 	primary_color = "#f0f8ff"
 
 /datum/gas/antinoblium
@@ -302,19 +303,19 @@
 	fusion_power = 20
 	rarity = 1
 	base_value = 10
-	desc = "We still don't know what it does, but it sells for a lot."
+	desc = "Мы до сих пор не знаем, что он делает, но он продаётся за большие деньги."
 	primary_color = COLOR_MAROON
 
 /obj/effect/overlay/gas
 	icon = 'icons/effects/atmospherics.dmi'
 	mouse_opacity = MOUSE_OPACITY_TRANSPARENT
-	anchored = TRUE  // should only appear in vis_contents, but to be safe
+	anchored = TRUE  // должен появляться только в vis_contents, но на всякий случай
 	layer = FLY_LAYER
 	plane = ABOVE_GAME_PLANE
 	appearance_flags = TILE_BOUND
 	vis_flags = NONE
-	// The visual offset we are "on".
-	// Can't use the traditional loc because we are stored in nullspace, and we can't set plane before init because of the helping that SET_PLANE_EXPLICIT does IN init
+	// Визуальное смещение, на котором мы находимся.
+	// Нельзя использовать традиционный loc, потому что мы хранимся в нуль-пространстве, и мы не можем установить plane перед init из-за помощи, которую SET_PLANE_EXPLICIT делает В init
 	var/plane_offset = 0
 
 /obj/effect/overlay/gas/New(state, alph, offset)
@@ -326,4 +327,3 @@
 /obj/effect/overlay/gas/Initialize(mapload)
 	. = ..()
 	SET_PLANE_W_SCALAR(src, initial(plane), plane_offset)
-

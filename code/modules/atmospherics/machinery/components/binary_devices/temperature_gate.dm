@@ -1,7 +1,7 @@
 /obj/machinery/atmospherics/components/binary/temperature_gate
 	icon_state = "tgate_map-3"
 	name = "temperature gate"
-	desc = "An activable gate that compares the input temperature with the interface set temperature to check if the gas can flow from the input side to the output side or not."
+	desc = "Активируемый шлюз, который сравнивает входную температуру с заданной, чтобы определить, может ли газ течь со стороны входа на сторону выхода."
 	can_unwrench = TRUE
 	shift_underlay_only = FALSE
 	construction_type = /obj/item/pipe/directional
@@ -17,20 +17,30 @@
 	///Check if the gas is moving from one pipenet to the other
 	var/is_gas_flowing = FALSE
 
+/obj/machinery/atmospherics/components/binary/temperature_gate/get_ru_names()
+	return list(
+		NOMINATIVE = "термошлюз",
+		GENITIVE = "термошлюза",
+		DATIVE = "термошлюзу",
+		ACCUSATIVE = "термошлюз",
+		INSTRUMENTAL = "термошлюзом",
+		PREPOSITIONAL = "термошлюзе",
+	)
+
 /obj/machinery/atmospherics/components/binary/temperature_gate/Initialize(mapload)
 	. = ..()
 	register_context()
 
 /obj/machinery/atmospherics/components/binary/temperature_gate/add_context(atom/source, list/context, obj/item/held_item, mob/user)
 	. = ..()
-	context[SCREENTIP_CONTEXT_CTRL_LMB] = "Turn [on ? "off" : "on"]"
-	context[SCREENTIP_CONTEXT_ALT_LMB] = "Maximize target temperature"
+	context[SCREENTIP_CONTEXT_CTRL_LMB] = "[on ? "Выключить" : "Включить"]"
+	context[SCREENTIP_CONTEXT_ALT_LMB] = "Максимизировать целевую температуру"
 	return CONTEXTUAL_SCREENTIP_SET
 
 /obj/machinery/atmospherics/components/binary/temperature_gate/click_ctrl(mob/user)
 	if(is_operational)
 		set_on(!on)
-		balloon_alert(user, "turned [on ? "on" : "off"]")
+		balloon_alert(user, "[on ? "включено" : "выключено"]")
 		investigate_log("was turned [on ? "on" : "off"] by [key_name(user)]", INVESTIGATE_ATMOS)
 		return CLICK_ACTION_SUCCESS
 	return CLICK_ACTION_BLOCKING
@@ -41,18 +51,18 @@
 
 	target_temperature = max_temperature
 	investigate_log("was set to [target_temperature] K by [key_name(user)]", INVESTIGATE_ATMOS)
-	balloon_alert(user, "target temperature set to [target_temperature] K")
+	balloon_alert(user, "целевая температура: [target_temperature] К")
 	update_appearance(UPDATE_ICON)
 	return CLICK_ACTION_SUCCESS
 
 
 /obj/machinery/atmospherics/components/binary/temperature_gate/examine(mob/user)
 	. = ..()
-	. += "This device will let gas flow if the temperature of the gas in the input is [inverted ? "higher" : "lower"] than the temperature set in the interface."
+	. += "Это устройство пропустит газ, если температура газа на входе [inverted ? "выше" : "ниже"], чем температура, установленная в интерфейсе."
 	if(inverted)
-		. += "The device settings can be restored if a multitool is used on it."
+		. += "Настройки устройства можно восстановить с помощью мультитула."
 	else
-		. += "The sensor's settings can be changed by using a multitool on the device."
+		. += "Настройки сенсора можно изменить с помощью мультитула."
 
 /obj/machinery/atmospherics/components/binary/temperature_gate/update_icon_nopipes()
 	if(on && is_operational && is_gas_flowing)
@@ -131,7 +141,7 @@
 /obj/machinery/atmospherics/components/binary/temperature_gate/can_unwrench(mob/user)
 	. = ..()
 	if(. && on && is_operational)
-		to_chat(user, span_warning("You cannot unwrench [src], turn it off first!"))
+		to_chat(user, span_warning("Нельзя откручивать [declent_ru(ACCUSATIVE)], сначала выключите его!"))
 		return FALSE
 
 /obj/machinery/atmospherics/components/binary/temperature_gate/multitool_act(mob/living/user, obj/item/multitool/I)
@@ -139,9 +149,9 @@
 	if (istype(I))
 		inverted = !inverted
 		if(inverted)
-			to_chat(user, span_notice("You set the [src]'s sensors to release gases when the temperature is higher than the setted one."))
+			to_chat(user, span_notice("Вы настраиваете сенсоры [declent_ru(GENITIVE)] на выпуск газов, когда температура выше установленной."))
 		else
-			to_chat(user, span_notice("You set the [src]'s sensors to the default settings."))
+			to_chat(user, span_notice("Вы сбрасываете настройки сенсоров [declent_ru(GENITIVE)] к значениям по умолчанию."))
 	return TRUE
 
 //mapping

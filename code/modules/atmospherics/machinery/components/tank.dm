@@ -2,7 +2,7 @@
 
 /obj/machinery/atmospherics/components/tank
 	name = "pressure tank"
-	desc = "A large vessel containing pressurized gas."
+	desc = "Большой сосуд, содержащий газ под давлением."
 
 	icon = 'icons/map_icons/objects.dmi'
 	icon_state = "/obj/machinery/atmospherics/components/tank"
@@ -66,6 +66,16 @@
 	/// The typecache of types which are allowed to merge internal storage
 	var/static/list/merger_typecache
 
+/obj/machinery/atmospherics/components/tank/get_ru_names()
+	return list(
+		NOMINATIVE = "газовый бак",
+		GENITIVE = "газового бака",
+		DATIVE = "газовому баку",
+		ACCUSATIVE = "газовый бак",
+		INSTRUMENTAL = "газовым баком",
+		PREPOSITIONAL = "газовом баке",
+	)
+
 /obj/machinery/atmospherics/components/tank/Initialize(mapload)
 	. = ..()
 
@@ -119,12 +129,12 @@
 
 /obj/machinery/atmospherics/components/tank/examine(mob/user, thats)
 	. = ..()
-	var/wrench_hint = EXAMINE_HINT("wrench")
+	var/wrench_hint = EXAMINE_HINT("гаечным ключом")
 	if(!initialize_directions)
-		. += span_notice("A pipe port can be opened with a [wrench_hint].")
+		. += span_notice("Порт трубы можно открыть [wrench_hint].")
 	else
-		. += span_notice("The pipe port can be moved or closed with a [wrench_hint].")
-	. += span_notice("A holographic sticker on it says that its maximum safe pressure is: [siunit_pressure(max_pressure, 0)].")
+		. += span_notice("Порт трубы можно переместить или закрыть [wrench_hint].")
+	. += span_notice("Голографическая наклейка на боку гласит, что максимальное безопасное давление составляет: [siunit_pressure(max_pressure, 0)].")
 
 /obj/machinery/atmospherics/components/tank/finalize_material_effects(list/materials)
 	. = ..()
@@ -366,18 +376,18 @@
 		return
 	if(!tool.tool_start_check(user, amount = 0, heat_required = HIGH_TEMPERATURE_REQUIRED))
 		return
-	to_chat(user, span_notice("You begin to repair the cracks in the gas tank..."))
+	to_chat(user, span_notice("Вы начинаете заделывать трещины в газовом баке..."))
 	var/repair_amount = max_integrity / 10
 	do
 		if(!tool.use_tool(src, user, 2.5 SECONDS, volume = 40))
 			return
 	while(repair_damage(repair_amount))
-	to_chat(user, span_notice("The gas tank has been fully repaired and all cracks sealed."))
+	to_chat(user, span_notice("Газовый бак полностью отремонтирован, все трещины заделаны."))
 
 /obj/machinery/atmospherics/components/tank/welder_act_secondary(mob/living/user, obj/item/tool)
 	. = ..()
 	. = TRUE
-	to_chat(user, span_notice("You begin cutting open the gas tank..."))
+	to_chat(user, span_notice("Вы начинаете разрезать газовый бак..."))
 	var/turf/current_location = get_turf(src)
 	var/datum/gas_mixture/airmix = current_location.return_air()
 
@@ -387,7 +397,7 @@
 	var/internal_pressure = air_contents.return_pressure() - airmix.return_pressure()
 	if(internal_pressure > 2 * ONE_ATMOSPHERE)
 		time_taken *= 2
-		to_chat(user, span_warning("The tank seems to be pressurized, are you sure this is a good idea?"))
+		to_chat(user, span_warning("Бак, похоже, находится под давлением, вы уверены, что это хорошая идея?"))
 		unsafe = TRUE
 
 	if(!tool.use_tool(src, user, time_taken, volume = 60))
@@ -396,7 +406,7 @@
 	if(unsafe)
 		unsafe_pressure_release(user, internal_pressure)
 	deconstruct(disassembled=TRUE)
-	to_chat(user, span_notice("You finish cutting open the sealed gas tank, revealing the innards."))
+	to_chat(user, span_notice("Вы заканчиваете разрезать запечатанный газовый бак, открывая его внутренности."))
 
 /obj/machinery/atmospherics/components/tank/on_deconstruction(disassembled)
 	var/turf/location = drop_location()
@@ -424,6 +434,16 @@
 	name = "pressure tank (Air)"
 	flags_1 = parent_type::flags_1 | NO_NEW_GAGS_PREVIEW_1
 
+/obj/machinery/atmospherics/components/tank/air/get_ru_names()
+	return list(
+		NOMINATIVE = "газовый бак (Воздух)",
+		GENITIVE = "газового бака (Воздух)",
+		DATIVE = "газовому баку (Воздух)",
+		ACCUSATIVE = "газовый бак (Воздух)",
+		INSTRUMENTAL = "газовым баком (Воздух)",
+		PREPOSITIONAL = "газовом баке (Воздух)",
+	)
+
 /obj/machinery/atmospherics/components/tank/air/layer1
 	piping_layer = 1
 
@@ -445,81 +465,281 @@
 	gas_type = /datum/gas/carbon_dioxide
 	flags_1 = parent_type::flags_1 | NO_NEW_GAGS_PREVIEW_1
 
+/obj/machinery/atmospherics/components/tank/carbon_dioxide/get_ru_names()
+	return list(
+		NOMINATIVE = "газовый бак (Диоксид углерода)",
+		GENITIVE = "газового бака (Диоксид углерода)",
+		DATIVE = "газовому баку (Диоксид углерода)",
+		ACCUSATIVE = "газовый бак (Диоксид углерода)",
+		INSTRUMENTAL = "газовым баком (Диоксид углерода)",
+		PREPOSITIONAL = "газовом баке (Диоксид углерода)",
+	)
+
 /obj/machinery/atmospherics/components/tank/plasma
 	gas_type = /datum/gas/plasma
 	flags_1 = parent_type::flags_1 | NO_NEW_GAGS_PREVIEW_1
+
+/obj/machinery/atmospherics/components/tank/plasma/get_ru_names()
+	return list(
+		NOMINATIVE = "газовый бак (Плазма)",
+		GENITIVE = "газового бака (Плазма)",
+		DATIVE = "газовому баку (Плазма)",
+		ACCUSATIVE = "газовый бак (Плазма)",
+		INSTRUMENTAL = "газовым баком (Плазма)",
+		PREPOSITIONAL = "газовом баке (Плазма)",
+	)
 
 /obj/machinery/atmospherics/components/tank/nitrogen
 	gas_type = /datum/gas/nitrogen
 	flags_1 = parent_type::flags_1 | NO_NEW_GAGS_PREVIEW_1
 
+/obj/machinery/atmospherics/components/tank/nitrogen/get_ru_names()
+	return list(
+		NOMINATIVE = "газовый бак (Азот)",
+		GENITIVE = "газового бака (Азот)",
+		DATIVE = "газовому баку (Азот)",
+		ACCUSATIVE = "газовый бак (Азот)",
+		INSTRUMENTAL = "газовым баком (Азот)",
+		PREPOSITIONAL = "газовом баке (Азот)",
+	)
+
 /obj/machinery/atmospherics/components/tank/oxygen
 	gas_type = /datum/gas/oxygen
 	flags_1 = parent_type::flags_1 | NO_NEW_GAGS_PREVIEW_1
+
+/obj/machinery/atmospherics/components/tank/oxygen/get_ru_names()
+	return list(
+		NOMINATIVE = "газовый бак (Кислород)",
+		GENITIVE = "газового бака (Кислород)",
+		DATIVE = "газовому баку (Кислород)",
+		ACCUSATIVE = "газовый бак (Кислород)",
+		INSTRUMENTAL = "газовым баком (Кислород)",
+		PREPOSITIONAL = "газовом баке (Кислород)",
+	)
 
 /obj/machinery/atmospherics/components/tank/nitrous
 	gas_type = /datum/gas/nitrous_oxide
 	flags_1 = parent_type::flags_1 | NO_NEW_GAGS_PREVIEW_1
 
+/obj/machinery/atmospherics/components/tank/nitrous/get_ru_names()
+	return list(
+		NOMINATIVE = "газовый бак (Оксид азота)",
+		GENITIVE = "газового бака (Оксид азота)",
+		DATIVE = "газовому баку (Оксид азота)",
+		ACCUSATIVE = "газовый бак (Оксид азота)",
+		INSTRUMENTAL = "газовым баком (Оксид азота)",
+		PREPOSITIONAL = "газовом баке (Оксид азота)",
+	)
+
 /obj/machinery/atmospherics/components/tank/bz
 	gas_type = /datum/gas/bz
 	flags_1 = parent_type::flags_1 | NO_NEW_GAGS_PREVIEW_1
+
+/obj/machinery/atmospherics/components/tank/bz/get_ru_names()
+	return list(
+		NOMINATIVE = "газовый бак (BZ)",
+		GENITIVE = "газового бака (BZ)",
+		DATIVE = "газовому баку (BZ)",
+		ACCUSATIVE = "газовый бак (BZ)",
+		INSTRUMENTAL = "газовым баком (BZ)",
+		PREPOSITIONAL = "газовом баке (BZ)",
+	)
 
 /obj/machinery/atmospherics/components/tank/freon
 	gas_type = /datum/gas/freon
 	flags_1 = parent_type::flags_1 | NO_NEW_GAGS_PREVIEW_1
 
+/obj/machinery/atmospherics/components/tank/freon/get_ru_names()
+	return list(
+		NOMINATIVE = "газовый бак (Фреон)",
+		GENITIVE = "газового бака (Фреон)",
+		DATIVE = "газовому баку (Фреон)",
+		ACCUSATIVE = "газовый бак (Фреон)",
+		INSTRUMENTAL = "газовым баком (Фреон)",
+		PREPOSITIONAL = "газовом баке (Фреон)",
+	)
+
 /obj/machinery/atmospherics/components/tank/halon
 	gas_type = /datum/gas/halon
 	flags_1 = parent_type::flags_1 | NO_NEW_GAGS_PREVIEW_1
+
+/obj/machinery/atmospherics/components/tank/halon/get_ru_names()
+	return list(
+		NOMINATIVE = "газовый бак (Галон)",
+		GENITIVE = "газового бака (Галон)",
+		DATIVE = "газовому баку (Галон)",
+		ACCUSATIVE = "газовый бак (Галон)",
+		INSTRUMENTAL = "газовым баком (Галон)",
+		PREPOSITIONAL = "газовом баке (Галон)",
+	)
 
 /obj/machinery/atmospherics/components/tank/healium
 	gas_type = /datum/gas/healium
 	flags_1 = parent_type::flags_1 | NO_NEW_GAGS_PREVIEW_1
 
+/obj/machinery/atmospherics/components/tank/healium/get_ru_names()
+	return list(
+		NOMINATIVE = "газовый бак (Хилиум)",
+		GENITIVE = "газового бака (Хилиум)",
+		DATIVE = "газовому баку (Хилиум)",
+		ACCUSATIVE = "газовый бак (Хилиум)",
+		INSTRUMENTAL = "газовым баком (Хилиум)",
+		PREPOSITIONAL = "газовом баке (Хилиум)",
+	)
+
 /obj/machinery/atmospherics/components/tank/hydrogen
 	gas_type = /datum/gas/hydrogen
 	flags_1 = parent_type::flags_1 | NO_NEW_GAGS_PREVIEW_1
+
+/obj/machinery/atmospherics/components/tank/hydrogen/get_ru_names()
+	return list(
+		NOMINATIVE = "газовый бак (Водород)",
+		GENITIVE = "газового бака (Водород)",
+		DATIVE = "газовому баку (Водород)",
+		ACCUSATIVE = "газовый бак (Водород)",
+		INSTRUMENTAL = "газовым баком (Водород)",
+		PREPOSITIONAL = "газовом баке (Водород)",
+	)
 
 /obj/machinery/atmospherics/components/tank/hypernoblium
 	gas_type = /datum/gas/hypernoblium
 	flags_1 = parent_type::flags_1 | NO_NEW_GAGS_PREVIEW_1
 
+/obj/machinery/atmospherics/components/tank/hypernoblium/get_ru_names()
+	return list(
+		NOMINATIVE = "газовый бак (Гиперноблий)",
+		GENITIVE = "газового бака (Гиперноблий)",
+		DATIVE = "газовому баку (Гиперноблий)",
+		ACCUSATIVE = "газовый бак (Гиперноблий)",
+		INSTRUMENTAL = "газовым баком (Гиперноблий)",
+		PREPOSITIONAL = "газовом баке (Гиперноблий)",
+	)
+
 /obj/machinery/atmospherics/components/tank/miasma
 	gas_type = /datum/gas/miasma
 	flags_1 = parent_type::flags_1 | NO_NEW_GAGS_PREVIEW_1
+
+/obj/machinery/atmospherics/components/tank/miasma/get_ru_names()
+	return list(
+		NOMINATIVE = "газовый бак (Миазмы)",
+		GENITIVE = "газового бака (Миазмы)",
+		DATIVE = "газовому баку (Миазмы)",
+		ACCUSATIVE = "газовый бак (Миазмы)",
+		INSTRUMENTAL = "газовым баком (Миазмы)",
+		PREPOSITIONAL = "газовом баке (Миазмы)",
+	)
 
 /obj/machinery/atmospherics/components/tank/nitrium
 	gas_type = /datum/gas/nitrium
 	flags_1 = parent_type::flags_1 | NO_NEW_GAGS_PREVIEW_1
 
+/obj/machinery/atmospherics/components/tank/nitrium/get_ru_names()
+	return list(
+		NOMINATIVE = "газовый бак (Нитриум)",
+		GENITIVE = "газового бака (Нитриум)",
+		DATIVE = "газовому баку (Нитриум)",
+		ACCUSATIVE = "газовый бак (Нитриум)",
+		INSTRUMENTAL = "газовым баком (Нитриум)",
+		PREPOSITIONAL = "газовом баке (Нитриум)",
+	)
+
 /obj/machinery/atmospherics/components/tank/pluoxium
 	gas_type = /datum/gas/pluoxium
 	flags_1 = parent_type::flags_1 | NO_NEW_GAGS_PREVIEW_1
+
+/obj/machinery/atmospherics/components/tank/pluoxium/get_ru_names()
+	return list(
+		NOMINATIVE = "газовый бак (Плюоксиум)",
+		GENITIVE = "газового бака (Плюоксиум)",
+		DATIVE = "газовому баку (Плюоксиум)",
+		ACCUSATIVE = "газовый бак (Плюоксиум)",
+		INSTRUMENTAL = "газовым баком (Плюоксиум)",
+		PREPOSITIONAL = "газовом баке (Плюоксиум)",
+	)
 
 /obj/machinery/atmospherics/components/tank/proto_nitrate
 	gas_type = /datum/gas/proto_nitrate
 	flags_1 = parent_type::flags_1 | NO_NEW_GAGS_PREVIEW_1
 
+/obj/machinery/atmospherics/components/tank/proto_nitrate/get_ru_names()
+	return list(
+		NOMINATIVE = "газовый бак (Протонитрат)",
+		GENITIVE = "газового бака (Протонитрат)",
+		DATIVE = "газовому баку (Протонитрат)",
+		ACCUSATIVE = "газовый бак (Протонитрат)",
+		INSTRUMENTAL = "газовым баком (Протонитрат)",
+		PREPOSITIONAL = "газовом баке (Протонитрат)",
+	)
+
 /obj/machinery/atmospherics/components/tank/tritium
 	gas_type = /datum/gas/tritium
 	flags_1 = parent_type::flags_1 | NO_NEW_GAGS_PREVIEW_1
+
+/obj/machinery/atmospherics/components/tank/tritium/get_ru_names()
+	return list(
+		NOMINATIVE = "газовый бак (Тритий)",
+		GENITIVE = "газового бака (Тритий)",
+		DATIVE = "газовому баку (Тритий)",
+		ACCUSATIVE = "газовый бак (Тритий)",
+		INSTRUMENTAL = "газовым баком (Тритий)",
+		PREPOSITIONAL = "газовом баке (Тритий)",
+	)
 
 /obj/machinery/atmospherics/components/tank/water_vapor
 	gas_type = /datum/gas/water_vapor
 	flags_1 = parent_type::flags_1 | NO_NEW_GAGS_PREVIEW_1
 
+/obj/machinery/atmospherics/components/tank/water_vapor/get_ru_names()
+	return list(
+		NOMINATIVE = "газовый бак (Водяной пар)",
+		GENITIVE = "газового бака (Водяной пар)",
+		DATIVE = "газовому баку (Водяной пар)",
+		ACCUSATIVE = "газовый бак (Водяной пар)",
+		INSTRUMENTAL = "газовым баком (Водяной пар)",
+		PREPOSITIONAL = "газовом баке (Водяной пар)",
+	)
+
 /obj/machinery/atmospherics/components/tank/zauker
 	gas_type = /datum/gas/zauker
 	flags_1 = parent_type::flags_1 | NO_NEW_GAGS_PREVIEW_1
+
+/obj/machinery/atmospherics/components/tank/zauker/get_ru_names()
+	return list(
+		NOMINATIVE = "газовый бак (Заукер)",
+		GENITIVE = "газового бака (Заукер)",
+		DATIVE = "газовому баку (Заукер)",
+		ACCUSATIVE = "газовый бак (Заукер)",
+		INSTRUMENTAL = "газовым баком (Заукер)",
+		PREPOSITIONAL = "газовом баке (Заукер)",
+	)
 
 /obj/machinery/atmospherics/components/tank/helium
 	gas_type = /datum/gas/helium
 	flags_1 = parent_type::flags_1 | NO_NEW_GAGS_PREVIEW_1
 
+/obj/machinery/atmospherics/components/tank/helium/get_ru_names()
+	return list(
+		NOMINATIVE = "газовый бак (Гелий)",
+		GENITIVE = "газового бака (Гелий)",
+		DATIVE = "газовому баку (Гелий)",
+		ACCUSATIVE = "газовый бак (Гелий)",
+		INSTRUMENTAL = "газовым баком (Гелий)",
+		PREPOSITIONAL = "газовом баке (Гелий)",
+	)
+
 /obj/machinery/atmospherics/components/tank/antinoblium
 	gas_type = /datum/gas/antinoblium
 	flags_1 = parent_type::flags_1 | NO_NEW_GAGS_PREVIEW_1
+
+/obj/machinery/atmospherics/components/tank/antinoblium/get_ru_names()
+	return list(
+		NOMINATIVE = "газовый бак (Антиноблий)",
+		GENITIVE = "газового бака (Антиноблий)",
+		DATIVE = "газовому баку (Антиноблий)",
+		ACCUSATIVE = "газовый бак (Антиноблий)",
+		INSTRUMENTAL = "газовым баком (Антиноблий)",
+		PREPOSITIONAL = "газовом баке (Антиноблий)",
+	)
 
 ///////////////////////////////////////////////////////////////////
 // Tank Frame Structure
@@ -533,24 +753,34 @@
 	var/construction_state = TANK_FRAME
 	var/datum/material/material_end_product
 
+/obj/structure/tank_frame/get_ru_names()
+	return list(
+		NOMINATIVE = "каркас бака",
+		GENITIVE = "каркаса бака",
+		DATIVE = "каркасу бака",
+		ACCUSATIVE = "каркас бака",
+		INSTRUMENTAL = "каркасом бака",
+		PREPOSITIONAL = "каркасе бака",
+	)
+
 /obj/structure/tank_frame/examine(mob/user)
 	. = ..()
-	var/wrenched_hint = EXAMINE_HINT("wrenched")
+	var/wrenched_hint = EXAMINE_HINT("прикручен")
 
 	if(!anchored)
-		. += span_notice("[src] has not been [wrenched_hint] to the floor yet.")
+		. += span_notice("[src] ещё не [wrenched_hint] к полу.")
 	else
-		. += span_notice("[src] is [wrenched_hint] to the floor.")
+		. += span_notice("[src] [wrenched_hint] к полу.")
 
 	switch(construction_state)
 		if(TANK_FRAME)
-			var/screwed_hint = EXAMINE_HINT("screwed")
-			var/plating_hint = EXAMINE_HINT("metal plating")
-			. += span_notice("[src] is [screwed_hint] together and now just needs some [plating_hint].")
+			var/screwed_hint = EXAMINE_HINT("свинчен")
+			var/plating_hint = EXAMINE_HINT("металлических листов")
+			. += span_notice("[src] [screwed_hint] и теперь требует [plating_hint].")
 		if(TANK_PLATING_UNSECURED)
-			var/crowbar_hint = EXAMINE_HINT("crowbar")
-			var/welder_hint = EXAMINE_HINT("welder")
-			. += span_notice("The plating has been firmly attached and would need a [crowbar_hint] to detach, but still needs to be sealed by a [welder_hint].")
+			var/crowbar_hint = EXAMINE_HINT("лом")
+			var/welder_hint = EXAMINE_HINT("сварка")
+			. += span_notice("Обшивка надежно закреплена и потребует [crowbar_hint] для отсоединения, но всё ещё нуждается в заварке [welder_hint].")
 
 /obj/structure/tank_frame/atom_deconstruct(disassembled)
 	if(disassembled)
@@ -580,54 +810,54 @@
 	if(construction_state != TANK_FRAME)
 		return
 	. = TRUE
-	to_chat(user, span_notice("You begin taking apart [src]."))
+	to_chat(user, span_notice("Вы начинаете разбирать [declent_ru(ACCUSATIVE)]."))
 	if(!tool.use_tool(src, user, 1 SECONDS))
 		return
 	deconstruct(TRUE)
-	to_chat(user, span_notice("[src] has been taken apart."))
+	to_chat(user, span_notice("[src] разобран."))
 
 /obj/structure/tank_frame/proc/add_plating(mob/living/user, obj/item/stack/stack)
 	. = FALSE
 	if(!stack.material_type)
-		balloon_alert(user, "invalid material!")
+		balloon_alert(user, "неподходящий материал!")
 	var/datum/material/stack_mat = GET_MATERIAL_REF(stack.material_type)
 	if(!(MAT_CATEGORY_RIGID in stack_mat.categories))
-		to_chat(user, span_notice("This material doesn't seem rigid enough to hold the shape of a tank..."))
+		to_chat(user, span_notice("Этот материал кажется недостаточно жёстким, чтобы держать форму бака..."))
 		return
 
 	. = TRUE
-	to_chat(user, span_notice("You begin adding [stack] to [src]..."))
+	to_chat(user, span_notice("Вы начинаете добавлять [stack] к [declent_ru(DATIVE)]..."))
 	if(!stack.use_tool(src, user, 3 SECONDS))
 		return
 	if(!stack.use(TANK_PLATING_SHEETS))
 		var/amount_more
 		switch(100 * stack.amount / TANK_PLATING_SHEETS)
 			if(0) // Wat?
-				amount_more = "any at all"
+				amount_more = "хоть сколько-то"
 			if(1 to 25)
-				amount_more = "a lot more"
+				amount_more = "намного больше"
 			if(26 to 50)
-				amount_more = "about four times as much"
+				amount_more = "примерно в четыре раза больше"
 			if(51 to 75)
-				amount_more = "about twice as much"
+				amount_more = "примерно в два раза больше"
 			if(76 to 100)
-				amount_more = "just a bit more"
+				amount_more = "совсем немного больше"
 			else
-				amount_more = "an indeterminate amount more"
-		to_chat(user, span_notice("You don't have enough [stack] to add all the plating. Maybe [amount_more]."))
+				amount_more = "неопределённое количество"
+		to_chat(user, span_notice("У вас недостаточно [stack.declent_ru(GENITIVE)], чтобы добавить всю обшивку. Может, нужно [amount_more]."))
 		return
 
 	material_end_product = stack_mat
 	construction_state = TANK_PLATING_UNSECURED
 	update_appearance(UPDATE_ICON)
-	to_chat(user, span_notice("You finish attaching [stack] to [src]."))
+	to_chat(user, span_notice("Вы заканчиваете прикреплять [stack] к [declent_ru(DATIVE)]."))
 
 /obj/structure/tank_frame/crowbar_act_secondary(mob/living/user, obj/item/tool)
 	. = ..()
 	if(construction_state != TANK_PLATING_UNSECURED)
 		return
 	. = TRUE
-	to_chat(user, span_notice("You start prying off the outer plating..."))
+	to_chat(user, span_notice("Вы начинаете отрывать внешнюю обшивку..."))
 	if(!tool.use_tool(src, user, 2 SECONDS))
 		return
 	construction_state = TANK_FRAME
@@ -641,11 +871,11 @@
 		return
 	. = TRUE
 	if(!anchored)
-		to_chat(user, span_notice("You need to <b>wrench</b> [src] to the floor before finishing."))
+		to_chat(user, span_notice("Вам нужно <b>прикрутить</b> [declent_ru(ACCUSATIVE)] к полу, прежде чем закончить."))
 		return
 	if(!tool.tool_start_check(user, amount = 0, heat_required = HIGH_TEMPERATURE_REQUIRED))
 		return
-	to_chat(user, span_notice("You begin sealing the outer plating with the welder..."))
+	to_chat(user, span_notice("Вы начинаете заваривать внешнюю обшивку сваркой..."))
 	if(!tool.use_tool(src, user, 2 SECONDS, volume = 60))
 		return
 
@@ -656,7 +886,7 @@
 	var/list/new_custom_materials = list((material_end_product) = TANK_PLATING_SHEETS * SHEET_MATERIAL_AMOUNT)
 	new_tank.set_custom_materials(new_custom_materials)
 	new_tank.on_construction(user, new_tank.pipe_color, new_tank.piping_layer)
-	to_chat(user, span_notice("[new_tank] has been sealed and is ready to accept gases."))
+	to_chat(user, span_notice("[new_tank] запечатан и готов к приёму газов."))
 	qdel(src)
 
 #undef TANK_PLATING_SHEETS

@@ -5,7 +5,7 @@
 
 /obj/machinery/portable_atmospherics/canister
 	name = "canister"
-	desc = "A canister for the storage of gas."
+	desc = "Канистра для хранения газа."
 	icon = 'icons/map_icons/objects.dmi'
 	icon_state = "/obj/machinery/portable_atmospherics/canister"
 	post_init_icon_state = ""
@@ -50,6 +50,16 @@
 	fire = 80
 	acid = 50
 
+/obj/machinery/portable_atmospherics/canister/get_ru_names()
+	return list(
+		NOMINATIVE = "канистра",
+		GENITIVE = "канистры",
+		DATIVE = "канистре",
+		ACCUSATIVE = "канистру",
+		INSTRUMENTAL = "канистрой",
+		PREPOSITIONAL = "канистре",
+	)
+
 /obj/machinery/portable_atmospherics/canister/get_save_vars()
 	. = ..()
 	. += NAMEOF(src, valve_open)
@@ -81,53 +91,63 @@
 /obj/machinery/portable_atmospherics/canister/interact(mob/user)
 	. = ..()
 	if(!allowed(user))
-		to_chat(user, span_alert("Error - Unauthorized User."))
+		to_chat(user, span_alert("Ошибка — неавторизованный пользователь."))
 		playsound(src, 'sound/machines/compiler/compiler-failure.ogg', 50, TRUE)
 		return
 
 /obj/machinery/portable_atmospherics/canister/add_context(atom/source, list/context, obj/item/held_item, mob/user)
 	. = ..()
 	if(holding)
-		context[SCREENTIP_CONTEXT_ALT_LMB] = "Remove tank"
+		context[SCREENTIP_CONTEXT_ALT_LMB] = "Извлечь баллон"
 	if(!held_item)
 		return CONTEXTUAL_SCREENTIP_SET
 	if(istype(held_item, /obj/item/stock_parts/power_store/cell))
-		context[SCREENTIP_CONTEXT_LMB] = "Insert cell"
+		context[SCREENTIP_CONTEXT_LMB] = "Вставить батарею"
 	switch(held_item.tool_behaviour)
 		if(TOOL_SCREWDRIVER)
-			context[SCREENTIP_CONTEXT_LMB] = "[panel_open ? "Close" : "Open"] hatch"
+			context[SCREENTIP_CONTEXT_LMB] = "[panel_open ? "Закрыть" : "Открыть"] люк"
 		if(TOOL_CROWBAR)
 			if(panel_open && internal_cell)
-				context[SCREENTIP_CONTEXT_LMB] = "Remove cell"
+				context[SCREENTIP_CONTEXT_LMB] = "Извлечь батарею"
 		if(TOOL_WELDER)
-			context[SCREENTIP_CONTEXT_LMB] = "Repair"
-			context[SCREENTIP_CONTEXT_RMB] = "Dismantle"
+			context[SCREENTIP_CONTEXT_LMB] = "Починить"
+			context[SCREENTIP_CONTEXT_RMB] = "Разобрать"
 
 	return CONTEXTUAL_SCREENTIP_SET
 
 /obj/machinery/portable_atmospherics/canister/examine(user)
 	. = ..()
 	if(atom_integrity < max_integrity)
-		. += span_notice("Integrity compromised, repair hull with a welding tool.")
-	. += span_notice("A sticker on its side says <b>MAX SAFE PRESSURE: [siunit_pressure(initial(pressure_limit), 0)]; MAX SAFE TEMPERATURE: [siunit(temp_limit, "K", 0)]</b>.")
-	. += span_notice("The hull is <b>welded</b> together and can be cut apart.")
+		. += span_notice("Целостность нарушена, почините корпус с помощью сварки.")
+	. += span_notice("Наклейка сбоку гласит: <b>МАКС. БЕЗОПАСНОЕ ДАВЛЕНИЕ: [siunit_pressure(initial(pressure_limit), 0)]; МАКС. БЕЗОПАСНАЯ ТЕМПЕРАТУРА: [siunit(temp_limit, "K", 0)]</b>.")
+	. += span_notice("Корпус <b>сварен</b>, его можно разрезать.")
 	if(internal_cell)
-		. += span_notice("The internal cell has [internal_cell.percent()]% of its total charge.")
+		. += span_notice("Заряд внутренней батареи составляет [internal_cell.percent()]%.")
 	else
-		. += span_notice("Warning, no cell installed, use a screwdriver to open the hatch and insert one.")
+		. += span_notice("Внимание: батарея не установлена. Используйте отвертку, чтобы открыть люк и вставить её.")
 	if(panel_open)
-		. += span_notice("Hatch open, close it with a screwdriver.")
+		. += span_notice("Люк открыт. Закройте его отверткой.")
 
 // Please keep the canister types sorted
 // Basic canister per gas below here
 
 /obj/machinery/portable_atmospherics/canister/air
 	name = "Air canister"
-	desc = "Pre-mixed air."
+	desc = "Смесь воздуха."
 	icon_state = "/obj/machinery/portable_atmospherics/canister/air"
 	post_init_icon_state = ""
 	greyscale_config = /datum/greyscale_config/canister
 	greyscale_colors = "#c6c0b5"
+
+/obj/machinery/portable_atmospherics/canister/air/get_ru_names()
+	return list(
+		NOMINATIVE = "канистра воздуха",
+		GENITIVE = "канистры воздуха",
+		DATIVE = "канистре воздуха",
+		ACCUSATIVE = "канистру воздуха",
+		INSTRUMENTAL = "канистрой воздуха",
+		PREPOSITIONAL = "канистре воздуха",
+	)
 
 /obj/machinery/portable_atmospherics/canister/antinoblium
 	name = "Antinoblium canister"
@@ -138,6 +158,16 @@
 	greyscale_config = /datum/greyscale_config/canister/double_stripe
 	greyscale_colors = "#333333#fefb30"
 
+/obj/machinery/portable_atmospherics/canister/antinoblium/get_ru_names()
+	return list(
+		NOMINATIVE = "канистра антиноблия",
+		GENITIVE = "канистры антиноблия",
+		DATIVE = "канистре антиноблия",
+		ACCUSATIVE = "канистру антиноблия",
+		INSTRUMENTAL = "канистрой антиноблия",
+		PREPOSITIONAL = "канистре антиноблия",
+	)
+
 /obj/machinery/portable_atmospherics/canister/bz
 	name = "\improper BZ canister"
 	gas_type = /datum/gas/bz
@@ -146,6 +176,16 @@
 	greyscale_config = /datum/greyscale_config/canister/double_stripe
 	greyscale_colors = "#9b5d7f#d0d2a0"
 
+/obj/machinery/portable_atmospherics/canister/bz/get_ru_names()
+	return list(
+		NOMINATIVE = "канистра BZ",
+		GENITIVE = "канистры BZ",
+		DATIVE = "канистре BZ",
+		ACCUSATIVE = "канистру BZ",
+		INSTRUMENTAL = "канистрой BZ",
+		PREPOSITIONAL = "канистре BZ",
+	)
+
 /obj/machinery/portable_atmospherics/canister/carbon_dioxide
 	name = "Carbon dioxide canister"
 	gas_type = /datum/gas/carbon_dioxide
@@ -153,6 +193,16 @@
 	post_init_icon_state = ""
 	greyscale_config = /datum/greyscale_config/canister/double_stripe
 	greyscale_colors = "#4e4c48#eaeaea"
+
+/obj/machinery/portable_atmospherics/canister/carbon_dioxide/get_ru_names()
+	return list(
+		NOMINATIVE = "канистра диоксида углерода",
+		GENITIVE = "канистры диоксида углерода",
+		DATIVE = "канистре диоксида углерода",
+		ACCUSATIVE = "канистру диоксида углерода",
+		INSTRUMENTAL = "канистрой диоксида углерода",
+		PREPOSITIONAL = "канистре диоксида углерода",
+	)
 
 /obj/machinery/portable_atmospherics/canister/freon
 	name = "Freon canister"
@@ -163,6 +213,16 @@
 	greyscale_config = /datum/greyscale_config/canister/double_stripe
 	greyscale_colors = "#6696ee#fefb30"
 
+/obj/machinery/portable_atmospherics/canister/freon/get_ru_names()
+	return list(
+		NOMINATIVE = "канистра фреона",
+		GENITIVE = "канистры фреона",
+		DATIVE = "канистре фреона",
+		ACCUSATIVE = "канистру фреона",
+		INSTRUMENTAL = "канистрой фреона",
+		PREPOSITIONAL = "канистре фреона",
+	)
+
 /obj/machinery/portable_atmospherics/canister/halon
 	name = "Halon canister"
 	gas_type = /datum/gas/halon
@@ -171,6 +231,16 @@
 	post_init_icon_state = ""
 	greyscale_config = /datum/greyscale_config/canister/double_stripe
 	greyscale_colors = "#9b5d7f#368bff"
+
+/obj/machinery/portable_atmospherics/canister/halon/get_ru_names()
+	return list(
+		NOMINATIVE = "канистра галона",
+		GENITIVE = "канистры галона",
+		DATIVE = "канистре галона",
+		ACCUSATIVE = "канистру галона",
+		INSTRUMENTAL = "канистрой галона",
+		PREPOSITIONAL = "канистре галона",
+	)
 
 /obj/machinery/portable_atmospherics/canister/healium
 	name = "Healium canister"
@@ -181,6 +251,16 @@
 	greyscale_config = /datum/greyscale_config/canister/double_stripe
 	greyscale_colors = "#009823#ff0e00"
 
+/obj/machinery/portable_atmospherics/canister/healium/get_ru_names()
+	return list(
+		NOMINATIVE = "канистра хилиума",
+		GENITIVE = "канистры хилиума",
+		DATIVE = "канистре хилиума",
+		ACCUSATIVE = "канистру хилиума",
+		INSTRUMENTAL = "канистрой хилиума",
+		PREPOSITIONAL = "канистре хилиума",
+	)
+
 /obj/machinery/portable_atmospherics/canister/helium
 	name = "Helium canister"
 	gas_type = /datum/gas/helium
@@ -189,6 +269,16 @@
 	post_init_icon_state = ""
 	greyscale_config = /datum/greyscale_config/canister/double_stripe
 	greyscale_colors = "#9b5d7f#368bff"
+
+/obj/machinery/portable_atmospherics/canister/helium/get_ru_names()
+	return list(
+		NOMINATIVE = "канистра гелия",
+		GENITIVE = "канистры гелия",
+		DATIVE = "канистре гелия",
+		ACCUSATIVE = "канистру гелия",
+		INSTRUMENTAL = "канистрой гелия",
+		PREPOSITIONAL = "канистре гелия",
+	)
 
 /obj/machinery/portable_atmospherics/canister/hydrogen
 	name = "Hydrogen canister"
@@ -199,6 +289,16 @@
 	greyscale_config = /datum/greyscale_config/canister/double_stripe
 	greyscale_colors = "#eaeaea#be3455"
 
+/obj/machinery/portable_atmospherics/canister/hydrogen/get_ru_names()
+	return list(
+		NOMINATIVE = "канистра водорода",
+		GENITIVE = "канистры водорода",
+		DATIVE = "канистре водорода",
+		ACCUSATIVE = "канистру водорода",
+		INSTRUMENTAL = "канистрой водорода",
+		PREPOSITIONAL = "канистре водорода",
+	)
+
 /obj/machinery/portable_atmospherics/canister/miasma
 	name = "Miasma canister"
 	gas_type = /datum/gas/miasma
@@ -208,6 +308,16 @@
 	greyscale_config = /datum/greyscale_config/canister/double_stripe
 	greyscale_colors = "#009823#f7d5d3"
 
+/obj/machinery/portable_atmospherics/canister/miasma/get_ru_names()
+	return list(
+		NOMINATIVE = "канистра миазмов",
+		GENITIVE = "канистры миазмов",
+		DATIVE = "канистре миазмов",
+		ACCUSATIVE = "канистру миазмов",
+		INSTRUMENTAL = "канистрой миазмов",
+		PREPOSITIONAL = "канистре миазмов",
+	)
+
 /obj/machinery/portable_atmospherics/canister/nitrogen
 	name = "Nitrogen canister"
 	gas_type = /datum/gas/nitrogen
@@ -215,6 +325,16 @@
 	post_init_icon_state = ""
 	greyscale_config = /datum/greyscale_config/canister/double_stripe
 	greyscale_colors = "#e9ff5c#f4fce8"
+
+/obj/machinery/portable_atmospherics/canister/nitrogen/get_ru_names()
+	return list(
+		NOMINATIVE = "канистра азота",
+		GENITIVE = "канистры азота",
+		DATIVE = "канистре азота",
+		ACCUSATIVE = "канистру азота",
+		INSTRUMENTAL = "канистрой азота",
+		PREPOSITIONAL = "канистре азота",
+	)
 
 /obj/machinery/portable_atmospherics/canister/nitrous_oxide
 	name = "Nitrous oxide canister"
@@ -224,6 +344,16 @@
 	greyscale_config = /datum/greyscale_config/canister/double_stripe
 	greyscale_colors = "#c63e3b#f7d5d3"
 
+/obj/machinery/portable_atmospherics/canister/nitrous_oxide/get_ru_names()
+	return list(
+		NOMINATIVE = "канистра оксида азота",
+		GENITIVE = "канистры оксида азота",
+		DATIVE = "канистре оксида азота",
+		ACCUSATIVE = "канистру оксида азота",
+		INSTRUMENTAL = "канистрой оксида азота",
+		PREPOSITIONAL = "канистре оксида азота",
+	)
+
 /obj/machinery/portable_atmospherics/canister/nitrium
 	name = "Nitrium canister"
 	gas_type = /datum/gas/nitrium
@@ -231,6 +361,16 @@
 	post_init_icon_state = ""
 	greyscale_config = /datum/greyscale_config/canister
 	greyscale_colors = "#7b4732"
+
+/obj/machinery/portable_atmospherics/canister/nitrium/get_ru_names()
+	return list(
+		NOMINATIVE = "канистра нитриума",
+		GENITIVE = "канистры нитриума",
+		DATIVE = "канистре нитриума",
+		ACCUSATIVE = "канистру нитриума",
+		INSTRUMENTAL = "канистрой нитриума",
+		PREPOSITIONAL = "канистре нитриума",
+	)
 
 /obj/machinery/portable_atmospherics/canister/nob
 	name = "Hyper-noblium canister"
@@ -240,6 +380,16 @@
 	greyscale_config = /datum/greyscale_config/canister/double_stripe
 	greyscale_colors = "#6399fc#b2b2b2"
 
+/obj/machinery/portable_atmospherics/canister/nob/get_ru_names()
+	return list(
+		NOMINATIVE = "канистра гиперноблия",
+		GENITIVE = "канистры гиперноблия",
+		DATIVE = "канистре гиперноблия",
+		ACCUSATIVE = "канистру гиперноблия",
+		INSTRUMENTAL = "канистрой гиперноблия",
+		PREPOSITIONAL = "канистре гиперноблия",
+	)
+
 /obj/machinery/portable_atmospherics/canister/oxygen
 	name = "Oxygen canister"
 	gas_type = /datum/gas/oxygen
@@ -248,6 +398,16 @@
 	greyscale_config = /datum/greyscale_config/canister/stripe
 	greyscale_colors = "#2786e5#e8fefe"
 
+/obj/machinery/portable_atmospherics/canister/oxygen/get_ru_names()
+	return list(
+		NOMINATIVE = "канистра кислорода",
+		GENITIVE = "канистры кислорода",
+		DATIVE = "канистре кислорода",
+		ACCUSATIVE = "канистру кислорода",
+		INSTRUMENTAL = "канистрой кислорода",
+		PREPOSITIONAL = "канистре кислорода",
+	)
+
 /obj/machinery/portable_atmospherics/canister/pluoxium
 	name = "Pluoxium canister"
 	gas_type = /datum/gas/pluoxium
@@ -255,6 +415,16 @@
 	post_init_icon_state = ""
 	greyscale_config = /datum/greyscale_config/canister
 	greyscale_colors = "#2786e5"
+
+/obj/machinery/portable_atmospherics/canister/pluoxium/get_ru_names()
+	return list(
+		NOMINATIVE = "канистра плюоксиума",
+		GENITIVE = "канистры плюоксиума",
+		DATIVE = "канистре плюоксиума",
+		ACCUSATIVE = "канистру плюоксиума",
+		INSTRUMENTAL = "канистрой плюоксиума",
+		PREPOSITIONAL = "канистре плюоксиума",
+	)
 
 /obj/machinery/portable_atmospherics/canister/proto_nitrate
 	name = "Proto Nitrate canister"
@@ -265,6 +435,16 @@
 	greyscale_config = /datum/greyscale_config/canister/double_stripe
 	greyscale_colors = "#008200#33cc33"
 
+/obj/machinery/portable_atmospherics/canister/proto_nitrate/get_ru_names()
+	return list(
+		NOMINATIVE = "канистра протонитрата",
+		GENITIVE = "канистры протонитрата",
+		DATIVE = "канистре протонитрата",
+		ACCUSATIVE = "канистру протонитрата",
+		INSTRUMENTAL = "канистрой протонитрата",
+		PREPOSITIONAL = "канистре протонитрата",
+	)
+
 /obj/machinery/portable_atmospherics/canister/plasma
 	name = "Plasma canister"
 	gas_type = /datum/gas/plasma
@@ -273,6 +453,16 @@
 	greyscale_config = /datum/greyscale_config/canister/hazard
 	greyscale_colors = "#f62800#000000"
 
+/obj/machinery/portable_atmospherics/canister/plasma/get_ru_names()
+	return list(
+		NOMINATIVE = "канистра плазмы",
+		GENITIVE = "канистры плазмы",
+		DATIVE = "канистре плазмы",
+		ACCUSATIVE = "канистру плазмы",
+		INSTRUMENTAL = "канистрой плазмы",
+		PREPOSITIONAL = "канистре плазмы",
+	)
+
 /obj/machinery/portable_atmospherics/canister/tritium
 	name = "Tritium canister"
 	gas_type = /datum/gas/tritium
@@ -280,6 +470,16 @@
 	post_init_icon_state = ""
 	greyscale_config = /datum/greyscale_config/canister/hazard
 	greyscale_colors = "#3fcd40#000000"
+
+/obj/machinery/portable_atmospherics/canister/tritium/get_ru_names()
+	return list(
+		NOMINATIVE = "канистра трития",
+		GENITIVE = "канистры трития",
+		DATIVE = "канистре трития",
+		ACCUSATIVE = "канистру трития",
+		INSTRUMENTAL = "канистрой трития",
+		PREPOSITIONAL = "канистре трития",
+	)
 
 /obj/machinery/portable_atmospherics/canister/water_vapor
 	name = "Water vapor canister"
@@ -290,6 +490,16 @@
 	greyscale_config = /datum/greyscale_config/canister/double_stripe
 	greyscale_colors = "#4c4e4d#f7d5d3"
 
+/obj/machinery/portable_atmospherics/canister/water_vapor/get_ru_names()
+	return list(
+		NOMINATIVE = "канистра водяного пара",
+		GENITIVE = "канистры водяного пара",
+		DATIVE = "канистре водяного пара",
+		ACCUSATIVE = "канистру водяного пара",
+		INSTRUMENTAL = "канистрой водяного пара",
+		PREPOSITIONAL = "канистре водяного пара",
+	)
+
 /obj/machinery/portable_atmospherics/canister/zauker
 	name = "Zauker canister"
 	gas_type = /datum/gas/zauker
@@ -299,13 +509,33 @@
 	greyscale_config = /datum/greyscale_config/canister/double_stripe
 	greyscale_colors = "#009a00#006600"
 
+/obj/machinery/portable_atmospherics/canister/zauker/get_ru_names()
+	return list(
+		NOMINATIVE = "канистра заукера",
+		GENITIVE = "канистры заукера",
+		DATIVE = "канистре заукера",
+		ACCUSATIVE = "канистру заукера",
+		INSTRUMENTAL = "канистрой заукера",
+		PREPOSITIONAL = "канистре заукера",
+	)
+
 // Special canisters below here
 
 /obj/machinery/portable_atmospherics/canister/fusion_test
 	name = "fusion test canister"
-	desc = "Don't be a badmin."
+	desc = "Не будь арбузером."
 	temp_limit = 1e12
 	pressure_limit = 1e14
+
+/obj/machinery/portable_atmospherics/canister/fusion_test/get_ru_names()
+	return list(
+		NOMINATIVE = "тестовая канистра синтеза",
+		GENITIVE = "тестовой канистры синтеза",
+		DATIVE = "тестовой канистре синтеза",
+		ACCUSATIVE = "тестовую канистру синтеза",
+		INSTRUMENTAL = "тестовой канистрой синтеза",
+		PREPOSITIONAL = "тестовой канистре синтеза",
+	)
 
 /obj/machinery/portable_atmospherics/canister/fusion_test/create_gas()
 	air_contents.add_gases(/datum/gas/hydrogen, /datum/gas/tritium)
@@ -316,11 +546,21 @@
 
 /obj/machinery/portable_atmospherics/canister/anesthetic_mix
 	name = "Anesthetic mix"
-	desc = "A mixture of N2O and Oxygen"
+	desc = "Смесь оксида азота и кислорода."
 	icon_state = "/obj/machinery/portable_atmospherics/canister/anesthetic_mix"
 	post_init_icon_state = ""
 	greyscale_config = /datum/greyscale_config/canister/double_stripe
 	greyscale_colors = "#9fba6c#3d4680"
+
+/obj/machinery/portable_atmospherics/canister/anesthetic_mix/get_ru_names()
+	return list(
+		NOMINATIVE = "канистра смеси анестетика",
+		GENITIVE = "канистры смеси анестетика",
+		DATIVE = "канистре смеси анестетика",
+		ACCUSATIVE = "канистру смеси анестетика",
+		INSTRUMENTAL = "канистрой смеси анестетика",
+		PREPOSITIONAL = "канистре смеси анестетика",
+	)
 
 /obj/machinery/portable_atmospherics/canister/anesthetic_mix/create_gas()
 	air_contents.add_gases(/datum/gas/oxygen, /datum/gas/nitrous_oxide)
@@ -420,15 +660,15 @@
 	if(istype(item, /obj/item/stock_parts/power_store/cell))
 		var/obj/item/stock_parts/power_store/cell/active_cell = item
 		if(!panel_open)
-			balloon_alert(user, "open hatch first!")
+			balloon_alert(user, "сначала откройте люк!")
 			return TRUE
 		if(!user.transferItemToLoc(active_cell, src))
 			return TRUE
 		if(internal_cell)
 			user.put_in_hands(internal_cell)
-			balloon_alert(user, "you replace the cell")
+			balloon_alert(user, "вы заменяете батарею")
 		else
-			balloon_alert(user, "you install the cell")
+			balloon_alert(user, "вы устанавливаете батарею")
 		internal_cell = active_cell
 		return TRUE
 	return ..()
@@ -443,7 +683,7 @@
 		return ITEM_INTERACT_BLOCKING
 
 	internal_cell.forceMove(drop_location())
-	balloon_alert(user, "cell removed")
+	balloon_alert(user, "батарея извлечена")
 	return ITEM_INTERACT_SUCCESS
 
 /obj/machinery/portable_atmospherics/canister/welder_act_secondary(mob/living/user, obj/item/I)
@@ -452,12 +692,12 @@
 
 	var/pressure = air_contents.return_pressure()
 	if(pressure > 300)
-		to_chat(user, span_alert("The pressure gauge on [src] indicates a high pressure inside... maybe you want to reconsider?"))
+		to_chat(user, span_alert("Манометр на [declent_ru(PREPOSITIONAL)] показывает высокое давление внутри... может, стоит передумать?"))
 		message_admins("[src] deconstructed by [ADMIN_LOOKUPFLW(user)]")
 		user.log_message("deconstructed [src] with a welder.", LOG_GAME)
-	to_chat(user, span_notice("You begin cutting [src] apart..."))
+	to_chat(user, span_notice("Вы начинаете разрезать [declent_ru(ACCUSATIVE)]..."))
 	if(I.use_tool(src, user, 3 SECONDS, volume=50))
-		to_chat(user, span_notice("You cut [src] apart."))
+		to_chat(user, span_notice("Вы разрезали [declent_ru(ACCUSATIVE)]."))
 		deconstruct(TRUE)
 
 	return ITEM_INTERACT_SUCCESS
@@ -623,7 +863,7 @@
 
 	switch(action)
 		if("relabel")
-			var/label = tgui_input_list(usr, "New canister label", "Canister", GLOB.gas_id_to_canister)
+			var/label = tgui_input_list(usr, "Новая этикетка канистры", "Канистра", GLOB.gas_id_to_canister)
 			if(isnull(label))
 				return
 			var/newtype = GLOB.gas_id_to_canister[label]
@@ -649,7 +889,7 @@
 				pressure = CAN_MAX_RELEASE_PRESSURE
 				. = TRUE
 			else if(pressure == "input")
-				pressure = tgui_input_number(usr, message = "New release pressure", title = "Canister Pressure", default = release_pressure, max_value = CAN_MAX_RELEASE_PRESSURE, min_value = CAN_MIN_RELEASE_PRESSURE, round_value = FALSE)
+				pressure = tgui_input_number(usr, message = "Новое давление выпуска", title = "Давление канистры", default = release_pressure, max_value = CAN_MAX_RELEASE_PRESSURE, min_value = CAN_MIN_RELEASE_PRESSURE, round_value = FALSE)
 				if(!isnull(pressure))
 					. = TRUE
 			else if(text2num(pressure) != null)

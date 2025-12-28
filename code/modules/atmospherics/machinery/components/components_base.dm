@@ -1,28 +1,28 @@
-// So much of atmospherics.dm was used solely by components, so separating this makes things all a lot cleaner.
-// On top of that, now people can add component-speciic procs/vars if they want!
+// Большая часть atmospherics.dm использовалась исключительно компонентами, поэтому разделение делает всё намного чище.
+// Кроме того, теперь люди могут добавлять специфичные для компонентов процедуры/переменные, если захотят!
 
 /obj/machinery/atmospherics/components
 	hide = FALSE
 	layer = GAS_PUMP_LAYER
-	///Is the component welded?
+	///Заварен ли компонент?
 	var/welded = FALSE
-	///Current underfloor_accessibility state, determines if the component should show the pipe underneath it and what plane it renders on.
+	///Текущее состояние доступности под полом, определяет, должен ли компонент показывать трубу под ним и на каком плане он рендерится.
 	var/underfloor_state = UNDERFLOOR_INTERACTABLE
-	///When the component is on a non default layer should we shift everything? Or just the underlay pipe
+	///Нужно ли сдвигать всё, когда компонент находится на нестандартном слое? Или только трубу подложки.
 	var/shift_underlay_only = TRUE
-	///Stores the parent pipeline, used in components
+	///Хранит родительский трубопровод, используется в компонентах
 	var/list/datum/pipeline/parents
-	///If this is queued for a rebuild this var signifies whether parents should be updated after it's done
+	///Если объект в очереди на перестройку, эта переменная указывает, нужно ли обновлять родителей после завершения
 	var/update_parents_after_rebuild = FALSE
-	///Stores the gasmix for each node, used in components
+	///Хранит газовую смесь для каждого узла, используется в компонентах
 	var/list/datum/gas_mixture/airs
-	///Handles whether the custom reconcilation handling should be used
+	///Определяет, должна ли использоваться кастомная обработка согласования (reconcilation)
 	var/custom_reconcilation = FALSE
 
 /obj/machinery/atmospherics/components/get_save_vars()
 	. = ..()
 	if(!override_naming)
-		// Prevents saving the dynamic name with \proper due to it converting to "???"
+		// Предотвращает сохранение динамического имени с \proper, так как оно превращается в "???"
 		. -= NAMEOF(src, name)
 	. += NAMEOF(src, welded)
 	return .
@@ -42,10 +42,10 @@
 
 	update_appearance()
 
-// Iconnery
+// Работа с иконками
 
 /**
- * Called by update_icon(), used individually by each component to determine the icon state without the pipe in consideration
+ * Вызывается в update_icon(), используется индивидуально каждым компонентом для определения состояния иконки без учета труб
  */
 /obj/machinery/atmospherics/components/proc/update_icon_nopipes()
 	return
@@ -55,7 +55,7 @@
 	return ..()
 
 /**
- * Called in on_hide(), set the underfloor_state var to true or false depending on the situation, calls update_icon()
+ * Вызывается в on_hide(), устанавливает переменную underfloor_state в true или false в зависимости от ситуации, вызывает update_icon()
  */
 /obj/machinery/atmospherics/components/proc/hide_pipe(underfloor_accessibility)
 	underfloor_state = underfloor_accessibility
@@ -74,17 +74,17 @@
 	var/uncovered_turf = loc && HAS_TRAIT(loc, TRAIT_UNCOVERED_TURF)
 	SET_PLANE_IMPLICIT(src, (underfloor_state == UNDERFLOOR_INTERACTABLE && !uncovered_turf) ? GAME_PLANE : FLOOR_PLANE)
 
-	// Layer is handled in update_layer()
+	// Слой обрабатывается в update_layer()
 	if(!underfloor_state)
 		return ..()
 
 	if(pipe_flags & PIPING_DISTRO_AND_WASTE_LAYERS)
 		return ..()
 
-	var/connected = 0 //Direction bitset
+	var/connected = 0 //Битовая маска направлений
 	var/underlay_pipe_layer = shift_underlay_only ? piping_layer : 3
 
-	for(var/i in 1 to device_type) //adds intact pieces
+	for(var/i in 1 to device_type) //добавляет целые части
 		if(!nodes[i])
 			continue
 		var/obj/machinery/atmospherics/node = nodes[i]
@@ -117,7 +117,7 @@
 		SET_PLANE_EXPLICIT(pipe_appearance, FLOOR_PLANE, src)
 	return pipe_appearance
 
-// Pipenet stuff; housekeeping
+// Работа с трубопроводом; обслуживание
 
 /obj/machinery/atmospherics/components/nullify_node(i)
 	if(parents[i])
@@ -148,9 +148,9 @@
 	return to_return
 
 /**
- * Called by nullify_node(), used to remove the pipeline the component is attached to
- * Arguments:
- * * -reference: the pipeline the component is attached to
+ * Вызывается через nullify_node(), используется для удаления трубопровода, к которому присоединен компонент
+ * Аргументы:
+ * * -reference: трубопровод, к которому присоединен компонент
  */
 /obj/machinery/atmospherics/components/proc/nullify_pipenet(datum/pipeline/reference)
 	if(!reference)
@@ -158,19 +158,19 @@
 
 	for (var/i in 1 to parents.len)
 		if (parents[i] == reference)
-			reference.other_airs -= airs[i] // Disconnects from the pipeline side
-			parents[i] = null // Disconnects from the machinery side.
+			reference.other_airs -= airs[i] // Отсоединяет со стороны трубопровода
+			parents[i] = null // Отсоединяет со стороны оборудования.
 
 	reference.other_atmos_machines -= src
 	if(custom_reconcilation)
 		reference.require_custom_reconcilation -= src
 
 	/**
-	 *  We explicitly qdel pipeline when this particular pipeline
-	 *  is projected to have no member and cause GC problems.
-	 *  We have to do this because components don't qdel pipelines
-	 *  while pipes must and will happily wreck and rebuild everything
-	 * again every time they are qdeleted.
+	 *  Мы явно удаляем (qdel) трубопровод, когда предполагается,
+	 *  что в этом конкретном трубопроводе не останется участников, что вызовет проблемы с GC.
+	 *  Мы должны делать это, потому что компоненты не удаляют трубопроводы,
+	 *  в то время как трубы обязаны это делать и будут с радостью ломать и перестраивать всё
+	 *  заново каждый раз, когда они удаляются.
 	 */
 
 	if(!length(reference.other_atmos_machines) && !length(reference.members))
@@ -194,17 +194,17 @@
 /obj/machinery/atmospherics/components/set_pipenet(datum/pipeline/reference, obj/machinery/atmospherics/target_component)
 	parents[nodes.Find(target_component)] = reference
 
-/obj/machinery/atmospherics/components/return_pipenet(obj/machinery/atmospherics/target_component = nodes[1]) //returns parents[1] if called without argument
+/obj/machinery/atmospherics/components/return_pipenet(obj/machinery/atmospherics/target_component = nodes[1]) //возвращает parents[1], если вызвано без аргументов
 	return parents[nodes.Find(target_component)]
 
 /obj/machinery/atmospherics/components/replace_pipenet(datum/pipeline/Old, datum/pipeline/New)
 	parents[parents.Find(Old)] = New
 
-// Helpers
+// Помощники
 
 /**
- * Called in most atmos processes and gas handling situations, update the parents pipelines of the devices connected to the source component
- * This way gases won't get stuck
+ * Вызывается в большинстве атмосферных процессов и ситуаций обработки газа, обновляет родительские трубопроводы устройств, подключенных к компоненту-источнику
+ * Таким образом, газы не застрянут
  */
 /obj/machinery/atmospherics/components/proc/update_parents()
 	if(!SSair.initialized)
@@ -225,35 +225,35 @@
 	for(var/i in 1 to device_type)
 		. += return_pipenet(nodes[i])
 
-/// When this machine is in a pipenet that is reconciling airs, this proc can add pipelines to the calculation.
-/// Can be either a list of pipenets or a single pipenet.
+/// Когда эта машина находится в сети труб, которая согласовывает воздух, эта процедура может добавлять трубопроводы в расчет.
+/// Может быть либо списком сетей труб, либо одной сетью труб.
 /obj/machinery/atmospherics/components/proc/return_pipenets_for_reconcilation(datum/pipeline/requester)
 	return list()
 
-/// When this machine is in a pipenet that is reconciling airs, this proc can add airs to the calculation.
-/// Can be either a list of airs or a single air mix.
+/// Когда эта машина находится в сети труб, которая согласовывает воздух, эта процедура может добавлять воздух в расчет.
+/// Может быть либо списком воздушных смесей, либо одной воздушной смесью.
 /obj/machinery/atmospherics/components/proc/return_airs_for_reconcilation(datum/pipeline/requester)
 	return list()
 
-// UI Stuff
+// Интерфейс
 
 /obj/machinery/atmospherics/components/ui_status(mob/user, datum/ui_state/state)
 	if(allowed(user))
 		return ..()
-	to_chat(user, span_danger("Access denied."))
+	to_chat(user, span_danger("Доступ запрещён."))
 	return UI_CLOSE
 
-// Tool acts
+// Действия с инструментами
 
 /obj/machinery/atmospherics/components/return_analyzable_air()
 	return airs
 
 /**
- * Handles machinery deconstruction and unsafe pressure release
+ * Обрабатывает разборку оборудования и опасный сброс давления
  */
 /obj/machinery/atmospherics/components/proc/crowbar_deconstruction_act(mob/living/user, obj/item/tool, internal_pressure = 0)
 	if(!panel_open)
-		balloon_alert(user, "open panel!")
+		balloon_alert(user, "откройте панель!")
 		return ITEM_INTERACT_SUCCESS
 
 	var/unsafe_wrenching = FALSE
@@ -271,12 +271,12 @@
 		default_deconstruction_crowbar(tool)
 		return ITEM_INTERACT_SUCCESS
 
-	to_chat(user, span_notice("You begin to unfasten \the [src]..."))
+	to_chat(user, span_notice("Вы начинаете откручивать [declent_ru(ACCUSATIVE)]..."))
 
 	internal_pressure -= environment_air.return_pressure()
 
 	if(internal_pressure > 2 * ONE_ATMOSPHERE)
-		to_chat(user, span_warning("As you begin deconstructing \the [src] a gush of air blows in your face... maybe you should reconsider?"))
+		to_chat(user, span_warning("Как только вы начинаете разбирать [declent_ru(ACCUSATIVE)], поток воздуха дует вам в лицо... может, стоит передумать?"))
 		unsafe_wrenching = TRUE
 
 	if(!do_after(user, 2 SECONDS, src))
@@ -315,22 +315,22 @@
 		SSair.add_to_rebuild_queue(src)
 
 /**
- * Disconnects all nodes from ourselves, remove us from the node's nodes.
- * Nullify our parent pipenet
+ * Отсоединяет все узлы от нас, удаляет нас из списка узлов соседа.
+ * Обнуляет наш родительский трубопровод
  */
 /obj/machinery/atmospherics/components/proc/disconnect_nodes()
 	for(var/i in 1 to device_type)
 		var/obj/machinery/atmospherics/node = nodes[i]
 		if(node)
-			if(src in node.nodes) //Only if it's actually connected. On-pipe version would is one-sided.
+			if(src in node.nodes) //Только если он действительно подключен. Версия на трубе односторонняя.
 				node.disconnect(src)
 			nodes[i] = null
 		if(parents[i])
 			nullify_pipenet(parents[i])
 
 /**
- * Connects all nodes to ourselves, add us to the node's nodes.
- * Calls atmos_init() on the node and on us.
+ * Подключает все узлы к нам, добавляет нас в список узлов соседа.
+ * Вызывает atmos_init() у узла и у нас.
  */
 /obj/machinery/atmospherics/components/proc/connect_nodes()
 	atmos_init()
@@ -342,10 +342,10 @@
 	SSair.add_to_rebuild_queue(src)
 
 /**
- * Easy way to toggle nodes connection and disconnection.
+ * Простой способ переключения соединения и отсоединения узлов.
  *
- * Arguments:
- * * disconnect - if TRUE, disconnects all nodes. If FALSE, connects all nodes.
+ * Аргументы:
+ * * disconnect - если TRUE, отсоединяет все узлы. Если FALSE, соединяет все узлы.
  */
 /obj/machinery/atmospherics/components/proc/change_nodes_connection(disconnect)
 	if(disconnect)
@@ -366,7 +366,7 @@
 	return (piping_layer - PIPING_LAYER_DEFAULT) * PIPING_LAYER_LCHANGE + (GLOB.pipe_colors_ordered[pipe_color] * 0.001)
 
 /**
- * Handles air relocation to the pipenet/environment
+ * Обрабатывает перемещение воздуха в трубопровод/окружающую среду
  */
 /obj/machinery/atmospherics/components/proc/relocate_airs(datum/gas_mixture/to_release)
 	var/turf/local_turf = get_turf(src)
