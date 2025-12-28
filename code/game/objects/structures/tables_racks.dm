@@ -303,13 +303,13 @@
 	var/interaction_key = "table_flip_[REF(src)]"
 	if(!is_flipped)
 		if(!LAZYACCESS(user.do_afters, interaction_key)) // To avoid balloon alert spam
-			user.balloon_alert_to_viewers("переворачивает стол...")
+			user.balloon_alert_to_viewers("переворачиваю стол...")
 		if(do_after(user, max_integrity * 0.25, src, interaction_key = interaction_key))
 			flip_table(get_dir(user, src))
 		return SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN
 
 	if(!LAZYACCESS(user.do_afters, interaction_key)) // To avoid balloon alert spam
-		user.balloon_alert_to_viewers("ставит стол обратно...")
+		user.balloon_alert_to_viewers("ставлю стол обратно...")
 	if(do_after(user, max_integrity * 0.25, src, interaction_key = interaction_key))
 		unflip_table()
 	return SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN
@@ -339,7 +339,7 @@
 /obj/structure/table/screwdriver_act_secondary(mob/living/user, obj/item/tool)
 	if(!deconstruction_ready)
 		return NONE
-	to_chat(user, span_notice("Вы начинаете разбирать [src.declent_ru(ACCUSATIVE)]..."))
+	to_chat(user, span_notice("Вы начинаете разбирать [declent_ru(ACCUSATIVE)]..."))
 	if(tool.use_tool(src, user, 2 SECONDS, volume=50))
 		deconstruct(TRUE)
 	return ITEM_INTERACT_SUCCESS
@@ -347,7 +347,7 @@
 /obj/structure/table/wrench_act_secondary(mob/living/user, obj/item/tool)
 	if(!deconstruction_ready)
 		return NONE
-	to_chat(user, span_notice("Вы начинаете демонтировать [src.declent_ru(ACCUSATIVE)]..."))
+	to_chat(user, span_notice("Вы начинаете демонтировать [declent_ru(ACCUSATIVE)]..."))
 	if(tool.use_tool(src, user, 4 SECONDS, volume=50))
 		playsound(loc, 'sound/items/deconstruct.ogg', 50, TRUE)
 		frame = null
@@ -504,12 +504,12 @@
 		return ITEM_INTERACT_FAILURE
 
 	if(locate(/mob/living) in loc.get_all_contents())
-		to_chat(user, span_warning("Вы не можете забрать [src.declent_ru(NOMINATIVE)] с такой тяжестью наверху!"))
+		to_chat(user, span_warning("Вы не можете забрать [declent_ru(NOMINATIVE)] с такой тяжестью наверху!"))
 		return ITEM_INTERACT_FAILURE
 
 	rable.loaded = src
 	forceMove(rable)
-	user.visible_message(span_notice("[user] собирает [src.declent_ru(NOMINATIVE)]."), span_notice("Вы собираете [src.declent_ru(NOMINATIVE)]."))
+	user.visible_message(span_notice("[user] собирает [declent_ru(NOMINATIVE)]."), span_notice("Вы собираете [declent_ru(NOMINATIVE)]."))
 	return ITEM_INTERACT_SUCCESS
 
 /obj/structure/table/rolling/AfterPutItemOnTable(obj/item/thing, mob/living/user)
@@ -607,7 +607,7 @@
 		table_shatter(M)
 
 /obj/structure/table/glass/proc/table_shatter(mob/living/victim)
-	visible_message(span_warning("[src.declent_ru(NOMINATIVE)] разбивается!"),
+	visible_message(span_warning("[declent_ru(NOMINATIVE)] разбивается!"),
 		span_danger("Слышен звон бьющегося стекла."))
 
 	playsound(loc, SFX_SHATTER, 50, TRUE)
@@ -1323,13 +1323,13 @@
 	if (air_tank)
 		. += span_notice("К нему прикреплён [air_tank] парой [EXAMINE_HINT("болтов")].")
 		if (patient)
-			. += span_info("Вы можете подключить внутреннее дыхание [patient] к [air_tank], перетащив [src.declent_ru(ACCUSATIVE)] на пациента.")
+			. += span_info("Вы можете подключить внутреннее дыхание [patient] к [air_tank], перетащив [declent_ru(ACCUSATIVE)] на пациента.")
 	else
 		. += span_notice("Снизу есть слот для крепления воздушного баллона.")
 	if (breath_mask)
 		. += span_notice("Сбоку прикреплена [breath_mask], трубка закреплена одним [EXAMINE_HINT("винтом")].")
 		if (breath_mask.loc == src)
-			. += span_info("Вы можете отсоединить маску, кликнув ПКМ по [src.declent_ru(DATIVE)] пустой рукой.")
+			. += span_info("Вы можете отсоединить маску, кликнув ПКМ по [declent_ru(DATIVE)] пустой рукой.")
 	else
 		. += span_notice("Сбоку есть порт для трубки дыхательной маски.")
 
@@ -1399,7 +1399,7 @@
 		var/mob/living/user = loc
 		to_chat(user, span_warning("Трубка [breath_mask] натягивается, и она выпадает из ваших рук!"))
 	else
-		visible_message(span_notice("[breath_mask] отскакивает обратно к [src.declent_ru(DATIVE)]."))
+		visible_message(span_notice("[breath_mask] отскакивает обратно к [declent_ru(DATIVE)]."))
 	snap_mask_back()
 
 /obj/structure/table/optable/proc/snap_mask_back()
