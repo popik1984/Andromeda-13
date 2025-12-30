@@ -57,10 +57,10 @@
 	if(iscarbon(living_target))
 		var/mob/living/carbon/carbon_target = living_target
 		if(carbon_target.handcuffed)
-			context[SCREENTIP_CONTEXT_RMB] = "Cut Restraints"
+			context[SCREENTIP_CONTEXT_RMB] = "Срезать оковы"
 			return CONTEXTUAL_SCREENTIP_SET
 	if(living_target.has_status_effect(/datum/status_effect/cuffed_item))
-		context[SCREENTIP_CONTEXT_RMB] = "Remove Binds From Item"
+		context[SCREENTIP_CONTEXT_RMB] = "Срезать оковы с предмета"
 		return CONTEXTUAL_SCREENTIP_SET
 	return NONE
 
@@ -71,14 +71,15 @@
 	var/examine_string
 	if(isnull(snap_time_weak))
 		return
-	examine_string = "It looks like it could be used to cut zipties or cable restraints off someone in [snap_time_weak] seconds"
+	examine_string = "Похоже, этим можно срезать стяжки с кого-то за [snap_time_weak/10] секунд"
 
 	if(!isnull(snap_time_strong))
-		examine_string += ", and handcuffs in [snap_time_strong] seconds."
+		examine_string += ", и наручники за [snap_time_strong/10] секунд."
 	else
 		examine_string += "."
 
 	examine_list += span_notice(examine_string)
+
 
 ///Signal called on parent when it right-clicks another mob.
 /datum/element/cuffsnapping/proc/try_cuffsnap_target(obj/item/cutter, mob/living/target, mob/living/cutter_user, list/modifiers)
@@ -100,14 +101,16 @@
 	if(!istype(cuffs))
 		return NONE
 
-	if(check_cuffs_strength(carbon_target, target, cutter_user, cuffs, span_notice("[cutter_user] tries to cut through [target]'s restraints with [cutter], but fails!")))
+	// ИСПРАВЛЕНИЕ: Первым аргументом передаем cutter (инструмент), а не carbon_target (моба)
+	if(check_cuffs_strength(cutter, target, cutter_user, cuffs, span_notice("[cutter_user] пытается срезать оковы с [target.declent_ru(GENITIVE)] [cutter.declent_ru(INSTRUMENTAL)], но безуспешно!")))
 		INVOKE_ASYNC(src, PROC_REF(do_cuffsnap_target), cutter, target, cutter_user, cuffs)
 
 	return COMPONENT_SKIP_ATTACK
 
 ///Check that the type of restraints can be cut by this element.
 /datum/element/cuffsnapping/proc/check_cuffs_strength(obj/item/cutter, mob/living/target, mob/living/cutter_user, obj/item/restraints/handcuffs/cuffs, message)
-	if(cuffs.restraint_strength ? snap_time_strong : snap_time_weak)
+	// ИСПРАВЛЕНИЕ: Проверяем на !isnull, так как время 0 (мгновенно) - это валидное значение, но if(0) вернет false.
+	if(!isnull(cuffs.restraint_strength ? snap_time_strong : snap_time_weak))
 		return TRUE
 	cutter_user.visible_message(message)
 	playsound(source = get_turf(cutter), soundin = cutter.usesound || cutter.hitsound, vol = cutter.get_clamped_volume(), vary = TRUE)
@@ -119,18 +122,18 @@
 		return
 	log_combat(cutter_user, target, "cut or tried to cut [target]'s cuffs", cutter)
 
-	do_snip_snap(cutter, target, cutter_user, cuffs, span_notice("[cutter_user] cuts [target]'s restraints with [cutter]!"))
+	do_snip_snap(cutter, target, cutter_user, cuffs, span_notice("[cutter_user] срезает оковы с [target.declent_ru(GENITIVE)] [cutter.declent_ru(INSTRUMENTAL)]!"))
 
 ///Called when a player tries to remove the cuffs binding an item to their owner
 /datum/element/cuffsnapping/proc/try_cuffsnap_item(obj/item/cutter, mob/living/target, mob/living/cutter_user, obj/item/cuffed, obj/item/restraints/handcuffs/cuffs)
-	if(check_cuffs_strength(cutter, target, cutter_user, cuffs, span_notice("[cutter_user] tries to cut through the restraints binding [cuffed] to [target], but fails!")))
+	if(check_cuffs_strength(cutter, target, cutter_user, cuffs, span_notice("[cutter_user] пытается срезать оковы, приковывающие [cuffed.declent_ru(ACCUSATIVE)] к [target.declent_ru(DATIVE)], но безуспешно!")))
 		return
 
 	log_combat(cutter_user, target, "cut or tried to cut restraints binding [cuffed] to")
 
-	do_snip_snap(cutter, target, cutter_user, cuffs, span_notice("[cutter_user] cuts the restraints binding [src] to [target] with [cutter]!"))
+	do_snip_snap(cutter, target, cutter_user, cuffs, span_notice("[cutter_user] срезает оковы, приковывающие [cuffed.declent_ru(ACCUSATIVE)] к [target.declent_ru(DATIVE)], [cutter.declent_ru(INSTRUMENTAL)]!"))
 
-///The proc responsible for the very timed action that deletes the cuffs
+////The proc responsible for the very timed action that deletes the cuffs
 /datum/element/cuffsnapping/proc/do_snip_snap(obj/item/cutter, mob/living/target, mob/cutter_user, obj/item/restraints/handcuffs/cuffs, message)
 	var/snap_time = cuffs.restraint_strength ? snap_time_strong : snap_time_weak
 
@@ -149,5 +152,20 @@
 
 	cutter_user.do_attack_animation(target, used_item = cutter)
 	cutter_user.visible_message(message)
-	qdel(cuffs)
+
+	// --- ИЗМЕНЕННАЯ ЛОГИКА ВЫПАДЕНИЯ ---
+	if(istype(cuffs, /obj/item/restraints/handcuffs/cable/zipties))
+		// Если это пластиковые стяжки -> Создаем сломанную версию и удаляем текущую
+		new /obj/item/restraints/handcuffs/cable/zipties/used(target.drop_location())
+		qdel(cuffs)
+	else
+		// Если это металлические наручники или кабельные путы -> Просто бросаем их на пол
+		cuffs.forceMove(target.drop_location())
+		cuffs.dropped(target)
+	// ------------------------------------
+
 	playsound(source = get_turf(cutter), soundin = cutter.usesound || cutter.hitsound, vol = cutter.get_clamped_volume(), vary = TRUE)
+
+
+
+/// TODO: ПОМЕНЯТЬ ВРЕМЯ СНЯТИЯ НАРУЧНИКОВ/СТЯЖЕК С 0 СЕКУНД НА 1 И БОЛЕЕ
