@@ -1,41 +1,42 @@
 /**
- * ## Paintable Decal Category
+ * ## Категория окрашиваемых декалей
  *
- * Holds a bunch of information the decal painter uses to determine what it can and can't paint, and how to paint it.
+ * Хранит набор информации, которую использует покрасчик декалей, чтобы определить,
+ * что он может красить, что нет, и как это делать.
  */
 /datum/paintable_decal_category
-	/// Human readable category name
-	var/category = "Generic"
-	/// The type of paintable decal this category contains - should be a subtype of /datum/paintable_decal
+	/// Читаемое имя категории
+	var/category = "Общие"
+	/// Тип окрашиваемой декали, которую содержит эта категория - должен быть подтипом /datum/paintable_decal
 	var/paintable_decal_type
-	/// Color options for this category - formatted as readable label - color value
+	/// Варианты цветов для этой категории - в формате читаемая метка - значение цвета
 	var/list/possible_colors
-	/// Direction options for this category - formatted as readable label - dir value to return
+	/// Варианты направлений для этой категории - в формате читаемая метка - значение dir для возврата
 	var/list/dir_list = list(
-		"North" = NORTH,
-		"South" = SOUTH,
-		"East" = EAST,
-		"West" = WEST,
+		"Север" = NORTH,
+		"Юг" = SOUTH,
+		"Восток" = EAST,
+		"Запад" = WEST,
 	)
-	/// Alpha for decals painted from this category (assuming no custom color is used)
+	/// Альфа-канал для декалей, окрашенных из этой категории (при условии, что не используется пользовательский цвет)
 	var/default_alpha = 255
 
-	/// Icon used for previews
+	/// Иконка, используемая для предварительного просмотра
 	var/preview_floor_icon = 'icons/turf/floors.dmi'
-	/// Icon state used for previews
+	/// Состояние иконки, используемое для предварительного просмотра
 	var/preview_floor_state = "floor"
 
-	/// Caches UI data to avoid regenerating it every time. It doesn't change anyways
+	/// Кэширует данные интерфейса, чтобы избежать их регенерации каждый раз. Они всё равно не меняются
 	VAR_PRIVATE/list/cached_category_data
 
-/// Returns a key for the spritesheet icon, used to avoid duplicates
+/// Возвращает ключ для иконки спрайтшита, используется для избежания дубликатов
 /datum/paintable_decal_category/proc/spritesheet_key(dir, state, color)
 	SHOULD_NOT_OVERRIDE(TRUE)
 	PRIVATE_PROC(TRUE)
 
 	return "[state]_[dir]_[replacetext(color, "#", "")]"
 
-/// Returns a list of preview icons for every single variety of every decal in this category for use in a spritesheet
+/// Возвращает список иконок предварительного просмотра для каждой разновидности каждой декали в этой категории для использования в спрайтшите
 /datum/paintable_decal_category/proc/generate_all_spritesheet_icons()
 	SHOULD_NOT_OVERRIDE(TRUE)
 
@@ -50,7 +51,7 @@
 		else
 			. += generate_independent_decal_spritesheet_icons(SOUTH, state)
 
-/// Returns a list of preview icon for a specific decal state and direction
+/// Возвращает список иконок предварительного просмотра для конкретного состояния и направления декали
 /datum/paintable_decal_category/proc/generate_independent_decal_spritesheet_icons(dir, state)
 	SHOULD_NOT_OVERRIDE(TRUE)
 	PRIVATE_PROC(TRUE)
@@ -59,7 +60,7 @@
 	for(var/colorname in possible_colors)
 		.[spritesheet_key(dir, state, possible_colors[colorname])] = generate_colored_decal_spritesheet_icon(state, dir, possible_colors[colorname])
 
-/// Actually generates the preview icon for a specific decal state, direction, and color
+/// Фактически генерирует иконку предварительного просмотра для конкретного состояния, направления и цвета декали
 /datum/paintable_decal_category/proc/generate_colored_decal_spritesheet_icon(state, dir, color)
 	PROTECTED_PROC(TRUE)
 
@@ -67,7 +68,7 @@
 	var/datum/universal_icon/colored_decal = uni_icon('icons/turf/decals.dmi', decal_data[DECAL_INFO_ICON_STATE], dir = decal_data[DECAL_INFO_DIR])
 	colored_decal.change_opacity(decal_data[DECAL_INFO_ALPHA] / 255)
 	if(color == "custom")
-		// Do a fun rainbow pattern to stand out while still being static.
+		// Делаем весёлую радужную раскраску, чтобы выделиться, оставаясь статичным.
 		colored_decal.blend_icon(uni_icon('icons/effects/random_spawners.dmi', "rainbow"), ICON_MULTIPLY)
 	else if(decal_data[DECAL_INFO_COLOR])
 		colored_decal.blend_color(decal_data[DECAL_INFO_COLOR], ICON_MULTIPLY)
@@ -76,7 +77,7 @@
 	floor.blend_icon(colored_decal, ICON_OVERLAY)
 	return floor
 
-/// Constructs and returns this category's UI data
+/// Создаёт и возвращает данные интерфейса этой категории
 /datum/paintable_decal_category/proc/get_ui_data() as /list
 	SHOULD_NOT_OVERRIDE(TRUE)
 
@@ -115,16 +116,16 @@
 
 	return cached_category_data.Copy()
 
-/// Checks if the passed icon state is one of this category's decals
+/// Проверяет, является ли переданное состояние иконки одной из декалей этой категории
 /datum/paintable_decal_category/proc/is_state_valid(state)
 	SHOULD_NOT_OVERRIDE(TRUE)
-	// Ui data has all icon states so let's just piggyback off of that
+	// В данных UI есть все состояния иконок, так что просто используем их
 	for(var/list/decal_data as anything in get_ui_data()["decal_list"])
 		if(decal_data["icon_state"] == state)
 			return TRUE
 	return FALSE
 
-/// Checks if the passed direction is one of this category's directions
+/// Проверяет, является ли переданное направление одним из направлений этой категории
 /datum/paintable_decal_category/proc/is_dir_valid(dir)
 	SHOULD_NOT_OVERRIDE(TRUE)
 	for(var/dirname in dir_list)
@@ -132,7 +133,7 @@
 			return TRUE
 	return FALSE
 
-/// Checks if the passed color is one of this category's colors
+/// Проверяет, является ли переданный цвет одним из цветов этой категории
 /datum/paintable_decal_category/proc/is_color_valid(color)
 	SHOULD_NOT_OVERRIDE(TRUE)
 	for(var/colorname in possible_colors)
@@ -141,18 +142,18 @@
 	return FALSE
 
 /**
- * Used by the decal painter to modify the state of the decal based on the... state.
+ * Используется покрасчиком декалей для изменения состояния декали в зависимости от... состояния.
  */
 /datum/paintable_decal_category/proc/get_decal_info(state, color, dir)
-	// Special case for 8-dir sprites. Rather than add support for both 4-dir and 8-dir,
-	// 8-dir are affixed with "__8" at the end of the icon state. Then we handle it in this proc.
+	// Особый случай для спрайтов с 8 направлениями. Вместо того чтобы добавлять поддержку и 4, и 8 направлений,
+	// 8-направленные помечаются "__8" в конце имени состояния иконки. Затем мы обрабатываем это здесь.
 	if(copytext(state, -3) == "__8")
 		state = splicetext(state, -3, 0, "")
 		dir = turn(dir, 45)
 
 	var/static/regex/rgba_regex = new(@"(#[0-9a-fA-F]{6})([0-9a-fA-F]{2})")
 	var/alpha = default_alpha
-	// Special case for RGBA colors
+	// Особый случай для цветов RGBA
 	if(rgba_regex.Find(color))
 		color = rgba_regex.group[1]
 		alpha = text2num(rgba_regex.group[2], 16)
@@ -164,41 +165,41 @@
 		"[DECAL_INFO_ALPHA]" = alpha,
 	)
 
-// Basic tile decals
+// Базовые декали плитки
 /datum/paintable_decal_category/tile
 	paintable_decal_type = /datum/paintable_decal/tile
-	category = "Tiles"
+	category = "Плитка"
 	default_alpha = /obj/effect/turf_decal/tile::alpha
 	possible_colors = list(
-		"Neutral" = "#d4d4d432", // very lazy way to do transparent decal, should be remade in future
-		"White" = "#FFFFFF",
-		"Dark" = /obj/effect/turf_decal/tile/dark::color,
-		"Bar Burgundy" = /obj/effect/turf_decal/tile/bar::color,
-		"Cargo Brown" = /obj/effect/turf_decal/tile/brown::color,
-		"Dark Blue" = /obj/effect/turf_decal/tile/dark_blue::color,
-		"Dark Green" = /obj/effect/turf_decal/tile/dark_green::color,
-		"Dark Red" = /obj/effect/turf_decal/tile/dark_red::color,
-		"Engi Yellow" = /obj/effect/turf_decal/tile/yellow::color,
-		"Med Blue" = /obj/effect/turf_decal/tile/blue::color,
-		"R&D Purple" = /obj/effect/turf_decal/tile/purple::color,
-		"Sec Red" = /obj/effect/turf_decal/tile/red::color,
-		"Service Green" = /obj/effect/turf_decal/tile/green::color,
-		"Custom" = "custom",
+		"Нейтральный" = "#d4d4d432", // очень ленивый способ сделать прозрачную декаль, в будущем нужно переделать
+		"Белый" = "#FFFFFF",
+		"Тёмный" = /obj/effect/turf_decal/tile/dark::color,
+		"Барный бордовый" = /obj/effect/turf_decal/tile/bar::color,
+		"Карго коричневый" = /obj/effect/turf_decal/tile/brown::color,
+		"Тёмно-синий" = /obj/effect/turf_decal/tile/dark_blue::color,
+		"Тёмно-зелёный" = /obj/effect/turf_decal/tile/dark_green::color,
+		"Тёмно-красный" = /obj/effect/turf_decal/tile/dark_red::color,
+		"Инженерный жёлтый" = /obj/effect/turf_decal/tile/yellow::color,
+		"Медицинский синий" = /obj/effect/turf_decal/tile/blue::color,
+		"РнД фиолетовый" = /obj/effect/turf_decal/tile/purple::color,
+		"СБ красный" = /obj/effect/turf_decal/tile/red::color,
+		"Сервисный зелёный" = /obj/effect/turf_decal/tile/green::color,
+		"Свой" = "custom",
 	)
 
-// Tile trimlines
+// Тримлайны плитки
 /datum/paintable_decal_category/tile/trimline
-	category = "Trimlines"
+	category = "Тримлайны"
 	paintable_decal_type = /datum/paintable_decal/trimline
 
-// Generic warning stripes
+// Общие предупреждающие полосы
 /datum/paintable_decal_category/warning
 	paintable_decal_type = /datum/paintable_decal/warning
-	category = "Warning Stripes"
+	category = "Предупреждающие полосы"
 	possible_colors = list(
-		"Yellow" = "yellow",
-		"Red" = "red",
-		"White" = "white",
+		"Жёлтый" = "yellow",
+		"Красный" = "red",
+		"Белый" = "white",
 	)
 
 /datum/paintable_decal_category/warning/generate_colored_decal_spritesheet_icon(state, dir, color)
@@ -209,7 +210,7 @@
 	return floor
 
 /datum/paintable_decal_category/warning/get_decal_info(state, color, dir)
-	// Special case. Default warning stripes are yellow, so don't append anything if passed yellow
+	// Особый случай. По умолчанию предупреждающие полосы желтые, поэтому ничего не добавляем, если передан желтый
 	if(color == "yellow")
 		color = ""
 
@@ -220,50 +221,50 @@
 		"[DECAL_INFO_ALPHA]" = default_alpha,
 	)
 
-// Plain colored siding
+// Простой цветной плинтус
 /datum/paintable_decal_category/siding
 	paintable_decal_type = /datum/paintable_decal/colored_siding
-	category = "Colored Sidings"
+	category = "Цветной плинтус"
 	possible_colors = list(
-		"Dim White" = /obj/effect/turf_decal/siding/white::color,
-		"White" = "#FFFFFF",
-		"Black" = /obj/effect/turf_decal/siding/dark::color,
-		"Cargo Brown" = /obj/effect/turf_decal/siding/brown::color,
-		"Dark Blue" = /obj/effect/turf_decal/siding/dark_blue::color,
-		"Dark Green" = /obj/effect/turf_decal/siding/dark_green::color,
-		"Dark Red" = /obj/effect/turf_decal/siding/dark_red::color,
-		"Engi Yellow" = /obj/effect/turf_decal/siding/yellow::color,
-		"Med Blue" = /obj/effect/turf_decal/siding/blue::color,
-		"R&D Purple" = /obj/effect/turf_decal/siding/purple::color,
-		"Sec Red" = /obj/effect/turf_decal/siding/red::color,
-		"Service Green" = /obj/effect/turf_decal/siding/green::color,
-		"Custom" = "custom",
+		"Тускло-белый" = /obj/effect/turf_decal/siding/white::color,
+		"Белый" = "#FFFFFF",
+		"Чёрный" = /obj/effect/turf_decal/siding/dark::color,
+		"Карго коричневый" = /obj/effect/turf_decal/siding/brown::color,
+		"Тёмно-синий" = /obj/effect/turf_decal/siding/dark_blue::color,
+		"Тёмно-зелёный" = /obj/effect/turf_decal/siding/dark_green::color,
+		"Тёмно-красный" = /obj/effect/turf_decal/siding/dark_red::color,
+		"Инженерный жёлтый" = /obj/effect/turf_decal/siding/yellow::color,
+		"Медицинский синий" = /obj/effect/turf_decal/siding/blue::color,
+		"РнД фиолетовый" = /obj/effect/turf_decal/siding/purple::color,
+		"СБ красный" = /obj/effect/turf_decal/siding/red::color,
+		"Сервисный зелёный" = /obj/effect/turf_decal/siding/green::color,
+		"Свой" = "custom",
 	)
 
-// Sidings which are not colored / have a specific pattern, texture, etc
+// Плинтусы, которые не окрашены / имеют определенный узор, текстуру и т.д.
 /datum/paintable_decal_category/normal_siding
 	paintable_decal_type = /datum/paintable_decal/siding
-	category = "Normal Sidings"
+	category = "Обычный плинтус"
 	possible_colors = list(
-		"Default" = /obj/effect/turf_decal/siding/wood::color,
+		"Стандартный" = /obj/effect/turf_decal/siding/wood::color,
 	)
 
-// Plating sidings and all color variations
+// Плинтусы покрытия и все цветовые вариации
 /datum/paintable_decal_category/plating
 	paintable_decal_type = /datum/paintable_decal/plating
-	category = "Plating Sidings"
+	category = "Плинтус покрытия"
 	possible_colors = list(
-		"Default" = "#949494",
-		"White" = "#FFFFFF",
-		"Terracotta" = "#b84221",
-		"Dark" = "#36373a",
-		"Light" = "#e2e2e2",
+		"Стандартный" = "#949494",
+		"Белый" = "#FFFFFF",
+		"Терракотовый" = "#b84221",
+		"Тёмный" = "#36373a",
+		"Светлый" = "#e2e2e2",
 	)
 
-/// Global list of all paintable decal categories singletons
+/// Глобальный список всех синглтонов категорий окрашиваемых декалей
 GLOBAL_LIST_INIT(paintable_decals, init_subtypes(/datum/paintable_decal_category))
 
-// Spritesheet used by the decal painter
+// Спрайтшит, используемый покрасчиком декалей
 /datum/asset/spritesheet_batched/decals
 	name = "paintable_decals"
 	ignore_dir_errors = TRUE
@@ -275,329 +276,329 @@ GLOBAL_LIST_INIT(paintable_decals, init_subtypes(/datum/paintable_decal_category
 			insert_icon(sprite_key, generated_icons[sprite_key])
 
 /**
- * ## Paintable Decal
+ * ## Окрашиваемая декаль
  *
- * Basically just holds a bunch of info pertaining to each decal for the decal painter to use.
+ * В основном просто хранит кучу информации, относящейся к каждой декали, для использования покрасчиком декалей.
  */
 /datum/paintable_decal
-	/// Human readable name of the decal
+	/// Читаемое имя декали
 	var/name
-	/// Icon state of the decal in decals.dmi
+	/// Состояние иконки декали в decals.dmi
 	var/icon_state
-	/// If TRUE, the decal's sprite changes depending on its dir
+	/// Если TRUE, спрайт декали меняется в зависимости от его направления (dir)
 	var/directional = TRUE
 
-// Basic tile decals
+// Базовые декали плитки
 /datum/paintable_decal/tile
 
 /datum/paintable_decal/tile/four_corners
-	name = "4 Corners"
+	name = "4 угла"
 	icon_state = "tile_fourcorners"
 	directional = FALSE
 
 /datum/paintable_decal/tile/full
-	name = "Full Tile"
+	name = "Полная плитка"
 	icon_state = "tile_full"
 	directional = FALSE
 
 /datum/paintable_decal/tile/corner
-	name = "Corner"
+	name = "Угол"
 	icon_state = "tile_corner"
 
 /datum/paintable_decal/tile/half
-	name = "Half"
+	name = "Половина"
 	icon_state = "tile_half_contrasted"
 
 /datum/paintable_decal/tile/half_full
-	name = "Full Half"
+	name = "Полная половина"
 	icon_state = "tile_half"
 
 /datum/paintable_decal/tile/opposing_corners
-	name = "Opposing Corners"
+	name = "Противоположные углы"
 	icon_state = "tile_opposing_corners"
 
 /datum/paintable_decal/tile/anticorner
-	name = "3 Corners"
+	name = "3 угла"
 	icon_state = "tile_anticorner_contrasted"
 
 /datum/paintable_decal/tile/tram
-	name = "Tram"
+	name = "Трамвай"
 	icon_state = "tile_tram"
 
 /datum/paintable_decal/tile/diagonal_centre
-	name = "Diagonal Centre"
+	name = "Диагональ (центр)"
 	icon_state = "diagonal_centre"
 	directional = FALSE
 
 /datum/paintable_decal/tile/diagonal_edge
-	name = "Diagonal Edge"
+	name = "Диагональ (край)"
 	icon_state = "diagonal_edge"
 	directional = FALSE
 
-// Tile trimlines
+// Тримлайны плитки
 /datum/paintable_decal/trimline
 
 /datum/paintable_decal/trimline/filled_box
-	name = "Trimline Filled Box"
+	name = "Тримлайн (сплошной квадрат)"
 	icon_state = "trimline_box_fill"
 	directional = FALSE
 
 /datum/paintable_decal/trimline/filled_corner
-	name = "Trimline Filled Corner"
+	name = "Тримлайн (сплошной угол)"
 	icon_state = "trimline_corner_fill"
 
 /datum/paintable_decal/trimline/filled
-	name = "Trimline Filled"
+	name = "Тримлайн (сплошной)"
 	icon_state = "trimline_fill"
 
 /datum/paintable_decal/trimline/filled_l
-	name = "Trimline Filled L"
-	icon_state = "trimline_fill__8" // 8 dir sprite
+	name = "Тримлайн (сплошной L)"
+	icon_state = "trimline_fill__8" // спрайт с 8 направлениями
 
 /datum/paintable_decal/trimline/filled_end
-	name = "Trimline Filled End"
+	name = "Тримлайн (сплошной конец)"
 	icon_state = "trimline_end_fill"
 
 /datum/paintable_decal/trimline/box
-	name = "Trimline Box"
+	name = "Тримлайн (квадрат)"
 	icon_state = "trimline_box"
 	directional = FALSE
 
 /datum/paintable_decal/trimline/corner
-	name = "Trimline Corner"
+	name = "Тримлайн (угол)"
 	icon_state = "trimline_corner"
 
 /datum/paintable_decal/trimline/circle
-	name = "Trimline Circle"
+	name = "Тримлайн (круг)"
 	icon_state = "trimline"
 
 /datum/paintable_decal/trimline/l
-	name = "Trimline L"
-	icon_state = "trimline__8" // 8 dir sprite
+	name = "Тримлайн (L)"
+	icon_state = "trimline__8" // спрайт с 8 направлениями
 
 /datum/paintable_decal/trimline/end
-	name = "Trimline End"
+	name = "Тримлайн (конец)"
 	icon_state = "trimline_end"
 
 /datum/paintable_decal/trimline/connector_l
-	name = "Trimline Connector L"
+	name = "Тримлайн (соединитель Л)"
 	icon_state = "trimline_shrink_cw"
 
 /datum/paintable_decal/trimline/connector_r
-	name = "Trimline Connector R"
+	name = "Тримлайн (соединитель П)"
 	icon_state = "trimline_shrink_ccw"
 
 /datum/paintable_decal/trimline/arrow_l_filled
-	name = "Trimline Arrow L Filled"
+	name = "Тримлайн стрелка Л (сплошная)"
 	icon_state = "trimline_arrow_cw_fill"
 
 /datum/paintable_decal/trimline/arrow_r_filled
-	name = "Trimline Arrow R Filled"
+	name = "Тримлайн стрелка П (сплошная)"
 	icon_state = "trimline_arrow_ccw_fill"
 
 /datum/paintable_decal/trimline/warn_filled
-	name = "Trimline Warn Filled"
+	name = "Тримлайн внимание (сплошной)"
 	icon_state = "trimline_warn_fill"
 
 /datum/paintable_decal/trimline/warn_filled_l
-	name = "Trimline Warn Filled L"
-	icon_state = "trimline_warn_fill__8" // 8 dir sprite
+	name = "Тримлайн внимание L (сплошной)"
+	icon_state = "trimline_warn_fill__8" // спрайт с 8 направлениями
 
 /datum/paintable_decal/trimline/warn_filled_corner
-	name = "Trimline Warn Filled Corner"
+	name = "Тримлайн внимание угол (сплошной)"
 	icon_state = "trimline_corner_warn_fill"
 
 /datum/paintable_decal/trimline/warn
-	name = "Trimline Warn"
+	name = "Тримлайн внимание"
 	icon_state = "trimline_warn"
 
 /datum/paintable_decal/trimline/warn_l
-	name = "Trimline Warn L"
-	icon_state = "trimline_warn__8" // 8 dir sprite
+	name = "Тримлайн внимание L"
+	icon_state = "trimline_warn__8" // спрайт с 8 направлениями
 
 /datum/paintable_decal/trimline/arrow_l
-	name = "Trimline Arrow L"
+	name = "Тримлайн стрелка Л"
 	icon_state = "trimline_arrow_cw"
 
 /datum/paintable_decal/trimline/arrow_r
-	name = "Trimline Arrow R"
+	name = "Тримлайн стрелка П"
 	icon_state = "trimline_arrow_ccw"
 
 /datum/paintable_decal/trimline/mid_joiner
-	name = "Trimline Mid Joiner"
+	name = "Тримлайн (средний соединитель)"
 	icon_state = "trimline_mid"
 
 /datum/paintable_decal/trimline/mid_joiner_filled
-	name = "Trimline Mid Joiner Filled"
+	name = "Тримлайн (средний соединитель сплошной)"
 	icon_state = "trimline_mid_fill"
 
 /datum/paintable_decal/trimline/tram
-	name = "Trimline Tram"
+	name = "Тримлайн (трамвай)"
 	icon_state = "trimline_tram"
 
-// Generic warning decals of each color
+// Общие предупреждающие декали каждого цвета
 /datum/paintable_decal/warning
 
 /datum/paintable_decal/warning/line
-	name = "Warning Line"
+	name = "Предупреждающая линия"
 	icon_state = "warningline"
 
 /datum/paintable_decal/warning/line_corner
-	name = "Warning Line Corner"
+	name = "Предупреждающая линия (угол)"
 	icon_state = "warninglinecorner"
 
 /datum/paintable_decal/warning/caution
-	name = "Caution Label"
+	name = "Надпись Caution"
 	icon_state = "caution"
 
 /datum/paintable_decal/warning/arrows
-	name = "Directional Arrows"
+	name = "Направляющие стрелки"
 	icon_state = "arrows"
 
 /datum/paintable_decal/warning/stand_clear
-	name = "Stand Clear Label"
+	name = "Надпись Stand Clear"
 	icon_state = "stand_clear"
 
 /datum/paintable_decal/warning/bot
-	name = "Bot"
+	name = "Бот"
 	icon_state = "bot"
 	directional = FALSE
 
 /datum/paintable_decal/warning/loading
-	name = "Loading Zone"
+	name = "Зона погрузки"
 	icon_state = "loadingarea"
 
 /datum/paintable_decal/warning/box
-	name = "Box"
+	name = "Квадрат"
 	icon_state = "box"
 	directional = FALSE
 
 /datum/paintable_decal/warning/box_corners
-	name = "Box Corner"
+	name = "Угол квадрата"
 	icon_state = "box_corners"
 
 /datum/paintable_decal/warning/delivery
-	name = "Delivery Marker"
+	name = "Маркер доставки"
 	icon_state = "delivery"
 	directional = FALSE
 
 /datum/paintable_decal/warning/warn_full
-	name = "Warning Box"
+	name = "Предупреждающий квадрат"
 	icon_state = "warn_full"
 	directional = FALSE
 
-// Plain colored siding
+// Простой цветной плинтус
 /datum/paintable_decal/colored_siding
 
 /datum/paintable_decal/colored_siding/line
-	name = "Siding"
+	name = "Плинтус"
 	icon_state = "siding_plain"
 
 /datum/paintable_decal/colored_siding/line_corner
-	name = "Siding Corner"
+	name = "Плинтус (угол)"
 	icon_state = "siding_plain_corner"
 
 /datum/paintable_decal/colored_siding/line_end
-	name = "Siding End"
+	name = "Плинтус (конец)"
 	icon_state = "siding_plain_end"
 
 /datum/paintable_decal/colored_siding/line_inner_corner
-	name = "Siding Inner Corner"
+	name = "Плинтус (внутренний угол)"
 	icon_state = "siding_plain_corner_inner"
 
-// Sidings which are not colored / have a specific pattern, texture, etc
+// Плинтусы, которые не окрашены / имеют определенный узор, текстуру и т.д.
 /datum/paintable_decal/siding
 
 /datum/paintable_decal/siding/wood
 
 /datum/paintable_decal/siding/wood/line
-	name = "Wood Siding"
+	name = "Деревянный плинтус"
 	icon_state = "siding_wood"
 
 /datum/paintable_decal/siding/wood/line_corner
-	name = "Wood Siding Corner"
+	name = "Деревянный плинтус (угол)"
 	icon_state = "siding_wood_corner"
 
 /datum/paintable_decal/siding/wood/line_end
-	name = "Wood Siding End"
+	name = "Деревянный плинтус (конец)"
 	icon_state = "siding_wood_end"
 
 /datum/paintable_decal/siding/wood/line_inner_corner
-	name = "Wood Siding Inner Corner"
-	icon_state = "siding_wood__8" // 8 dir sprite
+	name = "Деревянный плинтус (внутренний угол)"
+	icon_state = "siding_wood__8" // спрайт с 8 направлениями
 
-// Thin plating sidings and all color variations
+// Тонкие плинтусы покрытия и все цветовые вариации
 /datum/paintable_decal/plating/thinplating
 
 /datum/paintable_decal/plating/thinplating/line
-	name = "Thin Plating Siding"
+	name = "Тонкий плинтус покрытия"
 	icon_state = "siding_thinplating"
 
 /datum/paintable_decal/plating/thinplating/line_corner
-	name = "Thin Plating Siding Corner"
+	name = "Тонкий плинтус покрытия (угол)"
 	icon_state = "siding_thinplating_corner"
 
 /datum/paintable_decal/plating/thinplating/line_end
-	name = "Thin Plating Siding End"
+	name = "Тонкий плинтус покрытия (конец)"
 	icon_state = "siding_thinplating_end"
 
 /datum/paintable_decal/plating/thinplating/line_inner_corner
-	name = "Thin Plating Siding Inner Corner"
-	icon_state = "siding_thinplating__8" // 8 dir sprite
+	name = "Тонкий плинтус покрытия (внутренний угол)"
+	icon_state = "siding_thinplating__8" // спрайт с 8 направлениями
 
-// Alt / new thin plating sidings and all color variations
+// Альтернативные / новые тонкие плинтусы покрытия и все цветовые вариации
 /datum/paintable_decal/plating/thinplatingalt
 
 /datum/paintable_decal/plating/thinplatingalt/line
-	name = "Thin Plating Alt Siding"
+	name = "Тонкий плинтус покрытия (альт)"
 	icon_state = "siding_thinplating_new"
 
 /datum/paintable_decal/plating/thinplatingalt/line_corner
-	name = "Thin Plating Alt Siding Corner"
+	name = "Тонкий плинтус покрытия угол (альт)"
 	icon_state = "siding_thinplating_new_corner"
 
 /datum/paintable_decal/plating/thinplatingalt/line_end
-	name = "Thin Plating Alt Siding End"
+	name = "Тонкий плинтус покрытия конец (альт)"
 	icon_state = "siding_thinplating_new_end"
 
 /datum/paintable_decal/plating/thinplatingalt/line_inner_corner
-	name = "Thin Plating Alt Siding Inner Corner"
-	icon_state = "siding_thinplating_new__8" // 8 dir sprite
+	name = "Тонкий плинтус покрытия внутренний угол (альт)"
+	icon_state = "siding_thinplating_new__8" // спрайт с 8 направлениями
 
-// Wide plating sidings and all color variations
+// Широкие плинтусы покрытия и все цветовые вариации
 /datum/paintable_decal/plating/wideplating
 
 /datum/paintable_decal/plating/wideplating/line
-	name = "Wide Plating Siding"
+	name = "Широкий плинтус покрытия"
 	icon_state = "siding_wideplating"
 
 /datum/paintable_decal/plating/wideplating/line_corner
-	name = "Wide Plating Siding Corner"
+	name = "Широкий плинтус покрытия (угол)"
 	icon_state = "siding_wideplating_corner"
 
 /datum/paintable_decal/plating/wideplating/line_end
-	name = "Wide Plating Siding End"
+	name = "Широкий плинтус покрытия (конец)"
 	icon_state = "siding_wideplating_end"
 
 /datum/paintable_decal/plating/wideplating/line_inner_corner
-	name = "Wide Plating Siding Inner Corner"
-	icon_state = "siding_wideplating__8"  // 8 dir sprite
+	name = "Широкий плинтус покрытия (внутренний угол)"
+	icon_state = "siding_wideplating__8"  // спрайт с 8 направлениями
 
-// Alt / new wide plating sidings and all color variations
+// Альтернативные / новые широкие плинтусы покрытия и все цветовые вариации
 /datum/paintable_decal/plating/wideplatingalt
 
 /datum/paintable_decal/plating/wideplatingalt/line
-	name = "Wide Plating Alt Siding"
+	name = "Широкий плинтус покрытия (альт)"
 	icon_state = "siding_wideplating_new"
 
 /datum/paintable_decal/plating/wideplatingalt/line_corner
-	name = "Wide Plating Alt Siding Corner"
+	name = "Широкий плинтус покрытия угол (альт)"
 	icon_state = "siding_wideplating_new_corner"
 
 /datum/paintable_decal/plating/wideplatingalt/line_end
-	name = "Wide Plating Alt Siding End"
+	name = "Широкий плинтус покрытия конец (альт)"
 	icon_state = "siding_wideplating_new_end"
 
 /datum/paintable_decal/plating/wideplatingalt/line_inner_corner
-	name = "Wide Plating Alt Siding Inner Corner"
-	icon_state = "siding_wideplating_new__8" // 8 dir sprite
+	name = "Широкий плинтус покрытия внутренний угол (альт)"
+	icon_state = "siding_wideplating_new__8" // спрайт с 8 направлениями

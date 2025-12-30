@@ -1,7 +1,7 @@
 /obj/item/airlock_painter/decal
 	name = "decal painter"
-	desc = "An airlock painter, reprogrammed to use a different style of paint in order to apply decals for floor tiles as well, in addition to repainting doors. Decals break when the floor tiles are removed."
-	desc_controls = "Alt-Click to remove the ink cartridge."
+	desc = "Покрасчик шлюзов, перепрограммированный для использования другого типа краски, чтобы наносить декали на напольную плитку в дополнение к перекраске дверей. Декали разрушаются при снятии напольной плитки."
+	desc_controls = "Альт-клик, чтобы извлечь картридж с краской."
 	icon = 'icons/obj/devices/tool.dmi'
 	icon_state = "decal_sprayer"
 	inhand_icon_state = "decal_sprayer"
@@ -18,6 +18,16 @@
 
 	/// Current active decal category. Reference to a global singleton
 	VAR_PRIVATE/datum/paintable_decal_category/current_category
+
+/obj/item/airlock_painter/decal/get_ru_names()
+	return list(
+		NOMINATIVE = "покрасчик декалей",
+		GENITIVE = "покрасчика декалей",
+		DATIVE = "покрасчику декалей",
+		ACCUSATIVE = "покрасчик декалей",
+		INSTRUMENTAL = "покрасчиком декалей",
+		PREPOSITIONAL = "покрасчике декалей",
+	)
 
 /obj/item/airlock_painter/decal/Initialize(mapload)
 	. = ..()
@@ -142,6 +152,16 @@
 	icon_state = "decal_sprayer_ex"
 	initial_ink_type = /obj/item/toner/extreme
 
+/obj/item/airlock_painter/decal/debug/get_ru_names()
+	return list(
+		NOMINATIVE = "экстремальный покрасчик декалей",
+		GENITIVE = "экстремального покрасчика декалей",
+		DATIVE = "экстремальному покрасчику декалей",
+		ACCUSATIVE = "экстремальный покрасчик декалей",
+		INSTRUMENTAL = "экстремальным покрасчиком декалей",
+		PREPOSITIONAL = "экстремальном покрасчике декалей",
+	)
+
 /obj/item/airlock_painter/decal/cyborg
 	icon_state = "decal_sprayer_borg"
 	initial_ink_type = /obj/item/toner/infinite
@@ -154,7 +174,7 @@
 	if(cyborg.cell && cyborg.cell.charge > 0)
 		cyborg.cell.use(0.025 * STANDARD_CELL_CHARGE)
 	else if(cyborg.cell.charge <= 0)
-		balloon_alert(user, "not enough energy!")
+		balloon_alert(user, "недостаточно энергии!")
 		return
 
 /obj/item/airlock_painter/decal/cyborg/click_alt(mob/user)

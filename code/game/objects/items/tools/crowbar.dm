@@ -1,6 +1,6 @@
 /obj/item/crowbar
 	name = "pocket crowbar"
-	desc = "A small crowbar. This handy tool is useful for lots of things, such as prying floor tiles or opening unpowered doors."
+	desc = "Небольшая монтировка. Этот удобный инструмент полезен для многих вещей, таких как поддевание напольной плитки или открытие обесточенных дверей."
 	icon = 'icons/obj/tools.dmi'
 	icon_state = "crowbar"
 	inhand_icon_state = "crowbar"
@@ -19,8 +19,8 @@
 	drop_sound = 'sound/items/handling/tools/crowbar_drop.ogg'
 	pickup_sound = 'sound/items/handling/tools/crowbar_pickup.ogg'
 
-	attack_verb_continuous = list("attacks", "bashes", "batters", "bludgeons", "whacks")
-	attack_verb_simple = list("attack", "bash", "batter", "bludgeon", "whack")
+	attack_verb_continuous = list("атакует", "бьёт", "колотит", "дубасит", "ударяет")
+	attack_verb_simple = list("атаковать", "ударить", "поколотить", "отдубасить", "ударить")
 	tool_behaviour = TOOL_CROWBAR
 	toolspeed = 1
 	armor_type = /datum/armor/item_crowbar
@@ -30,12 +30,22 @@
 	fire = 50
 	acid = 30
 
+/obj/item/crowbar/get_ru_names()
+	return list(
+		NOMINATIVE = "карманная монтировка",
+		GENITIVE = "карманной монтировки",
+		DATIVE = "карманной монтировке",
+		ACCUSATIVE = "карманную монтировку",
+		INSTRUMENTAL = "карманной монтировкой",
+		PREPOSITIONAL = "карманной монтировке",
+	)
+
 /obj/item/crowbar/Initialize(mapload)
 	. = ..()
 	AddElement(/datum/element/falling_hazard, damage = force, wound_bonus = wound_bonus, hardhat_safety = TRUE, crushes = FALSE, impact_sound = hitsound)
 
 /obj/item/crowbar/suicide_act(mob/living/user)
-	user.visible_message(span_suicide("[user] is beating [user.p_them()]self to death with [src]! It looks like [user.p_theyre()] trying to commit suicide!"))
+	user.visible_message(span_suicide("[user] забивает себя до смерти [declent_ru(INSTRUMENTAL)]! Похоже, [user.p_theyre()] пытается совершить суицид!"))
 	playsound(loc, 'sound/items/weapons/genhit.ogg', 50, TRUE, -1)
 	return BRUTELOSS
 
@@ -46,7 +56,7 @@
 
 /obj/item/crowbar/abductor
 	name = "alien crowbar"
-	desc = "A hard-light crowbar. It appears to pry by itself, without any effort required."
+	desc = "Монтировка из твёрдого света. Кажется, она поддевает предметы сама по себе, не требуя никаких усилий."
 	icon = 'icons/obj/antags/abductor.dmi'
 	usesound = 'sound/items/weapons/sonic_jackhammer.ogg'
 	custom_materials = list(/datum/material/iron =SHEET_MATERIAL_AMOUNT * 2.5, /datum/material/silver = SHEET_MATERIAL_AMOUNT*1.25, /datum/material/plasma =HALF_SHEET_MATERIAL_AMOUNT, /datum/material/titanium =SHEET_MATERIAL_AMOUNT, /datum/material/diamond =SHEET_MATERIAL_AMOUNT)
@@ -54,9 +64,19 @@
 	inside_belt_icon_state = "crowbar_alien"
 	toolspeed = 0.1
 
+/obj/item/crowbar/abductor/get_ru_names()
+	return list(
+		NOMINATIVE = "инопланетная монтировка",
+		GENITIVE = "инопланетной монтировки",
+		DATIVE = "инопланетной монтировке",
+		ACCUSATIVE = "инопланетную монтировку",
+		INSTRUMENTAL = "инопланетной монтировкой",
+		PREPOSITIONAL = "инопланетной монтировке",
+	)
+
 /obj/item/crowbar/large
 	name = "large crowbar"
-	desc = "It's a big crowbar. It doesn't fit in your pockets, because it's big."
+	desc = "Это большой лом. Он не влезает в карманы, потому что большой."
 	force = 12
 	w_class = WEIGHT_CLASS_NORMAL
 	throw_speed = 3
@@ -66,14 +86,34 @@
 	worn_icon_state = "crowbar"
 	toolspeed = 0.7
 
+/obj/item/crowbar/large/get_ru_names()
+	return list(
+		NOMINATIVE = "большой лом",
+		GENITIVE = "большого лома",
+		DATIVE = "большому лому",
+		ACCUSATIVE = "большой лом",
+		INSTRUMENTAL = "большим ломом",
+		PREPOSITIONAL = "большом ломе",
+	)
+
 /obj/item/crowbar/large/emergency
 	name = "emergency crowbar"
-	desc = "It's a bulky crowbar. It almost seems deliberately designed to not be able to fit inside of a backpack."
+	desc = "Громоздкий лом. Кажется, он намеренно создан так, чтобы не влезать в рюкзак."
 	w_class = WEIGHT_CLASS_BULKY
+
+/obj/item/crowbar/large/emergency/get_ru_names()
+	return list(
+		NOMINATIVE = "аварийный лом",
+		GENITIVE = "аварийного лома",
+		DATIVE = "аварийному лому",
+		ACCUSATIVE = "аварийный лом",
+		INSTRUMENTAL = "аварийным ломом",
+		PREPOSITIONAL = "аварийном ломе",
+	)
 
 /obj/item/crowbar/hammer
 	name = "claw hammer"
-	desc = "It's a heavy hammer with a pry bar on the back of its head. Nails aren't common in space, but this tool can still be used as a weapon or a crowbar."
+	desc = "Тяжёлый молоток с гвоздодёром на обратной стороне. Гвозди в космосе не часто встречаются, но этот инструмент всё равно можно использовать как оружие или лом."
 	force = 11
 	w_class = WEIGHT_CLASS_NORMAL
 	icon = 'icons/obj/weapons/hammer.dmi'
@@ -90,22 +130,52 @@
 	custom_materials = list(/datum/material/wood=SMALL_MATERIAL_AMOUNT*0.5, /datum/material/iron=SMALL_MATERIAL_AMOUNT*0.7)
 	wound_bonus = 35
 
+/obj/item/crowbar/hammer/get_ru_names()
+	return list(
+		NOMINATIVE = "молоток-гвоздодёр",
+		GENITIVE = "молотка-гвоздодёра",
+		DATIVE = "молотку-гвоздодёру",
+		ACCUSATIVE = "молоток-гвоздодёр",
+		INSTRUMENTAL = "молотком-гвоздодёром",
+		PREPOSITIONAL = "молотке-гвоздодёре",
+	)
+
 /obj/item/crowbar/hammer/Initialize(mapload)
 	. = ..()
 	AddElement(/datum/element/kneejerk)
 
 /obj/item/crowbar/large/twenty_force //from space ruin
 	name = "heavy crowbar"
-	desc = "It's a big crowbar. It doesn't fit in your pockets, because it's big. It feels oddly heavy.."
+	desc = "Это большой лом. Он не влезает в карманы, потому что большой. Ощущается странно тяжёлым."
 	force = 20
 	icon_state = "crowbar_powergame"
 	inhand_icon_state = "crowbar_red"
 
+/obj/item/crowbar/large/twenty_force/get_ru_names()
+	return list(
+		NOMINATIVE = "тяжёлый лом",
+		GENITIVE = "тяжёлого лома",
+		DATIVE = "тяжёлому лому",
+		ACCUSATIVE = "тяжёлый лом",
+		INSTRUMENTAL = "тяжёлым ломом",
+		PREPOSITIONAL = "тяжёлом ломе",
+	)
+
 /obj/item/crowbar/large/old
 	name = "old crowbar"
-	desc = "It's an old crowbar. Much larger than the pocket sized ones, carrying a lot more heft. They don't make 'em like they used to."
+	desc = "Это старый лом. Намного больше карманных версий и гораздо увесистее. Такие больше не делают."
 	throwforce = 10
 	throw_speed = 2
+
+/obj/item/crowbar/large/old/get_ru_names()
+	return list(
+		NOMINATIVE = "старый лом",
+		GENITIVE = "старого лома",
+		DATIVE = "старому лому",
+		ACCUSATIVE = "старый лом",
+		INSTRUMENTAL = "старым ломом",
+		PREPOSITIONAL = "старом ломе",
+	)
 
 /obj/item/crowbar/large/old/Initialize(mapload)
 	. = ..()
@@ -114,7 +184,7 @@
 
 /obj/item/crowbar/power
 	name = "jaws of life"
-	desc = "A set of jaws of life, compressed through the magic of science."
+	desc = "Комплект челюстей жизни, сжатый магией науки."
 	icon_state = "jaws"
 	inhand_icon_state = "jawsoflife"
 	worn_icon_state = "jawsoflife"
@@ -133,9 +203,9 @@
 	/// Used on Initialize, how much time to cut real handcuffs. Null means it can't.
 	var/snap_time_strong_handcuffs = 0 SECONDS
 	/// The text used for our jaws tool description while active
-	var/active_text = "cutting"
+	var/active_text = "резак"
 	/// The text used for our jaws tool description while inactive
-	var/inactive_text = "prying"
+	var/inactive_text = "лом"
 	/// The default tool behavior. This should match tool_behavior
 	var/first_tool_behavior = TOOL_CROWBAR
 	/// The active tool behavior. This should not match tool_behavior on init.
@@ -156,6 +226,16 @@
 	/// How long between announcements from our jaws of life. Keeps the jaws from getting too radio spammy.
 	var/alert_cooldown_time = 1 MINUTES
 
+/obj/item/crowbar/power/get_ru_names()
+	return list(
+		NOMINATIVE = "челюсти жизни",
+		GENITIVE = "челюстей жизни",
+		DATIVE = "челюстям жизни",
+		ACCUSATIVE = "челюсти жизни",
+		INSTRUMENTAL = "челюстями жизни",
+		PREPOSITIONAL = "челюстях жизни",
+	)
+
 /obj/item/crowbar/power/get_all_tool_behaviours()
 	return list(first_tool_behavior, second_tool_behavior)
 
@@ -175,7 +255,7 @@
 
 /obj/item/crowbar/power/examine()
 	. = ..()
-	. += "It's fitted with a [tool_behaviour == first_tool_behavior ? inactive_text : active_text] head."
+	. += "Оснащены насадкой типа [tool_behaviour == first_tool_behavior ? inactive_text : active_text]."
 
 /*
  * Signal proc for [COMSIG_TRANSFORMING_ON_TRANSFORM].
@@ -187,7 +267,7 @@
 
 	tool_behaviour = (active ? second_tool_behavior : first_tool_behavior)
 	if(user)
-		balloon_alert(user, "attached [tool_behaviour == first_tool_behavior ? inactive_text : active_text]")
+		balloon_alert(user, "насадка: [tool_behaviour == first_tool_behavior ? inactive_text : active_text]")
 	playsound(src, 'sound/items/tools/change_jaws.ogg', 50, TRUE)
 	if(tool_behaviour != TOOL_WIRECUTTER)
 		RemoveElement(/datum/element/cuffsnapping, snap_time_weak_handcuffs, snap_time_strong_handcuffs)
@@ -213,7 +293,7 @@
 		for(var/possible_blacklisted_access in collective_access)
 			if(possible_blacklisted_access in blacklisted_access)
 				playsound(src.loc, 'sound/machines/buzz/buzz-sigh.ogg', 50, FALSE)
-				user.balloon_alert(user, "cannot pry open!")
+				user.balloon_alert(user, "не получается поддеть!")
 				return COMPONENT_TOOL_DO_NOT_ALLOW_FORCE_OPEN
 
 	if(radio_alert && COOLDOWN_FINISHED(src, alert_cooldown))
@@ -240,7 +320,7 @@
 	// This tool screams into the radio whenever the user successfully pries open an airlock.
 	name = "Door Forced Entry Alert"
 	announcement_lines_map = list(
-		RADIO_CHANNEL_SECURITY = "SECURITY ALERT: %PERSON has forced open a door at %LOCATION using %TOOL. Confirm that this was done during an emergency by authorized staff.",
+		RADIO_CHANNEL_SECURITY = "ТРЕВОГА СБ: %PERSON взламывает дверь в %LOCATION, используя %TOOL. Подтвердите, что это было сделано во время чрезвычайной ситуации уполномоченным персоналом.",
 	)
 	vars_and_tooltips_map = list(
 		"PERSON" = "will be replaced with the name of the user",
@@ -250,10 +330,10 @@
 
 /obj/item/crowbar/power/suicide_act(mob/living/user)
 	if(tool_behaviour == TOOL_CROWBAR)
-		user.visible_message(span_suicide("[user] is putting [user.p_their()] head in [src], it looks like [user.p_theyre()] trying to commit suicide!"))
+		user.visible_message(span_suicide("[user] засовывает свою голову в [declent_ru(ACCUSATIVE)], похоже, [user.p_theyre()] пытается совершить суицид!"))
 		playsound(loc, 'sound/items/tools/jaws_pry.ogg', 50, TRUE, -1)
 	else
-		user.visible_message(span_suicide("[user] is wrapping \the [src] around [user.p_their()] neck. It looks like [user.p_theyre()] trying to rip [user.p_their()] head off!"))
+		user.visible_message(span_suicide("[user] оборачивает [declent_ru(ACCUSATIVE)] вокруг своей шеи. Похоже, [user.p_theyre()] пытается оторвать себе голову!"))
 		playsound(loc, 'sound/items/tools/jaws_cut.ogg', 50, TRUE, -1)
 		if(iscarbon(user))
 			var/mob/living/carbon/suicide_victim = user
@@ -265,22 +345,31 @@
 
 /obj/item/crowbar/power/syndicate
 	name = "jaws of death"
-	desc = "An improved, faster, and smaller copy of Nanotrasen's standard jaws of life. Can be used to force open airlocks in its crowbar configuration."
+	desc = "Улучшенная, более быстрая и компактная копия стандартных челюстей жизни Nanotrasen. Может использоваться для принудительного открытия шлюзов в конфигурации лома."
 	icon_state = "jaws_syndie"
 	w_class = WEIGHT_CLASS_SMALL
 	toolspeed = 0.5
 
+/obj/item/crowbar/power/syndicate/get_ru_names()
+	return list(
+		NOMINATIVE = "челюсти смерти",
+		GENITIVE = "челюстей смерти",
+		DATIVE = "челюстям смерти",
+		ACCUSATIVE = "челюсти смерти",
+		INSTRUMENTAL = "челюстями смерти",
+		PREPOSITIONAL = "челюстях смерти",
+	)
+
 /obj/item/crowbar/power/paramedic
 	name = "jaws of recovery"
-	desc = "A specialized version of the jaws of life, primarily to be used by paramedics to recover the injured and the recently deceased. Rather than a cutting arm, this tool has a bonesetting apparatus. \
-		Cannot access certain high security areas due to safety concerns."
+	desc = "Специализированная версия челюстей жизни, предназначенная в первую очередь для парамедиков, чтобы извлекать раненых и недавно умерших. Вместо резака этот инструмент оснащён аппаратом для вправления костей. Не может получить доступ к некоторым зонам высокой безопасности из соображений безопасности."
 	icon_state = "jaws_paramedic"
 	inhand_icon_state = "jawsparamedic"
 	worn_icon_state = "jawsparamedic"
 	w_class = WEIGHT_CLASS_BULKY
 	toolspeed = 1
 	slot_flags = null
-	active_text = "bonesetting"
+	active_text = "костоправ"
 	second_tool_behavior = TOOL_BONESET
 	limit_jaws_access = TRUE
 	blacklisted_access = list(
@@ -308,6 +397,16 @@
 	)
 	radio_alert = TRUE
 
+/obj/item/crowbar/power/paramedic/get_ru_names()
+	return list(
+		NOMINATIVE = "челюсти восстановления",
+		GENITIVE = "челюстей восстановления",
+		DATIVE = "челюстям восстановления",
+		ACCUSATIVE = "челюсти восстановления",
+		INSTRUMENTAL = "челюстями восстановления",
+		PREPOSITIONAL = "челюстях восстановления",
+	)
+
 /obj/item/crowbar/power/paramedic/sound_the_alarms(mob/user, obj/machinery/door/airlock/target)
 		aas_config_announce(/datum/aas_config_entry/jaws_entry_alert_paramedic, list(
 			"PERSON" = user.name,
@@ -323,8 +422,8 @@
 	// This tool screams into the radio whenever the user successfully pries open an airlock.
 	name = "Door Forced Entry Medical Alert"
 	announcement_lines_map = list(
-		RADIO_CHANNEL_SECURITY = "SECURITY ALERT: %PERSON has forced open a door at %LOCATION using %TOOL. Confirm that this was done during an emergency by authorized staff.",
-		RADIO_CHANNEL_MEDICAL = "MEDICAL ALERT: %PERSON has forced open a door at %LOCATION using %TOOL. Confirm that this was done during an emergency by authorized staff.",
+		RADIO_CHANNEL_SECURITY = "ТРЕВОГА СБ: %PERSON взламывает дверь в %LOCATION, используя %TOOL. Подтвердите, что это было сделано во время чрезвычайной ситуации уполномоченным персоналом.",
+		RADIO_CHANNEL_MEDICAL = "МЕДИЦИНСКАЯ ТРЕВОГА: %PERSON взламывает дверь в %LOCATION, используя %TOOL. Подтвердите, что это было сделано во время чрезвычайной ситуации уполномоченным персоналом.",
 	)
 	vars_and_tooltips_map = list(
 		"PERSON" = "will be replaced with the name of the user",
@@ -333,15 +432,14 @@
 	)
 
 /obj/item/crowbar/power/paramedic/silent
-	desc = "A specialized version of the jaws of life, primarily to be used by paramedics to recover the injured and the recently deceased. Rather than a cutting arm, this tool has a bonesetting apparatus. \
-		This one looks upgraded."
+	desc = "Специализированная версия челюстей жизни, предназначенная в первую очередь для парамедиков, чтобы извлекать раненых и недавно умерших. Вместо резака этот инструмент оснащён аппаратом для вправления костей. Выглядят улучшенными."
 	w_class = WEIGHT_CLASS_NORMAL // it's a modified, normal jaws
 	limit_jaws_access = FALSE
 	radio_alert = FALSE
 
 /obj/item/crowbar/cyborg
 	name = "hydraulic crowbar"
-	desc = "A hydraulic prying tool, simple but powerful."
+	desc = "Гидравлический инструмент для поддевания, простой, но мощный."
 	icon = 'icons/obj/items_cyborg.dmi'
 	icon_state = "toolkit_engiborg_crowbar"
 	worn_icon_state = "toolkit_engiborg_crowbar" //error sprite - this shouldn't have been dropped
@@ -350,9 +448,19 @@
 	force = 10
 	toolspeed = 0.5
 
+/obj/item/crowbar/cyborg/get_ru_names()
+	return list(
+		NOMINATIVE = "гидравлический лом",
+		GENITIVE = "гидравлического лома",
+		DATIVE = "гидравлическому лому",
+		ACCUSATIVE = "гидравлический лом",
+		INSTRUMENTAL = "гидравлическим ломом",
+		PREPOSITIONAL = "гидравлическом ломе",
+	)
+
 /obj/item/crowbar/mechremoval
 	name = "mech removal tool"
-	desc = "A... really big crowbar. You're pretty sure it could pry open a mech, but it seems unwieldy otherwise."
+	desc = "Э... реально большой лом. Вы уверены, что им можно вскрыть мех, но в остальном он кажется неудобным."
 	icon_state = "mechremoval0"
 	base_icon_state = "mechremoval"
 	inhand_icon_state = null
@@ -370,6 +478,16 @@
 	bomb = 100
 	fire = 100
 
+/obj/item/crowbar/mechremoval/get_ru_names()
+	return list(
+		NOMINATIVE = "инструмент вскрытия мехов",
+		GENITIVE = "инструмента вскрытия мехов",
+		DATIVE = "инструменту вскрытия мехов",
+		ACCUSATIVE = "инструмент вскрытия мехов",
+		INSTRUMENTAL = "инструментом вскрытия мехов",
+		PREPOSITIONAL = "инструменте вскрытия мехов",
+	)
+
 /obj/item/crowbar/mechremoval/Initialize(mapload)
 	. = ..()
 	transform = transform.Translate(0, -8)
@@ -381,21 +499,21 @@
 
 /obj/item/crowbar/mechremoval/proc/empty_mech(obj/vehicle/sealed/mecha/mech, mob/user)
 	if(!HAS_TRAIT(src, TRAIT_WIELDED))
-		mech.balloon_alert(user, "not wielded!")
+		mech.balloon_alert(user, "нужно взять в две руки!")
 		return
 	var/obj/item/mecha_parts/mecha_equipment/sleeper/mech_sleeper = locate() in mech
 	if((!LAZYLEN(mech.occupants) || (LAZYLEN(mech.occupants) == 1 && mech.mecha_flags & SILICON_PILOT)) && (!mech_sleeper || !mech_sleeper.patient)) //if no occupants, or only an ai
-		mech.balloon_alert(user, "it's empty!")
+		mech.balloon_alert(user, "пусто!")
 		return
 	var/list/log_list_before = LAZYCOPY(mech.occupants)
 	if(mech_sleeper?.patient)
 		log_list_before += mech_sleeper.patient
 	user.log_message("tried to pry open [mech], located at [loc_name(mech)], which is occupied by [log_list_before.Join(", ")].", LOG_ATTACK)
 	var/mech_dir = mech.dir
-	mech.balloon_alert(user, "prying open...")
+	mech.balloon_alert(user, "вскрываю...")
 	playsound(mech, 'sound/machines/airlock/airlock_alien_prying.ogg', 100, TRUE)
 	if(!use_tool(mech, user, (mech.mecha_flags & IS_ENCLOSED) ? 5 SECONDS : 3 SECONDS, volume = 0, extra_checks = CALLBACK(src, PROC_REF(extra_checks), mech, mech_dir, mech_sleeper)))
-		mech.balloon_alert(user, "interrupted!")
+		mech.balloon_alert(user, "прервано!")
 		return
 	var/list/log_list_after = LAZYCOPY(mech.occupants)
 	if(mech_sleeper?.patient)

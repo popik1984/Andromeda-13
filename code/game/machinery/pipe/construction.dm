@@ -33,7 +33,7 @@
 
 /obj/item/pipe/on_craft_completion(list/components, datum/crafting_recipe/current_recipe, atom/crafter)
 	. = ..()
-	if(!istype(current_cipe, /datum/crafting_recipe/spec_pipe))
+	if(!istype(current_recipe, /datum/crafting_recipe/spec_pipe))
 		return
 	var/datum/crafting_recipe/spec_pipe/pipe_recipe = current_recipe
 	pipe_type = pipe_recipe.pipe_type

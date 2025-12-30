@@ -1,100 +1,99 @@
 /**
- * Machines in the world, such as computers, pipes, and airlocks.
+ * Машины в мире, такие как компьютеры, трубы и шлюзы.
  *
- *Overview:
- *  Used to create objects that need a per step proc call.  Default definition of 'Initialize()'
- *  stores a reference to src machine in global 'machines list'.  Default definition
- *  of 'Destroy' removes reference to src machine in global 'machines list'.
+ *Обзор:
+ *  Используется для создания объектов, которым требуется вызов процедуры на каждом шаге. Стандартное определение 'Initialize()'
+ *  сохраняет ссылку на машину src в глобальном списке 'machines list'. Стандартное определение
+ *  'Destroy' удаляет ссылку на машину src из глобального списка 'machines list'.
  *
- *Class Variables:
+ *Переменные класса:
  *  use_power (num)
- *     current state of auto power use.
- *     Possible Values:
- *        NO_POWER_USE -- no auto power use
- *        IDLE_POWER_USE -- machine is using power at its idle power level
- *        ACTIVE_POWER_USE -- machine is using power at its active power level
+ *     текущее состояние автоматического использования энергии.
+ *     Возможные значения:
+ *        NO_POWER_USE -- нет автоматического использования энергии
+ *        IDLE_POWER_USE -- машина использует энергию на уровне холостого хода
+ *        ACTIVE_POWER_USE -- машина использует энергию на активном уровне
  *
  *  active_power_usage (num)
- *     Value for the amount of power to use when in active power mode
+ *     Значение количества энергии, используемой в активном режиме
  *
  *  idle_power_usage (num)
- *     Value for the amount of power to use when in idle power mode
+ *     Значение количества энергии, используемой в режиме холостого хода
  *
  *  power_channel (num)
- *     What channel to draw from when drawing power for power mode
- *     Possible Values:
- *        AREA_USAGE_EQUIP:1 -- Equipment Channel
- *        AREA_USAGE_LIGHT:2 -- Lighting Channel
- *        AREA_USAGE_ENVIRON:3 -- Environment Channel
+ *     Из какого канала брать энергию при потреблении
+ *     Возможные значения:
+ *        AREA_USAGE_EQUIP:1 -- Канал оборудования
+ *        AREA_USAGE_LIGHT:2 -- Канал освещения
+ *        AREA_USAGE_ENVIRON:3 -- Канал окружения
  *
  *  component_parts (list)
- *     A list of component parts of machine used by frame based machines.
+ *     Список составных частей машины, используется машинами на основе каркаса.
  *
  *  stat (bitflag)
- *     Machine status bit flags.
- *     Possible bit flags:
- *        BROKEN -- Machine is broken
- *        NOPOWER -- No power is being supplied to machine.
- *        MAINT -- machine is currently under going maintenance.
- *        EMPED -- temporary broken by EMP pulse
+ *     Битовые флаги статуса машины.
+ *     Возможные битовые флаги:
+ *        BROKEN -- Машина сломана
+ *        NOPOWER -- К машине не поступает питание.
+ *        MAINT -- машина в данный момент находится на техобслуживании.
+ *        EMPED -- временно сломана импульсом ЭМИ
  *
- *Class Procs:
+ *Процедуры класса:
  *  Initialize()
  *
  *  Destroy()
  *
  *	update_mode_power_usage()
- *		updates the static_power_usage var of this machine and makes its static power usage from its area accurate.
- *		called after the idle or active power usage has been changed.
+ *		обновляет переменную static_power_usage этой машины и делает её статическое потребление энергии от зоны точным.
+ *		вызывается после изменения потребления энергии в простое или активном режиме.
  *
  *	update_power_channel()
- *		updates the static_power_usage var of this machine and makes its static power usage from its area accurate.
- *		called after the power_channel var has been changed or called to change the var itself.
+ *		обновляет переменную static_power_usage этой машины и делает её статическое потребление энергии от зоны точным.
+ *		вызывается после изменения переменной power_channel или вызова для изменения самой переменной.
  *
  *	unset_static_power()
- *		completely removes the current static power usage of this machine from its area.
- *		used in the other power updating procs to then readd the correct power usage.
+ *		полностью удаляет текущее статическое потребление энергии этой машины из её зоны.
+ *		используется в других процедурах обновления питания для последующего добавления правильного потребления.
  *
  *
- *     Default definition uses 'use_power', 'power_channel', 'active_power_usage',
- *     'idle_power_usage', 'powered()', and 'use_energy()' implement behavior.
+ *     Стандартное определение использует 'use_power', 'power_channel', 'active_power_usage',
+ *     'idle_power_usage', 'powered()' и 'use_energy()' для реализации поведения.
  *
  *  powered(chan = -1)         'modules/power/power.dm'
- *     Checks to see if area that contains the object has power available for power
- *     channel given in 'chan'. -1 defaults to power_channel
+ *     Проверяет, имеет ли зона, содержащая объект, доступную энергию для канала питания, заданного в 'chan'. -1 по умолчанию означает power_channel
  *
  *  use_energy(amount, chan=-1)   'modules/power/power.dm'
- *     Deducts 'amount' from the power channel 'chan' of the area that contains the object.
+ *     Вычитает 'amount' из канала питания 'chan' зоны, содержащей объект.
  *
  *  power_change()               'modules/power/power.dm'
- *     Called by the area that contains the object when ever that area under goes a
- *     power state change (area runs out of power, or area channel is turned off).
+ *     Вызывается зоной, содержащей объект, каждый раз, когда эта зона подвергается
+ *     изменению состояния питания (в зоне заканчивается энергия или канал зоны отключается).
  *
  *  RefreshParts()               'game/machinery/machine.dm'
- *     Called to refresh the variables in the machine that are contributed to by parts
- *     contained in the component_parts list. (example: glass and material amounts for
- *     the autolathe)
+ *     Вызывается для обновления переменных в машине, которые зависят от частей,
+ *     содержащихся в списке component_parts. (пример: количество стекла и материалов для
+ *     автолата)
  *
- *     Default definition does nothing.
+ *     Стандартное определение ничего не делает.
  *
  *  process()                  'game/machinery/machine.dm'
- *     Called by the 'machinery subsystem' once per machinery tick for each machine that is listed in its 'machines' list.
+ *     Вызывается 'подсистемой машин' один раз за тик машин для каждой машины, которая находится в её списке 'machines'.
  *
  *  process_atmos()
- *     Called by the 'air subsystem' once per atmos tick for each machine that is listed in its 'atmos_machines' list.
+ *     Вызывается 'подсистемой воздуха' один раз за атмосферный тик для каждой машины, которая находится в её списке 'atmos_machines'.
  * Compiled by Aygar
  */
 /obj/machinery
 	name = "machinery"
 	icon = 'icons/obj/machines/fax.dmi'
-	desc = "Some kind of machine."
+	desc = "Какой-то механизм."
 	abstract_type = /obj/machinery
-	verb_say = "beeps"
-	verb_yell = "blares"
+	verb_say = "пищит"
+	verb_yell = "ревет"
 	pressure_resistance = 15
 	pass_flags_self = PASSMACHINE | LETPASSCLICKS
 	max_integrity = 200
-	layer = BELOW_OBJ_LAYER //keeps shit coming out of the machine from ending up underneath it.
+	layer = BELOW_OBJ_LAYER //чтобы всякое дерьмо, вылетающее из машины, не оказывалось под ней.
 	flags_ricochet = RICOCHET_HARD
 	receive_ricochet_chance_mod = 0.3
 	anchored = TRUE
@@ -103,55 +102,55 @@
 	initial_language_holder = /datum/language_holder/speaking_machine
 	armor_type = /datum/armor/obj_machinery
 
-	///see code/__DEFINES/stat.dm
+	///см. code/__DEFINES/stat.dm
 	var/machine_stat = NONE
-	///see code/__DEFINES/machines.dm
+	///см. code/__DEFINES/machines.dm
 	var/use_power = IDLE_POWER_USE
-	///the amount of static power load this machine adds to its area's power_usage list when use_power = IDLE_POWER_USE
+	///количество статической нагрузки, которое эта машина добавляет в список power_usage своей зоны, когда use_power = IDLE_POWER_USE
 	var/idle_power_usage = BASE_MACHINE_IDLE_CONSUMPTION
-	///the amount of static power load this machine adds to its area's power_usage list when use_power = ACTIVE_POWER_USE
+	///количество статической нагрузки, которое эта машина добавляет в список power_usage своей зоны, когда use_power = ACTIVE_POWER_USE
 	var/active_power_usage = BASE_MACHINE_ACTIVE_CONSUMPTION
-	///the current amount of static power usage this machine is taking from its area
+	///текущее количество статического потребления энергии, которое эта машина забирает у своей зоны
 	var/static_power_usage = 0
-	//AREA_USAGE_EQUIP,AREA_USAGE_ENVIRON or AREA_USAGE_LIGHT
+	//AREA_USAGE_EQUIP,AREA_USAGE_ENVIRON или AREA_USAGE_LIGHT
 	var/power_channel = AREA_USAGE_EQUIP
-	///A combination of factors such as having power, not being broken and so on. Boolean.
+	///Комбинация факторов, таких как наличие питания, исправность и так далее. Булево значение.
 	var/is_operational = TRUE
-	///list of all the parts used to build it, if made from certain kinds of frames.
+	///список всех частей, использованных для сборки, если сделано из определённых типов каркасов.
 	var/list/component_parts = null
-	///Is the machines maintainence panel open.
+	///Открыта ли панель технического обслуживания машины.
 	var/panel_open = FALSE
-	///Is the machine open or closed
+	///Открыта машина или закрыта
 	var/state_open = FALSE
-	///If this machine is critical to station operation and should have the area be excempted from power failures.
+	///Является ли эта машина критически важной для работы станции и должна ли зона быть освобождена от сбоев питания.
 	var/critical_machine = FALSE
-	///if set, turned into typecache in Initialize, other wise, defaults to mob/living typecache
+	///если задано, преобразуется в typecache при инициализации, иначе по умолчанию typecache mob/living
 	var/list/occupant_typecache
-	///The mob that is sealed inside the machine
+	///Моб, запечатанный внутри машины
 	var/atom/movable/occupant = null
-	///Viable flags to go here are START_PROCESSING_ON_INIT, or START_PROCESSING_MANUALLY. See code\__DEFINES\machines.dm for more information on these flags.
+	///Допустимые флаги здесь: START_PROCESSING_ON_INIT или START_PROCESSING_MANUALLY. См. code\__DEFINES\machines.dm для дополнительной информации об этих флагах.
 	var/processing_flags = START_PROCESSING_ON_INIT
-	///What subsystem this machine will use, which is generally SSmachines or SSfastprocess. By default all machinery use SSmachines. This fires a machine's process() roughly every 2 seconds.
+	///Какую подсистему будет использовать эта машина, обычно SSmachines или SSfastprocess. По умолчанию все машины используют SSmachines. Это вызывает process() машины примерно каждые 2 секунды.
 	var/subsystem_type = /datum/controller/subsystem/machines
-	///Circuit to be created and inserted when the machinery is created
+	///Схема, которая будет создана и вставлена при создании оборудования
 	var/obj/item/circuitboard/circuit
-	///See code/DEFINES/interaction_flags.dm
+	///См. code/DEFINES/interaction_flags.dm
 	var/interaction_flags_machine = INTERACT_MACHINE_WIRES_IF_OPEN | INTERACT_MACHINE_ALLOW_SILICON | INTERACT_MACHINE_OPEN_SILICON
-	///The department we are paying to use this machine
+	///Отдел, которому мы платим за использование этой машины
 	var/payment_department = ACCOUNT_ENG
-	///Used in NAP violation, pay fine
+	///Используется при нарушении НАП, оплата штрафа
 	var/fair_market_price = 5
-	///Is this machine currently in the atmos machinery queue?
+	///Находится ли эта машина в очереди атмосферного оборудования?
 	var/atmos_processing = FALSE
-	///world.time of last use by [/mob/living]
+	///world.time последнего использования [/mob/living]
 	var/last_used_time = 0
-	///Mobtype of last user. Typecast to [/mob/living] for initial() usage
+	///Тип моба последнего пользователя. Приведение типа к [/mob/living] для использования initial()
 	var/mob/living/last_user_mobtype
-	///Do we want to hook into on_enter_area and on_exit_area?
-	///Disables some optimizations
+	///Хотим ли мы перехватывать on_enter_area и on_exit_area?
+	///Отключает некоторые оптимизации
 	var/always_area_sensitive = FALSE
-	///What was our power state the last time we updated its appearance?
-	///TRUE for on, FALSE for off, -1 for never checked
+	///Каково было наше состояние питания в последний раз, когда мы обновляли внешний вид?
+	///TRUE для включено, FALSE для выключено, -1 для "никогда не проверялось"
 	var/appearance_power_state = -1
 
 /datum/armor/obj_machinery
@@ -161,11 +160,21 @@
 	fire = 50
 	acid = 70
 
-///Needed by machine frame & flatpacker i.e the named arg board
+/obj/machinery/get_ru_names()
+	return list(
+		NOMINATIVE = "оборудование",
+		GENITIVE = "оборудования",
+		DATIVE = "оборудованию",
+		ACCUSATIVE = "оборудование",
+		INSTRUMENTAL = "оборудованием",
+		PREPOSITIONAL = "оборудовании",
+	)
+
+///Нужно для машинного каркаса и flatpacker, т.е. именованный аргумент board
 /obj/machinery/New(location, obj/item/circuitboard/board, ...)
 	if(istype(board))
 		circuit = board
-		//we don't want machines that override Initialize() have the board passed as a param e.g. atmos
+		//мы не хотим, чтобы машины, переопределяющие Initialize(), получали плату как параметр, например, atmos
 		return ..(location)
 
 	return ..()
@@ -185,7 +194,7 @@
 	if(occupant_typecache)
 		occupant_typecache = typecacheof(occupant_typecache)
 
-	if((resistance_flags & INDESTRUCTIBLE) && component_parts){ // This is needed to prevent indestructible machinery still blowing up. If an explosion occurs on the same tile as the indestructible machinery without the PREVENT_CONTENTS_EXPLOSION_1 flag, /datum/controller/subsystem/explosions/proc/propagate_blastwave will call ex_act on all movable atoms inside the machine, including the circuit board and component parts. However, if those parts get deleted, the entire machine gets deleted, allowing for INDESTRUCTIBLE machines to be destroyed. (See #62164 for more info)
+	if((resistance_flags & INDESTRUCTIBLE) && component_parts){ // Это необходимо для предотвращения взрыва неразрушимого оборудования. Если взрыв происходит на том же тайле, что и неразрушимое оборудование без флага PREVENT_CONTENTS_EXPLOSION_1, /datum/controller/subsystem/explosions/proc/propagate_blastwave вызовет ex_act для всех подвижных атомов внутри машины, включая плату и компоненты. Однако, если эти части удалятся, вся машина удалится, что позволит уничтожать INDESTRUCTIBLE машины. (См. #62164 для доп. информации)
 		flags_1 |= PREVENT_CONTENTS_EXPLOSION_1
 	}
 
@@ -200,10 +209,10 @@
 	post_machine_initialize()
 
 /**
- * Called in LateInitialize meant to be the machine replacement to it
- * This sets up power for the machine and requires parent be called,
- * ensuring power works on all machines unless exempted with NO_POWER_USE.
- * This is the proc to override if you want to do anything in LateInitialize.
+ * Вызывается в LateInitialize и предназначено для замены его в машинах
+ * Это настраивает питание для машины и требует вызова родителя,
+ * обеспечивая работу питания на всех машинах, если они не исключены с помощью NO_POWER_USE.
+ * Это процедура для переопределения, если вы хотите сделать что-то в LateInitialize.
  */
 /obj/machinery/proc/post_machine_initialize()
 	PROTECTED_PROC(TRUE)
@@ -228,19 +237,19 @@
 	return ..()
 
 /**
- * proc to call when the machine starts to require power after a duration of not requiring power
- * sets up power related connections to its area if it exists and becomes area sensitive
- * does not affect power usage itself
+ * процедура для вызова, когда машине начинает требоваться питание после периода отсутствия потребности в нём
+ * настраивает связи питания с её зоной, если она существует, и становится чувствительной к зоне
+ * не влияет на само потребление энергии
  *
- * Returns TRUE if it triggered a full registration, FALSE otherwise
- * We do this so machinery that want to sidestep the area sensitiveity optimization can
+ * Возвращает TRUE, если это вызвало полную регистрацию, иначе FALSE
+ * Мы делаем это, чтобы оборудование, которое хочет обойти оптимизацию чувствительности к зоне, могло это сделать
  */
 /obj/machinery/proc/setup_area_power_relationship()
 	var/area/our_area = get_area(src)
 	if(our_area)
 		RegisterSignal(our_area, COMSIG_AREA_POWER_CHANGE, PROC_REF(power_change))
 
-	if(HAS_TRAIT_FROM(src, TRAIT_AREA_SENSITIVE, INNATE_TRAIT)) // If we for some reason have not lost our area sensitivity, there's no reason to set it back up
+	if(HAS_TRAIT_FROM(src, TRAIT_AREA_SENSITIVE, INNATE_TRAIT)) // Если мы по какой-то причине не потеряли чувствительность к зоне, нет смысла настраивать её снова
 		return FALSE
 
 	become_area_sensitive(INNATE_TRAIT)
@@ -249,9 +258,9 @@
 	return TRUE
 
 /**
- * proc to call when the machine stops requiring power after a duration of requiring power
- * saves memory by removing the power relationship with its area if it exists and loses area sensitivity
- * does not affect power usage itself
+ * процедура для вызова, когда машине перестает требоваться питание после периода потребности в нём
+ * экономит память, удаляя связь питания с её зоной, если она существует, и теряет чувствительность к зоне
+ * не влияет на само потребление энергии
  */
 /obj/machinery/proc/remove_area_power_relationship()
 	var/area/our_area = get_area(src)
@@ -267,7 +276,7 @@
 
 /obj/machinery/proc/on_enter_area(datum/source, area/area_to_register)
 	SIGNAL_HANDLER
-	// If we're always area sensitive, and this is called while we have no power usage, do nothing and return
+	// Если мы всегда чувствительны к зоне, и это вызывается, пока у нас нет потребления энергии, ничего не делаем и возвращаем
 	if(always_area_sensitive && use_power == NO_POWER_USE)
 		return
 	update_current_power_usage()
@@ -276,7 +285,7 @@
 
 /obj/machinery/proc/on_exit_area(datum/source, area/area_to_unregister)
 	SIGNAL_HANDLER
-	// If we're always area sensitive, and this is called while we have no power usage, do nothing and return
+	// Если мы всегда чувствительны к зоне, и это вызывается, пока у нас нет потребления энергии, ничего не делаем и возвращаем
 	if(always_area_sensitive && use_power == NO_POWER_USE)
 		return
 	unset_static_power()
@@ -288,38 +297,38 @@
 	SEND_SIGNAL(src, COMSIG_MACHINERY_SET_OCCUPANT, new_occupant)
 	occupant = new_occupant
 
-/// Helper proc for telling a machine to start processing
+/// Вспомогательная процедура для команды машине начать обработку
 /obj/machinery/proc/begin_processing()
 	var/datum/controller/subsystem/processing/subsystem = locate(subsystem_type) in Master.subsystems
 	START_PROCESSING(subsystem, src)
 
-/// Helper proc for telling a machine to stop processing
+/// Вспомогательная процедура для команды машине остановить обработку
 /obj/machinery/proc/end_processing()
 	var/datum/controller/subsystem/processing/subsystem = locate(subsystem_type) in Master.subsystems
 	STOP_PROCESSING(subsystem, src)
 
-///Early process for machines added to SSmachines.processing_early to prioritize power draw
+///Ранняя обработка для машин, добавленных в SSmachines.processing_early для приоритизации потребления энергии
 /obj/machinery/proc/process_early()
 	set waitfor = FALSE
 	return PROCESS_KILL
 
-/obj/machinery/process()//If you dont use process or power why are you here
+/obj/machinery/process()//Если вы не используете process или питание, почему вы здесь?
 	return PROCESS_KILL
 
-///Late process for machines added to SSmachines.processing_late to gather accurate recordings
+///Поздняя обработка для машин, добавленных в SSmachines.processing_late для сбора точных записей
 /obj/machinery/proc/process_late()
 	set waitfor = FALSE
 	return PROCESS_KILL
 
 /**
- * Process but for machines interacting with atmospherics.
- * Like process, anything sensitive to changes in the wait time between process ticks should account for seconds_per_tick.
+ * Process, но для машин, взаимодействующих с атмосферой.
+ * Как и process, всё, чувствительное к изменениям времени ожидания между тиками обработки, должно учитывать seconds_per_tick.
 **/
-/obj/machinery/proc/process_atmos(seconds_per_tick)//If you dont touch atmos why are you here
+/obj/machinery/proc/process_atmos(seconds_per_tick)//Если вы не трогаете атмосферу, почему вы здесь?
 	set waitfor = FALSE
 	return PROCESS_KILL
 
-///Called when we want to change the value of the machine_stat variable. Holds bitflags.
+///Вызывается, когда мы хотим изменить значение переменной machine_stat. Содержит битовые флаги.
 /obj/machinery/proc/set_machine_stat(new_value)
 	SHOULD_NOT_OVERRIDE(TRUE)
 
@@ -330,15 +339,15 @@
 	on_set_machine_stat(.)
 
 
-///Called when the value of `machine_stat` changes, so we can react to it.
+///Вызывается, когда значение `machine_stat` изменяется, чтобы мы могли отреагировать на это.
 /obj/machinery/proc/on_set_machine_stat(old_value)
 	PROTECTED_PROC(TRUE)
 
-	//From off to on.
+	//От выкл к вкл.
 	if((old_value & (NOPOWER|BROKEN|MAINT)) && !(machine_stat & (NOPOWER|BROKEN|MAINT)))
 		set_is_operational(TRUE)
 		return
-	//From on to off.
+	//От вкл к выкл.
 	if(machine_stat & (NOPOWER|BROKEN|MAINT))
 		set_is_operational(FALSE)
 
@@ -358,12 +367,12 @@
 	grant_random_uncommon_language(source = LANGUAGE_EMP)
 
 /**
- * Opens the machine.
+ * Открывает машину.
  *
- * Will update the machine icon and any user interfaces currently open.
- * Arguments:
- * * drop - Boolean. Whether to drop any stored items in the machine. Does not include components.
- * * density - Boolean. Whether to make the object dense when it's open.
+ * Обновит иконку машины и все открытые в данный момент пользовательские интерфейсы.
+ * Аргументы:
+ * * drop - Булево. Выбрасывать ли любые хранящиеся предметы в машине. Не включает компоненты.
+ * * density - Булево. Делать ли объект плотным, когда он открыт.
  */
 /obj/machinery/proc/open_machine(drop = TRUE, density_to_set = FALSE)
 	state_open = TRUE
@@ -373,35 +382,35 @@
 	update_appearance()
 
 /**
- * Drop every movable atom in the machine's contents list, including any components and circuit.
+ * Выбрасывает каждый подвижный атом из списка содержимого машины, включая любые компоненты и плату.
  */
 /obj/machinery/dump_contents()
-	// Start by calling the dump_inventory_contents proc. Will allow machines with special contents
-	// to handle their dropping.
+	// Начинаем с вызова процедуры dump_inventory_contents. Позволит машинам с особым содержимым
+	// обработать его сброс.
 	dump_inventory_contents()
 
-	// Then we can clean up and drop everything else.
+	// Затем мы можем очистить и выбросить всё остальное.
 	var/turf/this_turf = get_turf(src)
 	for(var/atom/movable/movable_atom in contents)
 		movable_atom.forceMove(this_turf)
 
-	// We'll have dropped the occupant, circuit and component parts as part of this.
+	// Мы выбросили обитателя, плату и компоненты как часть этого.
 	set_occupant(null)
 	circuit = null
 	LAZYCLEARLIST(component_parts)
 
 /**
- * Drop every movable atom in the machine's contents list that is not a component_part.
+ * Выбрасывает каждый подвижный атом из списка содержимого машины, который не является component_part.
  *
- * Proc does not drop components and will skip over anything in the component_parts list.
- * Call dump_contents() to drop all contents including components.
- * Arguments:
- * * subset - If this is not null, only atoms that are also contained within the subset list will be dropped.
+ * Процедура не выбрасывает компоненты и пропускает всё, что находится в списке component_parts.
+ * Вызовите dump_contents(), чтобы выбросить всё содержимое, включая компоненты.
+ * Аргументы:
+ * * subset - Если не null, только атомы, которые также содержатся в списке subset, будут выброшены.
  */
 /obj/machinery/proc/dump_inventory_contents(list/subset = null)
 	var/turf/this_turf = get_turf(src)
 	for(var/atom/movable/movable_atom in contents)
-		//so machines like microwaves dont dump out signalers after cooking
+		//чтобы машины вроде микроволновок не выкидывали сигнализаторы после готовки
 		if(wires && (movable_atom in assoc_to_values(wires.assemblies)))
 			continue
 
@@ -417,14 +426,14 @@
 			set_occupant(null)
 
 /**
- * Puts passed object in to user's hand
+ * Кладёт переданный объект в руку пользователя
  *
- * Puts the passed object in to the users hand if they are adjacent.
- * If the user is not adjacent then place the object on top of the machine.
+ * Кладёт переданный объект в руку пользователя, если они находятся рядом.
+ * Если пользователь не рядом, помещает объект наверх машины.
  *
- * Vars:
- * * object (obj) The object to be moved in to the users hand.
- * * user (mob/living) The user to recive the object
+ * Переменные:
+ * * object (obj) Объект, который нужно поместить в руку пользователя.
+ * * user (mob/living) Пользователь для получения объекта
  */
 /obj/machinery/proc/try_put_in_hand(obj/item/object, mob/living/user)
 	if(!issilicon(user) && in_range(src, user))
@@ -462,7 +471,7 @@
 		target.forceMove(src)
 	update_appearance()
 
-///updates the use_power var for this machine and updates its static power usage from its area to reflect the new value
+///обновляет переменную use_power для этой машины и обновляет её статическое потребление энергии от зоны, чтобы отразить новое значение
 /obj/machinery/proc/update_use_power(new_use_power)
 	SHOULD_CALL_PARENT(TRUE)
 	if(new_use_power == use_power)
@@ -492,7 +501,7 @@
 
 	return TRUE
 
-///updates the power channel this machine uses. removes the static power usage from the old channel and readds it to the new channel
+///обновляет канал питания, который использует эта машина. удаляет статическое потребление энергии из старого канала и добавляет его в новый канал
 /obj/machinery/proc/update_power_channel(new_power_channel)
 	SHOULD_CALL_PARENT(TRUE)
 	if(new_power_channel == power_channel)
@@ -509,7 +518,7 @@
 
 	return TRUE
 
-///internal proc that removes all static power usage from the current area
+///внутренняя процедура, которая удаляет всё статическое потребление энергии из текущей зоны
 /obj/machinery/proc/unset_static_power()
 	SHOULD_NOT_OVERRIDE(TRUE)
 
@@ -524,12 +533,12 @@
 	return old_usage
 
 /**
- * sets the power_usage linked to the specified use_power_mode to new_usage
- * e.g. update_mode_power_usage(ACTIVE_POWER_USE, 10) sets active_power_use = 10 and updates its power draw from the machines area if use_power == ACTIVE_POWER_USE
+ * устанавливает power_usage, связанный с указанным use_power_mode, в new_usage
+ * например, update_mode_power_usage(ACTIVE_POWER_USE, 10) устанавливает active_power_use = 10 и обновляет потребление энергии от зоны машины, если use_power == ACTIVE_POWER_USE
  *
- * Arguments:
- * * use_power_mode - the use_power power mode to change. if IDLE_POWER_USE changes idle_power_usage, ACTIVE_POWER_USE changes active_power_usage
- * * new_usage - the new value to set the specified power mode var to
+ * Аргументы:
+ * * use_power_mode - режим питания use_power для изменения. если IDLE_POWER_USE, меняет idle_power_usage, ACTIVE_POWER_USE меняет active_power_usage
+ * * new_usage - новое значение для установки переменной указанного режима питания
  */
 /obj/machinery/proc/update_mode_power_usage(use_power_mode, new_usage)
 	SHOULD_CALL_PARENT(TRUE)
@@ -537,7 +546,7 @@
 		stack_trace("trying to set the power usage associated with NO_POWER_USE in update_mode_power_usage()!")
 		return FALSE
 
-	unset_static_power() //completely remove our static_power_usage from our area, then readd new_usage
+	unset_static_power() //полностью удалить наше static_power_usage из зоны, затем добавить new_usage
 
 	switch(use_power_mode)
 		if(IDLE_POWER_USE)
@@ -555,27 +564,27 @@
 
 	return TRUE
 
-///Get a valid powered area to reference for power use, mainly for wall-mounted machinery that isn't always mapped directly in a powered location.
+///Получить действительную запитанную зону для ссылки на использование энергии, в основном для настенного оборудования, которое не всегда мапится непосредственно в запитанном месте.
 /obj/machinery/proc/get_room_area()
 	var/area/machine_area = get_area(src)
 	if(isnull(machine_area))
 		return null // ??
 
-	// check our own loc first to see if its a powered area
+	// сначала проверьте наш собственный лок, чтобы увидеть, является ли он запитанной зоной
 	if(!machine_area.always_unpowered)
 		return machine_area
 
-	// loc area wasn't good, checking adjacent wall for a good area to use
+	// зона локации не подошла, проверяем смежную стену на предмет хорошей зоны для использования
 	var/turf/mounted_wall = get_step(src, dir)
 	if(isclosedturf(mounted_wall))
 		var/area/wall_area = get_area(mounted_wall)
 		if(!wall_area.always_unpowered)
 			return wall_area
 
-	// couldn't find a proper powered area on loc or adjacent wall, defaulting back to loc and blaming mappers
+	// не смогли найти подходящую запитанную зону на локации или смежной стене, возвращаемся к локации и виним мапперов
 	return machine_area
 
-///makes this machine draw power from its area according to which use_power mode it is set to
+///заставляет эту машину потреблять энергию из своей зоны в соответствии с тем, в какой режим use_power она установлена
 /obj/machinery/proc/update_current_power_usage()
 	if(static_power_usage)
 		unset_static_power()
@@ -597,7 +606,7 @@
 
 	return TRUE
 
-///Called when we want to change the value of the `is_operational` variable. Boolean.
+///Вызывается, когда мы хотим изменить значение переменной `is_operational`. Булево.
 /obj/machinery/proc/set_is_operational(new_value)
 	SHOULD_NOT_OVERRIDE(TRUE)
 
@@ -608,13 +617,13 @@
 	on_set_is_operational(.)
 
 
-///Called when the value of `is_operational` changes, so we can react to it.
+///Вызывается, когда значение `is_operational` изменяется, чтобы мы могли отреагировать на это.
 /obj/machinery/proc/on_set_is_operational(old_value)
 	PROTECTED_PROC(TRUE)
 
 	return
 
-///Called when we want to change the value of the `panel_open` variable. Boolean.
+///Вызывается, когда мы хотим изменить значение переменной `panel_open`. Булево.
 /obj/machinery/proc/set_panel_open(new_value)
 	SHOULD_NOT_OVERRIDE(TRUE)
 
@@ -624,13 +633,13 @@
 	panel_open = new_value
 	on_set_panel_open(old_value)
 
-///Called when the value of `panel_open` changes, so we can react to it.
+///Вызывается, когда значение `panel_open` изменяется, чтобы мы могли отреагировать на это.
 /obj/machinery/proc/on_set_panel_open(old_value)
 	PROTECTED_PROC(TRUE)
 
 	return
 
-/// Toggles the panel_open var. Defined for convienience
+/// Переключает переменную panel_open. Определено для удобства
 /obj/machinery/proc/toggle_panel_open()
 	SHOULD_NOT_OVERRIDE(TRUE)
 
@@ -640,7 +649,7 @@
 	if(QDELETED(user))
 		return FALSE
 
-	if((machine_stat & (NOPOWER|BROKEN)) && !(interaction_flags_machine & INTERACT_MACHINE_OFFLINE)) // Check if the machine is broken, and if we can still interact with it if so
+	if((machine_stat & (NOPOWER|BROKEN)) && !(interaction_flags_machine & INTERACT_MACHINE_OFFLINE)) // Проверяем, сломана ли машина, и можем ли мы с ней взаимодействовать, если да
 		return FALSE
 
 	var/try_use_signal = SEND_SIGNAL(user, COMSIG_TRY_USE_MACHINE, src) | SEND_SIGNAL(src, COMSIG_TRY_USE_MACHINE, user)
@@ -648,39 +657,39 @@
 		return FALSE
 
 	if(isAdminGhostAI(user))
-		return TRUE //the Gods have unlimited power and do not care for things such as range or blindness
+		return TRUE //Боги обладают неограниченной властью и не заботятся о таких вещах, как дальность или слепота
 
 	if(!isliving(user))
-		return FALSE //no ghosts allowed, sorry
+		return FALSE //призракам нельзя, извините
 
 	if(!HAS_SILICON_ACCESS(user) && !user.can_hold_items())
-		return FALSE //spiders gtfo
+		return FALSE //пауки, брысь
 
-	if(HAS_SILICON_ACCESS(user)) // If we are a silicon, make sure the machine allows silicons to interact with it
+	if(HAS_SILICON_ACCESS(user)) // Если мы силикон, убедимся, что машина позволяет силиконам взаимодействовать с ней
 		if(!(interaction_flags_machine & INTERACT_MACHINE_ALLOW_SILICON))
 			return FALSE
 
 		if(panel_open && !(interaction_flags_machine & INTERACT_MACHINE_OPEN) && !(interaction_flags_machine & INTERACT_MACHINE_OPEN_SILICON))
 			return FALSE
 
-		return user.can_interact_with(src) //AIs don't care about petty mortal concerns like needing to be next to a machine to use it, but borgs do care somewhat
+		return user.can_interact_with(src) //ИИ не заботятся о мелких смертных заботах вроде необходимости быть рядом с машиной, чтобы использовать её, но киборги немного заботятся
 
 	. = ..()
 	if(!.)
 		return FALSE
 
 	if((interaction_flags_machine & INTERACT_MACHINE_REQUIRES_SIGHT) && user.is_blind())
-		to_chat(user, span_warning("This machine requires sight to use."))
+		to_chat(user, span_warning("Необходимо зрение, чтобы использовать это."))
 		return FALSE
 
-	// machines have their own lit up display screens and LED buttons so we don't need to check for light
+	// машины имеют свои светящиеся экраны дисплеев и LED кнопки, поэтому нам не нужно проверять свет
 	if((interaction_flags_machine & INTERACT_MACHINE_REQUIRES_LITERACY) && !user.can_read(src, READING_CHECK_LITERACY))
 		return FALSE
 
 	if(panel_open && !(interaction_flags_machine & INTERACT_MACHINE_OPEN))
 		return FALSE
 
-	if(interaction_flags_machine & INTERACT_MACHINE_REQUIRES_SILICON) //if the user was a silicon, we'd have returned out earlier, so the user must not be a silicon
+	if(interaction_flags_machine & INTERACT_MACHINE_REQUIRES_SILICON) //если пользователь был силиконом, мы бы вышли раньше, значит, пользователь не должен быть силиконом
 		return FALSE
 
 	if(interaction_flags_machine & INTERACT_MACHINE_REQUIRES_STANDING)
@@ -688,11 +697,11 @@
 		if(!(living_user.mobility_flags & MOBILITY_MOVE))
 			return FALSE
 
-	return TRUE // If we passed all of those checks, woohoo! We can interact with this machine.
+	return TRUE // Если мы прошли все эти проверки, ура! Мы можем взаимодействовать с этой машиной.
 
 /**
- * Checks for NAP non aggression principle, an anarcho capitalist event triggered by admins
- * where using machines cost money
+ * Проверяет нарушение НАП (принцип ненападения), анархо-капиталистического события, запускаемого админами,
+ * где использование машин стоит денег
  */
 /obj/machinery/proc/check_nap_violations()
 	PROTECTED_PROC(TRUE)
@@ -705,16 +714,16 @@
 	var/mob/living/occupant_mob = occupant
 	var/obj/item/card/id/occupant_id = occupant_mob.get_idcard(TRUE)
 	if(!occupant_id)
-		say("Customer NAP Violation: No ID card found.")
+		say("Нарушение НАП Клиентом: ID карта не найдена.")
 		nap_violation(occupant_mob)
 		return FALSE
 	var/datum/bank_account/insurance = occupant_id.registered_account
 	if(!insurance)
-		say("Customer NAP Violation: No bank account found.")
+		say("Нарушение НАП Клиентом: Банковский счет не найден.")
 		nap_violation(occupant_mob)
 		return FALSE
 	if(!insurance.adjust_money(-fair_market_price))
-		say("Customer NAP Violation: Unable to pay.")
+		say("Нарушение НАП Клиентом: Невозможно оплатить.")
 		nap_violation(occupant_mob)
 		return FALSE
 	var/datum/bank_account/department_account = SSeconomy.get_dep_account(payment_department)
@@ -723,10 +732,10 @@
 	return TRUE
 
 /**
- * Actions to take in case of NAP violation
- * Arguments
+ * Действия, предпринимаемые в случае нарушения НАП
+ * Аргументы
  *
- * * mob/violator - the mob who violated the NAP aggrement
+ * * mob/violator - моб, нарушивший соглашение НАП
  */
 /obj/machinery/proc/nap_violation(mob/violator)
 	PROTECTED_PROC(TRUE)
@@ -735,7 +744,7 @@
 
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-//Return a non FALSE value to interrupt attack_hand propagation to subtypes.
+//Верните значение, отличное от FALSE, чтобы прервать распространение attack_hand к подтипам.
 /obj/machinery/interact(mob/user)
 	update_last_used(user)
 	return ..()
@@ -744,8 +753,8 @@
 	var/mob/user = ui.user
 	add_fingerprint(user)
 	update_last_used(user)
-	if(isAI(user) && !SScameras.is_visible_by_cameras(get_turf(src))) //We check if they're an AI specifically here, so borgs/adminghosts/human wand can still access off-camera stuff.
-		to_chat(user, span_warning("You can no longer connect to this device!"))
+	if(isAI(user) && !SScameras.is_visible_by_cameras(get_turf(src))) //Мы проверяем конкретно ИИ здесь, так что киборги/админские призраки/человеческие палочки всё ещё могут получить доступ к вещам вне камер.
+		to_chat(user, span_warning("Вы больше не можете подключиться к этому устройству!"))
 		return FALSE
 	return ..()
 
@@ -769,17 +778,17 @@
 	user.do_attack_animation(src, ATTACK_EFFECT_PUNCH)
 	var/damage = take_damage(damage_amount = 4, damage_type = BRUTE, damage_flag = MELEE, sound_effect = TRUE, attack_dir = get_dir(user, src))
 
-	var/hit_with_what_noun = "paws"
+	var/hit_with_what_noun = "лапами"
 	var/obj/item/bodypart/arm/arm = user.get_active_hand()
 	if(!isnull(arm))
 		hit_with_what_noun = arm.appendage_noun // hit with "their hand"
-		if(user.usable_hands > 1)
-			hit_with_what_noun += plural_s(hit_with_what_noun) // hit with "their hands"
+		//if(user.usable_hands > 1)
+		//	hit_with_what_noun += plural_s(hit_with_what_noun) // hit with "their hands"
 
 	user.visible_message(
-		span_danger("[user] smashes [src] with [user.p_their()] [hit_with_what_noun][damage ? "." : ", [no_damage_feedback]!"]"),
-		span_danger("You smash [src] with your [hit_with_what_noun][damage ? "." : ", [no_damage_feedback]!"]"),
-		span_hear("You hear a [damage ? "smash" : "thud"]."),
+		span_danger("[user] бьёт [declent_ru(ACCUSATIVE)] [user.p_their()] [hit_with_what_noun][damage ? "." : ", [no_damage_feedback]!"]"),
+		span_danger("Вы бьёте [declent_ru(ACCUSATIVE)] своими [hit_with_what_noun][damage ? "." : ", [no_damage_feedback]!"]"),
+		span_hear("Вы слышите [damage ? "удар" : "глухой стук"]."),
 		COMBAT_MESSAGE_RANGE,
 	)
 	return TRUE
@@ -795,14 +804,14 @@
 	if(!(interaction_flags_machine & INTERACT_MACHINE_ALLOW_SILICON) && !isAdminGhostAI(user))
 		return FALSE
 
-	if(!Adjacent(user) || !can_buckle || !has_buckled_mobs()) //so that borgs (but not AIs, sadly (perhaps in a future PR?)) can unbuckle people from machines
+	if(!Adjacent(user) || !can_buckle || !has_buckled_mobs()) //чтобы киборги (но не ИИ, к сожалению (возможно, в будущем PR?)) могли отстёгивать людей от машин
 		return _try_interact(user)
 
 	if(length(buckled_mobs) <= 1)
 		if(user_unbuckle_mob(buckled_mobs[1],user))
 			return TRUE
 
-	var/unbuckled = tgui_input_list(user, "Who do you wish to unbuckle?", "Unbuckle", sort_names(buckled_mobs))
+	var/unbuckled = tgui_input_list(user, "Кого вы хотите отстегнуть?", "Отстегнуть", sort_names(buckled_mobs))
 	if(isnull(unbuckled))
 		return FALSE
 	if(user_unbuckle_mob(unbuckled,user))
@@ -818,7 +827,7 @@
 			return FALSE
 		if((onSyndieBase() && loc != user))
 			return FALSE
-	if(iscyborg(user))// For some reason attack_robot doesn't work
+	if(iscyborg(user))// По какой-то причине attack_robot не работает
 		return attack_robot(user)
 	return _try_interact(user)
 
@@ -838,7 +847,7 @@
 	if(SEND_SIGNAL(user, COMSIG_TRY_USE_MACHINE, src) & COMPONENT_CANT_USE_MACHINE_TOOLS)
 		return ITEM_INTERACT_BLOCKING
 
-	//takes priority in case material container or other atoms that hook onto item interaction signals won't give it a chance
+	//имеет приоритет на случай, если контейнер материалов или другие атомы, которые перехватывают сигналы взаимодействия с предметами, не дадут этому шанса
 	if(istype(tool, /obj/item/storage/part_replacer))
 		update_last_used(user)
 		return tool.interact_with_atom(src, user, modifiers)
@@ -860,7 +869,7 @@
 
 /obj/machinery/proc/RefreshParts()
 	SHOULD_CALL_PARENT(TRUE)
-	//reset to baseline
+	//сброс к исходному
 	idle_power_usage = initial(idle_power_usage)
 	active_power_usage = initial(active_power_usage)
 	if(!component_parts || !component_parts.len)
@@ -885,9 +894,9 @@
 	if(!.)
 		return
 	crowbar.play_tool_sound(src, 50)
-	visible_message(span_notice("[usr] pries open \the [src]."), span_notice("You pry open \the [src]."))
+	visible_message(span_notice("[usr] поддевает и открывает [src]."), span_notice("Вы поддеваете и открываете [src]."))
 	open_machine(density_to_set = open_density)
-	if (close_after_pry) //Should it immediately close after prying? (If not, it must be closed elsewhere)
+	if (close_after_pry) //Должно ли оно немедленно закрываться после поддевания? (Если нет, оно должно быть закрыто в другом месте)
 		close_machine(density_to_set = closed_density)
 
 /obj/machinery/proc/default_deconstruction_crowbar(obj/item/crowbar, ignore_panel = 0, custom_deconstruct = FALSE)
@@ -903,8 +912,8 @@
 	SHOULD_NOT_OVERRIDE(TRUE)
 
 	if(obj_flags & NO_DEBRIS_AFTER_DECONSTRUCTION)
-		dump_inventory_contents() //drop stuff we consider important
-		return //Just delete us, no need to call anything else.
+		dump_inventory_contents() //выбросить вещи, которые мы считаем важными
+		return //Просто удалите нас, не нужно вызывать что-либо ещё.
 
 	on_deconstruction(disassembled)
 
@@ -912,8 +921,8 @@
 		spawn_frame(disassembled)
 
 	if(!LAZYLEN(component_parts))
-		dump_contents() //drop everything inside us
-		return //we don't have any parts.
+		dump_contents() //выбросить всё внутри нас
+		return //у нас нет никаких частей.
 
 	for(var/part in component_parts)
 		if(istype(part, /datum/stock_part))
@@ -925,34 +934,34 @@
 			obj_part.forceMove(loc)
 			if(istype(obj_part, /obj/item/circuitboard/machine))
 				var/obj/item/circuitboard/machine/board = obj_part
-				for(var/component in board.req_components) //loop through all stack components and spawn them
+				for(var/component in board.req_components) //цикл по всем компонентам стека и их создание
 					if(!ispath(component, /obj/item/stack))
 						continue
 					var/obj/item/stack/stack_path = component
 					new stack_path(loc, board.req_components[component])
 	LAZYCLEARLIST(component_parts)
 
-	//drop everything inside us. we do this last to give machines a chance
-	//to handle their contents before we dump them
+	//выбросить всё внутри нас. мы делаем это в последнюю очередь, чтобы дать машинам шанс
+	//обработать их содержимое перед тем, как мы его выбросим
 	dump_contents()
 
 /**
- * Spawns a frame where this machine is. If the machine was not disassmbled, the
- * frame is spawned damaged. If the frame couldn't exist on this turf, it's smashed
- * down to metal sheets.
+ * Создаёт каркас там, где находится эта машина. Если машина не была разобрана,
+ * каркас создаётся повреждённым. Если каркас не может существовать на этом тайле, он разбивается
+ * в металлические листы.
  *
- * Arguments:
- * * disassembled - If FALSE, the machine was destroyed instead of disassembled and the frame spawns at reduced integrity.
+ * Аргументы:
+ * * disassembled - Если FALSE, машина была уничтожена, а не разобрана, и каркас создаётся с уменьшенной прочностью.
  */
 /obj/machinery/proc/spawn_frame(disassembled)
 	var/obj/structure/frame/machine/new_frame = new /obj/structure/frame/machine(loc)
 
 	new_frame.state = FRAME_STATE_WIRED
 
-	// If the new frame shouldn't be able to fit here due to the turf being blocked, spawn the frame deconstructed.
+	// Если новый каркас не должен умещаться здесь из-за заблокированного тайла, создаём каркас разобранным.
 	if(isturf(loc))
 		var/turf/machine_turf = loc
-		// We're spawning a frame before this machine is qdeleted, so we want to ignore it. We've also just spawned a new frame, so ignore that too.
+		// Мы создаём каркас до того, как эта машина будет qdeleted, поэтому мы хотим игнорировать её. Мы также только что создали новый каркас, поэтому игнорируем и его.
 		if(machine_turf.is_blocked_turf(TRUE, source_atom = new_frame, ignore_atoms = list(src)))
 			new_frame.deconstruct(disassembled)
 			return
@@ -961,7 +970,7 @@
 	. = new_frame
 	new_frame.set_anchored(anchored)
 	if(!disassembled)
-		new_frame.update_integrity(new_frame.max_integrity * 0.5) //the frame is already half broken
+		new_frame.update_integrity(new_frame.max_integrity * 0.5) //каркас уже наполовину сломан
 	transfer_fingerprints_to(new_frame)
 
 
@@ -991,18 +1000,18 @@
 		set_occupant(null)
 		update_appearance()
 
-	// The circuit should also be in component parts, so don't early return.
+	// Плата также должна быть в component parts, так что не выходим раньше времени.
 	if(gone == circuit)
 		circuit = null
 	if((gone in component_parts) && !QDELETED(src))
 		component_parts -= gone
-		// It would be unusual for a component_part to be qdel'd ordinarily.
+		// Было бы необычно, если бы component_part был qdel'нут обычным образом.
 		deconstruct(FALSE)
 
 /**
- * This should be called before mass qdeling components to make space for replacements.
- * If not done, things will go awry as Exited() destroys the machine when it detects
- * even a single component exiting the atom.
+ * Это должно быть вызвано перед массовым qdeling компонентов, чтобы освободить место для замены.
+ * Если этого не сделать, всё пойдет наперекосяк, так как Exited() уничтожает машину, когда обнаруживает
+ * выход даже одного компонента из атома.
  */
 /obj/machinery/proc/clear_components()
 	if(!component_parts)
@@ -1021,10 +1030,10 @@
 	toggle_panel_open()
 	if(panel_open)
 		icon_state = icon_state_open
-		to_chat(user, span_notice("You open the maintenance hatch of [src]."))
+		to_chat(user, span_notice("Вы открываете техническую панель [declent_ru(GENITIVE)]."))
 	else
 		icon_state = icon_state_closed
-		to_chat(user, span_notice("You close the maintenance hatch of [src]."))
+		to_chat(user, span_notice("Вы закрываете техническую панель [declent_ru(GENITIVE)]."))
 	return TRUE
 
 /obj/machinery/proc/default_change_direction_wrench(mob/user, obj/item/wrench)
@@ -1033,7 +1042,7 @@
 
 	wrench.play_tool_sound(src, 50)
 	setDir(turn(dir,-90))
-	to_chat(user, span_notice("You rotate [src]."))
+	to_chat(user, span_notice("Вы поворачиваете [declent_ru(ACCUSATIVE)]."))
 	SEND_SIGNAL(src, COMSIG_MACHINERY_DEFAULT_ROTATE_WRENCH, user, wrench)
 	return TRUE
 
@@ -1052,25 +1061,25 @@
 	if(!machine_board)
 		return FALSE
 	/**
-	 * sorting is very important especially because we are breaking out when required part is found in the inner for loop
-	 * if the rped first picked up a tier 3 part AND THEN a tier 4 part
-	 * tier 3 would be installed and the loop would break and check for the next required component thus
-	 * completly ignoring the tier 4 component inside
-	 * we also ignore stack components inside the RPED cause we dont exchange that
+	 * сортировка очень важна, особенно потому что мы выходим, когда требуемая часть найдена во внутреннем цикле for
+	 * если rped сначала подобрал деталь 3-го тира, А ЗАТЕМ деталь 4-го тира
+	 * тир 3 будет установлен, цикл прервется и проверит следующий требуемый компонент, таким образом
+	 * полностью игнорируя компонент 4-го тира внутри
+	 * мы также игнорируем компоненты стека внутри RPED, потому что мы их не обмениваем
 	 */
 	var/shouldplaysound = FALSE
 	var/list/part_list = replacer_tool.get_sorted_parts(ignore_stacks = TRUE)
 	if(!part_list.len)
 		return FALSE
 	for(var/primary_part_base in component_parts)
-		//we exchanged all we could time to bail
+		//мы обменяли всё, что могли, пора сворачиваться
 		if(!part_list.len)
 			break
 
 		var/current_rating
 		var/required_type
 
-		//we dont exchange circuitboards cause thats dumb
+		//мы не меняем платы, потому что это тупо
 		if(istype(primary_part_base, /obj/item/circuitboard))
 			continue
 		else if(istype(primary_part_base, /datum/stock_part))
@@ -1088,16 +1097,16 @@
 		for(var/obj/item/secondary_part in part_list)
 			if(!istype(secondary_part, required_type))
 				continue
-			// If it's a corrupt or rigged cell, attempting to send it through Bluespace could have unforeseen consequences.
+			// Если это повреждённая или подстроенная ячейка, попытка отправить её через Блюспейс может иметь непредвиденные последствия.
 			if(istype(secondary_part, /obj/item/stock_parts/power_store/cell) && works_from_distance)
 				var/obj/item/stock_parts/power_store/cell/checked_cell = secondary_part
-				// If it's rigged or corrupted, max the charge. Then explode it.
+				// Если она подстроена или повреждена, максимизируем заряд. Затем взрываем её.
 				if(checked_cell.rigged || checked_cell.corrupted)
 					checked_cell.charge = checked_cell.maxcharge
 					checked_cell.explode()
 					break
 			if(secondary_part.get_part_rating() > current_rating)
-				//store name of part incase we qdel it below
+				//сохранить имя части на случай, если мы удалим её ниже
 				var/secondary_part_name = secondary_part.name
 				if(replacer_tool.atom_storage.attempt_remove(secondary_part, src))
 					if (istype(primary_part_base, /datum/stock_part))
@@ -1105,12 +1114,12 @@
 						if (isnull(stock_part_datum))
 							CRASH("[secondary_part] ([secondary_part.type]) did not have a stock part datum (was trying to find [primary_part_base])")
 						component_parts += stock_part_datum
-						part_list -= secondary_part //have to manually remove cause we are no longer refering replacer_tool.contents
+						part_list -= secondary_part //нужно вручную удалить, так как мы больше не ссылаемся на replacer_tool.contents
 						qdel(secondary_part)
 					else
 						component_parts += secondary_part
 						secondary_part.forceMove(src)
-						part_list -= secondary_part //have to manually remove cause we are no longer refering replacer_tool.contents
+						part_list -= secondary_part //нужно вручную удалить, так как мы больше не ссылаемся на replacer_tool.contents
 
 				component_parts -= primary_part_base
 
@@ -1123,8 +1132,8 @@
 					physical_part = primary_part_base
 
 				replacer_tool.atom_storage.attempt_insert(physical_part, user, TRUE, force = STORAGE_SOFT_LOCKED)
-				to_chat(user, span_notice("[capitalize(physical_part.name)] replaced with [secondary_part_name]."))
-				shouldplaysound = TRUE //Only play the sound when parts are actually replaced!
+				to_chat(user, span_notice("[capitalize(physical_part.name)] заменён на [secondary_part_name]."))
+				shouldplaysound = TRUE //Воспроизводить звук только при фактической замене деталей!
 				break
 
 	RefreshParts()
@@ -1145,12 +1154,12 @@
 		else
 			component_ref = component_part
 			for(var/obj/item/counted_part in part_count)
-				//e.g. 2 beakers though they have the same type are still 2 different objects so component_ref wont keep them unique so we look for that type ourselves and increment it
+				//например, 2 мензурки, хотя они имеют один и тот же тип, всё равно являются 2 разными объектами, поэтому component_ref не будет сохранять их уникальность, так что мы ищем этот тип сами и увеличиваем его
 				if(istype(counted_part, component_ref.type))
 					part_count[counted_part]++
 					component_ref = null
 					break
-			//looks like we already counted an type of this obj reference, time to bail
+			//похоже, мы уже посчитали тип этой ссылки на объект, пора выходить
 			if(!component_ref)
 				continue
 
@@ -1159,7 +1168,7 @@
 			continue
 		part_count[component_ref] = 1
 
-		// we infer the required stack stuff inside the machine from the circuitboards requested components
+		// мы делаем вывод о требуемых стеках внутри машины из запрошенных компонентов платы
 		if(istype(component_ref, /obj/item/circuitboard/machine))
 			var/obj/item/circuitboard/machine/board = component_ref
 			for(var/component in board.req_components)
@@ -1168,12 +1177,12 @@
 				part_count[component] = board.req_components[component]
 
 
-	var/text = span_notice("It contains the following parts:")
+	var/text = span_notice("Содержит следующие детали:")
 	for(var/component_part in part_count)
 		var/part_name
 		var/icon/html_icon
 		var/icon_state
-		//infer name & icon of part. stacks are just type paths so we have to get their initial values
+		//вывести имя и иконку части. стеки — это просто пути типов, поэтому нам нужно получить их начальные значения
 		if(ispath(component_part, /obj/item/stack))
 			var/obj/item/stack/stack_ref = component_part
 			part_name = initial(stack_ref.singular_name)
@@ -1184,42 +1193,42 @@
 			part_name = part.name
 			html_icon = part.icon
 			icon_state = part.icon_state
-		//merge icon & name into text
-		text += span_notice("[icon2html(html_icon, user, icon_state)] [part_count[component_part]] [part_name]\s.")
+		//объединить иконку и имя в текст
+		text += span_notice("[icon2html(html_icon, user, icon_state)] [part_count[component_part]] [part_name].")
 
 	return text
 
 /obj/machinery/examine(mob/user)
 	. = ..()
 	if(machine_stat & BROKEN)
-		. += span_notice("It looks broken and non-functional.")
+		. += span_notice("Выглядит сломанным и нефункциональным.")
 	if(!(resistance_flags & INDESTRUCTIBLE))
 		var/healthpercent = (atom_integrity/max_integrity) * 100
 		switch(healthpercent)
 			if(50 to 99)
-				. += "It looks slightly damaged."
+				. += "Выглядит слегка повреждённым."
 			if(25 to 50)
-				. += "It appears heavily damaged."
+				. += "Выглядит сильно повреждённым."
 			if(0 to 25)
-				. += span_warning("It's falling apart!")
+				. += span_warning("Разваливается на части!")
 
 /obj/machinery/examine_descriptor(mob/user)
-	return "machine"
+	return "механизм"
 
 /obj/machinery/examine_more(mob/user)
 	. = ..()
 	if(HAS_TRAIT(user, TRAIT_RESEARCH_SCANNER) && component_parts)
 		. += display_parts(user)
 
-//called on machinery construction (i.e from frame to machinery) but not on initialization
+//вызывается при строительстве техники (т.е. из каркаса в технику), но не при инициализации
 /obj/machinery/proc/on_construction(mob/user)
 	return
 
 /**
- * called on deconstruction before the final deletion
- * Arguments
+ * вызывается при разборке перед окончательным удалением
+ * Аргументы
  *
- * * disassembled - if TRUE means we used tools to deconstruct it, FALSE means it got destroyed by other means
+ * * disassembled - если TRUE, значит мы использовали инструменты для разборки, FALSE означает, что оно было уничтожено другими способами
  */
 /obj/machinery/proc/on_deconstruction(disassembled)
 	PROTECTED_PROC(TRUE)
@@ -1235,8 +1244,8 @@
 		power -= power * 5e-4
 	return ..()
 
-/obj/machinery/proc/adjust_item_drop_location(atom/movable/dropped_atom) // Adjust item drop location to a 3x3 grid inside the tile, returns slot id from 0 to 8
-	var/md5 = md5(dropped_atom.name) // Oh, and it's deterministic too. A specific item will always drop from the same slot.
+/obj/machinery/proc/adjust_item_drop_location(atom/movable/dropped_atom) // Отрегулировать место сброса предмета по сетке 3x3 внутри тайла, возвращает id слота от 0 до 8
+	var/md5 = md5(dropped_atom.name) // О, и это тоже детерминировано. Конкретный предмет всегда будет падать из одного и того же слота.
 	for (var/i in 1 to 32)
 		. += hex2num(md5[i])
 	. = . % 9
@@ -1260,13 +1269,13 @@
 	return ..()
 
 /**
- * Alerts the AI that a hack is in progress.
+ * Оповещает ИИ о том, что происходит взлом.
  *
- * Sends all AIs a message that a hack is occurring.  Specifically used for space ninja tampering as this proc was originally in the ninja files.
- * However, the proc may also be used elsewhere.
+ * Отправляет всем ИИ сообщение о том, что происходит взлом. Специально используется для вмешательства космического ниндзя, так как эта процедура изначально была в файлах ниндзя.
+ * Однако, процедура может использоваться и в других местах.
  */
 /obj/machinery/proc/AI_notify_hack()
-	var/alertstr = span_userdanger("Network Alert: Hacking attempt detected[get_area(src)?" in [get_area_name(src, TRUE)]":". Unable to pinpoint location"].")
+	var/alertstr = span_userdanger("Сетевая тревога: Обнаружена попытка взлома[get_area(src)?" в [get_area_name(src, TRUE)]":". Невозможно определить местоположение"].")
 	for(var/mob/living/silicon/ai/AI in GLOB.player_list)
 		to_chat(AI, alertstr)
 
@@ -1275,6 +1284,6 @@
 		last_used_time = world.time
 		last_user_mobtype = user.type
 
-/// Called if this machine is supposed to be a sabotage machine objective.
+/// Вызывается, если эта машина должна быть целью саботажа.
 /obj/machinery/proc/add_as_sabotage_target()
 	return
