@@ -1,6 +1,6 @@
 /obj/item/storage/belt
 	name = "not actually a toolbelt"
-	desc = "Can hold various things. This is the base type of /belt, are you sure you should have this?"
+	desc = "Может хранить разные вещи. Это базовый тип /belt, вы уверены, что он у вас должен быть?"
 	icon = 'icons/obj/clothing/belts.dmi'
 	icon_state = "utility"
 	inhand_icon_state = "utility"
@@ -9,15 +9,25 @@
 	righthand_file = 'icons/mob/inhands/equipment/belt_righthand.dmi'
 	abstract_type = /obj/item/storage/belt
 	slot_flags = ITEM_SLOT_BELT
-	attack_verb_continuous = list("whips", "lashes", "disciplines")
-	attack_verb_simple = list("whip", "lash", "discipline")
+	attack_verb_continuous = list("хлещет", "сечёт", "дисциплинирует")
+	attack_verb_simple = list("хлестнуть", "высечь", "дисциплинировать")
 	max_integrity = 300
 	equip_sound = 'sound/items/equip/toolbelt_equip.ogg'
 	w_class = WEIGHT_CLASS_BULKY
 	var/content_overlays = FALSE //If this is true, the belt will gain overlays based on what it's holding
 
+/obj/item/storage/belt/get_ru_names()
+	return list(
+		NOMINATIVE = "не совсем пояс для инструментов",
+		GENITIVE = "не совсем пояса для инструментов",
+		DATIVE = "не совсем поясу для инструментов",
+		ACCUSATIVE = "не совсем пояс для инструментов",
+		INSTRUMENTAL = "не совсем поясом для инструментов",
+		PREPOSITIONAL = "не совсем поясе для инструментов",
+	)
+
 /obj/item/storage/belt/suicide_act(mob/living/carbon/user)
-	user.visible_message(span_suicide("[user] begins belting [user.p_them()]self with \the [src]! It looks like [user.p_theyre()] trying to commit suicide!"))
+	user.visible_message(span_suicide("[user] начинает пороть себя [declent_ru(INSTRUMENTAL)]! Похоже, [user.p_theyre()] пытается совершить суицид!"))
 	return BRUTELOSS
 
 /obj/item/storage/belt/update_overlays()
@@ -34,7 +44,7 @@
 
 /obj/item/storage/belt/utility
 	name = "toolbelt" //Carn: utility belt is nicer, but it bamboozles the text parsing.
-	desc = "Holds tools."
+	desc = "Хранит инструменты."
 	icon_state = "utility"
 	inhand_icon_state = "utility"
 	worn_icon_state = "utility"
@@ -44,12 +54,32 @@
 	pickup_sound = 'sound/items/handling/toolbelt_pickup.ogg'
 	storage_type = /datum/storage/utility_belt
 
+/obj/item/storage/belt/utility/get_ru_names()
+	return list(
+		NOMINATIVE = "пояс для инструментов",
+		GENITIVE = "пояса для инструментов",
+		DATIVE = "поясу для инструментов",
+		ACCUSATIVE = "пояс для инструментов",
+		INSTRUMENTAL = "поясом для инструментов",
+		PREPOSITIONAL = "поясе для инструментов",
+	)
+
 /obj/item/storage/belt/utility/chief
 	name = "chief engineer's toolbelt"
-	desc = "Holds tools, looks snazzy."
+	desc = "Хранит инструменты, выглядит стильно."
 	icon_state = "utility_ce"
 	inhand_icon_state = "utility_ce"
 	worn_icon_state = "utility_ce"
+
+/obj/item/storage/belt/utility/chief/get_ru_names()
+	return list(
+		NOMINATIVE = "пояс главного инженера",
+		GENITIVE = "пояса главного инженера",
+		DATIVE = "поясу главного инженера",
+		ACCUSATIVE = "пояс главного инженера",
+		INSTRUMENTAL = "поясом главного инженера",
+		PREPOSITIONAL = "поясе главного инженера",
+	)
 
 /obj/item/storage/belt/utility/chief/full
 	preload = TRUE
@@ -189,7 +219,7 @@
 
 /obj/item/storage/belt/medical
 	name = "medical belt"
-	desc = "Can hold various medical equipment."
+	desc = "Может хранить различное медицинское оборудование."
 	icon_state = "medical"
 	inhand_icon_state = "medical"
 	worn_icon_state = "medical"
@@ -197,12 +227,32 @@
 	pickup_sound = 'sound/items/handling/toolbelt_pickup.ogg'
 	storage_type = /datum/storage/medical_belt
 
+/obj/item/storage/belt/medical/get_ru_names()
+	return list(
+		NOMINATIVE = "медицинский пояс",
+		GENITIVE = "медицинского пояса",
+		DATIVE = "медицинскому поясу",
+		ACCUSATIVE = "медицинский пояс",
+		INSTRUMENTAL = "медицинским поясом",
+		PREPOSITIONAL = "медицинском поясе",
+	)
+
 /obj/item/storage/belt/medical/paramedic
 	name = "EMT belt"
 	icon_state = "emt"
 	inhand_icon_state = "security"
 	worn_icon_state = "emt"
 	preload = TRUE
+
+/obj/item/storage/belt/medical/paramedic/get_ru_names()
+	return list(
+		NOMINATIVE = "пояс парамедика",
+		GENITIVE = "пояса парамедика",
+		DATIVE = "поясу парамедика",
+		ACCUSATIVE = "пояс парамедика",
+		INSTRUMENTAL = "поясом парамедика",
+		PREPOSITIONAL = "поясе парамедика",
+	)
 
 /obj/item/storage/belt/medical/paramedic/PopulateContents()
 	SSwardrobe.provide_type(/obj/item/sensor_device, src)
@@ -254,12 +304,22 @@
 
 /obj/item/storage/belt/security
 	name = "security belt"
-	desc = "Can hold security gear like handcuffs and flashes."
+	desc = "Может хранить снаряжение охраны, такое как наручники и вспышки."
 	icon_state = "security"
 	inhand_icon_state = "security"//Could likely use a better one.
 	worn_icon_state = "security"
 	content_overlays = TRUE
 	storage_type = /datum/storage/security_belt
+
+/obj/item/storage/belt/security/get_ru_names()
+	return list(
+		NOMINATIVE = "пояс офицера",
+		GENITIVE = "пояса офицера",
+		DATIVE = "поясу офицера",
+		ACCUSATIVE = "пояс офицера",
+		INSTRUMENTAL = "поясом офицера",
+		PREPOSITIONAL = "поясе офицера",
+	)
 
 /obj/item/storage/belt/security/full/PopulateContents()
 	new /obj/item/reagent_containers/spray/pepper(src)
@@ -271,7 +331,7 @@
 
 /obj/item/storage/belt/security/webbing
 	name = "security webbing"
-	desc = "Unique and versatile chest rig, can hold security gear."
+	desc = "Уникальная и универсальная нагрудная разгрузка, может хранить снаряжение охраны."
 	icon_state = "securitywebbing"
 	inhand_icon_state = "securitywebbing"
 	worn_icon_state = "securitywebbing"
@@ -279,14 +339,34 @@
 	custom_premium_price = PAYCHECK_COMMAND * 3
 	storage_type = /datum/storage/security_belt/webbing
 
+/obj/item/storage/belt/security/webbing/get_ru_names()
+	return list(
+		NOMINATIVE = "разгрузка офицера",
+		GENITIVE = "разгрузки офицера",
+		DATIVE = "разгрузке офицера",
+		ACCUSATIVE = "разгрузку офицера",
+		INSTRUMENTAL = "разгрузкой офицера",
+		PREPOSITIONAL = "разгрузке офицера",
+	)
+
 /obj/item/storage/belt/mining
 	name = "explorer's webbing"
-	desc = "A versatile chest rig, cherished by miners and hunters alike."
+	desc = "Универсальная нагрудная разгрузка, ценимая как шахтёрами, так и охотниками."
 	icon_state = "explorer1"
 	inhand_icon_state = "explorer1"
 	worn_icon_state = "explorer1"
 	w_class = WEIGHT_CLASS_BULKY
 	storage_type = /datum/storage/mining_belt
+
+/obj/item/storage/belt/mining/get_ru_names()
+	return list(
+		NOMINATIVE = "разгрузка исследователя",
+		GENITIVE = "разгрузки исследователя",
+		DATIVE = "разгрузке исследователя",
+		ACCUSATIVE = "разгрузку исследователя",
+		INSTRUMENTAL = "разгрузкой исследователя",
+		PREPOSITIONAL = "разгрузке исследователя",
+	)
 
 /obj/item/storage/belt/mining/vendor/PopulateContents()
 	new /obj/item/survivalcapsule(src)
@@ -307,21 +387,41 @@
 
 /obj/item/storage/belt/mining/primitive
 	name = "hunter's belt"
-	desc = "A versatile belt, woven from sinew."
+	desc = "Универсальный пояс, сплетенный из жил."
 	icon_state = "ebelt"
 	inhand_icon_state = "ebelt"
 	worn_icon_state = "ebelt"
 	storage_type = /datum/storage/mining_belt/primitive
 
+/obj/item/storage/belt/mining/primitive/get_ru_names()
+	return list(
+		NOMINATIVE = "пояс охотника",
+		GENITIVE = "пояса охотника",
+		DATIVE = "поясу охотника",
+		ACCUSATIVE = "пояс охотника",
+		INSTRUMENTAL = "поясом охотника",
+		PREPOSITIONAL = "поясе охотника",
+	)
+
 /obj/item/storage/belt/soulstone
 	name = "soul stone belt"
-	desc = "Designed for ease of access to the shards during a fight, as to not let a single enemy spirit slip away."
+	desc = "Разработан для легкого доступа к осколкам во время боя, чтобы ни один вражеский дух не ускользнул."
 	icon_state = "soulstonebelt"
 	inhand_icon_state = "soulstonebelt"
 	worn_icon_state = "soulstonebelt"
 	drop_sound = 'sound/items/handling/toolbelt_drop.ogg'
 	pickup_sound = 'sound/items/handling/toolbelt_pickup.ogg'
 	storage_type = /datum/storage/soulstone_belt
+
+/obj/item/storage/belt/soulstone/get_ru_names()
+	return list(
+		NOMINATIVE = "пояс камней душ",
+		GENITIVE = "пояса камней душ",
+		DATIVE = "поясу камней душ",
+		ACCUSATIVE = "пояс камней душ",
+		INSTRUMENTAL = "поясом камней душ",
+		PREPOSITIONAL = "поясе камней душ",
+	)
 
 /obj/item/storage/belt/soulstone/full/PopulateContents()
 	for(var/i in 1 to 6)
@@ -333,12 +433,22 @@
 
 /obj/item/storage/belt/champion
 	name = "championship belt"
-	desc = "Proves to the world that you are the strongest!"
+	desc = "Доказывает всему миру, что вы сильнейший!"
 	icon_state = "championbelt"
 	inhand_icon_state = "championbelt"
 	worn_icon_state = "championbelt"
 	custom_materials = list(/datum/material/gold=SMALL_MATERIAL_AMOUNT *4)
 	storage_type = /datum/storage/champion_belt
+
+/obj/item/storage/belt/champion/get_ru_names()
+	return list(
+		NOMINATIVE = "чемпионский пояс",
+		GENITIVE = "чемпионского пояса",
+		DATIVE = "чемпионскому поясу",
+		ACCUSATIVE = "чемпионский пояс",
+		INSTRUMENTAL = "чемпионским поясом",
+		PREPOSITIONAL = "чемпионском поясе",
+	)
 
 /obj/item/storage/belt/champion/Initialize(mapload)
 	. = ..()
@@ -347,21 +457,41 @@
 
 /obj/item/storage/belt/military
 	name = "chest rig"
-	desc = "A set of tactical webbing worn by Syndicate boarding parties."
+	desc = "Набор тактических ремней, которые носят абордажные группы Синдиката."
 	icon_state = "militarywebbing"
 	inhand_icon_state = "militarywebbing"
 	worn_icon_state = "militarywebbing"
 	resistance_flags = FIRE_PROOF
 	storage_type = /datum/storage/military_belt
 
+/obj/item/storage/belt/military/get_ru_names()
+	return list(
+		NOMINATIVE = "разгрузка",
+		GENITIVE = "разгрузки",
+		DATIVE = "разгрузке",
+		ACCUSATIVE = "разгрузку",
+		INSTRUMENTAL = "разгрузкой",
+		PREPOSITIONAL = "разгрузке",
+	)
+
 /obj/item/storage/belt/military/snack
 	name = "tactical snack rig"
 	storage_type = /datum/storage/military_belt/snack
 
+/obj/item/storage/belt/military/snack/get_ru_names()
+	return list(
+		NOMINATIVE = "тактическая закусочная разгрузка",
+		GENITIVE = "тактической закусочной разгрузки",
+		DATIVE = "тактической закусочной разгрузке",
+		ACCUSATIVE = "тактическую закусочную разгрузку",
+		INSTRUMENTAL = "тактической закусочной разгрузкой",
+		PREPOSITIONAL = "тактической закусочной разгрузке",
+	)
+
 /obj/item/storage/belt/military/snack/Initialize(mapload)
 	. = ..()
 	var/sponsor = pick("Donk Co.", "Waffle Corp.", "Roffle Co.", "Gorlex Marauders", "Tiger Cooperative")
-	desc = "A set of snack-tical webbing worn by athletes of the [sponsor] VR sports division."
+	desc = "Комплект снек-тической разгрузки, которую носят атлеты подразделения VR-спорта [sponsor]."
 
 /obj/item/storage/belt/military/snack/full/Initialize(mapload)
 	. = ..()
@@ -396,12 +526,22 @@
 
 /obj/item/storage/belt/military/abductor
 	name = "agent belt"
-	desc = "A belt used by abductor agents."
+	desc = "Пояс, используемый агентами абдукторов."
 	icon = 'icons/obj/antags/abductor.dmi'
 	icon_state = "belt"
 	inhand_icon_state = "security"
 	worn_icon_state = "security"
 	content_overlays = TRUE
+
+/obj/item/storage/belt/military/abductor/get_ru_names()
+	return list(
+		NOMINATIVE = "пояс агента",
+		GENITIVE = "пояса агента",
+		DATIVE = "поясу агента",
+		ACCUSATIVE = "пояс агента",
+		INSTRUMENTAL = "поясом агента",
+		PREPOSITIONAL = "поясе агента",
+	)
 
 /obj/item/storage/belt/military/abductor/full/PopulateContents()
 	new /obj/item/screwdriver/abductor(src)
@@ -414,18 +554,38 @@
 
 /obj/item/storage/belt/military/army
 	name = "army belt"
-	desc = "A belt used by military forces."
+	desc = "Пояс, используемый вооруженными силами."
 	icon_state = "military"
 	inhand_icon_state = "security"
 	worn_icon_state = "military"
 
+/obj/item/storage/belt/military/army/get_ru_names()
+	return list(
+		NOMINATIVE = "армейский пояс",
+		GENITIVE = "армейского пояса",
+		DATIVE = "армейскому поясу",
+		ACCUSATIVE = "армейский пояс",
+		INSTRUMENTAL = "армейским поясом",
+		PREPOSITIONAL = "армейском поясе",
+	)
+
 /obj/item/storage/belt/military/assault
 	name = "assault belt"
-	desc = "A tactical assault belt."
+	desc = "Тактический штурмовой пояс."
 	icon_state = "assault"
 	inhand_icon_state = "security"
 	worn_icon_state = "assault"
 	storage_type = /datum/storage/military_belt/assault
+
+/obj/item/storage/belt/military/assault/get_ru_names()
+	return list(
+		NOMINATIVE = "штурмовой пояс",
+		GENITIVE = "штурмового пояса",
+		DATIVE = "штурмовому поясу",
+		ACCUSATIVE = "штурмовой пояс",
+		INSTRUMENTAL = "штурмовым поясом",
+		PREPOSITIONAL = "штурмовом поясе",
+	)
 
 /obj/item/storage/belt/military/assault/full/PopulateContents()
 	generate_items_inside(list(
@@ -435,13 +595,23 @@
 
 /obj/item/storage/belt/grenade
 	name = "grenadier belt"
-	desc = "A belt for holding grenades."
+	desc = "Пояс для хранения гранат."
 	icon_state = "grenadebeltnew"
 	inhand_icon_state = "security"
 	worn_icon_state = "grenadebeltnew"
 	drop_sound = 'sound/items/handling/toolbelt_drop.ogg'
 	pickup_sound = 'sound/items/handling/toolbelt_pickup.ogg'
 	storage_type = /datum/storage/grenade_belt
+
+/obj/item/storage/belt/grenade/get_ru_names()
+	return list(
+		NOMINATIVE = "пояс гренадёра",
+		GENITIVE = "пояса гренадёра",
+		DATIVE = "поясу гренадёра",
+		ACCUSATIVE = "пояс гренадёра",
+		INSTRUMENTAL = "поясом гренадёра",
+		PREPOSITIONAL = "поясе гренадёра",
+	)
 
 /obj/item/storage/belt/grenade/full/PopulateContents()
 	generate_items_inside(list(
@@ -459,11 +629,21 @@
 
 /obj/item/storage/belt/wands
 	name = "wand belt"
-	desc = "A belt designed to hold various rods of power. A veritable fanny pack of exotic magic."
+	desc = "Пояс, предназначенный для хранения различных жезлов силы. Настоящая поясная сумка экзотической магии."
 	icon_state = "soulstonebelt"
 	inhand_icon_state = "soulstonebelt"
 	worn_icon_state = "soulstonebelt"
 	storage_type = /datum/storage/wands_belt
+
+/obj/item/storage/belt/wands/get_ru_names()
+	return list(
+		NOMINATIVE = "пояс жезлов",
+		GENITIVE = "пояса жезлов",
+		DATIVE = "поясу жезлов",
+		ACCUSATIVE = "пояс жезлов",
+		INSTRUMENTAL = "поясом жезлов",
+		PREPOSITIONAL = "поясе жезлов",
+	)
 
 /obj/item/storage/belt/wands/full/PopulateContents()
 	new /obj/item/gun/magic/wand/death(src)
@@ -480,13 +660,23 @@
 
 /obj/item/storage/belt/janitor
 	name = "janibelt"
-	desc = "A belt used to hold most janitorial supplies."
+	desc = "Пояс, используемый для хранения большинства принадлежностей уборщика."
 	icon_state = "janibelt"
 	inhand_icon_state = "janibelt"
 	worn_icon_state = "janibelt"
 	drop_sound = 'sound/items/handling/toolbelt_drop.ogg'
 	pickup_sound = 'sound/items/handling/toolbelt_pickup.ogg'
 	storage_type = /datum/storage/janitor_belt
+
+/obj/item/storage/belt/janitor/get_ru_names()
+	return list(
+		NOMINATIVE = "пояс уборщика",
+		GENITIVE = "пояса уборщика",
+		DATIVE = "поясу уборщика",
+		ACCUSATIVE = "пояс уборщика",
+		INSTRUMENTAL = "поясом уборщика",
+		PREPOSITIONAL = "поясе уборщика",
+	)
 
 /obj/item/storage/belt/janitor/full/PopulateContents()
 	new /obj/item/lightreplacer(src)
@@ -497,15 +687,25 @@
 
 /obj/item/storage/belt/bandolier
 	name = "bandolier"
-	desc = "A bandolier for holding rifle shotgun, and bigger revolver caliber ammunition."
+	desc = "Бандольер для хранения патронов для винтовок, дробовиков и крупнокалиберных револьверов."
 	icon_state = "bandolier"
 	inhand_icon_state = "bandolier"
 	worn_icon_state = "bandolier"
 	storage_type = /datum/storage/bandolier_belt
 
+/obj/item/storage/belt/bandolier/get_ru_names()
+	return list(
+		NOMINATIVE = "бандольер",
+		GENITIVE = "бандольера",
+		DATIVE = "бандольеру",
+		ACCUSATIVE = "бандольер",
+		INSTRUMENTAL = "бандольером",
+		PREPOSITIONAL = "бандольере",
+	)
+
 /obj/item/storage/belt/fannypack
 	name = "fannypack"
-	desc = "A dorky fannypack for keeping small items in. Concealed enough, or ugly enough to avert their eyes, that others won't see what you put in or take out easily."
+	desc = "Дурацкая поясная сумка для хранения мелких предметов. Достаточно скрытная или достаточно уродливая, чтобы отводить взгляды, так что другие не увидят, что вы в неё кладете или достаете."
 	icon_state = "fannypack_leather"
 	inhand_icon_state = null
 	worn_icon_state = "fannypack_leather"
@@ -513,62 +713,182 @@
 	custom_price = PAYCHECK_CREW * 2
 	storage_type = /datum/storage/fanny_pack
 
+/obj/item/storage/belt/fannypack/get_ru_names()
+	return list(
+		NOMINATIVE = "поясная сумка",
+		GENITIVE = "поясной сумки",
+		DATIVE = "поясной сумке",
+		ACCUSATIVE = "поясную сумку",
+		INSTRUMENTAL = "поясной сумкой",
+		PREPOSITIONAL = "поясной сумке",
+	)
+
 /obj/item/storage/belt/fannypack/black
 	name = "black fannypack"
 	icon_state = "fannypack_black"
 	worn_icon_state = "fannypack_black"
+
+/obj/item/storage/belt/fannypack/black/get_ru_names()
+	return list(
+		NOMINATIVE = "чёрная поясная сумка",
+		GENITIVE = "чёрной поясной сумки",
+		DATIVE = "чёрной поясной сумке",
+		ACCUSATIVE = "чёрную поясную сумку",
+		INSTRUMENTAL = "чёрной поясной сумкой",
+		PREPOSITIONAL = "чёрной поясной сумке",
+	)
 
 /obj/item/storage/belt/fannypack/red
 	name = "red fannypack"
 	icon_state = "fannypack_red"
 	worn_icon_state = "fannypack_red"
 
+/obj/item/storage/belt/fannypack/red/get_ru_names()
+	return list(
+		NOMINATIVE = "красная поясная сумка",
+		GENITIVE = "красной поясной сумки",
+		DATIVE = "красной поясной сумке",
+		ACCUSATIVE = "красную поясную сумку",
+		INSTRUMENTAL = "красной поясной сумкой",
+		PREPOSITIONAL = "красной поясной сумке",
+	)
+
 /obj/item/storage/belt/fannypack/purple
 	name = "purple fannypack"
 	icon_state = "fannypack_purple"
 	worn_icon_state = "fannypack_purple"
+
+/obj/item/storage/belt/fannypack/purple/get_ru_names()
+	return list(
+		NOMINATIVE = "фиолетовая поясная сумка",
+		GENITIVE = "фиолетовой поясной сумки",
+		DATIVE = "фиолетовой поясной сумке",
+		ACCUSATIVE = "фиолетовую поясную сумку",
+		INSTRUMENTAL = "фиолетовой поясной сумкой",
+		PREPOSITIONAL = "фиолетовой поясной сумке",
+	)
 
 /obj/item/storage/belt/fannypack/blue
 	name = "blue fannypack"
 	icon_state = "fannypack_blue"
 	worn_icon_state = "fannypack_blue"
 
+/obj/item/storage/belt/fannypack/blue/get_ru_names()
+	return list(
+		NOMINATIVE = "синяя поясная сумка",
+		GENITIVE = "синей поясной сумки",
+		DATIVE = "синей поясной сумке",
+		ACCUSATIVE = "синюю поясную сумку",
+		INSTRUMENTAL = "синей поясной сумкой",
+		PREPOSITIONAL = "синей поясной сумке",
+	)
+
 /obj/item/storage/belt/fannypack/orange
 	name = "orange fannypack"
 	icon_state = "fannypack_orange"
 	worn_icon_state = "fannypack_orange"
+
+/obj/item/storage/belt/fannypack/orange/get_ru_names()
+	return list(
+		NOMINATIVE = "оранжевая поясная сумка",
+		GENITIVE = "оранжевой поясной сумки",
+		DATIVE = "оранжевой поясной сумке",
+		ACCUSATIVE = "оранжевую поясную сумку",
+		INSTRUMENTAL = "оранжевой поясной сумкой",
+		PREPOSITIONAL = "оранжевой поясной сумке",
+	)
 
 /obj/item/storage/belt/fannypack/white
 	name = "white fannypack"
 	icon_state = "fannypack_white"
 	worn_icon_state = "fannypack_white"
 
+/obj/item/storage/belt/fannypack/white/get_ru_names()
+	return list(
+		NOMINATIVE = "белая поясная сумка",
+		GENITIVE = "белой поясной сумки",
+		DATIVE = "белой поясной сумке",
+		ACCUSATIVE = "белую поясную сумку",
+		INSTRUMENTAL = "белой поясной сумкой",
+		PREPOSITIONAL = "белой поясной сумке",
+	)
+
 /obj/item/storage/belt/fannypack/green
 	name = "green fannypack"
 	icon_state = "fannypack_green"
 	worn_icon_state = "fannypack_green"
+
+/obj/item/storage/belt/fannypack/green/get_ru_names()
+	return list(
+		NOMINATIVE = "зелёная поясная сумка",
+		GENITIVE = "зелёной поясной сумки",
+		DATIVE = "зелёной поясной сумке",
+		ACCUSATIVE = "зелёную поясную сумку",
+		INSTRUMENTAL = "зелёной поясной сумкой",
+		PREPOSITIONAL = "зелёной поясной сумке",
+	)
 
 /obj/item/storage/belt/fannypack/pink
 	name = "pink fannypack"
 	icon_state = "fannypack_pink"
 	worn_icon_state = "fannypack_pink"
 
+/obj/item/storage/belt/fannypack/pink/get_ru_names()
+	return list(
+		NOMINATIVE = "розовая поясная сумка",
+		GENITIVE = "розовой поясной сумки",
+		DATIVE = "розовой поясной сумке",
+		ACCUSATIVE = "розовую поясную сумку",
+		INSTRUMENTAL = "розовой поясной сумкой",
+		PREPOSITIONAL = "розовой поясной сумке",
+	)
+
 /obj/item/storage/belt/fannypack/cyan
 	name = "cyan fannypack"
 	icon_state = "fannypack_cyan"
 	worn_icon_state = "fannypack_cyan"
+
+/obj/item/storage/belt/fannypack/cyan/get_ru_names()
+	return list(
+		NOMINATIVE = "голубая поясная сумка",
+		GENITIVE = "голубой поясной сумки",
+		DATIVE = "голубой поясной сумке",
+		ACCUSATIVE = "голубую поясную сумку",
+		INSTRUMENTAL = "голубой поясной сумкой",
+		PREPOSITIONAL = "голубой поясной сумке",
+	)
 
 /obj/item/storage/belt/fannypack/yellow
 	name = "yellow fannypack"
 	icon_state = "fannypack_yellow"
 	worn_icon_state = "fannypack_yellow"
 
+/obj/item/storage/belt/fannypack/yellow/get_ru_names()
+	return list(
+		NOMINATIVE = "жёлтая поясная сумка",
+		GENITIVE = "жёлтой поясной сумки",
+		DATIVE = "жёлтой поясной сумке",
+		ACCUSATIVE = "жёлтую поясную сумку",
+		INSTRUMENTAL = "жёлтой поясной сумкой",
+		PREPOSITIONAL = "жёлтой поясной сумке",
+	)
+
 /obj/item/storage/belt/fannypack/cummerbund
 	name = "cummerbund"
-	desc = "A pleated sash that pairs well with a suit jacket."
+	desc = "Плиссированный пояс, который хорошо сочетается с пиджаком."
 	icon_state = "cummerbund"
 	inhand_icon_state = null
 	worn_icon_state = "cummerbund"
+
+/obj/item/storage/belt/fannypack/cummerbund/get_ru_names()
+	return list(
+		NOMINATIVE = "кушак",
+		GENITIVE = "кушака",
+		DATIVE = "кушаку",
+		ACCUSATIVE = "кушак",
+		INSTRUMENTAL = "кушаком",
+		PREPOSITIONAL = "кушаке",
+	)
 
 /obj/item/storage/belt/fannypack/yellow/bee_terrorist/PopulateContents()
 	new /obj/item/grenade/c4 (src)
@@ -578,13 +898,23 @@
 /obj/item/storage/belt/fannypack/black/rogue
 	name = "fannypack of ULTIMATE DESPAIR"
 
+/obj/item/storage/belt/fannypack/black/rogue/get_ru_names()
+	return list(
+		NOMINATIVE = "поясная сумка АБСОЛЮТНОГО ОТЧАЯНИЯ",
+		GENITIVE = "поясной сумки АБСОЛЮТНОГО ОТЧАЯНИЯ",
+		DATIVE = "поясной сумке АБСОЛЮТНОГО ОТЧАЯНИЯ",
+		ACCUSATIVE = "поясную сумку АБСОЛЮТНОГО ОТЧАЯНИЯ",
+		INSTRUMENTAL = "поясной сумкой АБСОЛЮТНОГО ОТЧАЯНИЯ",
+		PREPOSITIONAL = "поясной сумке АБСОЛЮТНОГО ОТЧАЯНИЯ",
+	)
+
 /obj/item/storage/belt/fannypack/black/rogue/PopulateContents()
 	new /obj/item/food/drug/saturnx(src)
 	new /obj/item/reagent_containers/cup/blastoff_ampoule(src)
 	new /obj/item/reagent_containers/hypospray/medipen/methamphetamine(src)
 
 /obj/item/storage/belt/sheath
-	desc = "holds like, blades and stuff. You should not be seeing this."
+	desc = "содержит типа клинки и всё такое. Вы не должны это видеть."
 	w_class = WEIGHT_CLASS_BULKY
 	interaction_flags_click = parent_type::interaction_flags_click | NEED_DEXTERITY | NEED_HANDS
 	var/stored_blade
@@ -596,14 +926,14 @@
 /obj/item/storage/belt/sheath/examine(mob/user)
 	. = ..()
 	if(length(contents))
-		. += span_notice("Alt-click it to quickly draw the blade.")
+		. += span_notice("[EXAMINE_HINT("Альт-клик")] по [declent_ru(DATIVE)], чтобы быстро выхватить клинок.")
 
 /obj/item/storage/belt/sheath/click_alt(mob/user)
 	if(!length(contents))
-		balloon_alert(user, "it's empty!")
+		balloon_alert(user, "пусто!")
 		return CLICK_ACTION_BLOCKING
 	var/obj/item/stored_item = contents[1]
-	user.visible_message(span_notice("[user] takes [stored_item] out of [src]."), span_notice("You take [stored_item] out of [src]."))
+	user.visible_message(span_notice("[user] достаёт [stored_item.declent_ru(ACCUSATIVE)] из [declent_ru(GENITIVE)]."), span_notice("Вы достаёте [stored_item.declent_ru(ACCUSATIVE)] из [declent_ru(GENITIVE)]."))
 	user.put_in_hands(stored_item)
 	update_appearance()
 	return CLICK_ACTION_SUCCESS
@@ -625,35 +955,75 @@
 
 /obj/item/storage/belt/sheath/sabre
 	name = "sabre sheath"
-	desc = "An ornate sheath designed to hold an officer's blade."
+	desc = "Богато украшенные ножны, предназначенные для клинка офицера."
 	icon_state = "sheath"
 	inhand_icon_state = "sheath"
 	worn_icon_state = "sheath"
 	storage_type = /datum/storage/sabre_belt
 	stored_blade = /obj/item/melee/sabre
 
+/obj/item/storage/belt/sheath/sabre/get_ru_names()
+	return list(
+		NOMINATIVE = "ножны сабли",
+		GENITIVE = "ножен сабли",
+		DATIVE = "ножнам сабли",
+		ACCUSATIVE = "ножны сабли",
+		INSTRUMENTAL = "ножнами сабли",
+		PREPOSITIONAL = "ножнах сабли",
+	)
+
 /obj/item/storage/belt/sheath/grass_sabre
 	name = "sabre sheath"
-	desc = "A simple grass sheath designed to hold a sabre of... some sort. An actual metal one might be too sharp, though..."
+	desc = "Простые травяные ножны, предназначенные для сабли... какого-то рода. Настоящая металлическая может быть слишком острой, впрочем..."
 	icon_state = "grass_sheath"
 	inhand_icon_state = "grass_sheath"
 	worn_icon_state = "grass_sheath"
 	storage_type = /datum/storage/green_sabre_belt
 
+/obj/item/storage/belt/sheath/grass_sabre/get_ru_names()
+	return list(
+		NOMINATIVE = "ножны сабли",
+		GENITIVE = "ножен сабли",
+		DATIVE = "ножнам сабли",
+		ACCUSATIVE = "ножны сабли",
+		INSTRUMENTAL = "ножнами сабли",
+		PREPOSITIONAL = "ножнах сабли",
+	)
+
 /obj/item/storage/belt/sheath/gladius
 	name = "gladius scabbard"
-	desc = "A fun-sized sheath for a fun-sized sword."
+	desc = "Ножны забавного размера для меча забавного размера."
 	icon_state = "gladius_sheath"
 	inhand_icon_state = "gladius_sheath"
 	worn_icon_state = "gladius_sheath"
 	storage_type = /datum/storage/gladius_belt
 	stored_blade = /obj/item/claymore/gladius
 
+/obj/item/storage/belt/sheath/gladius/get_ru_names()
+	return list(
+		NOMINATIVE = "ножны гладиуса",
+		GENITIVE = "ножен гладиуса",
+		DATIVE = "ножнам гладиуса",
+		ACCUSATIVE = "ножны гладиуса",
+		INSTRUMENTAL = "ножнами гладиуса",
+		PREPOSITIONAL = "ножнах гладиуса",
+	)
+
 /obj/item/storage/belt/plant
 	name = "botanical belt"
-	desc = "A sturdy leather belt used to hold most hydroponics supplies."
+	desc = "Прочный кожаный пояс, используемый для хранения большинства принадлежностей гидропоники."
 	icon_state = "plantbelt"
 	inhand_icon_state = "utility"
 	worn_icon_state = "plantbelt"
 	content_overlays = TRUE
 	storage_type = /datum/storage/plant_belt
+
+/obj/item/storage/belt/plant/get_ru_names()
+	return list(
+		NOMINATIVE = "ботанический пояс",
+		GENITIVE = "ботанического пояса",
+		DATIVE = "ботаническому поясу",
+		ACCUSATIVE = "ботанический пояс",
+		INSTRUMENTAL = "ботаническим поясом",
+		PREPOSITIONAL = "ботаническом поясе",
+	)

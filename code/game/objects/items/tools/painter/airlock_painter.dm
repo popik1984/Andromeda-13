@@ -1,7 +1,7 @@
 /obj/item/airlock_painter
 	name = "airlock painter"
-	desc = "An advanced autopainter preprogrammed with several paintjobs for airlocks. Use it on an airlock during or after construction to change the paintjob."
-	desc_controls = "Alt-Click to remove the ink cartridge."
+	desc = "Продвинутый автопокрасчик, в который запрограммировано несколько расцветок для шлюзов. Используйте его на шлюзе во время или после строительства, чтобы изменить расцветку."
+	desc_controls = "Альт-клик, чтобы извлечь картридж с краской."
 	icon = 'icons/obj/devices/tool.dmi'
 	icon_state = "paint_sprayer"
 	inhand_icon_state = "paint_sprayer"
@@ -21,22 +21,32 @@
 	var/initial_ink_type = /obj/item/toner
 	/// Associate list of all paint jobs the airlock painter can apply. The key is the name of the airlock the user will see. The value is the type path of the airlock
 	var/list/available_paint_jobs = list(
-		"Public" = /obj/machinery/door/airlock/public,
-		"Engineering" = /obj/machinery/door/airlock/engineering,
-		"Atmospherics" = /obj/machinery/door/airlock/atmos,
-		"Security" = /obj/machinery/door/airlock/security,
-		"Command" = /obj/machinery/door/airlock/command,
-		"Medical" = /obj/machinery/door/airlock/medical,
-		"Virology" = /obj/machinery/door/airlock/virology,
-		"Research" = /obj/machinery/door/airlock/research,
-		"Hydroponics" = /obj/machinery/door/airlock/hydroponics,
-		"Freezer" = /obj/machinery/door/airlock/freezer,
-		"Science" = /obj/machinery/door/airlock/science,
-		"Mining" = /obj/machinery/door/airlock/mining,
-		"Maintenance" = /obj/machinery/door/airlock/maintenance,
-		"External" = /obj/machinery/door/airlock/external,
-		"External Maintenance"= /obj/machinery/door/airlock/maintenance/external,
-		"Standard" = /obj/machinery/door/airlock
+		"Общий" = /obj/machinery/door/airlock/public,
+		"Инженерный" = /obj/machinery/door/airlock/engineering,
+		"Атмосферный" = /obj/machinery/door/airlock/atmos,
+		"Охрана" = /obj/machinery/door/airlock/security,
+		"Командный" = /obj/machinery/door/airlock/command,
+		"Медицинский" = /obj/machinery/door/airlock/medical,
+		"Вирусология" = /obj/machinery/door/airlock/virology,
+		"Исследовательский" = /obj/machinery/door/airlock/research,
+		"Гидропоника" = /obj/machinery/door/airlock/hydroponics,
+		"Холодильник" = /obj/machinery/door/airlock/freezer,
+		"Научный" = /obj/machinery/door/airlock/science,
+		"Шахтёрский" = /obj/machinery/door/airlock/mining,
+		"Технический" = /obj/machinery/door/airlock/maintenance,
+		"Внешний" = /obj/machinery/door/airlock/external,
+		"Внешний технический"= /obj/machinery/door/airlock/maintenance/external,
+		"Стандартный" = /obj/machinery/door/airlock
+	)
+
+/obj/item/airlock_painter/get_ru_names()
+	return list(
+		NOMINATIVE = "покрасчик шлюзов",
+		GENITIVE = "покрасчика шлюзов",
+		DATIVE = "покрасчику шлюзов",
+		ACCUSATIVE = "покрасчик шлюзов",
+		INSTRUMENTAL = "покрасчиком шлюзов",
+		PREPOSITIONAL = "покрасчике шлюзов",
 	)
 
 /obj/item/airlock_painter/Initialize(mapload)
@@ -62,10 +72,10 @@
 //because you're expecting user input.
 /obj/item/airlock_painter/proc/can_use(mob/user)
 	if(!ink)
-		balloon_alert(user, "no cartridge!")
+		balloon_alert(user, "нет картриджа!")
 		return FALSE
 	else if(ink.charges < 1)
-		balloon_alert(user, "out of ink!")
+		balloon_alert(user, "нет краски!")
 		return FALSE
 	else
 		return TRUE
@@ -74,7 +84,7 @@
 	var/obj/item/organ/lungs/L = user.get_organ_slot(ORGAN_SLOT_LUNGS)
 
 	if(can_use(user) && L)
-		user.visible_message(span_suicide("[user] is inhaling toner from [src]! It looks like [user.p_theyre()] trying to commit suicide!"))
+		user.visible_message(span_suicide("[user] вдыхает тонер из [declent_ru(GENITIVE)]! Похоже, [user.p_theyre()] пытается совершить суицид!"))
 		use(user)
 
 		// Once you've inhaled the toner, you throw up your lungs
@@ -100,45 +110,45 @@
 
 		// TODO maybe add some colorful vomit?
 
-		user.visible_message(span_suicide("[user] vomits out [user.p_their()] [L]!"))
+		user.visible_message(span_suicide("[user] выплёвывает [user.p_their()] [L.declent_ru(ACCUSATIVE)]!"))
 		playsound(user.loc, 'sound/effects/splat.ogg', 50, TRUE)
 
 		L.forceMove(T)
 
 		return (TOXLOSS|OXYLOSS)
 	else if(can_use(user) && !L)
-		user.visible_message(span_suicide("[user] is spraying toner on [user.p_them()]self from [src]! It looks like [user.p_theyre()] trying to commit suicide."))
+		user.visible_message(span_suicide("[user] распыляет на себя тонер из [declent_ru(GENITIVE)]! Похоже, [user.p_theyre()] пытается совершить суицид."))
 		user.reagents.add_reagent(/datum/reagent/colorful_reagent, 1)
 		user.reagents.expose(user, TOUCH, 1)
 		return TOXLOSS
 
 	else
-		user.visible_message(span_suicide("[user] is trying to inhale toner from [src]! It might be a suicide attempt if [src] had any toner."))
+		user.visible_message(span_suicide("[user] пытается вдохнуть тонер из [declent_ru(GENITIVE)]! Это могло бы быть попыткой суицида, если бы в [declent_ru(PREPOSITIONAL)] был тонер."))
 		return SHAME
 
 
 /obj/item/airlock_painter/examine(mob/user)
 	. = ..()
 	if(!ink)
-		. += span_notice("It doesn't have a toner cartridge installed.")
+		. += span_notice("В нём не установлен картридж с тонером.")
 		return
-	var/ink_level = "high"
+	var/ink_level = "высоким"
 	if(ink.charges < 1)
-		ink_level = "empty"
+		ink_level = "нулевым"
 	else if((ink.charges/ink.max_charges) <= 0.25) //25%
-		ink_level = "low"
+		ink_level = "низким"
 	else if((ink.charges/ink.max_charges) > 1) //Over 100% (admin var edit)
-		ink_level = "dangerously high"
-	. += span_notice("Its ink levels look [ink_level].")
+		ink_level = "опасно высоким"
+	. += span_notice("Уровень чернил выглядит [ink_level].")
 
 /obj/item/airlock_painter/attackby(obj/item/W, mob/user, list/modifiers, list/attack_modifiers)
 	if(istype(W, /obj/item/toner))
 		if(ink)
-			to_chat(user, span_warning("[src] already contains \a [ink]!"))
+			to_chat(user, span_warning("[declent_ru(NOMINATIVE)] уже содержит [ink.declent_ru(ACCUSATIVE)]!"))
 			return
 		if(!user.transferItemToLoc(W, src))
 			return
-		to_chat(user, span_notice("You install [W] into [src]."))
+		to_chat(user, span_notice("Вы устанавливаете [W.declent_ru(ACCUSATIVE)] в [declent_ru(ACCUSATIVE)]."))
 		ink = W
 		playsound(src.loc, 'sound/machines/click.ogg', 50, TRUE)
 	else
@@ -151,6 +161,6 @@
 	playsound(src.loc, 'sound/machines/click.ogg', 50, TRUE)
 	ink.forceMove(user.drop_location())
 	user.put_in_hands(ink)
-	to_chat(user, span_notice("You remove [ink] from [src]."))
+	to_chat(user, span_notice("Вы извлекаете [ink.declent_ru(ACCUSATIVE)] из [declent_ru(GENITIVE)]."))
 	ink = null
 	return CLICK_ACTION_SUCCESS

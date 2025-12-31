@@ -16,7 +16,7 @@ GLOBAL_LIST_INIT(wire_node_generating_types, typecacheof(list(
 ////////////////////////////////
 /obj/structure/cable
 	name = "power cable"
-	desc = "A flexible, superconducting insulated cable for heavy-duty power transfer."
+	desc = "Гибкий, сверхпроводящий изолированный кабель для передачи большой мощности."
 	icon = 'icons/obj/pipes_n_cables/layer_cable.dmi'
 	icon_state = "l2-1-2-4-8-node"
 	color = CABLE_HEX_COLOR_YELLOW
@@ -31,6 +31,16 @@ GLOBAL_LIST_INIT(wire_node_generating_types, typecacheof(list(
 	var/datum/powernet/powernet
 	var/cable_color = CABLE_COLOR_YELLOW
 	var/is_fully_initialized = FALSE
+
+/obj/structure/cable/get_ru_names()
+	return list(
+		NOMINATIVE = "силовой кабель",
+		GENITIVE = "силового кабеля",
+		DATIVE = "силовому кабелю",
+		ACCUSATIVE = "силовой кабель",
+		INSTRUMENTAL = "силовым кабелем",
+		PREPOSITIONAL = "силовом кабеле",
+	)
 
 /obj/structure/cable/layer1
 	color = CABLE_HEX_COLOR_RED
@@ -197,7 +207,7 @@ GLOBAL_LIST_INIT(wire_node_generating_types, typecacheof(list(
 	if(W.tool_behaviour == TOOL_WIRECUTTER)
 		if (shock(user, 50))
 			return
-		user.visible_message(span_notice("[user] cuts the cable."), span_notice("You cut the cable."))
+		user.visible_message(span_notice("[user] перерезает кабель."), span_notice("Вы перерезали кабель."))
 		investigate_log("was cut by [key_name(usr)] in [AREACOORD(src)]", INVESTIGATE_WIRES)
 		deconstruct()
 		return
@@ -211,9 +221,9 @@ GLOBAL_LIST_INIT(wire_node_generating_types, typecacheof(list(
 
 /obj/structure/cable/proc/get_power_info()
 	if(powernet?.avail > 0)
-		return span_danger("Total power: [display_power(powernet.avail)]\nLoad: [display_power(powernet.load)]\nExcess power: [display_power(surplus())]")
+		return span_danger("Всего энергии: [display_power(powernet.avail)]\nНагрузка: [display_power(powernet.load)]\nИзбыток энергии: [display_power(surplus())]")
 	else
-		return span_danger("The cable is not powered.")
+		return span_danger("Кабель не под напряжением.")
 
 
 // Items usable on a cable :
@@ -447,7 +457,7 @@ GLOBAL_LIST_INIT(wire_node_generating_types, typecacheof(list(
 	amount = MAXCOIL
 	merge_type = /obj/item/stack/cable_coil // This is here to let its children merge between themselves
 	color = CABLE_HEX_COLOR_YELLOW
-	desc = "A coil of insulated power cable."
+	desc = "Моток изолированного силового кабеля."
 	throwforce = 0
 	w_class = WEIGHT_CLASS_SMALL
 	throw_speed = 3
@@ -455,9 +465,9 @@ GLOBAL_LIST_INIT(wire_node_generating_types, typecacheof(list(
 	mats_per_unit = list(/datum/material/iron=SMALL_MATERIAL_AMOUNT*0.1, /datum/material/glass=SMALL_MATERIAL_AMOUNT*0.1)
 	obj_flags = CONDUCTS_ELECTRICITY
 	slot_flags = ITEM_SLOT_BELT
-	attack_verb_continuous = list("whips", "lashes", "disciplines", "flogs")
-	attack_verb_simple = list("whip", "lash", "discipline", "flog")
-	singular_name = "cable piece"
+	attack_verb_continuous = list("хлещет", "сечёт", "дисциплинирует", "порет")
+	attack_verb_simple = list("хлестнуть", "высечь", "дисциплинировать", "выпороть")
+	singular_name = "кусок кабеля"
 	full_w_class = WEIGHT_CLASS_SMALL
 	grind_results = list(/datum/reagent/copper = 2) //2 copper per cable in the coil
 	usesound = 'sound/items/deconstruct.ogg'
@@ -466,6 +476,16 @@ GLOBAL_LIST_INIT(wire_node_generating_types, typecacheof(list(
 	var/cable_color = CABLE_COLOR_YELLOW
 	var/obj/structure/cable/target_type = /obj/structure/cable
 	var/target_layer = CABLE_LAYER_2
+
+/obj/item/stack/cable_coil/get_ru_names()
+	return list(
+		NOMINATIVE = "моток кабеля",
+		GENITIVE = "мотка кабеля",
+		DATIVE = "мотку кабеля",
+		ACCUSATIVE = "моток кабеля",
+		INSTRUMENTAL = "мотком кабеля",
+		PREPOSITIONAL = "мотке кабеля",
+	)
 
 /obj/item/stack/cable_coil/Initialize(mapload, new_amount, merge = TRUE, list/mat_override=null, mat_amt=1)
 	. = ..()
@@ -478,19 +498,19 @@ GLOBAL_LIST_INIT(wire_node_generating_types, typecacheof(list(
 
 /obj/item/stack/cable_coil/examine(mob/user)
 	. = ..()
-	. += "<b>Use it in hand</b> to change the layer you are placing on, amongst other things."
+	. += "<b>Используйте в руке</b>, чтобы изменить слой укладки и многое другое."
 
 /obj/item/stack/cable_coil/update_name()
 	if(novariants)
 		return
 	. = ..()
-	name = "cable [(amount < 3) ? "piece" : "coil"]"
+	name = "[(amount < 3) ? "кусок" : "моток"] кабеля"
 
 /obj/item/stack/cable_coil/update_desc()
 	if(novariants)
 		return
 	. = ..()
-	desc = "A [(amount < 3) ? "piece" : "coil"] of insulated power cable."
+	desc = "[(amount < 3) ? "Кусок" : "Моток"] изолированного силового кабеля."
 
 /obj/item/stack/cable_coil/proc/set_cable_color(new_color)
 	color = GLOB.cable_colors[new_color]
@@ -506,16 +526,16 @@ GLOBAL_LIST_INIT(wire_node_generating_types, typecacheof(list(
 
 /obj/item/stack/cable_coil/suicide_act(mob/living/user)
 	if(locate(/obj/structure/chair/stool) in get_turf(user))
-		user.visible_message(span_suicide("[user] is making a noose with [src]! It looks like [user.p_theyre()] trying to commit suicide!"))
+		user.visible_message(span_suicide("[user] делает петлю из [declent_ru(GENITIVE)]! Похоже, [user.p_theyre()] пытается совершить суицид!"))
 	else
-		user.visible_message(span_suicide("[user] is strangling [user.p_them()]self with [src]! It looks like [user.p_theyre()] trying to commit suicide!"))
+		user.visible_message(span_suicide("[user] душит себя [declent_ru(INSTRUMENTAL)]! Похоже, [user.p_theyre()] пытается совершить суицид!"))
 	return OXYLOSS
 
 /obj/item/stack/cable_coil/proc/check_menu(mob/living/user)
 	if(!istype(user))
 		return FALSE
 	if(!ISADVANCEDTOOLUSER(user))
-		to_chat(user, span_warning("You don't have the dexterity to do this!"))
+		to_chat(user, span_warning("У вас не хватает ловкости, чтобы сделать это!"))
 		return FALSE
 	if(user.incapacitated || !user.Adjacent(src))
 		return FALSE
@@ -530,55 +550,55 @@ GLOBAL_LIST_INIT(wire_node_generating_types, typecacheof(list(
 	restraints_icon.color = color
 
 	var/list/radial_menu = list(
-	"Layer 1" = image(icon = 'icons/hud/radial.dmi', icon_state = "coil-red"),
-	"Layer 2" = image(icon = 'icons/hud/radial.dmi', icon_state = "coil-yellow"),
-	"Layer 3" = image(icon = 'icons/hud/radial.dmi', icon_state = "coil-blue"),
-	"Multilayer cable hub" = image(icon = 'icons/obj/pipes_n_cables/structures.dmi', icon_state = "cable_bridge"),
-	"Multi Z layer cable hub" = image(icon = 'icons/obj/pipes_n_cables/structures.dmi', icon_state = "cablerelay-broken-cable"),
-	"Cable restraints" = restraints_icon
+	"Слой 1" = image(icon = 'icons/hud/radial.dmi', icon_state = "coil-red"),
+	"Слой 2" = image(icon = 'icons/hud/radial.dmi', icon_state = "coil-yellow"),
+	"Слой 3" = image(icon = 'icons/hud/radial.dmi', icon_state = "coil-blue"),
+	"Многослойный хаб" = image(icon = 'icons/obj/pipes_n_cables/structures.dmi', icon_state = "cable_bridge"),
+	"Мульти-Z хаб" = image(icon = 'icons/obj/pipes_n_cables/structures.dmi', icon_state = "cablerelay-broken-cable"),
+	"Стяжки" = restraints_icon
 	)
 
 	var/layer_result = show_radial_menu(user, src, radial_menu, custom_check = CALLBACK(src, PROC_REF(check_menu), user), require_near = TRUE, tooltips = TRUE)
 	if(!check_menu(user))
 		return
 	switch(layer_result)
-		if("Layer 1")
+		if("Слой 1")
 			icon = initial(icon)
 			novariants = FALSE
 			set_cable_color(CABLE_COLOR_RED)
 			target_type = /obj/structure/cable/layer1
 			target_layer = CABLE_LAYER_1
-		if("Layer 2")
+		if("Слой 2")
 			icon = initial(icon)
 			novariants = FALSE
 			set_cable_color(CABLE_COLOR_YELLOW)
 			target_type = /obj/structure/cable
 			target_layer = CABLE_LAYER_2
-		if("Layer 3")
+		if("Слой 3")
 			icon = initial(icon)
 			novariants = FALSE
 			set_cable_color(CABLE_COLOR_BLUE)
 			target_type = /obj/structure/cable/layer3
 			target_layer = CABLE_LAYER_3
-		if("Multilayer cable hub")
+		if("Многослойный хаб")
 			name = "multilayer cable hub"
-			desc = "A multilayer cable hub."
+			desc = "Многослойный хаб для кабелей."
 			icon = 'icons/obj/pipes_n_cables/structures.dmi'
 			icon_state = "cable_bridge"
 			novariants = TRUE
 			set_cable_color(CABLE_COLOR_WHITE)
 			target_type = /obj/structure/cable/multilayer
 			target_layer = CABLE_LAYER_2
-		if("Multi Z layer cable hub")
+		if("Мульти-Z хаб")
 			name = "multi z layer cable hub"
-			desc = "A multi-z layer cable hub."
+			desc = "Мульти-Z хаб для кабелей."
 			icon = 'icons/obj/pipes_n_cables/structures.dmi'
 			icon_state = "cablerelay-broken-cable"
 			novariants = TRUE
 			set_cable_color(CABLE_COLOR_WHITE)
 			target_type = /obj/structure/cable/multilayer/multiz
 			target_layer = CABLE_LAYER_2
-		if("Cable restraints")
+		if("Стяжки")
 			if (amount >= CABLE_RESTRAINTS_COST)
 				if(use(CABLE_RESTRAINTS_COST))
 					var/obj/item/restraints/handcuffs/cable/restraints = new(null, cable_color)
@@ -611,11 +631,11 @@ GLOBAL_LIST_INIT(wire_node_generating_types, typecacheof(list(
 		return NONE
 
 	if (!affecting.burn_dam)
-		balloon_alert(user, "limb not damaged")
+		balloon_alert(user, "конечность не повреждена")
 		return ITEM_INTERACT_BLOCKING
 
-	user.visible_message(span_notice("[user] starts to fix some of the wires in [attacked_humanoid == user ? user.p_their() : "[attacked_humanoid]'s"] [affecting.name]."),
-		span_notice("You start fixing some of the wires in [attacked_humanoid == user ? "your" : "[attacked_humanoid]'s"] [affecting.name]."))
+	user.visible_message(span_notice("[user] начинает чинить провода в [affecting.declent_ru(PREPOSITIONAL)][attacked_humanoid == user ? "" : " [attacked_humanoid.declent_ru(GENITIVE)]"]."),
+		span_notice("Вы начинаете чинить провода в [affecting.declent_ru(PREPOSITIONAL)][attacked_humanoid == user ? "" : " [attacked_humanoid.declent_ru(GENITIVE)]"]."))
 
 	var/use_delay = repeating ? 1 SECONDS : 0
 	if(user == attacked_humanoid)
@@ -624,7 +644,7 @@ GLOBAL_LIST_INIT(wire_node_generating_types, typecacheof(list(
 	if(!do_after(user, use_delay, attacked_humanoid))
 		return ITEM_INTERACT_BLOCKING
 
-	if (!attacked_humanoid.item_heal(user, brute_heal = 0, burn_heal = 15, heal_message_brute = "dents", heal_message_burn = "burnt wires", required_bodytype = BODYTYPE_ROBOTIC))
+	if (!attacked_humanoid.item_heal(user, brute_heal = 0, burn_heal = 15, heal_message_brute = "вмятины", heal_message_burn = "сгоревшие провода", required_bodytype = BODYTYPE_ROBOTIC))
 		return ITEM_INTERACT_BLOCKING
 
 	if (use(1) && amount > 0)
@@ -642,20 +662,20 @@ GLOBAL_LIST_INIT(wire_node_generating_types, typecacheof(list(
 		return
 
 	if(!isturf(T) || T.underfloor_accessibility < UNDERFLOOR_INTERACTABLE || !T.can_have_cabling())
-		to_chat(user, span_warning("You can only lay cables on catwalks and plating!"))
+		to_chat(user, span_warning("Вы можете прокладывать кабели только на мостиках и покрытии!"))
 		return
 
 	if(get_amount() < 1) // Out of cable
-		to_chat(user, span_warning("There is no cable left!"))
+		to_chat(user, span_warning("Кабель кончился!"))
 		return
 
 	if(get_dist(T,user) > 1) // Too far
-		to_chat(user, span_warning("You can't lay cable at a place that far away!"))
+		to_chat(user, span_warning("Вы не можете прокладывать кабель так далеко!"))
 		return
 
 	for(var/obj/structure/cable/C in T)
 		if(C.cable_layer & target_layer)
-			to_chat(user, span_warning("There's already a cable at that position!"))
+			to_chat(user, span_warning("В этом месте уже есть кабель!"))
 			return
 
 	var/obj/structure/cable/C = new target_type(T)
@@ -703,12 +723,22 @@ GLOBAL_LIST_INIT(wire_node_generating_types, typecacheof(list(
 ///multilayer cable to connect different layers
 /obj/structure/cable/multilayer
 	name = "multilayer cable hub"
-	desc = "A flexible, superconducting insulated multilayer hub for heavy-duty multilayer power transfer."
+	desc = "Гибкий, сверхпроводящий изолированный многослойный хаб для передачи большой мощности между слоями."
 	icon = 'icons/obj/pipes_n_cables/structures.dmi'
 	icon_state = "cable_bridge"
 	cable_layer = CABLE_LAYER_2
 	layer = WIRE_LAYER - 0.02 //Below all cables Disabled layers can lay over hub
 	color = CABLE_COLOR_WHITE
+
+/obj/structure/cable/multilayer/get_ru_names()
+	return list(
+		NOMINATIVE = "многослойный хаб",
+		GENITIVE = "многослойного хаба",
+		DATIVE = "многослойному хабу",
+		ACCUSATIVE = "многослойный хаб",
+		INSTRUMENTAL = "многослойным хабом",
+		PREPOSITIONAL = "многослойном хабе",
+	)
 
 /obj/structure/cable/multilayer/update_icon_state()
 	SHOULD_CALL_PARENT(FALSE)
@@ -746,9 +776,9 @@ GLOBAL_LIST_INIT(wire_node_generating_types, typecacheof(list(
 
 /obj/structure/cable/multilayer/examine(mob/user)
 	. += ..()
-	. += span_notice("L1:[cable_layer & CABLE_LAYER_1 ? "Connect" : "Disconnect"].")
-	. += span_notice("L2:[cable_layer & CABLE_LAYER_2 ? "Connect" : "Disconnect"].")
-	. += span_notice("L3:[cable_layer & CABLE_LAYER_3 ? "Connect" : "Disconnect"].")
+	. += span_notice("Слой 1:[cable_layer & CABLE_LAYER_1 ? "Подключён" : "Отключён"].")
+	. += span_notice("Слой 2:[cable_layer & CABLE_LAYER_2 ? "Подключён" : "Отключён"].")
+	. += span_notice("Слой 3:[cable_layer & CABLE_LAYER_3 ? "Подключён" : "Отключён"].")
 
 GLOBAL_LIST(hub_radial_layer_list)
 
@@ -760,9 +790,9 @@ GLOBAL_LIST(hub_radial_layer_list)
 		return
 	if(!GLOB.hub_radial_layer_list)
 		GLOB.hub_radial_layer_list = list(
-			"Layer 1" = image(icon = 'icons/hud/radial.dmi', icon_state = "coil-red"),
-			"Layer 2" = image(icon = 'icons/hud/radial.dmi', icon_state = "coil-yellow"),
-			"Layer 3" = image(icon = 'icons/hud/radial.dmi', icon_state = "coil-blue")
+			"Слой 1" = image(icon = 'icons/hud/radial.dmi', icon_state = "coil-red"),
+			"Слой 2" = image(icon = 'icons/hud/radial.dmi', icon_state = "coil-yellow"),
+			"Слой 3" = image(icon = 'icons/hud/radial.dmi', icon_state = "coil-blue")
 			)
 
 	var/layer_result = show_radial_menu(user, src, GLOB.hub_radial_layer_list, custom_check = CALLBACK(src, PROC_REF(check_menu), user), require_near = TRUE, tooltips = TRUE)
@@ -770,15 +800,15 @@ GLOBAL_LIST(hub_radial_layer_list)
 		return
 	var/CL
 	switch(layer_result)
-		if("Layer 1")
+		if("Слой 1")
 			CL = CABLE_LAYER_1
-			to_chat(user, span_warning("You toggle L1 connection."))
-		if("Layer 2")
+			to_chat(user, span_warning("Вы переключаете соединение первого слоя."))
+		if("Слой 2")
 			CL = CABLE_LAYER_2
-			to_chat(user, span_warning("You toggle L2 connection."))
-		if("Layer 3")
+			to_chat(user, span_warning("Вы переключаете соединение второго слоя."))
+		if("Слой 3")
 			CL = CABLE_LAYER_3
-			to_chat(user, span_warning("You toggle L3 connection."))
+			to_chat(user, span_warning("Вы переключаете соединение третьего слоя."))
 
 	cut_cable_from_powernet(FALSE)
 
@@ -794,7 +824,7 @@ GLOBAL_LIST(hub_radial_layer_list)
 	if(!istype(user))
 		return FALSE
 	if(!ISADVANCEDTOOLUSER(user))
-		to_chat(user, span_warning("You don't have the dexterity to do this!"))
+		to_chat(user, span_warning("У вас не хватает ловкости, чтобы сделать это!"))
 		return FALSE
 	if(user.incapacitated || !user.Adjacent(src))
 		return FALSE
@@ -809,7 +839,7 @@ GLOBAL_LIST(hub_radial_layer_list)
 	auto_propagate_cut_cable(src) // update the powernets
 
 /obj/structure/cable/multilayer/click_ctrl(mob/user)
-	to_chat(user, span_warning("You push the reset button."))
+	to_chat(user, span_warning("Вы нажимаете кнопку сброса."))
 	addtimer(CALLBACK(src, PROC_REF(Reload)), 10, TIMER_UNIQUE) //spam protect
 	return CLICK_ACTION_SUCCESS
 

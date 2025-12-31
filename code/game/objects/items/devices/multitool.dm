@@ -7,12 +7,9 @@
  *
  */
 
-
-
-
 /obj/item/multitool
 	name = "multitool"
-	desc = "Used for pulsing wires to test which to cut. Not recommended by doctors. You can activate it in-hand to locate the nearest APC."
+	desc = "Используется для пульсации проводов, чтобы проверить, какой из них нужно перерезать. Доктора не рекомендуют прикладывать его к сердцу. Вы можете активировать его в руке, чтобы найти ближайший ЛКП. Универсальный инструмент?"
 	icon = 'icons/obj/devices/tool.dmi'
 	icon_state = "multitool"
 	inhand_icon_state = "multitool"
@@ -36,6 +33,16 @@
 	var/apc_scanner = TRUE
 	COOLDOWN_DECLARE(next_apc_scan)
 
+/obj/item/multitool/get_ru_names()
+	return list(
+		NOMINATIVE = "мультитул",
+		GENITIVE = "мультитула",
+		DATIVE = "мультитулу",
+		ACCUSATIVE = "мультитул",
+		INSTRUMENTAL = "мультитулом",
+		PREPOSITIONAL = "мультитуле",
+	)
+
 /obj/item/multitool/Destroy()
 	if(buffer)
 		remove_buffer(buffer)
@@ -43,7 +50,7 @@
 
 /obj/item/multitool/examine(mob/user)
 	. = ..()
-	. += span_notice("Its buffer [buffer ? "contains [buffer]." : "is empty."]")
+	. += span_notice("Его буфер [buffer ? "содержит [buffer]." : "пуст."]")
 
 /obj/item/multitool/attack_self(mob/user, list/modifiers)
 	. = ..()
@@ -70,7 +77,7 @@
 	var/area/local_area = get_area(src)
 	var/obj/machinery/power/apc/power_controller = local_area.apc
 	if(!power_controller)
-		user.balloon_alert(user, "couldn't find apc!")
+		user.balloon_alert(user, "не удалось найти лкп!")
 		return
 
 	var/dist = get_dist(src, power_controller)
@@ -80,7 +87,7 @@
 
 	switch(dist)
 		if (0)
-			user.balloon_alert(user, "found apc!")
+			user.balloon_alert(user, "лкп найден!")
 			return
 		if(1 to 5)
 			arrow_color = COLOR_GREEN
@@ -108,7 +115,7 @@
 	QDEL_IN(arrow, 1.5 SECONDS)
 
 /obj/item/multitool/suicide_act(mob/living/carbon/user)
-	user.visible_message(span_suicide("[user] puts the [src] to [user.p_their()] chest. It looks like [user.p_theyre()] trying to pulse [user.p_their()] heart off!"))
+	user.visible_message(span_suicide("[user] прикладывает [declent_ru(ACCUSATIVE)] к своей груди. Похоже, [user.p_theyre()] пытается подать импульс на своё сердце!"))
 	return OXYLOSS//there's a reason it wasn't recommended by doctors
 
 /**
@@ -165,14 +172,14 @@
 	. = ..()
 	if(!hud_on)
 		return
-	. += span_notice("You can right-click to scan for nearby unseen spots. They will be shown for exactly 8 seconds due to battery limitations.")
+	. += span_notice("Вы можете нажать ПКМ, чтобы просканировать ближайшие невидимые зоны. Они будут показаны ровно 8 секунд из-за ограничений батареи.")
 	switch(detect_state)
 		if(PROXIMITY_NONE)
-			. += span_green("No AI should be currently looking at you. Keep on your clandestine activities.")
+			. += span_green("Никакой ИИ сейчас не должен на вас смотреть. Продолжайте свою подпольную деятельность.")
 		if(PROXIMITY_NEAR)
-			. += span_warning("An AI is getting uncomfortably close. Maybe time to drop what youre doing.")
+			. += span_warning("ИИ становится некомфортно близко. Возможно, пора прекратить то, что вы делаете.")
 		if(PROXIMITY_ON_SCREEN)
-			. += span_danger("An AI is (probably) looking at you. You should probably hide this.")
+			. += span_danger("ИИ (вероятно) смотрит на вас. Вам, вероятно, следует спрятать это.")
 
 /obj/item/multitool/ai_detect/Destroy()
 	if(hud_on && ismob(loc))
@@ -216,7 +223,7 @@
 /obj/item/multitool/ai_detect/proc/toggle_hud(mob/user)
 	hud_on = !hud_on
 	if(user)
-		to_chat(user, span_notice("You toggle the ai detection feature on [src] [hud_on ? "on" : "off"]."))
+		to_chat(user, span_notice("Вы [hud_on ? "включаете" : "выключаете"] функцию обнаружения ИИ на [declent_ru(PREPOSITIONAL)]."))
 	if(hud_on)
 		START_PROCESSING(SSfastprocess, src)
 		show_hud(user)
@@ -261,7 +268,7 @@
 	if(isnull(user?.client)) // the monkey incident of 2564
 		return
 	if(!COOLDOWN_FINISHED(src, static_scan_cd))
-		balloon_alert(user, "recharging!")
+		balloon_alert(user, "перезарядка!")
 		return
 	cleanup_static()
 	var/turf/our_turf = get_turf(src)
@@ -280,7 +287,7 @@
 			new_images += img
 	user.client.images |= new_images
 	static_viewer = WEAKREF(user.client)
-	balloon_alert(user, "nearby unseen spots shown")
+	balloon_alert(user, "показаны ближайшие невидимые зоны")
 	static_disappear_timer = addtimer(CALLBACK(src, PROC_REF(cleanup_static)), 8 SECONDS, TIMER_STOPPABLE)
 	COOLDOWN_START(src, static_scan_cd, 4 SECONDS)
 
@@ -314,20 +321,40 @@
 
 /obj/item/multitool/abductor
 	name = "alien multitool"
-	desc = "An omni-technological interface."
+	desc = "Омни-технологический интерфейс."
 	icon = 'icons/obj/antags/abductor.dmi'
 	icon_state = "multitool"
 	inside_belt_icon_state = "multitool_alien"
 	custom_materials = list(/datum/material/iron = SHEET_MATERIAL_AMOUNT * 2.5, /datum/material/silver = SHEET_MATERIAL_AMOUNT * 1.25, /datum/material/plasma = SHEET_MATERIAL_AMOUNT * 2.5, /datum/material/titanium = SHEET_MATERIAL_AMOUNT, /datum/material/diamond = SHEET_MATERIAL_AMOUNT)
 	toolspeed = 0.1
 
+/obj/item/multitool/abductor/get_ru_names()
+	return list(
+		NOMINATIVE = "инопланетный мультитул",
+		GENITIVE = "инопланетного мультитула",
+		DATIVE = "инопланетному мультитулу",
+		ACCUSATIVE = "инопланетный мультитул",
+		INSTRUMENTAL = "инопланетным мультитулом",
+		PREPOSITIONAL = "инопланетном мультитуле",
+	)
+
 /obj/item/multitool/cyborg
 	name = "electronic multitool"
-	desc = "Optimised version of a regular multitool. Streamlines processes handled by its internal microchip."
+	desc = "Оптимизированная версия обычного мультитула. Ускоряет процессы за счёт внутреннего микрочипа."
 	icon = 'icons/obj/items_cyborg.dmi'
 	icon_state = "toolkit_engiborg_multitool"
 	icon_angle = 0
 	toolspeed = 0.5
+
+/obj/item/multitool/cyborg/get_ru_names()
+	return list(
+		NOMINATIVE = "электронный мультитул",
+		GENITIVE = "электронного мультитула",
+		DATIVE = "электронному мультитулу",
+		ACCUSATIVE = "электронный мультитул",
+		INSTRUMENTAL = "электронным мультитулом",
+		PREPOSITIONAL = "электронном мультитуле",
+	)
 
 #undef PROXIMITY_NEAR
 #undef PROXIMITY_NONE

@@ -1,6 +1,6 @@
 /obj/item/wrench
 	name = "wrench"
-	desc = "A wrench with common uses. Can be found in your hand."
+	desc = "Гаечный ключ для общих целей. Можно найти у себя в руке."
 	icon = 'icons/obj/tools.dmi'
 	icon_state = "wrench"
 	inhand_icon_state = "wrench"
@@ -20,8 +20,8 @@
 	drop_sound = 'sound/items/handling/tools/wrench_drop.ogg'
 	pickup_sound = 'sound/items/handling/tools/wrench_pickup.ogg'
 
-	attack_verb_continuous = list("bashes", "batters", "bludgeons", "whacks")
-	attack_verb_simple = list("bash", "batter", "bludgeon", "whack")
+	attack_verb_continuous = list("бьёт", "колотит", "дубасит", "ударяет")
+	attack_verb_simple = list("ударить", "поколотить", "отдубасить", "ударить")
 	tool_behaviour = TOOL_WRENCH
 	toolspeed = 1
 	armor_type = /datum/armor/item_wrench
@@ -30,18 +30,28 @@
 	fire = 50
 	acid = 30
 
+/obj/item/wrench/get_ru_names()
+	return list(
+		NOMINATIVE = "гаечный ключ",
+		GENITIVE = "гаечного ключа",
+		DATIVE = "гаечному ключу",
+		ACCUSATIVE = "гаечный ключ",
+		INSTRUMENTAL = "гаечным ключом",
+		PREPOSITIONAL = "гаечном ключе",
+	)
+
 /obj/item/wrench/Initialize(mapload)
 	. = ..()
 	AddElement(/datum/element/falling_hazard, damage = force, wound_bonus = wound_bonus, hardhat_safety = TRUE, crushes = FALSE, impact_sound = hitsound)
 
 /obj/item/wrench/suicide_act(mob/living/user)
-	user.visible_message(span_suicide("[user] is beating [user.p_them()]self to death with [src]! It looks like [user.p_theyre()] trying to commit suicide!"))
+	user.visible_message(span_suicide("[user] забивает себя до смерти [declent_ru(INSTRUMENTAL)]! Похоже, [user.p_theyre()] пытается совершить суицид!"))
 	playsound(loc, 'sound/items/weapons/genhit.ogg', 50, TRUE, -1)
 	return BRUTELOSS
 
 /obj/item/wrench/abductor
 	name = "alien wrench"
-	desc = "A polarized wrench. It causes anything placed between the jaws to turn."
+	desc = "Поляризованный ключ. Заставляет вращаться всё, что попадает между губок."
 	icon = 'icons/obj/antags/abductor.dmi'
 	inside_belt_icon_state = "wrench_alien"
 	icon_angle = -135
@@ -49,26 +59,45 @@
 	usesound = 'sound/effects/empulse.ogg'
 	toolspeed = 0.1
 
+/obj/item/wrench/abductor/get_ru_names()
+	return list(
+		NOMINATIVE = "инопланетный ключ",
+		GENITIVE = "инопланетного ключа",
+		DATIVE = "инопланетному ключу",
+		ACCUSATIVE = "инопланетный ключ",
+		INSTRUMENTAL = "инопланетным ключом",
+		PREPOSITIONAL = "инопланетном ключе",
+	)
 
 /obj/item/wrench/medical
 	name = "medical wrench"
-	desc = "A medical wrench with common(medical?) uses. Can be found in your hand."
+	desc = "Медицинский ключ для общих (медицинских?) целей. Можно найти у себя в руке."
 	icon_state = "wrench_medical"
 	inhand_icon_state = "wrench_medical"
 	force = 2 //MEDICAL
 	throwforce = 4
-	attack_verb_continuous = list("heals", "medicals", "taps", "pokes", "analyzes") //"cobbyed"
-	attack_verb_simple = list("heal", "medical", "tap", "poke", "analyze")
+	attack_verb_continuous = list("лечит", "медицинит", "постукивает", "тыкает", "анализирует") //"cobbyed"
+	attack_verb_simple = list("полечить", "помедицинить", "стукнуть", "тыкнуть", "проанализировать")
 	///var to hold the name of the person who suicided
 	var/suicider
+
+/obj/item/wrench/medical/get_ru_names()
+	return list(
+		NOMINATIVE = "медицинский ключ",
+		GENITIVE = "медицинского ключа",
+		DATIVE = "медицинскому ключу",
+		ACCUSATIVE = "медицинский ключ",
+		INSTRUMENTAL = "медицинским ключом",
+		PREPOSITIONAL = "медицинском ключе",
+	)
 
 /obj/item/wrench/medical/examine(mob/user)
 	. = ..()
 	if(suicider)
-		. += span_notice("For some reason, it reminds you of [suicider].")
+		. += span_notice("По какой-то причине он напоминает вам о [suicider].")
 
 /obj/item/wrench/medical/suicide_act(mob/living/user)
-	user.visible_message(span_suicide("[user] is praying to the medical wrench to take [user.p_their()] soul. It looks like [user.p_theyre()] trying to commit suicide!"))
+	user.visible_message(span_suicide("[user] молится на [declent_ru(ACCUSATIVE)], чтобы тот забрал [user.p_their()] душу. Похоже, [user.p_theyre()] пытается совершить суицид!"))
 	user.Stun(100, ignore_canstun = TRUE)// Stun stops them from wandering off
 	user.set_light_color(COLOR_VERY_SOFT_YELLOW)
 	user.set_light(2)
@@ -88,22 +117,42 @@
 
 /obj/item/wrench/cyborg
 	name = "hydraulic wrench"
-	desc = "An advanced robotic wrench, powered by internal hydraulics. Twice as fast as the handheld version."
+	desc = "Продвинутый роботизированный ключ, работающий на внутренней гидравлике. В два раза быстрее ручной версии."
 	icon = 'icons/obj/items_cyborg.dmi'
 	icon_state = "toolkit_engiborg_wrench"
 	icon_angle = 0
 	toolspeed = 0.5
 
+/obj/item/wrench/cyborg/get_ru_names()
+	return list(
+		NOMINATIVE = "гидравлический ключ",
+		GENITIVE = "гидравлического ключа",
+		DATIVE = "гидравлическому ключу",
+		ACCUSATIVE = "гидравлический ключ",
+		INSTRUMENTAL = "гидравлическим ключом",
+		PREPOSITIONAL = "гидравлическом ключе",
+	)
+
 /obj/item/wrench/combat
 	name = "combat wrench"
-	desc = "It's like a normal wrench but edgier. Can be found on the battlefield."
+	desc = "Как обычный ключ, но круче. Можно найти на поле боя."
 	icon_state = "wrench_combat"
 	inhand_icon_state = "wrench_combat"
 	inside_belt_icon_state = "wrench_combat"
 	icon_angle = -90
-	attack_verb_continuous = list("devastates", "brutalizes", "commits a war crime against", "obliterates", "humiliates")
-	attack_verb_simple = list("devastate", "brutalize", "commit a war crime against", "obliterate", "humiliate")
+	attack_verb_continuous = list("опустошает", "терзает", "совершает военное преступление против", "уничтожает", "унижает")
+	attack_verb_simple = list("опустошить", "растерзать", "совершить военное преступление против", "уничтожить", "унизить")
 	tool_behaviour = null
+
+/obj/item/wrench/combat/get_ru_names()
+	return list(
+		NOMINATIVE = "боевой ключ",
+		GENITIVE = "боевого ключа",
+		DATIVE = "боевому ключу",
+		ACCUSATIVE = "боевой ключ",
+		INSTRUMENTAL = "боевым ключом",
+		PREPOSITIONAL = "боевом ключе",
+	)
 
 /obj/item/wrench/combat/Initialize(mapload)
 	. = ..()
@@ -127,14 +176,24 @@
 
 	tool_behaviour = active ? TOOL_WRENCH : initial(tool_behaviour)
 	if(user)
-		balloon_alert(user, "[name] [active ? "active, woe!":"restrained"]")
+		balloon_alert(user, "[name] [active ? "активен, горе!":"ограничен"]")
 	playsound(src, active ? 'sound/items/weapons/saberon.ogg' : 'sound/items/weapons/saberoff.ogg', 5, TRUE)
 	return COMPONENT_NO_DEFAULT_MESSAGE
 
 /obj/item/wrench/bolter
 	name = "bolter wrench"
-	desc = "A wrench designed to grab into airlock's bolting system and raise it regardless of the airlock's power status."
+	desc = "Гаечный ключ, предназначенный для захвата системы болтов шлюза и их поднятия независимо от наличия питания."
 	icon_state = "bolter_wrench"
 	inhand_icon_state = "bolter_wrench"
 	icon_angle = -90
 	w_class = WEIGHT_CLASS_NORMAL
+
+/obj/item/wrench/bolter/get_ru_names()
+	return list(
+		NOMINATIVE = "болтер-ключ",
+		GENITIVE = "болтер-ключа",
+		DATIVE = "болтер-ключу",
+		ACCUSATIVE = "болтер-ключ",
+		INSTRUMENTAL = "болтер-ключом",
+		PREPOSITIONAL = "болтер-ключе",
+	)

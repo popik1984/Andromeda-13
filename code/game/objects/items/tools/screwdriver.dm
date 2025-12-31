@@ -1,6 +1,6 @@
 /obj/item/screwdriver
 	name = "screwdriver"
-	desc = "You can be totally screwy with this."
+	desc = "Этим можно прикрутить что угодно."
 	icon = 'icons/map_icons/items/_item.dmi'
 	icon_state = "/obj/item/screwdriver"
 	post_init_icon_state = "screwdriver"
@@ -19,8 +19,8 @@
 	throw_speed = 3
 	throw_range = 5
 	custom_materials = list(/datum/material/iron=SMALL_MATERIAL_AMOUNT*0.75)
-	attack_verb_continuous = list("stabs")
-	attack_verb_simple = list("stab")
+	attack_verb_continuous = list("тыкает")
+	attack_verb_simple = list("ткнуть")
 	hitsound = 'sound/items/weapons/bladeslice.ogg'
 	usesound = list('sound/items/tools/screwdriver.ogg', 'sound/items/tools/screwdriver2.ogg')
 	operating_sound = 'sound/items/tools/screwdriver_operating.ogg'
@@ -52,8 +52,18 @@
 	fire = 50
 	acid = 30
 
+/obj/item/screwdriver/get_ru_names()
+	return list(
+		NOMINATIVE = "отвёртка",
+		GENITIVE = "отвёртки",
+		DATIVE = "отвёртке",
+		ACCUSATIVE = "отвёртку",
+		INSTRUMENTAL = "отвёрткой",
+		PREPOSITIONAL = "отвёртке",
+	)
+
 /obj/item/screwdriver/suicide_act(mob/living/user)
-	user.visible_message(span_suicide("[user] is stabbing [src] into [user.p_their()] [pick("temple", "heart")]! It looks like [user.p_theyre()] trying to commit suicide!"))
+	user.visible_message(span_suicide("[user] вонзает [src.declent_ru(ACCUSATIVE)] себе в [pick("висок", "сердце")]! Похоже, [user.p_theyre()] пытается совершить суицид!"))
 	return BRUTELOSS
 
 /obj/item/screwdriver/Initialize(mapload)
@@ -65,7 +75,7 @@
 
 /obj/item/screwdriver/abductor
 	name = "alien screwdriver"
-	desc = "An ultrasonic screwdriver."
+	desc = "Ультразвуковая отвёртка."
 	icon = 'icons/obj/antags/abductor.dmi'
 	icon_state = "screwdriver_a"
 	post_init_icon_state = null
@@ -79,12 +89,22 @@
 	greyscale_config_inhand_right = null
 	greyscale_colors = null
 
+/obj/item/screwdriver/abductor/get_ru_names()
+	return list(
+		NOMINATIVE = "инопланетная отвёртка",
+		GENITIVE = "инопланетной отвёртки",
+		DATIVE = "инопланетной отвёртке",
+		ACCUSATIVE = "инопланетную отвёртку",
+		INSTRUMENTAL = "инопланетной отвёрткой",
+		PREPOSITIONAL = "инопланетной отвёртке",
+	)
+
 /obj/item/screwdriver/abductor/get_belt_overlay()
 	return mutable_appearance('icons/obj/clothing/belt_overlays.dmi', "screwdriver_alien")
 
 /obj/item/screwdriver/power
 	name = "hand drill"
-	desc = "A simple powered hand drill."
+	desc = "Простая электрическая ручная дрель."
 	icon = 'icons/obj/tools.dmi'
 	icon_state = "drill"
 	post_init_icon_state = null
@@ -98,8 +118,8 @@
 	throwforce = 8
 	throw_speed = 2
 	throw_range = 3//it's heavier than a screw driver/wrench, so it does more damage, but can't be thrown as far
-	attack_verb_continuous = list("drills", "screws", "jabs", "whacks")
-	attack_verb_simple = list("drill", "screw", "jab", "whack")
+	attack_verb_continuous = list("сверлит", "вкручивает", "тыкает", "бьёт")
+	attack_verb_simple = list("просверлить", "вкрутить", "ткнуть", "ударить")
 	hitsound = 'sound/items/tools/drill_hit.ogg'
 	usesound = 'sound/items/tools/drill_use.ogg'
 	w_class = WEIGHT_CLASS_NORMAL
@@ -110,6 +130,16 @@
 	greyscale_config_inhand_left = null
 	greyscale_config_inhand_right = null
 	greyscale_colors = null
+
+/obj/item/screwdriver/power/get_ru_names()
+	return list(
+		NOMINATIVE = "ручная дрель",
+		GENITIVE = "ручной дрели",
+		DATIVE = "ручной дрели",
+		ACCUSATIVE = "ручную дрель",
+		INSTRUMENTAL = "ручной дрелью",
+		PREPOSITIONAL = "ручной дрели",
+	)
 
 /obj/item/screwdriver/power/get_all_tool_behaviours()
 	return list(TOOL_SCREWDRIVER, TOOL_WRENCH)
@@ -137,25 +167,25 @@
 
 	tool_behaviour = (active ? TOOL_WRENCH : TOOL_SCREWDRIVER)
 	if(user)
-		balloon_alert(user, "attached [active ? "bolt bit" : "screw bit"]")
+		balloon_alert(user, "насадка для [active ? "болтов" : "винтов"]")
 	playsound(src, 'sound/items/tools/change_drill.ogg', 50, TRUE)
 	return COMPONENT_NO_DEFAULT_MESSAGE
 
 /obj/item/screwdriver/power/examine()
 	. = ..()
-	. += "It's fitted with a [tool_behaviour == TOOL_SCREWDRIVER ? "screw" : "bolt"] bit."
+	. += "Установлена насадка для [tool_behaviour == TOOL_SCREWDRIVER ? "винтов" : "болтов"]."
 
 /obj/item/screwdriver/power/suicide_act(mob/living/user)
 	if(tool_behaviour == TOOL_SCREWDRIVER)
-		user.visible_message(span_suicide("[user] is putting [src] to [user.p_their()] temple. It looks like [user.p_theyre()] trying to commit suicide!"))
+		user.visible_message(span_suicide("[user] приставляет [src.declent_ru(ACCUSATIVE)] к своему виску! Похоже, [user.p_theyre()] пытается совершить суицид!"))
 	else
-		user.visible_message(span_suicide("[user] is pressing [src] against [user.p_their()] head! It looks like [user.p_theyre()] trying to commit suicide!"))
+		user.visible_message(span_suicide("[user] прижимает [src.declent_ru(ACCUSATIVE)] к своей голове! Похоже, [user.p_theyre()] пытается совершить суицид!"))
 	playsound(loc, 'sound/items/tools/drill_use.ogg', 50, TRUE, -1)
 	return BRUTELOSS
 
 /obj/item/screwdriver/cyborg
 	name = "automated screwdriver"
-	desc = "A powerful automated screwdriver, designed to be both precise and quick."
+	desc = "Мощная автоматическая отвёртка, разработанная для точности и скорости."
 	icon = 'icons/obj/items_cyborg.dmi'
 	icon_state = "toolkit_engiborg_screwdriver"
 	post_init_icon_state = null
@@ -165,6 +195,16 @@
 	random_color = FALSE
 	greyscale_config = null
 	greyscale_colors = null
+
+/obj/item/screwdriver/cyborg/get_ru_names()
+	return list(
+		NOMINATIVE = "автоматическая отвёртка",
+		GENITIVE = "автоматической отвёртки",
+		DATIVE = "автоматической отвёртке",
+		ACCUSATIVE = "автоматическую отвёртку",
+		INSTRUMENTAL = "автоматической отвёрткой",
+		PREPOSITIONAL = "автоматической отвёртке",
+	)
 
 /obj/item/screwdriver/red
 	random_color = FALSE

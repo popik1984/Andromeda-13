@@ -1,6 +1,6 @@
 /obj/item/holosign_creator
 	name = "holographic sign projector"
-	desc = "A handy-dandy holographic projector that displays a janitorial sign."
+	desc = "Удобный голографический проектор, который показывает знак уборщика."
 	icon = 'icons/obj/devices/tool.dmi'
 	icon_state = "signmaker"
 	inhand_icon_state = "electronic"
@@ -29,6 +29,16 @@
 		/obj/structure/mineral_door,
 	)
 
+/obj/item/holosign_creator/get_ru_names()
+	return list(
+		NOMINATIVE = "проектор голознаков",
+		GENITIVE = "проектора голознаков",
+		DATIVE = "проектору голознаков",
+		ACCUSATIVE = "проектор голознаков",
+		INSTRUMENTAL = "проектором голознаков",
+		PREPOSITIONAL = "проекторе голознаков",
+	)
+
 /obj/item/holosign_creator/Initialize(mapload)
 	. = ..()
 	AddElement(/datum/element/openspace_item_click_handler)
@@ -41,7 +51,7 @@
 	. = ..()
 	if(!signs)
 		return
-	. += span_notice("It is currently maintaining <b>[signs.len]/[max_signs]</b> projections.")
+	. += span_notice("В данный момент он поддерживает <b>[signs.len]/[max_signs]</b> проекций.")
 
 /obj/item/holosign_creator/check_allowed_items(atom/target, not_inside, target_self)
 	if(HAS_TRAIT(target, TRAIT_COMBAT_MODE_SKIP_INTERACTION))
@@ -60,10 +70,10 @@
 	if(target_turf.is_blocked_turf(TRUE, ignore_atoms = projectable_through, type_list = TRUE)) //can't put holograms on a tile that has dense stuff
 		return ITEM_INTERACT_BLOCKING
 	if(holocreator_busy)
-		balloon_alert(user, "busy making a hologram!")
+		balloon_alert(user, "занят созданием голограммы!")
 		return ITEM_INTERACT_BLOCKING
 	if(LAZYLEN(signs) >= max_signs)
-		balloon_alert(user, "max capacity!")
+		balloon_alert(user, "лимит достигнут!")
 		return ITEM_INTERACT_BLOCKING
 
 	playsound(src, 'sound/machines/click.ogg', 20, TRUE)
@@ -96,7 +106,7 @@
 	if(LAZYLEN(signs))
 		for(var/obj/structure/holosign/hologram as anything in signs)
 			qdel(hologram)
-		balloon_alert(user, "holograms cleared")
+		balloon_alert(user, "голограммы очищены")
 
 /obj/item/holosign_creator/Destroy()
 	. = ..()
@@ -115,30 +125,60 @@
 
 /obj/item/holosign_creator/janibarrier
 	name = "custodial holobarrier projector"
-	desc = "A holographic projector that creates hard light wet floor barriers."
+	desc = "Голографический проектор, создающий твердые световые барьеры 'Мокрый пол'."
 	holosign_type = /obj/structure/holosign/barrier/wetsign
 	creation_time = 1 SECONDS
 	max_signs = 12
 
+/obj/item/holosign_creator/janibarrier/get_ru_names()
+	return list(
+		NOMINATIVE = "проектор голобарьеров уборщика",
+		GENITIVE = "проектора голобарьеров уборщика",
+		DATIVE = "проектору голобарьеров уборщика",
+		ACCUSATIVE = "проектор голобарьеров уборщика",
+		INSTRUMENTAL = "проектором голобарьеров уборщика",
+		PREPOSITIONAL = "проекторе голобарьеров уборщика",
+	)
+
 /obj/item/holosign_creator/security
 	name = "security holobarrier projector"
-	desc = "A holographic projector that creates holographic security barriers. You can remotely open barriers with it."
+	desc = "Голографический проектор, создающий защитные голобарьеры. Вы можете дистанционно открывать барьеры с его помощью."
 	icon_state = "signmaker_sec"
 	holosign_type = /obj/structure/holosign/barrier
 	creation_time = 2 SECONDS
 	max_signs = 6
 
+/obj/item/holosign_creator/security/get_ru_names()
+	return list(
+		NOMINATIVE = "проектор голобарьеров охраны",
+		GENITIVE = "проектора голобарьеров охраны",
+		DATIVE = "проектору голобарьеров охраны",
+		ACCUSATIVE = "проектор голобарьеров охраны",
+		INSTRUMENTAL = "проектором голобарьеров охраны",
+		PREPOSITIONAL = "проекторе голобарьеров охраны",
+	)
+
 /obj/item/holosign_creator/engineering
 	name = "engineering holobarrier projector"
-	desc = "A holographic projector that creates holographic engineering barriers. You can remotely open barriers with it."
+	desc = "Голографический проектор, создающий инженерные голобарьеры. Вы можете дистанционно открывать барьеры с его помощью."
 	icon_state = "signmaker_engi"
 	holosign_type = /obj/structure/holosign/barrier/engineering
 	creation_time = 1 SECONDS
 	max_signs = 12
 
+/obj/item/holosign_creator/engineering/get_ru_names()
+	return list(
+		NOMINATIVE = "проектор голобарьеров инженера",
+		GENITIVE = "проектора голобарьеров инженера",
+		DATIVE = "проектору голобарьеров инженера",
+		ACCUSATIVE = "проектор голобарьеров инженера",
+		INSTRUMENTAL = "проектором голобарьеров инженера",
+		PREPOSITIONAL = "проекторе голобарьеров инженера",
+	)
+
 /obj/item/holosign_creator/atmos
 	name = "ATMOS holofan projector"
-	desc = "A holographic projector that creates holographic barriers that prevent changes in atmosphere conditions."
+	desc = "Голографический проектор, создающий голографические барьеры, предотвращающие изменение атмосферных условий."
 	icon_state = "signmaker_atmos"
 	holosign_type = /obj/structure/holosign/barrier/atmos
 	creation_time = 0
@@ -154,6 +194,16 @@
 	/// Timer for auto-turning off clearview
 	var/clearview_timer
 
+/obj/item/holosign_creator/atmos/get_ru_names()
+	return list(
+		NOMINATIVE = "проектор АТМОС голобарьеров",
+		GENITIVE = "проектора АТМОС голобарьеров",
+		DATIVE = "проектору АТМОС голобарьеров",
+		ACCUSATIVE = "проектор АТМОС голобарьеров",
+		INSTRUMENTAL = "проектором АТМОС голобарьеров",
+		PREPOSITIONAL = "проекторе АТМОС голобарьеров",
+	)
+
 /obj/item/holosign_creator/atmos/Initialize(mapload)
 	. = ..()
 	register_context()
@@ -168,7 +218,7 @@
 /obj/item/holosign_creator/atmos/add_context(atom/source, list/context, obj/item/held_item, mob/user)
 	. = ..()
 	if(LAZYLEN(signs))
-		context[SCREENTIP_CONTEXT_RMB] = "[clearview ? "Turn off" : "Temporarily activate"] clearview"
+		context[SCREENTIP_CONTEXT_RMB] = "[clearview ? "Выключить" : "Временно включить"] прозрачность"
 	return CONTEXTUAL_SCREENTIP_SET
 
 /obj/item/holosign_creator/atmos/create_holosign(atom/target, mob/user)
@@ -183,13 +233,13 @@
 /obj/item/holosign_creator/atmos/attack_self_secondary(mob/user, modifiers)
 	if(clearview)
 		reset_hologram_transparency()
-		balloon_alert(user, "turned off clearview")
+		balloon_alert(user, "прозрачность выключена")
 		return
 	if(LAZYLEN(signs))
 		for(var/obj/structure/holosign/barrier/atmos/hologram as anything in signs)
 			hologram.clearview_transparency()
 		clearview = TRUE
-		balloon_alert(user, "turned on clearview")
+		balloon_alert(user, "прозрачность включена")
 		clearview_timer = addtimer(CALLBACK(src, PROC_REF(reset_hologram_transparency)), 40 SECONDS, TIMER_STOPPABLE)
 	return ..()
 
@@ -202,26 +252,46 @@
 
 /obj/item/holosign_creator/medical
 	name = "\improper PENLITE barrier projector"
-	desc = "A holographic projector that creates PENLITE holobarriers. Useful during quarantines since they halt those with malicious diseases."
+	desc = "Голографический проектор, создающий PENLITE голобарьеры. Полезны во время карантина, так как они останавливают носителей опасных заболеваний."
 	icon_state = "signmaker_med"
 	holosign_type = /obj/structure/holosign/barrier/medical
 	creation_time = 1 SECONDS
 	max_signs = 6
 
+/obj/item/holosign_creator/medical/get_ru_names()
+	return list(
+		NOMINATIVE = "проектор PENLITE голобарьеров",
+		GENITIVE = "проектора PENLITE голобарьеров",
+		DATIVE = "проектору PENLITE голобарьеров",
+		ACCUSATIVE = "проектор PENLITE голобарьеров",
+		INSTRUMENTAL = "проектором PENLITE голобарьеров",
+		PREPOSITIONAL = "проекторе PENLITE голобарьеров",
+	)
+
 /obj/item/holosign_creator/cyborg
 	name = "Energy Barrier Projector"
-	desc = "A holographic projector that creates fragile energy fields."
+	desc = "Голографический проектор, создающий хрупкие энергетические поля."
 	creation_time = 1.5 SECONDS
 	max_signs = 9
 	holosign_type = /obj/structure/holosign/barrier/cyborg
 	var/shock = FALSE
+
+/obj/item/holosign_creator/cyborg/get_ru_names()
+	return list(
+		NOMINATIVE = "проектор энергобарьеров",
+		GENITIVE = "проектора энергобарьеров",
+		DATIVE = "проектору энергобарьеров",
+		ACCUSATIVE = "проектор энергобарьеров",
+		INSTRUMENTAL = "проектором энергобарьеров",
+		PREPOSITIONAL = "проекторе энергобарьеров",
+	)
 
 /obj/item/holosign_creator/cyborg/attack_self(mob/user)
 	if(iscyborg(user))
 		var/mob/living/silicon/robot/borg = user
 
 		if(shock)
-			to_chat(user, span_notice("You clear all active holograms, and reset your projector to normal."))
+			to_chat(user, span_notice("Вы удаляете все активные голограммы и сбрасываете проектор в нормальный режим."))
 			holosign_type = /obj/structure/holosign/barrier/cyborg
 			creation_time = 0.5 SECONDS
 			for(var/obj/structure/holosign/hologram as anything in signs)
@@ -229,7 +299,7 @@
 			shock = FALSE
 			return
 		if(borg.emagged && !shock)
-			to_chat(user, span_warning("You clear all active holograms, and overload your energy projector!"))
+			to_chat(user, span_warning("Вы удаляете все активные голограммы и перегружаете свой энергетический проектор!"))
 			holosign_type = /obj/structure/holosign/barrier/cyborg/hacked
 			creation_time = 3 SECONDS
 			for(var/obj/structure/holosign/hologram as anything in signs)
@@ -238,4 +308,4 @@
 			return
 	for(var/obj/structure/holosign/hologram as anything in signs)
 		qdel(hologram)
-	balloon_alert(user, "holograms cleared")
+	balloon_alert(user, "голограммы очищены")
