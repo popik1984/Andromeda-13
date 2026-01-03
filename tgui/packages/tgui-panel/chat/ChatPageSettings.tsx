@@ -36,7 +36,7 @@ export function ChatPageSettings(props) {
             <Button
               color="blue"
               icon="angles-left"
-              tooltip="Reorder tab to the left"
+              tooltip="Переместить вкладку влево"
               onClick={() =>
                 dispatch(
                   moveChatPageLeft({
@@ -66,7 +66,7 @@ export function ChatPageSettings(props) {
             <Button
               color="blue"
               icon="angles-right"
-              tooltip="Reorder tab to the right"
+              tooltip="Переместить вкладку вправо"
               onClick={() =>
                 dispatch(
                   moveChatPageRight({
@@ -81,7 +81,7 @@ export function ChatPageSettings(props) {
           <Button.Checkbox
             checked={page.hideUnreadCount}
             icon={page.hideUnreadCount ? 'bell-slash' : 'bell'}
-            tooltip="Disables unread counter"
+            tooltip="Отключить счётчик непрочитанных"
             onClick={() =>
               dispatch(
                 updateChatPage({
@@ -91,7 +91,7 @@ export function ChatPageSettings(props) {
               )
             }
           >
-            Mute
+            Без звука
           </Button.Checkbox>
         </Stack.Item>
         {!page.isMain && (
@@ -107,13 +107,13 @@ export function ChatPageSettings(props) {
                 )
               }
             >
-              Remove
+              Удалить
             </Button>
           </Stack.Item>
         )}
       </Stack>
       <Divider />
-      <Section title="Messages to display">
+      <Section title="Отображаемые сообщения">
         {MESSAGE_TYPES.filter(
           (typeDef) => !typeDef.important && !typeDef.admin,
         ).map((typeDef) => (
@@ -132,7 +132,7 @@ export function ChatPageSettings(props) {
             {typeDef.name}
           </Button.Checkbox>
         ))}
-        <Collapsible mt={1} color="transparent" title="Admin stuff">
+        <Collapsible mt={1} color="transparent" title="Админские сообщения">
           {MESSAGE_TYPES.filter(
             (typeDef) => !typeDef.important && typeDef.admin,
           ).map((typeDef) => (

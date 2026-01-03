@@ -15,7 +15,7 @@ import { selectSettings } from './selectors';
 
 const TabsViews = ['default', 'classic', 'scrollable'];
 const LinkedToChat = () => (
-  <NoticeBox color="red">Unlink Stat Panel from chat!</NoticeBox>
+  <NoticeBox color="red">Отвяжите панель статистики от чата!</NoticeBox>
 );
 
 export function SettingsStatPanel(props) {
@@ -28,7 +28,7 @@ export function SettingsStatPanel(props) {
       <Stack fill vertical>
         <Stack.Item>
           <LabeledList>
-            <LabeledList.Item label="Tabs" verticalAlign="middle">
+            <LabeledList.Item label="Вкладки" verticalAlign="middle">
               {TabsViews.map((view) => (
                 <Button
                   key={view}
@@ -42,7 +42,7 @@ export function SettingsStatPanel(props) {
                 </Button>
               ))}
             </LabeledList.Item>
-            <LabeledList.Item label="Font size">
+            <LabeledList.Item label="Размер шрифта">
               <Stack.Item grow>
                 {statLinked ? (
                   <LinkedToChat />
@@ -75,7 +75,7 @@ export function SettingsStatPanel(props) {
               dispatch(updateSettings({ statLinked: !statLinked }))
             }
           >
-            {statLinked ? 'Unlink from chat' : 'Link to chat'}
+            {statLinked ? 'Отвязать от чата' : 'Привязать к чату'}
           </Button>
         </Stack.Item>
       </Stack>

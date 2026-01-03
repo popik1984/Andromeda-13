@@ -7,24 +7,23 @@
 export const SETTINGS_TABS = [
   {
     id: 'general',
-    name: 'General',
+    name: 'Основные',
   },
-
   {
     id: 'textHighlight',
-    name: 'Text Highlights',
+    name: 'Подсветка текста',
   },
   {
     id: 'chatPage',
-    name: 'Chat Tabs',
+    name: 'Вкладки чата',
   },
   {
     id: 'statPanel',
-    name: 'Stat Panel',
+    name: 'Панель статистики',
   },
 ];
 
-export const FONTS_DISABLED = 'Default';
+export const FONTS_DISABLED = 'По умолчанию';
 
 export const FONTS = [
   FONTS_DISABLED,

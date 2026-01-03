@@ -23,7 +23,7 @@ export const ReconnectButton = () => {
           Byond.command('.reconnect');
         }}
       >
-        Reconnect
+        Переподключиться
       </Button>
       <Button
         color="white"

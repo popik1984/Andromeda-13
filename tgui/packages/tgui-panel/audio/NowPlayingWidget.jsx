@@ -17,9 +17,9 @@ export const NowPlayingWidget = (props) => {
     settings = useSettings(),
     title = audio.meta?.title,
     URL = audio.meta?.link,
-    Artist = audio.meta?.artist || 'Unknown Artist',
-    upload_date = audio.meta?.upload_date || 'Unknown Date',
-    album = audio.meta?.album || 'Unknown Album',
+    Artist = audio.meta?.artist || 'Неизвестный исполнитель',
+    upload_date = audio.meta?.upload_date || 'Неизвестная дата',
+    album = audio.meta?.album || 'Неизвестный альбом',
     duration = audio.meta?.duration,
     date = !Number.isNaN(upload_date)
       ? upload_date?.substring(0, 4) +
@@ -42,31 +42,31 @@ export const NowPlayingWidget = (props) => {
           }}
         >
           {
-            <Collapsible title={title || 'Unknown Track'} color={'blue'}>
+            <Collapsible title={title || 'Неизвестный трек'} color={'blue'}>
               <Section>
                 {URL !== 'Song Link Hidden' && (
                   <Flex.Item grow={1} color="label">
-                    URL: <a href={URL}>{URL}</a>
+                    Ссылка: <a href={URL}>{URL}</a>
                   </Flex.Item>
                 )}
                 <Flex.Item grow={1} color="label">
-                  Duration: {duration}
+                  Длительность: {duration}
                 </Flex.Item>
                 {Artist !== 'Song Artist Hidden' &&
-                  Artist !== 'Unknown Artist' && (
+                  Artist !== 'Неизвестный исполнитель' && (
                     <Flex.Item grow={1} color="label">
-                      Artist: {Artist}
+                      Исполнитель: {Artist}
                     </Flex.Item>
                   )}
-                {album !== 'Song Album Hidden' && album !== 'Unknown Album' && (
+                {album !== 'Song Album Hidden' && album !== 'Неизвестный альбом' && (
                   <Flex.Item grow={1} color="label">
-                    Album: {album}
+                    Альбом: {album}
                   </Flex.Item>
                 )}
                 {upload_date !== 'Song Upload Date Hidden' &&
-                  upload_date !== 'Unknown Date' && (
+                  upload_date !== 'Неизвестная дата' && (
                     <Flex.Item grow={1} color="label">
-                      Uploaded: {date}
+                      Загружено: {date}
                     </Flex.Item>
                   )}
               </Section>
@@ -75,13 +75,13 @@ export const NowPlayingWidget = (props) => {
         </Flex.Item>
       )) || (
         <Flex.Item grow={1} color="label">
-          Nothing to play.
+          Нечего воспроизводить.
         </Flex.Item>
       )}
       {audio.playing && (
         <Flex.Item mx={0.5} fontSize="0.9em">
           <Button
-            tooltip="Stop"
+            tooltip="Остановить"
             icon="stop"
             onClick={() =>
               dispatch({

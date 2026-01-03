@@ -104,7 +104,7 @@ SUBSYSTEM_DEF(mapping)
 		var/datum/map_config/old_config = current_map
 		current_map = config.defaultmap
 		if(!current_map || current_map.defaulted)
-			to_chat(world, span_boldannounce("Unable to load next or default map config, defaulting to [old_config.map_name]."))
+			to_chat(world, span_boldannounce("Не удалось загрузить следующую или конфигурацию карты по умолчанию, переход на \[[old_config.map_name]\]."))
 			current_map = old_config
 	plane_offset_to_true = list()
 	true_to_offset_planes = list()
@@ -431,7 +431,7 @@ Used by the AI doomsday and the self-destruct nuke.
 		if (!pm.load(x_offset, y_offset, start_z + parsed_maps[P], no_changeturf = TRUE, new_z = TRUE))
 			errorList |= pm.original_path
 	if(!silent)
-		INIT_ANNOUNCE("Loaded [name] in [(REALTIMEOFDAY - start_time)/10]s!")
+		INIT_ANNOUNCE("Карта \[[name]\] загружена за [(REALTIMEOFDAY - start_time)/10]с!")
 	return parsed_maps
 
 /datum/controller/subsystem/mapping/proc/loadWorld()
@@ -443,8 +443,8 @@ Used by the AI doomsday and the self-destruct nuke.
 
 	// load the station
 	station_start = world.maxz + 1
-	INIT_ANNOUNCE("Loading [current_map.map_name]...")
-	LoadGroup(FailedZs, "Station", current_map.map_path, current_map.map_file, current_map.traits, ZTRAITS_STATION, height_autosetup = current_map.height_autosetup)
+	INIT_ANNOUNCE("Загрузка карты \[[current_map.map_name]\]...")
+	LoadGroup(FailedZs, "Станция", current_map.map_path, current_map.map_file, current_map.traits, ZTRAITS_STATION, height_autosetup = current_map.height_autosetup)
 
 	if(SSdbcore.Connect())
 		var/datum/db_query/query_round_map_name = SSdbcore.NewQuery({"
@@ -456,7 +456,7 @@ Used by the AI doomsday and the self-destruct nuke.
 #ifndef LOWMEMORYMODE
 
 	if(current_map.minetype == MINETYPE_LAVALAND)
-		LoadGroup(FailedZs, "Lavaland", "map_files/Mining", "Lavaland.dmm", default_traits = ZTRAITS_LAVALAND)
+		LoadGroup(FailedZs, "Лаваленд", "map_files/Mining", "Lavaland.dmm", default_traits = ZTRAITS_LAVALAND)
 	else if (!isnull(current_map.minetype) && current_map.minetype != MINETYPE_NONE && current_map.minetype != MINETYPE_ICE)
 		INIT_ANNOUNCE("WARNING: An unknown minetype '[current_map.minetype]' was set! This is being ignored! Update the maploader code!")
 #endif
@@ -928,7 +928,7 @@ ADMIN_VERB(load_away_mission, R_FUN, "Load Away Mission", "Load a specific away 
 
 	if(!isnull(start_time))
 		var/tracked_time = (REALTIMEOFDAY - start_time) / 10
-		var/finished_message = "Loaded [number_of_away_missions] away missions in [tracked_time] second[tracked_time == 1 ? "" : "s"]!"
+		var/finished_message = "Загружено [number_of_away_missions] внестанционных миссий за [tracked_time] секунд[tracked_time == 1 ? "у" : "ы"]!"
 		to_chat(world, span_boldannounce(finished_message), MESSAGE_TYPE_DEBUG)
 		log_world(finished_message)
 		log_mapping(finished_message)

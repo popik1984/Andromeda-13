@@ -14,13 +14,13 @@ export const IMAGE_RETRY_DELAY = 250;
 export const IMAGE_RETRY_LIMIT = 10;
 export const IMAGE_RETRY_MESSAGE_AGE = 60000;
 
-// Default message type
+// Тип сообщения по умолчанию
 export const MESSAGE_TYPE_UNKNOWN = 'unknown';
 
-// Internal message type
+// Внутренний тип сообщения
 export const MESSAGE_TYPE_INTERNAL = 'internal';
 
-// Must match the set of defines in code/__DEFINES/chat.dm
+// Должны соответствовать дефайнам в code/__DEFINES/chat.dm
 export const MESSAGE_TYPE_SYSTEM = 'system';
 export const MESSAGE_TYPE_LOCALCHAT = 'localchat';
 export const MESSAGE_TYPE_RADIO = 'radio';
@@ -39,117 +39,117 @@ export const MESSAGE_TYPE_ADMINLOG = 'adminlog';
 export const MESSAGE_TYPE_ATTACKLOG = 'attacklog';
 export const MESSAGE_TYPE_DEBUG = 'debug';
 
-// Metadata for each message type
+// Метаданные для каждого типа сообщений
 export const MESSAGE_TYPES = [
-  // Always-on types
+  // Всегда включённые типы
   {
     type: MESSAGE_TYPE_SYSTEM,
-    name: 'System Messages',
-    description: 'Messages from your client, always enabled',
+    name: 'Системные сообщения',
+    description: 'Сообщения от вашего клиента, всегда включены',
     selector: '.boldannounce',
     important: true,
   },
-  // Basic types
+  // Основные типы
   {
     type: MESSAGE_TYPE_LOCALCHAT,
-    name: 'Local',
-    description: 'In-character local messages (say, emote, etc)',
+    name: 'Локальный чат',
+    description: 'Внутриигровые локальные сообщения (сказать, эмоция и т.д.)',
     selector: '.say, .emote',
   },
   {
     type: MESSAGE_TYPE_RADIO,
-    name: 'Radio',
-    description: 'All departments of radio messages',
+    name: 'Радио',
+    description: 'Все отделы радио сообщений',
     selector:
       '.alert, .minorannounce, .syndradio, .centcomradio, .aiprivradio, .comradio, .secradio, .gangradio, .engradio, .medradio, .sciradio, .suppradio, .servradio, .radio, .deptradio, .binarysay, .resonate, .abductor, .alien, .changeling',
   },
   {
     type: MESSAGE_TYPE_ENTERTAINMENT,
-    name: 'Entertainment',
-    description: 'Entertainment and newscaster broadcasts',
+    name: 'Развлечения',
+    description: 'Развлекательные трансляции и новости',
     selector: '.enteradio, .newscaster',
   },
   {
     type: MESSAGE_TYPE_INFO,
-    name: 'Info',
-    description: 'Non-urgent messages from the game and items',
+    name: 'Информация',
+    description: 'Несрочные сообщения от игры и предметов',
     selector:
       '.notice:not(.pm), .adminnotice, .info, .sinister, .cult, .infoplain, .announce, .hear, .smallnotice, .holoparasite, .boldnotice',
   },
   {
     type: MESSAGE_TYPE_WARNING,
-    name: 'Warnings',
-    description: 'Urgent messages from the game and items',
+    name: 'Предупреждения',
+    description: 'Срочные сообщения от игры и предметов',
     selector:
       '.warning:not(.pm), .critical, .userdanger, .italics, .alertsyndie, .warningplain',
   },
   {
     type: MESSAGE_TYPE_DEADCHAT,
-    name: 'Deadchat',
-    description: 'All of deadchat',
+    name: 'Призраки',
+    description: 'Весь чат призраков',
     selector: '.deadsay, .ghostalert',
   },
   {
     type: MESSAGE_TYPE_OOC,
     name: 'OOC',
-    description: 'The bluewall of global OOC messages',
+    description: 'Глобальные OOC сообщения',
     selector: '.ooc, .adminooc, .adminobserverooc, .oocplain',
   },
   {
     type: MESSAGE_TYPE_ADMINPM,
-    name: 'Admin PMs',
-    description: 'Messages to/from admins (adminhelp)',
+    name: 'Ахелп',
+    description: 'Сообщения к/от администраторов (adminhelp)',
     selector: '.pm, .adminhelp',
   },
   {
     type: MESSAGE_TYPE_COMBAT,
-    name: 'Combat Log',
-    description: 'Urist McTraitor has stabbed you with a knife!',
+    name: 'Бой',
+    description: 'Урист МакТрейтор ударил вас ножом!',
     selector: '.danger',
   },
   {
     type: MESSAGE_TYPE_UNKNOWN,
-    name: 'Unsorted',
-    description: 'Everything we could not sort, always enabled',
+    name: 'Несортированные',
+    description: 'Всё, что не удалось отсортировать, всегда включено',
   },
-  // Admin stuff
+  // Админские типы
   {
     type: MESSAGE_TYPE_ADMINCHAT,
-    name: 'Admin Chat',
-    description: 'ASAY messages',
+    name: 'Администратор',
+    description: 'Сообщения ASAY',
     selector: '.admin_channel, .adminsay',
     admin: true,
   },
   {
     type: MESSAGE_TYPE_MODCHAT,
-    name: 'Mod Chat',
-    description: 'MSAY messages',
+    name: 'Модератор',
+    description: 'Сообщения MSAY',
     selector: '.mod_channel',
     admin: true,
   },
   {
     type: MESSAGE_TYPE_PRAYER,
-    name: 'Prayers',
-    description: 'Prayers from players',
+    name: 'Молитвы',
+    description: 'Молитвы от игроков',
     admin: true,
   },
   {
     type: MESSAGE_TYPE_ADMINLOG,
-    name: 'Admin Log',
-    description: 'ADMIN LOG: Urist McAdmin has jumped to coordinates X, Y, Z',
+    name: 'Логи админа',
+    description: 'АДМИН ЛОГ: Урист МакАдмин переместился к координатам X, Y, Z',
     selector: '.log_message',
     admin: true,
   },
   {
     type: MESSAGE_TYPE_ATTACKLOG,
-    name: 'Attack Log',
-    description: 'Urist McTraitor has shot John Doe',
+    name: 'Логи боя',
+    description: 'Урист МакТрейтор выстрелил в Джона Доу',
     admin: true,
   },
   {
     type: MESSAGE_TYPE_DEBUG,
-    name: 'Debug Log',
-    description: 'DEBUG: SSPlanets subsystem Recover().',
+    name: 'Отладочный логи',
+    description: 'DEBUG: Подсистема SSPlanets Recover().',
     admin: true,
   },
 ];
