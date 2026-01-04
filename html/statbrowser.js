@@ -17,11 +17,11 @@ if (!String.prototype.trim) {
 // Status panel implementation ------------------------------------------------
 //status_tab_parts expects a list to be returned, to which we'll send a list within a list
 //with just "loading" to not appear broken.
-var status_tab_parts = [["Loading..."]];
+var status_tab_parts = [["Загрузка..."]];
 var current_tab = null;
 //mc_tab_parts expects a list to be returned, to which we'll send a list within a list
 //with just "loading" to not appear broken.
-var mc_tab_parts = [["Loading..."]];
+var mc_tab_parts = [["Загрузка..."]];
 var href_token = null;
 var spells = [];
 var spell_tabs = [];
@@ -895,15 +895,21 @@ Byond.subscribeTo("init_verbs", function (payload) {
 });
 
 Byond.subscribeTo("update_stat", function (payload) {
-  status_tab_parts = [payload.ping_str];
+  status_tab_parts = [];
+
+  if (payload.info_str != null) {
+    status_tab_parts.push(payload.info_str);
+  }
+
+  if (payload.ping_str != null) {
+    status_tab_parts.push(payload.ping_str);
+  }
 
   var parsed = payload.global_data;
-
   for (var i = 0; i < parsed.length; i++)
     if (parsed[i] != null) status_tab_parts.push(parsed[i]);
 
   parsed = payload.other_str;
-
   for (var i = 0; i < parsed.length; i++)
     if (parsed[i] != null) status_tab_parts.push(parsed[i]);
 

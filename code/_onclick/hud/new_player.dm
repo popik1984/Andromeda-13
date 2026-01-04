@@ -682,8 +682,8 @@
 	if(SSticker.current_state == GAME_STATE_STARTUP)
 		to_chat(usr, span_admin("The server is still setting up, but the round will be started as soon as possible."))
 
-#define OVERLAY_X_DIFF 12
-#define OVERLAY_Y_DIFF 5
+#define OVERLAY_X_DIFF 3
+#define OVERLAY_Y_DIFF 2
 
 ///Lobby screen that appears before the game has started showing how many players there are and who is ready.
 /atom/movable/screen/lobby/new_player_info
@@ -694,8 +694,8 @@
 	base_icon_state = "newplayer"
 	maptext_height = 75
 	maptext_width = 80
-	maptext_x = OVERLAY_X_DIFF
-	maptext_y = OVERLAY_Y_DIFF
+	maptext_x = 28
+	maptext_y = 10
 
 	///Boolean on whether or not we should have our static overlay, so we 'turn' the TV off when collapsing.
 	var/show_static = TRUE
@@ -777,37 +777,41 @@
 		maptext = null
 		return
 	if(!MC_RUNNING())
-		maptext = MAPTEXT("<span style='text-align: center; vertical-align: middle'>Loading...</span>")
+		maptext = MAPTEXT("<span style='text-align: center; vertical-align: middle'>Загрузка...</span>")
 		return
 	if(SSticker.IsPostgame())
-		maptext = MAPTEXT("<span style='text-align: center; vertical-align: middle'>Game ended, <br /> \
-			restart soon</span>")
+		maptext = MAPTEXT("<span style='text-align: center; vertical-align: middle'>Игра окончена, <br /> \
+			перезапуск скоро</span>")
 		return
 
 	var/new_maptext
 	var/round_started = SSticker.HasRoundStarted()
+	var/player_count = LAZYLEN(GLOB.clients)
+
 	if(round_started)
 		new_maptext = "<span style='text-align: center; vertical-align: middle'>[SSmapping.current_map.map_name]<br /> \
-			[LAZYLEN(GLOB.clients)] player\s online<br /> \
-			[ROUND_TIME()] in<br />"
+			[player_count] игрок[DECL_CREDIT(player_count)] онлайн<br /> \
+			[ROUND_TIME()] в игре<br />"
 		new_maptext += "</span>"
 	else
 		var/time_remaining = SSticker.GetTimeLeft()
 		if(time_remaining > 0)
-			time_remaining = "[round(time_remaining/10)]s"
+			time_remaining = "[round(time_remaining/10)]с"
 		else if(time_remaining == -10)
-			time_remaining = "DELAYED"
+			time_remaining = "ОТЛОЖЕНО"
 		else
-			time_remaining = "SOON"
+			time_remaining = "СКОРО"
 
 		if(hud.mymob.client?.holder)
-			new_maptext = "<span style='text-align: center; vertical-align: middle'>Starting in [time_remaining]<br /> \
-				[LAZYLEN(GLOB.clients)] player\s<br /> \
-				[SSticker.totalPlayersReady] players ready<br /> \
-				[SSticker.total_admins_ready] / [length(GLOB.admins)] admins ready</span>"
+			new_maptext = "<span style='text-align: center; vertical-align: middle'>Старт через [time_remaining]<br /> \
+				[player_count] игрок[DECL_CREDIT(player_count)]<br /> \
+				[SSticker.totalPlayersReady] игрок[DECL_CREDIT(SSticker.totalPlayersReady)] готово<br /> \
+				[SSticker.total_admins_ready] / [length(GLOB.admins)] админ[DECL_CREDIT(length(GLOB.admins))] готово</span>"
 		else
 			new_maptext = "<span style='text-align: center; vertical-align: middle; font-size: 18px'>[time_remaining]</span><br /> \
-				<span style='text-align: center; vertical-align: middle'>[LAZYLEN(GLOB.clients)] player\s</span>"
+				<span style='text-align: center; vertical-align: middle'>[player_count] игрок[DECL_CREDIT(player_count)]</span>"
+
+	maptext = MAPTEXT(new_maptext)
 
 	maptext = MAPTEXT(new_maptext)
 

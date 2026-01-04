@@ -572,23 +572,23 @@
 /obj/docking_port/mobile/proc/getModeStr()
 	switch(mode)
 		if(SHUTTLE_IGNITING)
-			return "IGN"
+			return "Запуск"
 		if(SHUTTLE_RECALL)
-			return "RCL"
+			return "Отозван"
 		if(SHUTTLE_CALL)
-			return "ETA"
+			return "Прибытие"
 		if(SHUTTLE_DOCKED)
-			return "ETD"
+			return "Ожидание"
 		if(SHUTTLE_ESCAPE)
-			return "ESC"
+			return "Убыл"
 		if(SHUTTLE_STRANDED)
-			return "ERR"
+			return "Ошибка"
 		if(SHUTTLE_RECHARGING)
-			return "RCH"
+			return "Заправка"
 		if(SHUTTLE_PREARRIVAL)
-			return "LDN"
+			return "Прибытие"
 		if(SHUTTLE_DISABLED)
-			return "DIS"
+			return "Отключён"
 	return ""
 
 // returns 5-letter timer string, used by status screens and mob status panel

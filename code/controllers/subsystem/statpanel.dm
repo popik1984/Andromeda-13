@@ -21,40 +21,48 @@ SUBSYSTEM_DEF(statpanels)
 	if (!resumed)
 		num_fires++
 		var/datum/map_config/cached = SSmap_vote.next_map_config
+		var/active_players = get_active_player_count(alive_check = FALSE, afk_check = TRUE, human_check = FALSE)
+		var/observing_players = length(GLOB.current_observers_list)
 
 		if(isnull(SSmapping.current_map))
-			global_data = list("Loading")
+			global_data = list("Загрузка")
 		else if(SSmapping.current_map.feedback_link)
-			global_data = list(list("Map: [SSmapping.current_map.map_name]", " (Feedback)", "action=openLink&link=[SSmapping.current_map.feedback_link]"))
+			global_data = list(list("Карта: [SSmapping.current_map.map_name]", " (Feedback)", "action=openLink&link=[SSmapping.current_map.feedback_link]"))
 		else
-			global_data = list("Map: [SSmapping.current_map?.map_name]")
+			global_data = list("Карта: [SSmapping.current_map?.map_name]")
 
 		if(SSmapping.current_map?.mapping_url)
 			global_data += list(list("same_line", " | (View in Browser)", "action=openWebMap"))
 
 		if(cached)
-			global_data += "Next Map: [cached.map_name]"
+			global_data += "Следующая Карта: [cached.map_name]"
 
 		global_data += list(
-			"Round ID: [GLOB.round_id ? GLOB.round_id : "NULL"]",
-			"Server Time: [time2text(world.timeofday, "YYYY-MM-DD hh:mm:ss", world.timezone)]",
-			"Round Time: [ROUND_TIME()]",
-			"Station Time: [station_time_timestamp()]",
-			"Time Dilation: [round(SStime_track.time_dilation_current,1)]% AVG:([round(SStime_track.time_dilation_avg_fast,1)]%, [round(SStime_track.time_dilation_avg,1)]%, [round(SStime_track.time_dilation_avg_slow,1)]%)",
+			"ID Раунда: [GLOB.round_id ? GLOB.round_id : "ОТСУТСТВУЕТ"]",
+			"~~~ Онлайн ~~~",
+			"Подключено: [GLOB.clients.len] | Активны: [active_players] | Наблюдают: [observing_players]", // Наблюдают = Куколдят :)
+			"~~~ Время ~~~",
+			"Станционное время (IC): [station_time_timestamp()]",
+			"[SSticker.round_start_time ? "Время раунда" : "Время лобби"]: [ROUND_TIME()]",
+			"Серверное время (МСК): [time2text(world.timeofday, "YYYY-MM-DD hh:mm:ss", world.timezone)]",
+			"Замедление времени: [round(SStime_track.time_dilation_current,1)]% В среднем:([round(SStime_track.time_dilation_avg_fast,1)]%, [round(SStime_track.time_dilation_avg,1)]%, [round(SStime_track.time_dilation_avg_slow,1)]%)",
 		)
 
 		if(SSshuttle.emergency)
 			var/ETA = SSshuttle.emergency.getModeStr()
 			if(ETA)
-				global_data += "[ETA] [SSshuttle.emergency.getTimerStr()]"
+				global_data += "~~~ Шаттл ~~~"
+				global_data += "Эвакуационный шаттл ([ETA]): [SSshuttle.emergency.getTimerStr()]"
 
 		if(SSticker.reboot_timer)
 			var/reboot_time = timeleft(SSticker.reboot_timer)
 			if(reboot_time)
-				global_data += "Reboot: [DisplayTimeText(reboot_time, 1)]"
+				global_data += "~~~ Сервер ~~~"
+				global_data += "Перезапуск раунда: [DisplayTimeText(reboot_time, 1)]"
 		// admin must have delayed round end
 		else if(SSticker.ready_for_reboot)
-			global_data += "Reboot: DELAYED"
+			global_data += "~~~ Сервер ~~~"
+			global_data += "Перезапуск раунда: ОТЛОЖЕН"
 
 		src.currentrun = GLOB.clients.Copy()
 		mc_data = null
@@ -124,7 +132,8 @@ SUBSYSTEM_DEF(statpanels)
 		return
 	target.stat_panel.send_message("update_stat", list(
 		"global_data" = global_data,
-		"ping_str" = "Ping: [round(target.lastping, 1)]ms (Average: [round(target.avgping, 1)]ms)",
+		"info_str" = "~~~ Информация ~~~",
+		"ping_str" = "Пинг: [round(target.lastping, 1)]мс (В среднем: [round(target.avgping, 1)]мс)",
 		"other_str" = target.mob?.get_status_tab_items(),
 	))
 

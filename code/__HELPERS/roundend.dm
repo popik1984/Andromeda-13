@@ -244,8 +244,8 @@ GLOBAL_LIST_INIT(achievements_unlocked, list())
 	//Set news report and mode result
 	SSdynamic.set_round_result()
 
-	to_chat(world, span_infoplain(span_big(span_bold("<BR><BR><BR>The round has ended."))))
-	log_game("The round has ended.")
+	to_chat(world, span_infoplain(span_big(span_bold("<BR><BR><BR>Раунд закончился."))))
+	log_game("Раунд закончился.")
 	for(var/channel_tag in CONFIG_GET(str_list/channel_announce_end_game))
 		send2chat(new /datum/tgs_message_content("[GLOB.round_id ? "Round [GLOB.round_id]" : "The round has"] just ended."), channel_tag)
 	send2adminchat("Server", "Round just ended.")
@@ -301,9 +301,9 @@ GLOBAL_LIST_INIT(achievements_unlocked, list())
 /datum/controller/subsystem/ticker/proc/standard_reboot()
 	if(ready_for_reboot)
 		if(GLOB.station_was_nuked)
-			Reboot("Station destroyed by Nuclear Device.", "nuke")
+			Reboot("Станция уничтожена ядерным устройством.", "nuke")
 		else
-			Reboot("Round ended.", "proper completion")
+			Reboot("Раунд завершён.", "proper completion")
 	else
 		CRASH("Attempted standard reboot without ticker roundend completion")
 
