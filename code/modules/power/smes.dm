@@ -44,12 +44,12 @@
 
 /obj/machinery/power/smes/get_ru_names()
 	return list(
-		NOMINATIVE = "энергонакопитель",
-		GENITIVE = "энергонакопителя",
-		DATIVE = "энергонакопителю",
-		ACCUSATIVE = "энергонакопитель",
-		INSTRUMENTAL = "энергонакопителем",
-		PREPOSITIONAL = "энергонакопителе",
+		NOMINATIVE = "СМЭС",
+		GENITIVE = "СМЭСа",
+		DATIVE = "СМЭСу",
+		ACCUSATIVE = "СМЭС",
+		INSTRUMENTAL = "СМЭСом",
+		PREPOSITIONAL = "СМЭСе",
 	)
 
 /obj/machinery/power/smes/Initialize(mapload)
@@ -536,12 +536,12 @@
 
 /obj/machinery/power/smes/super/get_ru_names()
 	return list(
-		NOMINATIVE = "супер-емкий энергонакопитель",
-		GENITIVE = "супер-емкого энергонакопителя",
-		DATIVE = "супер-емкому энергонакопителю",
-		ACCUSATIVE = "супер-емкий энергонакопитель",
-		INSTRUMENTAL = "супер-емким энергонакопителем",
-		PREPOSITIONAL = "супер-емком энергонакопителе",
+		NOMINATIVE = "супер-емкий СМЭС",
+		GENITIVE = "супер-емкого СМЭСа",
+		DATIVE = "супер-емкому СМЭСу",
+		ACCUSATIVE = "супер-емкий СМЭС",
+		INSTRUMENTAL = "супер-емким СМЭСом",
+		PREPOSITIONAL = "супер-емком СМЭСе",
 	)
 
 /obj/machinery/power/smes/super/full
@@ -563,12 +563,12 @@
 
 /obj/machinery/power/smes/magical/get_ru_names()
 	return list(
-		NOMINATIVE = "магический энергонакопитель",
-		GENITIVE = "магического энергонакопителя",
-		DATIVE = "магическому энергонакопителю",
-		ACCUSATIVE = "магический энергонакопитель",
-		INSTRUMENTAL = "магическим энергонакопителем",
-		PREPOSITIONAL = "магическом энергонакопителе",
+		NOMINATIVE = "магический СМЭС",
+		GENITIVE = "магического СМЭСа",
+		DATIVE = "магическому СМЭСу",
+		ACCUSATIVE = "магический СМЭС",
+		INSTRUMENTAL = "магическим СМЭСом",
+		PREPOSITIONAL = "магическом СМЭСе",
 	)
 
 /obj/machinery/power/smes/magical/adjust_charge(charge_adjust)

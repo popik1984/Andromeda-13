@@ -84,12 +84,12 @@
 
 /obj/machinery/light/get_ru_names()
 	return list(
-		NOMINATIVE = "осветитель",
-		GENITIVE = "осветителя",
-		DATIVE = "осветителю",
-		ACCUSATIVE = "осветитель",
-		INSTRUMENTAL = "осветителем",
-		PREPOSITIONAL = "осветителе",
+		NOMINATIVE = "светильник",
+		GENITIVE = "светильника",
+		DATIVE = "светильнику",
+		ACCUSATIVE = "светильник",
+		INSTRUMENTAL = "светильником",
+		PREPOSITIONAL = "светильнике",
 	)
 
 // создание нового осветительного прибора

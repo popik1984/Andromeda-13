@@ -82,7 +82,7 @@
 				container.reagents.add_reagent(dispensedreagent, min(container.volume - container.reagents.total_volume, container.amount_per_transfer_from_this))
 				to_chat(user, span_notice("Вы наполняете [container.declent_ru(ACCUSATIVE)] из [declent_ru(GENITIVE)]."))
 				return TRUE
-			to_chat(user, span_notice("[container.declent_ru(NOMINATIVE)] полн[GEND_UI_A_O(container)]."))
+			to_chat(user, span_notice("[container.declent_ru(NOMINATIVE)] полон."))
 			return FALSE
 
 	if(istype(attacking_item, /obj/item/melee/baton/security))
