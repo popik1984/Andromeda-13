@@ -1,15 +1,15 @@
-/// How much time (in seconds) is assumed to pass while assuming air. Used to scale overpressure/overtemp damage when assuming air.
+/// Сколько времени (в секундах) считается прошедшим при поглощении воздуха. Используется для масштабирования урона от избыточного давления/температуры при поглощении воздуха.
 #define ASSUME_AIR_DT_FACTOR 1
-/// Multiplies the pressure of assembly bomb explosions before it's put through THE LOGARITHM
+/// Умножает давление бомб из сборки перед тем, как оно пройдет через ЛОГАРИФМ
 #define ASSEMBLY_BOMB_COEFFICIENT 0.5
-/// Base of the logarithmic function used to calculate assembly bomb explosion size
+/// Основание логарифмической функции, используемой для расчета размера взрыва бомбы из сборки
 #define ASSEMBLY_BOMB_BASE 2.7
 
 /**
- * # Gas Tank
+ * # Газовый бак
  *
- * Handheld gas canisters
- * Can rupture explosively if overpressurized
+ * Ручные газовые канистры
+ * Могут разорваться со взрывом при избыточном давлении
  */
 /obj/item/tank
 	name = "tank"
@@ -21,7 +21,7 @@
 	righthand_file = 'icons/mob/inhands/equipment/tanks_righthand.dmi'
 	obj_flags = CONDUCTS_ELECTRICITY
 	slot_flags = ITEM_SLOT_BACK
-	worn_icon = 'icons/mob/clothing/back.dmi' //since these can also get thrown into suit storage slots. if something goes on the belt, set this to null.
+	worn_icon = 'icons/mob/clothing/back.dmi' //так как их также можно положить в слоты хранения костюма. если что-то идет на пояс, установите это в null.
 	hitsound = 'sound/items/weapons/smash.ogg'
 	pickup_sound = 'sound/items/handling/gas_tank/gas_tank_pick_up.ogg'
 	drop_sound = 'sound/items/handling/gas_tank/gas_tank_drop.ogg'
@@ -37,70 +37,80 @@
 	action_slots = ALL
 	armor_type = /datum/armor/item_tank
 	integrity_failure = 0.5
-	/// If we are in the process of exploding, stops multi explosions
+	/// Если мы находимся в процессе взрыва, останавливает множественные взрывы
 	var/igniting = FALSE
-	/// The gases this tank contains. Don't modify this directly, use return_air() to get it instead
+	/// Газы, содержащиеся в этом баке. Не изменяйте это напрямую, используйте return_air() для получения
 	var/datum/gas_mixture/air_contents = null
-	/// The volume of this tank. Among other things gas tank explosions (including TTVs) scale off of this. Be sure to account for that if you change this or you will break ~~toxins~~ ordinance.
+	/// Объем этого бака. Среди прочего, взрывы газовых баков (включая бомбы) зависят от этого. Учтите это, если будете менять, иначе вы сломаете ~~токсины~~ ординанс.
 	var/volume = TANK_STANDARD_VOLUME
-	/// Whether the tank is currently leaking.
+	/// Протекает ли бак в данный момент.
 	var/leaking = FALSE
-	/// The pressure of the gases this tank supplies to internals.
+	/// Давление газов, которое этот бак подает в дыхательную маску.
 	var/distribute_pressure = ONE_ATMOSPHERE
-	/// Icon state when in a tank holder or a surgical table. Null makes it incompatible with tank holder.
+	/// Состояние иконки, когда находится в держателе бака или на хирургическом столе. Null делает его несовместимым с держателем бака.
 	var/tank_holder_icon_state = "holder_generic"
-	///Used by process() to track if there's a reason to process each tick
+	///Используется process() для отслеживания, есть ли причина для обработки в каждом тике
 	var/excited = TRUE
-	/// How our particular tank explodes.
+	/// Как именно взрывается наш конкретный бак.
 	var/list/explosion_info
-	/// List containing reactions happening inside our tank.
+	/// Список, содержащий реакции, происходящие внутри нашего бака.
 	var/list/reaction_info
-	/// Mob that is currently breathing from the tank.
+	/// Моб, который в данный момент дышит из бака.
 	var/mob/living/carbon/breathing_mob = null
-	///Progress bar showing how much volume is in the tank when equipped.
+	///Прогресс-бар, показывающий, сколько объема осталось в баке, когда он экипирован.
 	var/datum/progressbar/volume_bar
-	/// Attached assembly, can either detonate the tank or release its contents when receiving a signal
+	/// Прикрепленная сборка, может либо взорвать бак, либо выпустить его содержимое при получении сигнала
 	var/obj/item/assembly_holder/tank_assembly
-	/// Whether or not it will try to explode when it receives a signal
+	/// Попытается ли он взорваться при получении сигнала
 	var/bomb_status = FALSE
 
-/// Closes the tank if dropped while open.
+/// Закрывает бак, если его уронили в открытом состоянии.
 /datum/armor/item_tank
 	bomb = 10
 	fire = 80
 	acid = 30
 
+/obj/item/tank/get_ru_names()
+	return list(
+		NOMINATIVE = "бак",
+		GENITIVE = "бака",
+		DATIVE = "баку",
+		ACCUSATIVE = "бак",
+		INSTRUMENTAL = "баком",
+		PREPOSITIONAL = "баке",
+	)
+
 /obj/item/tank/dropped(mob/living/user, silent)
 	. = ..()
-	// Close open air tank if its current user got sent to the shadowrealm.
+	// Закрыть открытый бак, если его текущий пользователь отправился в мир иной.
 	if (QDELETED(breathing_mob))
 		breathing_mob = null
 		return
-	// Close open air tank if it got dropped by its current user.
+	// Закрыть открытый бак, если его текущий пользователь уронил его.
 	if (loc != breathing_mob)
 		breathing_mob.cutoff_internals()
 
-/// Closes the tank if given to another mob while open.
+/// Закрывает бак, если он передан другому мобу в открытом состоянии.
 /obj/item/tank/equipped(mob/living/user, slot, initial)
 	. = ..()
-	// Close open air tank if it was equipped by a mob other than the current user.
+	// Закрыть открытый бак, если он был экипирован мобом, отличным от текущего пользователя.
 	if (breathing_mob && (user != breathing_mob))
 		breathing_mob.cutoff_internals()
 
-/// Called by carbons after they connect the tank to their breathing apparatus.
+/// Вызывается карбоновыми мобами после подключения бака к дыхательному аппарату.
 /obj/item/tank/proc/after_internals_opened(mob/living/carbon/carbon_target)
 	breathing_mob = carbon_target
 	playsound(loc, 'sound/items/internals/internals_on.ogg', 15, TRUE, SHORT_RANGE_SOUND_EXTRARANGE)
-	var/pressure_on_open = air_contents.return_pressure() //we start off "full" when we toggle, and count down from there.
+	var/pressure_on_open = air_contents.return_pressure() //мы начинаем "полными" при переключении и отсчитываем оттуда.
 	volume_bar = new(carbon_target, pressure_on_open, src, pressure_on_open)
 
-/// Called by carbons after they disconnect the tank from their breathing apparatus.
+/// Вызывается карбоновыми мобами после отключения бака от дыхательного аппарата.
 /obj/item/tank/proc/after_internals_closed(mob/living/carbon/carbon_target)
 	breathing_mob = null
 	playsound(loc, 'sound/items/internals/internals_off.ogg', 15, TRUE, SHORT_RANGE_SOUND_EXTRARANGE)
 	QDEL_NULL(volume_bar)
 
-/// Attempts to toggle the mob's internals on or off using this tank. Returns TRUE if successful.
+/// Пытается переключить подачу воздуха из бака для моба. Возвращает TRUE в случае успеха.
 /obj/item/tank/proc/toggle_internals(mob/living/carbon/mob_target)
 	return mob_target.toggle_internals(src)
 
@@ -113,7 +123,7 @@
 	if(tank_holder_icon_state)
 		AddComponent(/datum/component/container_item/tank_holder, tank_holder_icon_state)
 
-	air_contents = new(volume) //liters
+	air_contents = new(volume) //литры
 	air_contents.temperature = T20C
 
 	populate_gas()
@@ -123,8 +133,8 @@
 
 	AddComponent(/datum/component/atmos_reaction_recorder, reset_criteria = list(COMSIG_GASMIX_MERGING = air_contents, COMSIG_GASMIX_REMOVING = air_contents), target_list = reaction_info)
 
-	// This is separate from the reaction recorder.
-	// In this case we are only listening to determine if the tank is overpressurized but not destroyed.
+	// Это отделено от регистратора реакций.
+	// В данном случае мы слушаем только для того, чтобы определить, переполнен ли бак давлением, но не уничтожен.
 	RegisterSignal(air_contents, COMSIG_GASMIX_MERGED, PROC_REF(merging_information))
 
 	START_PROCESSING(SSobj, src)
@@ -153,31 +163,31 @@
 		icon = loc
 	if(!in_range(src, user) && !isobserver(user))
 		if(icon == src)
-			. += span_notice("If you want any more information you'll need to get closer.")
+			. += span_notice("Если вам нужна дополнительная информация, вам нужно подойти поближе.")
 		return
 
-	. += span_notice("The pressure gauge reads [round(air_contents.return_pressure(),0.01)] kPa.")
+	. += span_notice("Манометр показывает [round(air_contents.return_pressure(),0.01)] кПа.")
 
 	var/celsius_temperature = air_contents.temperature-T0C
 	var/descriptive
 
 	if (celsius_temperature < 20)
-		descriptive = "cold"
+		descriptive = "холодным"
 	else if (celsius_temperature < 40)
-		descriptive = "room temperature"
+		descriptive = "комнатной температуры"
 	else if (celsius_temperature < 80)
-		descriptive = "lukewarm"
+		descriptive = "тёпловатым"
 	else if (celsius_temperature < 100)
-		descriptive = "warm"
+		descriptive = "тёплым"
 	else if (celsius_temperature < 300)
-		descriptive = "hot"
+		descriptive = "горячим"
 	else
-		descriptive = "furiously hot"
+		descriptive = "невыносимо жарким"
 
-	. += span_notice("It feels [descriptive].")
+	. += span_notice("Ощущается [descriptive].")
 
 	if(tank_assembly)
-		. += span_warning("There is some kind of device [EXAMINE_HINT("rigged")] to the tank!")
+		. += span_warning("К [declent_ru(DATIVE)] прикреплено какое-то устройство!")
 
 /obj/item/tank/atom_deconstruct(disassembled = TRUE)
 	var/atom/location = loc
@@ -188,20 +198,20 @@
 
 /obj/item/tank/suicide_act(mob/living/user)
 	var/mob/living/carbon/human/human_user = user
-	user.visible_message(span_suicide("[user] is putting [src]'s valve to [user.p_their()] lips! It looks like [user.p_theyre()] trying to commit suicide!"))
+	user.visible_message(span_suicide("[user] прикладывает клапан [declent_ru(GENITIVE)] к своим губам! Похоже, [user] пытается совершить суицид!"))
 	playsound(loc, 'sound/effects/spray.ogg', 10, TRUE, -3)
 	if(!QDELETED(human_user) && air_contents && air_contents.return_pressure() >= 1000)
 		ADD_TRAIT(human_user, TRAIT_DISFIGURED, TRAIT_GENERIC)
 		human_user.inflate_gib()
 		return MANUAL_SUICIDE
-	to_chat(user, span_warning("There isn't enough pressure in [src] to commit suicide with..."))
+	to_chat(user, span_warning("В [declent_ru(PREPOSITIONAL)] недостаточно давления для суицида..."))
 	return SHAME
 
 /obj/item/tank/attackby(obj/item/attacking_item, mob/user, list/modifiers, list/attack_modifiers)
 	add_fingerprint(user)
 	if(istype(attacking_item, /obj/item/assembly_holder))
 		if(tank_assembly)
-			balloon_alert(user, "something already attached!")
+			balloon_alert(user, "что-то уже прикреплено!")
 			return ITEM_INTERACT_BLOCKING
 		bomb_assemble(attacking_item, user)
 		return ITEM_INTERACT_SUCCESS
@@ -216,11 +226,11 @@
 
 /obj/item/tank/welder_act(mob/living/user, obj/item/tool)
 	if(bomb_status)
-		balloon_alert(user, "already welded!")
+		balloon_alert(user, "уже заварено!")
 		return ITEM_INTERACT_BLOCKING
 	if(tool.use_tool(src, user, 0, volume=40))
 		bomb_status = TRUE
-		balloon_alert(user, "bomb armed")
+		balloon_alert(user, "бомба взведена")
 		log_bomber(user, "welded a single tank bomb,", src, "| Temp: [air_contents.temperature] Pressure: [air_contents.return_pressure()]")
 		add_fingerprint(user)
 		return ITEM_INTERACT_SUCCESS
@@ -296,10 +306,10 @@
 	return TRUE
 
 /**
- * Removes some volume of the tanks gases as the tanks distribution pressure.
+ * Удаляет некоторый объем газов из бака с давлением распределения бака.
  *
- * Arguments:
- * - volume_to_return: The amount of volume to remove from the tank.
+ * Аргументы:
+ * - volume_to_return: Количество объема, которое нужно удалить из бака.
  */
 /obj/item/tank/proc/remove_air_volume(volume_to_return)
 	if(!air_contents)
@@ -308,13 +318,13 @@
 	var/tank_pressure = air_contents.return_pressure()
 	var/actual_distribute_pressure = clamp(tank_pressure, 0, distribute_pressure)
 
-	// Lets do some algebra to understand why this works, yeah?
-	// R_IDEAL_GAS_EQUATION is (kPa * L) / (K * mol) by the by, so the units in this equation look something like this
-	// kpa * L / (R_IDEAL_GAS_EQUATION * K)
-	// Or restated (kpa * L / K) * 1/R_IDEAL_GAS_EQUATION
-	// (kpa * L * K * mol) / (kpa * L * K)
-	// If we cancel it all out, we get moles, which is the expected unit
-	// This sort of thing comes up often in atmos, keep the tool in mind for other bits of code
+	// Давайте займемся алгеброй, чтобы понять, почему это работает, ага?
+	// R_IDEAL_GAS_EQUATION это (кПа * Л) / (К * моль) кстати, так что единицы в этом уравнении выглядят примерно так
+	// кПа * Л / (R_IDEAL_GAS_EQUATION * К)
+	// Или перефразируя (кПа * Л / К) * 1/R_IDEAL_GAS_EQUATION
+	// (кПа * Л * К * моль) / (кПа * Л * К)
+	// Если мы все сократим, то получим моли, что и является ожидаемой единицей
+	// Такие вещи часто встречаются в atmos, имейте в виду этот инструмент для других частей кода
 	var/moles_needed = actual_distribute_pressure*volume_to_return/(R_IDEAL_GAS_EQUATION*air_contents.temperature)
 
 	return remove_air(moles_needed)
@@ -325,7 +335,7 @@
 	if(!QDELETED(volume_bar))
 		volume_bar.update(air_contents.return_pressure())
 
-	//Allow for reactions
+	//Разрешить реакции
 	excited = (excited | air_contents.react(src))
 	excited = (excited | handle_tolerances(seconds_per_tick))
 	excited = (excited | leaking)
@@ -343,11 +353,11 @@
 	location.assume_air(leaked_gas)
 
 /**
- * Handles the minimum and maximum pressure tolerances of the tank.
+ * Обрабатывает допуски минимального и максимального давления в баке.
  *
- * Returns true if it did anything of significance, false otherwise
- * Arguments:
- * - seconds_per_tick: How long has passed between ticks.
+ * Возвращает true, если произошло что-то значительное, false в противном случае
+ * Аргументы:
+ * - seconds_per_tick: Сколько времени прошло между тиками.
  */
 /obj/item/tank/proc/handle_tolerances(seconds_per_tick)
 	if(!air_contents)
@@ -367,7 +377,7 @@
 		return TRUE
 	return FALSE
 
-/// Handles the tank springing a leak.
+/// Обрабатывает возникновение утечки в баке.
 /obj/item/tank/atom_break(damage_flag)
 	. = ..()
 	if(leaking)
@@ -376,26 +386,26 @@
 	leaking = TRUE
 	START_PROCESSING(SSobj, src)
 
-	if(atom_integrity < 0) // So we don't play the alerts while we are exploding or rupturing.
+	if(atom_integrity < 0) // Чтобы мы не проигрывали оповещения, пока взрываемся или разрываемся.
 		return
-	visible_message(span_warning("[src] springs a leak!"))
+	visible_message(span_warning("[declent_ru(NOMINATIVE)] дает течь!"))
 	playsound(src, 'sound/effects/spray.ogg', 10, TRUE, -3)
 
-/// Handles rupturing and fragmenting
+/// Обрабатывает разрыв и фрагментацию
 /obj/item/tank/atom_destruction(damage_flag)
 	if(!air_contents)
 		return ..()
 
-	/// Handle fragmentation
+	/// Обработка фрагментации
 	var/pressure = air_contents.return_pressure()
 	if(pressure > TANK_FRAGMENT_PRESSURE)
 		if(!istype(loc, /obj/item/transfer_valve))
 			log_bomber(get_mob_by_key(fingerprintslast), "was last key to touch", src, "which ruptured explosively")
-		//Give the gas a chance to build up more pressure through reacting
+		//Дать газу шанс создать больше давления через реакцию
 		air_contents.react(src)
 		pressure = air_contents.return_pressure()
 
-		// As of writing this this is calibrated to maxcap at 140L and 160atm.
+		// На момент написания это откалибровано на макскап при 140Л и 160атм.
 		var/power = (air_contents.volume * (pressure - TANK_FRAGMENT_PRESSURE)) / TANK_FRAGMENT_SCALE
 		log_atmos("[type] exploded with a power of [power] and a mix of ", air_contents)
 		dyn_explosion(src, power, flash_range = 1.5, ignorecap = FALSE)
@@ -409,12 +419,12 @@
 /obj/item/tank/proc/explosion_information()
 	return list(TANK_RESULTS_REACTION = reaction_info, TANK_RESULTS_MISC = explosion_info)
 
-/obj/item/tank/on_found(mob/finder) //for mousetraps
+/obj/item/tank/on_found(mob/finder) //для мышеловок
 	. = ..()
 	if(tank_assembly)
 		tank_assembly.on_found(finder)
 
-/obj/item/tank/attack_hand() //also for mousetraps
+/obj/item/tank/attack_hand() //также для мышеловок
 	if(..())
 		return
 	if(tank_assembly)
@@ -443,14 +453,14 @@
 /obj/item/tank/IsSpecialAssembly()
 	return TRUE
 
-/obj/item/tank/receive_signal() //This is mainly called by the sensor through sense() to the holder, and from the holder to here.
-	audible_message(span_warning("[icon2html(src, hearers(src))] *beep* *beep* *beep*"))
+/obj/item/tank/receive_signal() //Это вызывается в основном датчиком через sense() держателю, и от держателя сюда.
+	audible_message(span_warning("[icon2html(src, hearers(src))] *бип* *бип* *бип*"))
 	playsound(src, 'sound/machines/beep/triple_beep.ogg', ASSEMBLY_BEEP_VOLUME, TRUE)
 	addtimer(CALLBACK(src, PROC_REF(ignite)), 1 SECONDS)
 
-/// Attaches an assembly holder to the tank to create a bomb.
+/// Прикрепляет держатель сборки к баку для создания бомбы.
 /obj/item/tank/proc/bomb_assemble(obj/item/assembly_holder/assembly, mob/living/user)
-	//Check if either part of the assembly has an igniter, but if both parts are igniters, then fuck it
+	//Проверяем, есть ли в любой части сборки воспламенитель, но если обе части - воспламенители, то к черту это
 	var/igniter_count = 0
 	for(var/obj/item/assembly/igniter/attached_assembly in assembly.assemblies)
 		igniter_count++
@@ -458,34 +468,34 @@
 	if(LAZYLEN(assembly.assemblies) == igniter_count)
 		return
 
-	if(isitem(loc)) // we are in a storage item
-		balloon_alert(user, "can't reach!")
+	if(isitem(loc)) // мы внутри предмета для хранения
+		balloon_alert(user, "не достать!")
 		return
 
 	if((src in user.get_equipped_items(INCLUDE_POCKETS | INCLUDE_ACCESSORIES)) && !user.canUnEquip(src))
-		balloon_alert(user, "it's stuck!")
+		balloon_alert(user, "застряло!")
 		return
 
 	if(!user.canUnEquip(assembly))
-		balloon_alert(user, "it's stuck!")
+		balloon_alert(user, "застряло!")
 		return
 
 	if(!user.transferItemToLoc(assembly, src))
-		balloon_alert(user, "it's stuck!")
+		balloon_alert(user, "застряло!")
 		return
 
-	tank_assembly = assembly //Tell the tank about its assembly part
-	assembly.master = src //Tell the assembly about its new owner
+	tank_assembly = assembly //Сообщаем баку о его части сборки
+	assembly.master = src //Сообщаем сборке о ее новом владельце
 	assembly.on_attach()
 	update_weight_class(WEIGHT_CLASS_BULKY)
 
-	balloon_alert(user, "bomb assembled")
+	balloon_alert(user, "бомба собрана")
 	update_appearance(UPDATE_OVERLAYS)
 
-/// Detaches an assembly holder from the tank, disarming the bomb
+/// Отсоединяет держатель сборки от бака, обезвреживая бомбу
 /obj/item/tank/proc/bomb_disassemble(mob/user)
 	bomb_status = FALSE
-	balloon_alert(user, "bomb disarmed")
+	balloon_alert(user, "бомба обезврежена")
 	if(!tank_assembly)
 		CRASH("bomb_disassemble() called on a tank with no assembly!")
 	user.put_in_hands(tank_assembly)
@@ -494,13 +504,13 @@
 	update_weight_class(initial(w_class))
 	update_appearance(UPDATE_OVERLAYS)
 
-/// Ignites the contents of the tank. Called when receiving a signal if the tank is welded and has an igniter attached.
+/// Воспламеняет содержимое бака. Вызывается при получении сигнала, если бак заварен и к нему прикреплен воспламенитель.
 /obj/item/tank/proc/ignite()
-	if(!bomb_status) // if it isn't welded, release the gases instead
+	if(!bomb_status) // если не заварен, вместо этого выпустить газы
 		release()
 		return
 
-	// check to make sure it's not already exploding before exploding it
+	// убедитесь, что он еще не взрывается, прежде чем взрывать его
 	if(igniting)
 		CRASH("ignite() called multiple times on [type]")
 	igniting = TRUE
@@ -514,7 +524,7 @@
 
 	var/turf/ground_zero = get_turf(loc)
 
-	/// Used to determine what the temperature of the hotspot when it isn't able to explode
+	/// Используется для определения температуры горячей точки, когда она не может взорваться
 	var/igniter_temperature = 0
 	for(var/obj/item/assembly/igniter/firestarter in tank_assembly.assemblies)
 		igniter_temperature = max(igniter_temperature, firestarter.heat)
@@ -563,7 +573,7 @@
 
 	qdel(src)
 
-/// Releases air stored in the tank. Called when signaled without being welded, or when ignited without enough pressure to explode.
+/// Выпускает воздух, хранящийся в баке. Вызывается при подаче сигнала без заварки или при воспламенении без достаточного давления для взрыва.
 /obj/item/tank/proc/release()
 	var/datum/gas_mixture/our_mix = return_air()
 	var/datum/gas_mixture/removed = remove_air(our_mix.total_moles())

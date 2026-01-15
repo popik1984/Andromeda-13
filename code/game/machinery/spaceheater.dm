@@ -12,7 +12,7 @@
 	icon_state = "sheater-off"
 	base_icon_state = "sheater"
 	name = "space heater"
-	desc = "Made by Space Amish using traditional space techniques, this heater/cooler is guaranteed not to set the station on fire. Warranty void if used in engines."
+	desc = "Сделан космическими амишами с использованием традиционных космических технологий, этот обогреватель/охладитель гарантированно не устроит пожар на станции. Гарантия аннулируется при использовании в двигателях."
 	max_integrity = 250
 	armor_type = /datum/armor/machinery_space_heater
 	circuit = /obj/item/circuitboard/machine/space_heater
@@ -46,6 +46,16 @@
 	fire = 80
 	acid = 10
 
+/obj/machinery/space_heater/get_ru_names()
+	return list(
+		NOMINATIVE = "космический обогреватель",
+		GENITIVE = "космического обогревателя",
+		DATIVE = "космическому обогревателю",
+		ACCUSATIVE = "космический обогреватель",
+		INSTRUMENTAL = "космическим обогревателем",
+		PREPOSITIONAL = "космическом обогревателе",
+	)
+
 /obj/machinery/space_heater/get_cell()
 	return cell
 
@@ -58,16 +68,16 @@
 
 	AddElement( \
 		/datum/element/contextual_screentip_bare_hands, \
-		rmb_text = "Toggle power", \
+		rmb_text = "Переключить питание", \
 	)
 
 	var/static/list/tool_behaviors = list(
 		TOOL_SCREWDRIVER = list(
-			SCREENTIP_CONTEXT_LMB = "Open hatch",
+			SCREENTIP_CONTEXT_LMB = "Открыть люк",
 		),
 
 		TOOL_WRENCH = list(
-			SCREENTIP_CONTEXT_LMB = "Anchor",
+			SCREENTIP_CONTEXT_LMB = "Прикрутить",
 		),
 	)
 	AddElement(/datum/element/contextual_screentip_tools, tool_behaviors)
@@ -96,21 +106,21 @@
 
 /obj/machinery/space_heater/examine(mob/user)
 	. = ..()
-	. += "\The [src] is [on ? "on" : "off"], and the hatch is [panel_open ? "open" : "closed"]."
+	. += "[declent_ru(NOMINATIVE)] [on ? "включён" : "выключен"], а люк [panel_open ? "открыт" : "закрыт"]."
 	if(cell)
-		. += "The charge meter reads [cell ? round(cell.percent(), 1) : 0]%."
+		. += "Индикатор заряда показывает [cell ? round(cell.percent(), 1) : 0]%."
 	else
-		. += span_warning("There is no power cell installed.")
+		. += span_warning("В нём нет энергоячейки.")
 	if(in_range(user, src) || isobserver(user))
 		. += heating_examine()
-		. += span_notice("<b>Right-click</b> to toggle [on ? "off" : "on"].")
+		. += span_notice("<b>ПКМ</b>, чтобы [on ? "выключить" : "включить"].")
 
 ///Returns the heating power of this machine as an examine
 /obj/machinery/space_heater/proc/heating_examine()
 	var/target_temp = round(target_temperature - T0C, 1)
 	var/min_temp = max(settable_temperature_median - settable_temperature_range, TCMB) - T0C
 	var/max_temp = settable_temperature_median + settable_temperature_range - T0C
-	return span_notice("The status display reads:<br>Heating power: <b>[display_power(heating_energy, convert = TRUE, scheduler = SSair)] at [(efficiency / 20) * 100]% efficiency.</b><br>Target temperature: <b>[target_temp]°C [min_temp]°C - [max_temp]°C]</b>\n")
+	return span_notice("Дисплей состояния показывает:<br>Мощность нагрева: <b>[display_power(heating_energy, convert = TRUE, scheduler = SSair)] при [(efficiency / 20) * 100]% эффективности.</b><br>Целевая температура: <b>[target_temp]°C [min_temp]°C - [max_temp]°C]</b>\n")
 
 /obj/machinery/space_heater/update_icon_state()
 	. = ..()
@@ -210,7 +220,7 @@
 	add_fingerprint(user)
 
 	if(default_deconstruction_screwdriver(user, icon_state, icon_state, I))
-		user.visible_message(span_notice("\The [user] [panel_open ? "opens" : "closes"] the hatch on \the [src]."), span_notice("You [panel_open ? "open" : "close"] the hatch on \the [src]."))
+		user.visible_message(span_notice("[user] [panel_open ? "открывает" : "закрывает"] люк [declent_ru(GENITIVE)]."), span_notice("Вы [panel_open ? "открываете" : "закрываете"] люк [declent_ru(GENITIVE)]."))
 		update_appearance()
 		return TRUE
 
@@ -219,16 +229,16 @@
 
 	if(istype(I, /obj/item/stock_parts/power_store/cell))
 		if(!panel_open)
-			to_chat(user, span_warning("The hatch must be open to insert a power cell!"))
+			to_chat(user, span_warning("Чтобы вставить энергоячейку, люк должен быть открыт!"))
 			return
 		if(cell)
-			to_chat(user, span_warning("There is already a power cell inside!"))
+			to_chat(user, span_warning("Внутри уже есть энергоячейка!"))
 			return
 		if(!user.transferItemToLoc(I, src))
 			return
 		cell = I
 		I.add_fingerprint(usr)
-		user.visible_message(span_notice("\The [user] inserts a power cell into \the [src]."), span_notice("You insert the power cell into \the [src]."))
+		user.visible_message(span_notice("[user] вставляет энергоячейку в [declent_ru(ACCUSATIVE)]."), span_notice("Вы вставляете энергоячейку в [declent_ru(ACCUSATIVE)]."))
 		SStgui.update_uis(src)
 		return TRUE
 	return ..()
@@ -304,13 +314,13 @@
 	mode = HEATER_MODE_STANDBY
 	if(!isnull(user))
 		if(QDELETED(cell))
-			balloon_alert(user, "no cell!")
+			balloon_alert(user, "нет ячейки!")
 		else if(!cell.charge())
-			balloon_alert(user, "no charge!")
+			balloon_alert(user, "нет заряда!")
 		else if(!is_operational)
-			balloon_alert(user, "not operational!")
+			balloon_alert(user, "не работает!")
 		else
-			balloon_alert(user, "turned [on ? "on" : "off"]")
+			balloon_alert(user, "[on ? "включено" : "выключено"]")
 	update_appearance()
 	if(on)
 		SSair.start_processing_machine(src)
@@ -318,7 +328,7 @@
 ///For use with heating reagents in a ghetto way
 /obj/machinery/space_heater/improvised_chem_heater
 	name = "improvised chem heater"
-	desc = "A space heater fashioned to reroute heating to a water bath on top."
+	desc = "Обогреватель, переделанный для перенаправления тепла в водяную баню сверху."
 	panel_open = TRUE //This is always open - since we've injected wires in the panel
 	//We inherit the cell from the heater prior
 	cell = null
@@ -331,6 +341,16 @@
 	var/beaker_conduction_power = 0.1
 	/// The subsystem we're being processed by.
 	var/datum/controller/subsystem/processing/our_subsystem
+
+/obj/machinery/space_heater/improvised_chem_heater/get_ru_names()
+	return list(
+		NOMINATIVE = "импровизированный хим. нагреватель",
+		GENITIVE = "импровизированного хим. нагревателя",
+		DATIVE = "импровизированному хим. нагревателю",
+		ACCUSATIVE = "импровизированный хим. нагреватель",
+		INSTRUMENTAL = "импровизированным хим. нагревателем",
+		PREPOSITIONAL = "импровизированном хим. нагревателе",
+	)
 
 /obj/machinery/space_heater/improvised_chem_heater/Initialize(mapload)
 	our_subsystem = locate(subsystem_type) in Master.subsystems
@@ -357,7 +377,7 @@
 	// Conducted energy per joule of thermal energy difference in a tick.
 	var/conduction_energy = beaker_conduction_power * (set_mode == HEATER_MODE_AUTO ? 0.5 : 1) * our_subsystem.wait / (1 SECONDS)
 	// This accounts for the timestep inaccuracy.
-	. += span_notice("Reagent conduction power: <b>[conduction_energy < 1 ? display_power(-log(1 - conduction_energy) SECONDS / our_subsystem.wait, convert = FALSE) : "∞W"]/J</b>")
+	. += span_notice("Мощность проводимости реагента: <b>[conduction_energy < 1 ? display_power(-log(1 - conduction_energy) SECONDS / our_subsystem.wait, convert = FALSE) : "∞W"]/J</b>")
 
 /obj/machinery/space_heater/improvised_chem_heater/toggle_power(user)
 	. = ..()
@@ -422,14 +442,14 @@
 		return
 	if(istype(item, /obj/item/stock_parts/power_store/cell))
 		if(cell)
-			to_chat(user, span_warning("There is already a power cell inside!"))
+			to_chat(user, span_warning("Внутри уже есть энергоячейка!"))
 			return
 		else if(!user.transferItemToLoc(item, src))
 			return
 		cell = item
 		item.add_fingerprint(usr)
 
-		user.visible_message(span_notice("\The [user] inserts a power cell into \the [src]."), span_notice("You insert the power cell into \the [src]."))
+		user.visible_message(span_notice("[user] вставляет энергоячейку в [declent_ru(ACCUSATIVE)]."), span_notice("Вы вставляете энергоячейку в [declent_ru(ACCUSATIVE)]."))
 		SStgui.update_uis(src)
 	//reagent containers
 	if(is_reagent_container(item) && !(item.item_flags & ABSTRACT) && item.is_open_container())
@@ -438,7 +458,7 @@
 		if(!user.transferItemToLoc(container, src))
 			return
 		replace_beaker(user, container)
-		to_chat(user, span_notice("You add [container] to [src]'s water bath."))
+		to_chat(user, span_notice("Вы добавляете [container.declent_ru(ACCUSATIVE)] в водяную баню [declent_ru(GENITIVE)]."))
 		ui_interact(user)
 		return
 	//Dropper tools
