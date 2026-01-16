@@ -1,6 +1,6 @@
 /obj/item/folder
 	name = "folder"
-	desc = "A folder."
+	desc = "Папка."
 	icon = 'icons/obj/service/bureaucracy.dmi'
 	icon_state = "folder"
 	w_class = WEIGHT_CLASS_SMALL
@@ -22,10 +22,20 @@
 	/// icon_state of overlay for papers inside of this folder
 	var/paper_overlay_state = "folder_paper"
 	/// Name to display for use-on-item screentips, to avoid overly long screentips.
-	var/folder_type_name = "folder"
+	var/folder_type_name = "папку"
+
+/obj/item/folder/get_ru_names()
+	return list(
+		NOMINATIVE = "папка",
+		GENITIVE = "папки",
+		DATIVE = "папке",
+		ACCUSATIVE = "папку",
+		INSTRUMENTAL = "папкой",
+		PREPOSITIONAL = "папке",
+	)
 
 /obj/item/folder/suicide_act(mob/living/user)
-	user.visible_message(span_suicide("[user] begins filing an imaginary death warrant! It looks like [user.p_theyre()] trying to commit suicide!"))
+	user.visible_message(span_suicide("[user] начинает заполнять воображаемый смертный приговор! Похоже, [user] пытается совершить суицид!"))
 	return OXYLOSS
 
 /obj/item/folder/Initialize(mapload)
@@ -45,12 +55,12 @@
 /obj/item/folder/examine()
 	. = ..()
 	if(length(contents) && !contents_hidden)
-		. += span_notice("<b>Right-click</b> to remove [contents[1]].")
+		. += span_notice("<b>ПКМ</b>, чтобы извлечь [contents[1]].")
 
 /obj/item/folder/add_item_context(obj/item/source, list/context, atom/target, mob/living/user)
 	if(is_type_in_typecache(target, folder_insertables))
 		// As this is shown on the paper, we clarify we are picking it up.
-		context[SCREENTIP_CONTEXT_LMB] = "Insert into [folder_type_name]"
+		context[SCREENTIP_CONTEXT_LMB] = "Вставить в [folder_type_name]"
 		return CONTEXTUAL_SCREENTIP_SET
 	return NONE
 
@@ -58,13 +68,13 @@
 	if(isnull(held_item))
 		return NONE
 	if(is_type_in_typecache(held_item, folder_insertables))
-		context[SCREENTIP_CONTEXT_LMB] = "Insert"
+		context[SCREENTIP_CONTEXT_LMB] = "Вставить"
 		return CONTEXTUAL_SCREENTIP_SET
 	if(IS_WRITING_UTENSIL(held_item))
-		context[SCREENTIP_CONTEXT_LMB] = "Rename"
+		context[SCREENTIP_CONTEXT_LMB] = "Переименовать"
 		return CONTEXTUAL_SCREENTIP_SET
 	if((held_item.tool_behaviour == TOOL_KNIFE || held_item.tool_behaviour == TOOL_WIRECUTTER) && !contents.len)
-		context[SCREENTIP_CONTEXT_LMB] = "Cut apart"
+		context[SCREENTIP_CONTEXT_LMB] = "Разрезать"
 		return CONTEXTUAL_SCREENTIP_SET
 	return NONE
 
@@ -72,7 +82,7 @@
 	if(istype(Item))
 		Item.forceMove(user.loc)
 		user.put_in_hands(Item)
-		to_chat(user, span_notice("You remove [Item] from [src]."))
+		to_chat(user, span_notice("Вы достаёте [Item.declent_ru(ACCUSATIVE)] из [declent_ru(GENITIVE)]."))
 		update_icon()
 
 /obj/item/folder/attack_hand(mob/user, list/modifiers)
@@ -113,10 +123,10 @@
 
 /obj/item/folder/proc/sharp_thing_act(mob/user, obj/item/sharp_tool)
 	if(contents.len)
-		balloon_alert(user, "empty [src] first!")
+		balloon_alert(user, "сначала опустошите папку!")
 		return ITEM_INTERACT_BLOCKING
 
-	balloon_alert(user, "cut apart")
+	balloon_alert(user, "разрезано")
 	qdel(src)
 	user.put_in_hands(new /obj/item/stack/sheet/cardboard)
 	return ITEM_INTERACT_SUCCESS

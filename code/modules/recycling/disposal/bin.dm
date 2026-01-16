@@ -125,15 +125,15 @@ GLOBAL_VAR_INIT(disposals_animals_spawned, 0)
 		if(I.tool_behaviour == TOOL_SCREWDRIVER)
 			toggle_panel_open()
 			I.play_tool_sound(src)
-			to_chat(user, span_notice("You [panel_open ? "remove":"attach"] the screws around the power connection."))
+			to_chat(user, span_notice("Вы [panel_open ? "откручиваете":"прикручиваете"] винты вокруг коннектора питания."))
 			return
 		else if(I.tool_behaviour == TOOL_WELDER && panel_open)
 			if(!I.tool_start_check(user, amount=1, heat_required = HIGH_TEMPERATURE_REQUIRED))
 				return
 
-			to_chat(user, span_notice("You start slicing the floorweld off \the [src]..."))
+			to_chat(user, span_notice("Вы начинаете срезать напольный шов [declent_ru(GENITIVE)]..."))
 			if(I.use_tool(src, user, 20, volume=SMALL_MATERIAL_AMOUNT) && panel_open)
-				to_chat(user, span_notice("You slice the floorweld off \the [src]."))
+				to_chat(user, span_notice("Вы срезали напольный шов [declent_ru(GENITIVE)]."))
 				deconstruct()
 			return
 
@@ -148,7 +148,7 @@ GLOBAL_VAR_INIT(disposals_animals_spawned, 0)
 
 /// The regal rat spawns ratty treasures from the disposal
 /obj/machinery/disposal/proc/rat_rummage(mob/living/basic/regal_rat/king)
-	king.visible_message(span_warning("[king] starts rummaging through [src]."),span_notice("You rummage through [src]..."))
+	king.visible_message(span_warning("[king] начинает рыться в [src]."),span_notice("Вы роетесь в [src]..."))
 	if (!do_after(king, 2 SECONDS, src, interaction_key = "regalrat"))
 		return
 
@@ -156,18 +156,18 @@ GLOBAL_VAR_INIT(disposals_animals_spawned, 0)
 	var/loot = rand(1,100)
 	switch(loot)
 		if(1 to 5)
-			to_chat(king, span_notice("You find some leftover coins. More for the royal treasury!"))
+			to_chat(king, span_notice("Вы находите остатки монет. Больше для королевской казны!"))
 			var/pickedcoin = pick(GLOB.ratking_coins)
 			for(var/i = 1 to rand(1,3))
 				new pickedcoin(king.drop_location())
 		if(6 to 33)
 			cheese = TRUE
-			king.say(pick("Treasure!","Our precious!","Cheese!"), ignore_spam = TRUE, forced = "regal rat rummaging")
-			to_chat(king, span_notice("Score! You find some cheese!"))
+			king.say(pick("Сокровище!","Моя прелесть!","Сыр!"), ignore_spam = TRUE, forced = "regal rat rummaging")
+			to_chat(king, span_notice("Очки! Вы нашли немного сыра!"))
 			new /obj/item/food/cheese/wedge(king.drop_location())
 		else
 			var/pickedtrash = pick(GLOB.ratking_trash)
-			to_chat(king, span_notice("You just find more garbage and dirt. Lovely, but beneath you now."))
+			to_chat(king, span_notice("Вы просто нашли больше мусора и грязи. Мило, но теперь ниже вашего достоинства."))
 			new pickedtrash(king.drop_location())
 
 	if (cheese)
@@ -177,15 +177,15 @@ GLOBAL_VAR_INIT(disposals_animals_spawned, 0)
 		var/mob/living/basic/mouse/new_subject = new(king.drop_location())
 		ADD_TRAIT(new_subject, TRAIT_SPAWNED_MOB, INNATE_TRAIT)
 		playsound(new_subject, 'sound/mobs/non-humanoids/mouse/mousesqueek.ogg', 100)
-		visible_message(span_warning("[new_subject] climbs out of [src]!"))
+		visible_message(span_warning("[new_subject] вылезает из [src]!"))
 
 /// Moves an item into the diposal bin
 /obj/machinery/disposal/proc/place_item_in_disposal(obj/item/disposing_item, mob/user)
 	if(!user.transferItemToLoc(disposing_item, newloc = src))
 		return FALSE
 	user.visible_message(
-		span_notice("[user.name] places \the [disposing_item] into \the [src]."),
-		span_notice("You place \the [disposing_item] into \the [src]."),
+		span_notice("[user.name] кладёт [disposing_item] в [src]."),
+		span_notice("Вы кладете [disposing_item] в [src]."),
 	)
 	return TRUE
 
@@ -211,20 +211,20 @@ GLOBAL_VAR_INIT(disposals_animals_spawned, 0)
 	if(target.buckled || target.has_buckled_mobs())
 		return FALSE
 	if(target.mob_size > MOB_SIZE_HUMAN)
-		to_chat(user, span_warning("[target] doesn't fit inside [src]!"))
+		to_chat(user, span_warning("[target] не помещается в [src]!"))
 		return FALSE
 	add_fingerprint(user)
 	if(user == target)
-		user.visible_message(span_warning("[user] starts climbing into [src]."), span_notice("You start climbing into [src]..."))
+		user.visible_message(span_warning("[user] начинает залезать в [src]."), span_notice("Вы начинаете залезать в [src]..."))
 	else
-		target.visible_message(span_danger("[user] starts putting [target] into [src]."), span_userdanger("[user] starts putting you into [src]!"))
+		target.visible_message(span_danger("[user] начинает запихивать [target] в [src]."), span_userdanger("[user] начинает запихивать вас в [src]!"))
 	if(!do_after(user, 2 SECONDS, target) || QDELETED(src))
 		return FALSE
 	target.forceMove(src)
 	if(user == target)
-		user.visible_message(span_warning("[user] climbs into [src]."), span_notice("You climb into [src]."))
+		user.visible_message(span_warning("[user] залезает в [src]."), span_notice("Вы залезаете в [src]."))
 	else
-		target.visible_message(span_danger("[user] places [target] in [src]."), span_userdanger("[user] places you in [src]."))
+		target.visible_message(span_danger("[user] помещает [target] в [src]."), span_userdanger("[user] помещает вас в [src]."))
 		log_combat(user, target, "stuffed", addition="into [src]")
 	update_appearance()
 	return TRUE
@@ -234,22 +234,22 @@ GLOBAL_VAR_INIT(disposals_animals_spawned, 0)
 		bag.undeploy_bodybag(src)
 		qdel(bag)
 		user.visible_message(
-			span_warning("[user] stuffs the empty [bag.name] into [src]."),
-			span_notice("You stuff the empty [bag.name] into [src].")
+			span_warning("[user] засовывает пустой [bag.name] в [src]."),
+			span_notice("Вы засовываете пустой [bag.name] в [src].")
 		)
 		return TRUE
 
 	user.visible_message(
-		span_warning("[user] starts putting [bag] into [src]."),
-		span_notice("You start putting [bag] into [src]...")
+		span_warning("[user] начинает класть [bag] в [src]."),
+		span_notice("Вы начинаете класть [bag] в [src]...")
 	)
 
 	if(!do_after(user, 4 SECONDS, bag) || QDELETED(src))
 		return FALSE
 
 	user.visible_message(
-		span_warning("[user] places [bag] in [src]."),
-		span_notice("You place [bag] in [src].")
+		span_warning("[user] кладёт [bag] в [src]."),
+		span_notice("Вы кладете [bag] в [src].")
 	)
 
 	if(!length(bag.contents))
@@ -356,7 +356,7 @@ GLOBAL_VAR_INIT(disposals_animals_spawned, 0)
 
 	. = STORAGE_DUMP_HANDLED
 
-	to_chat(user, span_notice("You dump out [storage.parent] into [src]."))
+	to_chat(user, span_notice("Вы высыпаете [storage.parent] в [src]."))
 
 	for(var/obj/item/to_dump in storage.real_location)
 		if(user.active_storage != storage && to_dump.on_found(user))
@@ -368,12 +368,12 @@ GLOBAL_VAR_INIT(disposals_animals_spawned, 0)
 
 /obj/machinery/disposal/force_pushed(atom/movable/pusher, force = MOVE_FORCE_DEFAULT, direction)
 	. = ..()
-	visible_message(span_warning("[src] is ripped free from the floor!"))
+	visible_message(span_warning("[src] вырывается из пола!"))
 	deconstruct()
 
 /obj/machinery/disposal/move_crushed(atom/movable/pusher, force = MOVE_FORCE_DEFAULT, direction)
 	. = ..()
-	visible_message(span_warning("[src] is ripped free from the floor!"))
+	visible_message(span_warning("[src] вырывается из пола!"))
 	deconstruct()
 
 
@@ -399,9 +399,9 @@ GLOBAL_VAR_INIT(disposals_animals_spawned, 0)
 	density = cur_density
 	target.Knockdown(SHOVE_KNOCKDOWN_SOLID)
 	target.forceMove(src)
-	target.visible_message(span_danger("[shover.name] shoves [target.name] into \the [src]!"),
-		span_userdanger("You're shoved into \the [src] by [target.name]!"), span_hear("You hear aggressive shuffling followed by a loud thud!"), COMBAT_MESSAGE_RANGE, shover)
-	to_chat(src, span_danger("You shove [target.name] into \the [src]!"))
+	target.visible_message(span_danger("[shover.name] запихивает [target.name] в [src]!"),
+		span_userdanger("[shover.name] запихивает вас в [src]!"), span_hear("Вы слышите агрессивную возню и громкий стук!"), COMBAT_MESSAGE_RANGE, shover)
+	to_chat(src, span_danger("Вы запихиваете [target.name] в [src]!"))
 	log_combat(shover, target, "shoved", "into [src] (disposal bin)[weapon ? " with [weapon]" : ""]")
 	return COMSIG_LIVING_SHOVE_HANDLED
 
@@ -416,7 +416,7 @@ GLOBAL_VAR_INIT(disposals_animals_spawned, 0)
 	items_to_sweep.Cut()
 
 	update_appearance()
-	to_chat(user, span_notice("You sweep the pile of garbage into [src]."))
+	to_chat(user, span_notice("Вы сметаете кучу мусора в [src]."))
 	playsound(broom.loc, 'sound/items/weapons/thudswoosh.ogg', 30, TRUE, -1)
 
 
@@ -429,7 +429,7 @@ GLOBAL_VAR_INIT(disposals_animals_spawned, 0)
 
 /obj/machinery/disposal/bin
 	name = "disposal unit"
-	desc = "A pneumatic waste disposal unit."
+	desc = "Пневматический утилизатор отходов."
 	icon_state = "disposal"
 	interaction_flags_atom = parent_type::interaction_flags_atom | INTERACT_ATOM_IGNORE_MOBILITY
 	/// Reference to the mounted destination tagger for disposal bins with one mounted.
@@ -441,6 +441,16 @@ GLOBAL_VAR_INIT(disposals_animals_spawned, 0)
 	/// do we contain an animal?
 	var/contained_animal
 
+/obj/machinery/disposal/bin/get_ru_names()
+	return list(
+		NOMINATIVE = "утилизатор",
+		GENITIVE = "утилизатора",
+		DATIVE = "утилизатору",
+		ACCUSATIVE = "утилизатор",
+		INSTRUMENTAL = "утилизатором",
+		PREPOSITIONAL = "утилизаторе",
+	)
+
 /obj/machinery/disposal/bin/Initialize(mapload, obj/structure/disposalconstruct/make_from)
 	. = ..()
 	if(mapload && prob(CONTAINS_ANIMAL_CHANCE) && GLOB.disposals_animals_spawned < MAXIMUM_ANIMAL_SPAWNS)
@@ -450,7 +460,7 @@ GLOBAL_VAR_INIT(disposals_animals_spawned, 0)
 /obj/machinery/disposal/bin/attackby(obj/item/weapon, mob/user, list/modifiers, list/attack_modifiers)
 	if(istype(weapon, /obj/item/storage/bag/trash)) //Not doing component overrides because this is a specific type.
 		var/obj/item/storage/bag/trash/bag = weapon
-		to_chat(user, span_warning("You empty the bag."))
+		to_chat(user, span_warning("Вы опустошаете мешок."))
 		bag.atom_storage.remove_all(src)
 		update_appearance()
 	else
@@ -461,14 +471,14 @@ GLOBAL_VAR_INIT(disposals_animals_spawned, 0)
 	if(istype(weapon, /obj/item/dest_tagger))
 		var/obj/item/dest_tagger/new_tagger = weapon
 		if(mounted_tagger)
-			balloon_alert(user, "already has a tagger!")
+			balloon_alert(user, "уже имеет метчик!")
 			return
 		if(HAS_TRAIT(new_tagger, TRAIT_NODROP) || !user.transferItemToLoc(new_tagger, src))
-			balloon_alert(user, "stuck to your hand!")
+			balloon_alert(user, "прилип к руке!")
 			return
 		new_tagger.moveToNullspace()
-		user.visible_message(span_notice("[user] snaps \the [new_tagger] onto [src]!"))
-		balloon_alert(user, "tagger returned")
+		user.visible_message(span_notice("[user] прикрепляет [new_tagger] к [src]!"))
+		balloon_alert(user, "метчик возвращён")
 		playsound(src, 'sound/machines/click.ogg', 50, TRUE)
 		mounted_tagger = new_tagger
 		update_appearance()
@@ -479,14 +489,14 @@ GLOBAL_VAR_INIT(disposals_animals_spawned, 0)
 /obj/machinery/disposal/bin/attack_hand_secondary(mob/user, list/modifiers)
 	. = ..()
 	if(!mounted_tagger)
-		balloon_alert(user, "no destination tagger!")
+		balloon_alert(user, "нет метчика назначения!")
 		return SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN
 	if(!user.put_in_hands(mounted_tagger))
-		balloon_alert(user, "destination tagger falls!")
+		balloon_alert(user, "метчик назначения падает!")
 		mounted_tagger = null
 		return SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN
-	user.visible_message(span_notice("[user] unhooks the [mounted_tagger] from [src]."))
-	balloon_alert(user, "tagger pulled")
+	user.visible_message(span_notice("[user] отцепляет [mounted_tagger] от [src]."))
+	balloon_alert(user, "метчик снят")
 	playsound(src, 'sound/machines/click.ogg', 60, TRUE)
 	mounted_tagger = null
 	update_appearance(UPDATE_OVERLAYS)
@@ -495,9 +505,9 @@ GLOBAL_VAR_INIT(disposals_animals_spawned, 0)
 /obj/machinery/disposal/bin/examine(mob/user)
 	. = ..()
 	if(isnull(mounted_tagger))
-		. += span_notice("The destination tagger mount is empty.")
+		. += span_notice("Крепление для метчика назначения пусто.")
 	else
-		. += span_notice("\The [mounted_tagger] is hanging on the side. Right Click to remove.")
+		. += span_notice("[mounted_tagger] висит сбоку. Нажмите ПКМ, чтобы снять.")
 
 /obj/machinery/disposal/bin/Destroy()
 	if(!isnull(mounted_tagger))
@@ -566,10 +576,10 @@ GLOBAL_VAR_INIT(disposals_animals_spawned, 0)
 		var/mob/thrower = throwingdatum?.get_thrower()
 		if((istype(thrower) && HAS_TRAIT(thrower, TRAIT_THROWINGARM)) || prob(75))
 			AM.forceMove(src)
-			visible_message(span_notice("[AM] lands in [src]."))
+			visible_message(span_notice("[AM] приземляется в [src]."))
 			update_appearance()
 		else
-			visible_message(span_notice("[AM] bounces off of [src]'s rim!"))
+			visible_message(span_notice("[AM] отскакивает от края [src]!"))
 			return ..()
 	else
 		return ..()
@@ -627,7 +637,7 @@ GLOBAL_VAR_INIT(disposals_animals_spawned, 0)
 	var/turf/final_turf = length(open_turfs) ? pick(open_turfs) : drop_location()
 	var/mob/living/startled_animal = new contained_animal(drop_location())
 	startled_animal.Move(final_turf)
-	visible_message(span_notice("A startled [startled_animal] jumps out of [src]"))
+	visible_message(span_notice("Испуганный [startled_animal] выпрыгивает из [src]"))
 	contained_animal = null
 
 /// Initiates flushing
@@ -700,10 +710,20 @@ GLOBAL_VAR_INIT(disposals_animals_spawned, 0)
 
 /obj/machinery/disposal/delivery_chute
 	name = "delivery chute"
-	desc = "A chute for big and small packages alike!"
+	desc = "Желоб для посылок больших и маленьких!"
 	density = TRUE
 	icon_state = "intake"
 	pressure_charging = FALSE // the chute doesn't need charging and always works
+
+/obj/machinery/disposal/delivery_chute/get_ru_names()
+	return list(
+		NOMINATIVE = "приемный лоток",
+		GENITIVE = "приемного лотка",
+		DATIVE = "приемному лотку",
+		ACCUSATIVE = "приемный лоток",
+		INSTRUMENTAL = "приемным лотком",
+		PREPOSITIONAL = "приемном лотке",
+	)
 
 /obj/machinery/disposal/delivery_chute/place_item_in_disposal(obj/item/I, mob/user)
 	if(I.CanEnterDisposals())
@@ -733,7 +753,7 @@ GLOBAL_VAR_INIT(disposals_animals_spawned, 0)
 	else if(ismob(AM))
 		var/mob/M = AM
 		if(prob(2)) // to prevent mobs being stuck in infinite loops
-			to_chat(M, span_warning("You hit the edge of the chute."))
+			to_chat(M, span_warning("Вы ударяетесь о край лотка."))
 			return
 		M.forceMove(src)
 	flush()

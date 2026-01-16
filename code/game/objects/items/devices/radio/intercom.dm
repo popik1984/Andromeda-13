@@ -1,6 +1,6 @@
 /obj/item/radio/intercom
 	name = "station intercom"
-	desc = "A trusty station intercom, ready to spring into action even when the headsets go silent."
+	desc = "Надёжный станционный интерком, готовый к работе даже когда гарнитуры замолкают."
 	icon = 'icons/obj/machines/wallmounts.dmi'
 	icon_state = "intercom"
 	anchored = TRUE
@@ -19,14 +19,34 @@
 	///The icon of intercom while its turned off
 	var/icon_off = "intercom-p"
 
+/obj/item/radio/intercom/get_ru_names()
+	return list(
+		NOMINATIVE = "станционный интерком",
+		GENITIVE = "станционного интеркома",
+		DATIVE = "станционному интеркому",
+		ACCUSATIVE = "станционный интерком",
+		INSTRUMENTAL = "станционным интеркомом",
+		PREPOSITIONAL = "станционном интеркоме",
+	)
+
 /obj/item/radio/intercom/unscrewed
 	unscrewed = TRUE
 
 /obj/item/radio/intercom/prison
 	name = "receive-only intercom"
-	desc = "A station intercom. It looks like it has been modified to not broadcast."
+	desc = "Станционный интерком. Выглядит так, будто его модифицировали для запрета вещания."
 	icon_state = "intercom_prison"
 	icon_off = "intercom_prison-p"
+
+/obj/item/radio/intercom/prison/get_ru_names()
+	return list(
+		NOMINATIVE = "интерком (только приём)",
+		GENITIVE = "интеркома (только приём)",
+		DATIVE = "интеркому (только приём)",
+		ACCUSATIVE = "интерком (только приём)",
+		INSTRUMENTAL = "интеркомом (только приём)",
+		PREPOSITIONAL = "интеркоме (только приём)",
+	)
 
 /obj/item/radio/intercom/prison/Initialize(mapload)
 	. = ..()
@@ -48,43 +68,43 @@
 
 /obj/item/radio/intercom/examine(mob/user)
 	. = ..()
-	. += span_notice("Use [MODE_TOKEN_INTERCOM] when nearby to speak into it.")
+	. += span_notice("Используйте [MODE_TOKEN_INTERCOM], находясь рядом, чтобы говорить в него.")
 	if(!unscrewed)
-		. += span_notice("It's <b>screwed</b> and secured to the wall.")
+		. += span_notice("Он <b>привинчен</b> и закреплён на стене.")
 	else
-		. += span_notice("It's <i>unscrewed</i> from the wall, and can be <b>detached</b>.")
+		. += span_notice("Он <i>отвинчен</i> от стены и может быть <b>снят</b>.")
 
 	if(anonymize)
-		. += span_notice("Speaking through this intercom will anonymize your voice.")
+		. += span_notice("Разговор через этот интерком анонимизирует ваш голос.")
 
 	if(freqlock == RADIO_FREQENCY_UNLOCKED)
 		if(obj_flags & EMAGGED)
-			. += span_warning("Its frequency lock has been shorted...")
+			. += span_warning("Его блокировка частоты закорочена...")
 	else
-		. += span_notice("It has a frequency lock set to [frequency/10].")
+		. += span_notice("Установлена блокировка частоты на [frequency/10].")
 
 /obj/item/radio/intercom/screwdriver_act(mob/living/user, obj/item/tool)
 	if(unscrewed)
-		user.visible_message(span_notice("[user] starts tightening [src]'s screws..."), span_notice("You start screwing in [src]..."))
+		user.visible_message(span_notice("[user] начинает затягивать винты [declent_ru(GENITIVE)]..."), span_notice("Вы начинаете завинчивать [declent_ru(ACCUSATIVE)]..."))
 		if(tool.use_tool(src, user, 30, volume=50))
-			user.visible_message(span_notice("[user] tightens [src]'s screws!"), span_notice("You tighten [src]'s screws."))
+			user.visible_message(span_notice("[user] затягивает винты [declent_ru(GENITIVE)]!"), span_notice("Вы затягиваете винты [declent_ru(GENITIVE)]."))
 			unscrewed = FALSE
 	else
-		user.visible_message(span_notice("[user] starts loosening [src]'s screws..."), span_notice("You start unscrewing [src]..."))
+		user.visible_message(span_notice("[user] начинает ослаблять винты [declent_ru(GENITIVE)]..."), span_notice("Вы начинаете отвинчивать [declent_ru(ACCUSATIVE)]..."))
 		if(tool.use_tool(src, user, 40, volume=50))
-			user.visible_message(span_notice("[user] loosens [src]'s screws!"), span_notice("You unscrew [src], loosening it from the wall."))
+			user.visible_message(span_notice("[user] ослабляет винты [declent_ru(GENITIVE)]!"), span_notice("Вы отвинчиваете [declent_ru(ACCUSATIVE)], ослабляя его крепление к стене."))
 			unscrewed = TRUE
 	return TRUE
 
 /obj/item/radio/intercom/wrench_act(mob/living/user, obj/item/tool)
 	. = TRUE
 	if(!unscrewed)
-		to_chat(user, span_warning("You need to unscrew [src] from the wall first!"))
+		to_chat(user, span_warning("Сначала нужно отвинтить [declent_ru(ACCUSATIVE)] от стены!"))
 		return
-	user.visible_message(span_notice("[user] starts unsecuring [src]..."), span_notice("You start unsecuring [src]..."))
+	user.visible_message(span_notice("[user] начинает откреплять [declent_ru(ACCUSATIVE)]..."), span_notice("Вы начинаете откреплять [declent_ru(ACCUSATIVE)]..."))
 	tool.play_tool_sound(src)
 	if(tool.use_tool(src, user, 80))
-		user.visible_message(span_notice("[user] unsecures [src]!"), span_notice("You detach [src] from the wall."))
+		user.visible_message(span_notice("[user] открепляет [declent_ru(ACCUSATIVE)]!"), span_notice("Вы снимаете [declent_ru(ACCUSATIVE)] со стены."))
 		playsound(src, 'sound/items/deconstruct.ogg', 50, TRUE)
 		deconstruct(TRUE)
 
@@ -147,7 +167,7 @@
 	switch(freqlock)
 		// Emagging an intercom with an emaggable lock will remove the lock
 		if(RADIO_FREQENCY_EMAGGABLE_LOCK)
-			balloon_alert(user, "frequency lock cleared")
+			balloon_alert(user, "блокировка частоты снята")
 			playsound(src, SFX_SPARKS, 75, TRUE, SILENCED_SOUND_EXTRARANGE)
 			freqlock = RADIO_FREQENCY_UNLOCKED
 			obj_flags |= EMAGGED
@@ -155,7 +175,7 @@
 
 		// A fully locked one will do nothing, as locked is intended to be used for stuff that should never be changed
 		if(RADIO_FREQENCY_LOCKED)
-			balloon_alert(user, "can't override frequency lock!")
+			balloon_alert(user, "невозможно обойти блокировку частоты!")
 			playsound(src, 'sound/machines/buzz/buzz-two.ogg', 50, FALSE, SILENCED_SOUND_EXTRARANGE)
 			return
 
@@ -192,20 +212,40 @@
 //Created through the autolathe or through deconstructing intercoms. Can be applied to wall to make a new intercom on it!
 /obj/item/wallframe/intercom
 	name = "intercom frame"
-	desc = "A ready-to-go intercom. Just slap it on a wall and screw it in!"
+	desc = "Готовый интерком. Просто прилепи на стену и прикрути!"
 	icon = 'icons/obj/machines/wallmounts.dmi'
 	icon_state = "intercom"
 	result_path = /obj/item/radio/intercom/unscrewed
 	pixel_shift = 26
 	custom_materials = list(/datum/material/iron = SHEET_MATERIAL_AMOUNT * 2)
 
+/obj/item/wallframe/intercom/get_ru_names()
+	return list(
+		NOMINATIVE = "каркас интеркома",
+		GENITIVE = "каркаса интеркома",
+		DATIVE = "каркасу интеркома",
+		ACCUSATIVE = "каркас интеркома",
+		INSTRUMENTAL = "каркасом интеркома",
+		PREPOSITIONAL = "каркасе интеркома",
+	)
+
 MAPPING_DIRECTIONAL_HELPERS(/obj/item/radio/intercom, 27)
 
 /obj/item/radio/intercom/chapel
 	name = "Confessional intercom"
-	desc = "Talk through this... to confess your many sins. Conceals your voice, to keep them secret."
+	desc = "Говорите через него... чтобы исповедаться в своих грехах. Скрывает ваш голос, чтобы сохранить их в тайне."
 	anonymize = TRUE
 	freqlock = RADIO_FREQENCY_EMAGGABLE_LOCK
+
+/obj/item/radio/intercom/chapel/get_ru_names()
+	return list(
+		NOMINATIVE = "интерком исповедальни",
+		GENITIVE = "интеркома исповедальни",
+		DATIVE = "интеркому исповедальни",
+		ACCUSATIVE = "интерком исповедальни",
+		INSTRUMENTAL = "интеркомом исповедальни",
+		PREPOSITIONAL = "интеркоме исповедальни",
+	)
 
 /obj/item/radio/intercom/chapel/Initialize(mapload)
 	. = ..()
@@ -214,26 +254,56 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/item/radio/intercom, 27)
 
 /obj/item/radio/intercom/command
 	name = "command intercom"
-	desc = "The command's special free-frequency intercom. It's a versatile tool that can be tuned to any frequency, granting you access to channels you're not supposed to be on. Plus, it comes equipped with a built-in voice amplifier for crystal-clear communication."
+	desc = "Особый интерком командования со свободной частотой. Это универсальный инструмент, который можно настроить на любую частоту, предоставляя доступ к каналам, на которых вас не должно быть. Плюс, он оснащён встроенным усилителем голоса для кристально чистой связи."
 	icon_state = "intercom_command"
 	freerange = TRUE
 	command = TRUE
 	icon_off = "intercom_command-p"
 
+/obj/item/radio/intercom/command/get_ru_names()
+	return list(
+		NOMINATIVE = "командный интерком",
+		GENITIVE = "командного интеркома",
+		DATIVE = "командному интеркому",
+		ACCUSATIVE = "командный интерком",
+		INSTRUMENTAL = "командным интеркомом",
+		PREPOSITIONAL = "командном интеркоме",
+	)
+
 /obj/item/radio/intercom/syndicate
 	name = "syndicate intercom"
-	desc = "Talk smack through this."
+	desc = "Поливайте грязью через это."
 	command = TRUE
 	special_channels = RADIO_SPECIAL_SYNDIE
 
+/obj/item/radio/intercom/syndicate/get_ru_names()
+	return list(
+		NOMINATIVE = "интерком Синдиката",
+		GENITIVE = "интеркома Синдиката",
+		DATIVE = "интеркому Синдиката",
+		ACCUSATIVE = "интерком Синдиката",
+		INSTRUMENTAL = "интеркомом Синдиката",
+		PREPOSITIONAL = "интеркоме Синдиката",
+	)
+
 /obj/item/radio/intercom/syndicate/freerange
 	name = "syndicate wide-band intercom"
-	desc = "A custom-made Syndicate-issue intercom used to transmit on all Nanotrasen frequencies. Particularly expensive."
+	desc = "Заказной интерком Синдиката, используемый для передачи на всех частотах Nanotrasen. Особенно дорогой."
 	freerange = TRUE
+
+/obj/item/radio/intercom/syndicate/freerange/get_ru_names()
+	return list(
+		NOMINATIVE = "широкополосный интерком Синдиката",
+		GENITIVE = "широкополосного интеркома Синдиката",
+		DATIVE = "широкополосному интеркому Синдиката",
+		ACCUSATIVE = "широкополосный интерком Синдиката",
+		INSTRUMENTAL = "широкополосным интеркомом Синдиката",
+		PREPOSITIONAL = "широкополосном интеркоме Синдиката",
+	)
 
 /obj/item/radio/intercom/mi13
 	name = "intercom"
-	desc = "Talk through this to talk to whoever is in this facility with you."
+	desc = "Говорите через него, чтобы связаться с тем, кто находится с вами в этом комплексе."
 	freerange = TRUE
 
 MAPPING_DIRECTIONAL_HELPERS(/obj/item/radio/intercom/prison, 27)

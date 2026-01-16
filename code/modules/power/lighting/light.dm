@@ -1,92 +1,102 @@
-// the standard tube light fixture
+// стандартный светильник с лампой-трубкой
 /obj/machinery/light
 	name = "light fixture"
 	icon = 'icons/obj/lighting.dmi'
 	icon_state = "tube"
-	desc = "A lighting fixture."
+	desc = "Осветительный прибор."
 	layer = WALL_OBJ_LAYER
 	max_integrity = 100
 	use_power = ACTIVE_POWER_USE
 	idle_power_usage = BASE_MACHINE_IDLE_CONSUMPTION * 0.02
 	active_power_usage = BASE_MACHINE_ACTIVE_CONSUMPTION * 0.02
-	power_channel = AREA_USAGE_LIGHT //Lights are calc'd via area so they dont need to be in the machine list
+	power_channel = AREA_USAGE_LIGHT //Свет рассчитывается через зону, поэтому ему не нужно быть в списке машин
 	always_area_sensitive = TRUE
 	light_angle = 170
-	///What overlay the light should use
+	///Какой оверлей должен использовать свет
 	var/overlay_icon = 'icons/obj/lighting_overlay.dmi'
-	///base description and icon_state
+	///базовое описание и icon_state
 	var/base_state = "tube"
-	///Is the light on?
+	///Включен ли свет?
 	var/on = FALSE
-	///Amount of power used
+	///Количество используемой энергии
 	var/static_power_used = 0
-	///Luminosity when on, also used in power calculation
+	///Светимость при включении, также используется при расчете мощности
 	var/brightness = 8
-	///Basically the alpha of the emitted light source
+	///По сути, альфа излучаемого источника света
 	var/bulb_power = 1
-	///Default colour of the light.
+	///Цвет света по умолчанию.
 	var/bulb_colour = LIGHT_COLOR_DEFAULT
-	///LIGHT_OK, _EMPTY, _BURNED or _BROKEN
+	///LIGHT_OK, _EMPTY, _BURNED или _BROKEN
 	var/status = LIGHT_OK
-	///Should we flicker?
+	///Должны ли мы мерцать?
 	var/flickering = FALSE
-	///The type of light item
+	///Тип предмета света
 	var/light_type = /obj/item/light/tube
-	///String of the light type, used in descriptions and in examine
-	var/fitting = "tube"
-	///Count of number of times switched on/off, this is used to calculate the probability the light burns out
+	///Строка типа света, используется в описаниях и при осмотре
+	var/fitting = "лампа-трубка"
+	///Счетчик количества включений/выключений, используется для расчета вероятности перегорания лампы
 	var/switchcount = 0
-	///Cell reference
+	///Ссылка на ячейку
 	var/obj/item/stock_parts/power_store/cell
-	/// If TRUE, then cell is null, but one is pretending to exist.
-	/// This is to defer emergency cell creation unless necessary, as it is very expensive.
+	/// Если TRUE, то ячейка равна null, но делает вид, что существует.
+	/// Это нужно для того, чтобы отложить создание аварийной ячейки до тех пор, пока это не станет необходимым, так как это очень затратно.
 	var/has_mock_cell = TRUE
-	///If true, this fixture generates a very weak cell at roundstart
+	///Если true, этот прибор генерирует очень слабую ячейку в начале раунда
 	var/start_with_cell = TRUE
-	///Currently in night shift mode?
+	///Включен ли режим ночной смены?
 	var/nightshift_enabled = FALSE
-	///Set to FALSE to never let this light get switched to night mode.
+	///Установите в FALSE, чтобы никогда не позволять этому свету переключаться в ночной режим.
 	var/nightshift_allowed = TRUE
-	///Brightness of the nightshift light
+	///Яркость света в ночную смену
 	var/nightshift_brightness = 8
-	///Alpha of the nightshift light
+	///Альфа света в ночную смену
 	var/nightshift_light_power = 0.45
-	///Basecolor of the nightshift light
+	///Базовый цвет света в ночную смену
 	var/nightshift_light_color = "#FFDDCC"
-	///If true, the light is in low power mode
+	///Если true, свет находится в режиме низкого энергопотребления
 	var/low_power_mode = FALSE
-	///If true, this light cannot ever be in low power mode
+	///Если true, этот свет никогда не может быть в режиме низкого энергопотребления
 	var/no_low_power = FALSE
-	///If true, overrides lights to use emergency lighting
+	///Если true, принудительно переключает свет на использование аварийного освещения
 	var/major_emergency = FALSE
-	///Multiplier for this light's base brightness during a cascade
+	///Множитель базовой яркость этого света во время каскада
 	var/bulb_major_emergency_brightness_mul = 0.75
-	///Colour of the light when major emergency mode is on
+	///Цвет света при включенном режиме серьезной аварии
 	var/bulb_emergency_colour = "#ff4e4e"
-	///Multiplier for this light's base brightness in low power power mode
+	///Множитель базовой яркость этого света в режиме низкого энергопотребления
 	var/bulb_low_power_brightness_mul = 0.25
-	///Determines the colour of the light while it's in low power mode
+	///Определяет цвет света, пока он находится в режиме низкого энергопотребления
 	var/bulb_low_power_colour = COLOR_VIVID_RED
-	///The multiplier for determining the light's power in low power mode
+	///Множитель для определения мощности света в режиме низкого энергопотребления
 	var/bulb_low_power_pow_mul = 0.75
-	///The minimum value for the light's power in low power mode
+	///Минимальное значение мощности света в режиме низкого энергопотребления
 	var/bulb_low_power_pow_min = 0.5
-	///The Light range to use when working in fire alarm status
+	///Дальность света при работе в статусе пожарной тревоги
 	var/fire_brightness = 9
-	///The Light power to use when working in fire alarm status
+	///Мощность света при работе в статусе пожарной тревоги
 	var/fire_power = 0.5
-	///The Light colour to use when working in fire alarm status
+	///Цвет света при работе в статусе пожарной тревоги
 	var/fire_colour = COLOR_FIRE_LIGHT_RED
-	///Power usage - W per unit of luminosity
+	///Потребление энергии - Вт на единицу светимости
 	var/power_consumption_rate = 20
-	///break if moved, if false also makes it ignore if the wall its on breaks
+	///ломаться при перемещении, если false, также игнорирует разрушение стены, на которой он находится
 	var/break_if_moved = TRUE
 
-// create a new lighting fixture
+/obj/machinery/light/get_ru_names()
+	return list(
+		NOMINATIVE = "светильник",
+		GENITIVE = "светильника",
+		DATIVE = "светильнику",
+		ACCUSATIVE = "светильник",
+		INSTRUMENTAL = "светильником",
+		PREPOSITIONAL = "светильнике",
+	)
+
+// создание нового осветительного прибора
 /obj/machinery/light/Initialize(mapload)
 	. = ..()
 
-	// Detect and scream about double stacked lights
+	// Обнаружить и сообщить о двойных сложенных светильниках
 	if(PERFORM_ALL_TESTS(focus_only/stacked_lights))
 		var/turf/our_location = get_turf(src)
 		for(var/obj/machinery/light/on_turf in our_location)
@@ -97,7 +107,7 @@
 			stack_trace("Conflicting double stacked light [on_turf.type] found at [get_area(our_location)] ([our_location.x],[our_location.y],[our_location.z])")
 			qdel(on_turf)
 
-	if(!mapload) //sync up nightshift lighting for player made lights
+	if(!mapload) //синхронизация освещения ночной смены для созданных игроком светильников
 		var/area/our_area = get_room_area()
 		var/obj/machinery/power/apc/temp_apc = our_area.apc
 		nightshift_enabled = temp_apc?.nightshift_lights
@@ -106,13 +116,13 @@
 		has_mock_cell = FALSE
 
 	if(is_station_level(z))
-		RegisterSignal(SSdcs, COMSIG_GLOB_GREY_TIDE_LIGHT, PROC_REF(grey_tide)) //Only put the signal on station lights
+		RegisterSignal(SSdcs, COMSIG_GLOB_GREY_TIDE_LIGHT, PROC_REF(grey_tide)) //Помещаем сигнал только на станционные светильники
 
-	// Light projects out backwards from the dir of the light
+	// Свет проецируется назад от направления светильника
 	set_light(l_dir = REVERSE_DIR(dir))
 	RegisterSignal(src, COMSIG_LIGHT_EATER_ACT, PROC_REF(on_light_eater))
 	AddElement(/datum/element/atmos_sensitive, mapload)
-	AddElement(/datum/element/contextual_screentip_bare_hands, rmb_text = "Remove bulb")
+	AddElement(/datum/element/contextual_screentip_bare_hands, rmb_text = "Вынуть лампу")
 	if(mapload)
 		find_and_mount_on_atom(mark_for_late_init = TRUE)
 
@@ -127,10 +137,10 @@
 	. = ..()
 #ifndef MAP_TEST
 	switch(fitting)
-		if("tube")
+		if("лампа-трубка")
 			if(prob(2))
 				break_light_tube(TRUE)
-		if("bulb")
+		if("лампочка")
 			if(prob(5))
 				break_light_tube(TRUE)
 #endif
@@ -157,9 +167,9 @@
 	. = ..()
 	set_light(l_dir = REVERSE_DIR(dir))
 
-// If we're adjacent to the source, we make this sorta indentation for our light to ensure it stays lit (and to make distances look right)
-// By shifting the light position we use forward a bit, towards something that isn't off by 0.5 from being in angle
-// Because angle calculation is kinda harsh it's hard to find a happy point between fulldark and fullbright for the corners behind the light. this is good enough tho
+// Если мы примыкаем к источнику, мы делаем что-то вроде отступа для нашего света, чтобы гарантировать, что он останется освещенным (и чтобы расстояния выглядели правильно)
+// Сдвигая положение света, мы используем немного вперед, к чему-то, что не отклонено на 0.5 от угла
+// Поскольку расчет угла довольно суров, трудно найти золотую середину между полной темнотой и полным светом для углов позади света. но этого достаточно
 /obj/machinery/light/get_light_offset()
 	var/list/hand_back = ..()
 	var/list/dir_offset = dir2offset(REVERSE_DIR(dir))
@@ -168,7 +178,7 @@
 	return hand_back
 
 /obj/machinery/light/update_icon_state()
-	switch(status) // set icon_states
+	switch(status) // установить icon_states
 		if(LIGHT_OK)
 			var/area/local_area = get_room_area()
 			if(low_power_mode || major_emergency || (local_area?.fire))
@@ -203,8 +213,8 @@
 		return
 	. += mutable_appearance(overlay_icon, base_state)
 
-// Area sensitivity is traditionally tied directly to power use, as an optimization
-// But since we want it for fire reacting, we disregard that
+// Чувствительность к зоне традиционно напрямую связана с использованием энергии в качестве оптимизации
+// Но поскольку мы хотим, чтобы он реагировал на огонь, мы игнорируем это
 /obj/machinery/light/setup_area_power_relationship()
 	. = ..()
 	if(!.)
@@ -225,7 +235,7 @@
 	SIGNAL_HANDLER
 	update()
 
-// update the icon_state and luminosity of the light depending on its state
+// обновить icon_state и светимость света в зависимости от его состояния
 /obj/machinery/light/proc/update(trigger = TRUE)
 	switch(status)
 		if(LIGHT_BROKEN,LIGHT_BURNED,LIGHT_EMPTY)
@@ -283,17 +293,17 @@
 	broken_sparks(start_only=TRUE)
 
 /obj/machinery/light/update_current_power_usage()
-	if(!on && static_power_used > 0) //Light is off but still powered
+	if(!on && static_power_used > 0) //Свет выключен, но все еще находится под напряжением
 		removeStaticPower(static_power_used, AREA_USAGE_STATIC_LIGHT)
 		static_power_used = 0
-	else if(on) //Light is on, just recalculate usage
+	else if(on) //Свет включен, просто пересчитываем использование
 		var/static_power_used_new = 0
 		var/area/local_area = get_room_area()
 		if (nightshift_enabled && !local_area?.fire)
 			static_power_used_new = nightshift_brightness * nightshift_light_power * power_consumption_rate
 		else
 			static_power_used_new = brightness * bulb_power * power_consumption_rate
-		if(static_power_used != static_power_used_new) //Consumption changed - update
+		if(static_power_used != static_power_used_new) //Потребление изменилось - обновить
 			removeStaticPower(static_power_used, AREA_USAGE_STATIC_LIGHT)
 			static_power_used = static_power_used_new
 			addStaticPower(static_power_used, AREA_USAGE_STATIC_LIGHT)
@@ -316,16 +326,16 @@
 
 /obj/machinery/light/process(seconds_per_tick)
 	if(has_power())
-		// If the cell is done mooching station power, and reagents don't need processing, stop processing
+		// Если ячейка закончила потреблять энергию станции, и реагенты не требуют обработки, остановить обработку
 		if(is_full_charge() && !reagents)
 			return PROCESS_KILL
 		if(cell)
-			charge_cell(LIGHT_EMERGENCY_POWER_USE * seconds_per_tick, cell = cell) //Recharge emergency power automatically while not using it
-	if(reagents) //with most reagents coming out at 300, and with most meaningful reactions coming at 370+, this rate gives a few seconds of time to place it in and get out of dodge regardless of input.
+			charge_cell(LIGHT_EMERGENCY_POWER_USE * seconds_per_tick, cell = cell) //Автоматическая подзарядка аварийного питания при неиспользовании
+	if(reagents) //при большинстве реагентов выходящих при 300, и при большинстве значимых реакций при 370+, эта скорость дает несколько секунд времени, чтобы поместить его внутрь и убраться, независимо от ввода.
 		reagents.adjust_thermal_energy(8 * reagents.total_volume * SPECIFIC_HEAT_DEFAULT * seconds_per_tick)
 		reagents.handle_reactions()
 	if(low_power_mode && !use_emergency_power(LIGHT_EMERGENCY_POWER_USE * seconds_per_tick))
-		update(FALSE) //Disables emergency mode and sets the color to normal
+		update(FALSE) //Отключает аварийный режим и устанавливает нормальный цвет
 
 /obj/machinery/light/proc/burn_out()
 	if(status == LIGHT_OK)
@@ -334,8 +344,8 @@
 		on = FALSE
 		set_light(l_range = 0)
 
-// attempt to set the light's on/off status
-// will not switch on if broken/burned/empty
+// попытка установить статус включения/выключения света
+// не включится, если сломан/перегорел/пуст
 /obj/machinery/light/proc/set_on(turn_on)
 	on = (turn_on && status == LIGHT_OK)
 	update()
@@ -347,35 +357,35 @@
 
 	return cell
 
-// examine verb
+// глагол examine
 /obj/machinery/light/examine(mob/user)
 	. = ..()
 	switch(status)
 		if(LIGHT_OK)
-			. += span_notice("It is turned [on? "on" : "off"].")
+			. += span_notice("Он [on? "включён" : "выключен"].")
 		if(LIGHT_EMPTY)
-			. +=  span_notice("The [fitting] has been removed.")
+			. +=  span_notice("[capitalize(fitting)] отсутствует.")
 		if(LIGHT_BURNED)
-			. +=  span_danger("The [fitting] is burnt out.")
+			. +=  span_danger("[capitalize(fitting)] перегорела.")
 		if(LIGHT_BROKEN)
-			. += span_danger("The [fitting] has been smashed.")
+			. += span_danger("[capitalize(fitting)] разбита.")
 	if(cell || has_mock_cell)
-		. +=  span_notice("Its backup power charge meter reads [has_mock_cell ? 100 : round((cell.charge / cell.maxcharge) * 100, 0.1)]%.")
+		. +=  span_notice("Индикатор резервного питания показывает [has_mock_cell ? 100 : round((cell.charge / cell.maxcharge) * 100, 0.1)]%.")
 
 
 
-// attack with item - insert light (if right type), otherwise try to break the light
+// атака предметом - вставить свет (если правильный тип), в противном случае попытаться разбить свет
 
 /obj/machinery/light/attackby(obj/item/tool, mob/living/user, list/modifiers, list/attack_modifiers)
-	// attempt to insert light
+	// попытка вставить свет
 	if(istype(tool, /obj/item/light))
 		if(status == LIGHT_OK)
-			to_chat(user, span_warning("There is a [fitting] already inserted!"))
+			to_chat(user, span_warning("[capitalize(fitting)] уже вставлена!"))
 			return
 		add_fingerprint(user)
 		var/obj/item/light/light_object = tool
 		if(!istype(light_object, light_type))
-			to_chat(user, span_warning("This type of light requires a [fitting]!"))
+			to_chat(user, span_warning("Для этого светильника нужна [fitting]!"))
 			return
 		if(!user.temporarilyRemoveItemFromInventory(light_object))
 			return
@@ -383,9 +393,9 @@
 		add_fingerprint(user)
 		if(status != LIGHT_EMPTY)
 			drop_light_tube(user)
-			to_chat(user, span_notice("You replace [light_object]."))
+			to_chat(user, span_notice("Вы заменяете [light_object.declent_ru(ACCUSATIVE)]."))
 		else
-			to_chat(user, span_notice("You insert [light_object]."))
+			to_chat(user, span_notice("Вы вставляете [light_object.declent_ru(ACCUSATIVE)]."))
 		if(length(light_object.reagents.reagent_list))
 			create_reagents(LIGHT_REAGENT_CAPACITY, SEALED_CONTAINER | TRANSPARENT)
 			light_object.reagents.trans_to(reagents, LIGHT_REAGENT_CAPACITY)
@@ -399,20 +409,20 @@
 
 		return
 
-	// attempt to stick weapon into light socket
+	// попытка засунуть оружие в патрон светильника
 	if(status != LIGHT_EMPTY || user.combat_mode)
 		return ..()
-	if(tool.tool_behaviour == TOOL_SCREWDRIVER) //If it's a screwdriver open it.
+	if(tool.tool_behaviour == TOOL_SCREWDRIVER) //Если это отвертка, открыть его.
 		tool.play_tool_sound(src, 75)
-		user.visible_message(span_notice("[user.name] opens [src]'s casing."), \
-			span_notice("You open [src]'s casing."), span_hear("You hear a noise."))
+		user.visible_message(span_notice("[user.name] открывает корпус [declent_ru(GENITIVE)]."), \
+			span_notice("Вы открываете корпус [declent_ru(GENITIVE)]."), span_hear("Вы слышите шум."))
 		deconstruct()
 		return
 
 	if(tool.item_flags & ABSTRACT)
 		return
 
-	to_chat(user, span_userdanger("You stick \the [tool] into the light socket!"))
+	to_chat(user, span_userdanger("Вы засовываете [tool.declent_ru(ACCUSATIVE)] в патрон светильника!"))
 	if(has_power() && (tool.obj_flags & CONDUCTS_ELECTRICITY))
 		do_sparks(3, TRUE, src)
 		if (prob(75))
@@ -423,11 +433,11 @@
 
 	var/obj/item/wallframe/light_fixture/frame = null
 	switch(fitting)
-		if("tube")
+		if("лампа-трубка")
 			frame = new /obj/item/wallframe/light_fixture(drop_point)
-		if("bulb")
+		if("лампочка")
 			frame = new /obj/item/wallframe/light_fixture/small(drop_point)
-		if("floor bulb")
+		if("напольная лампочка")
 			frame = new /obj/item/wallframe/light_fixture/small(drop_point)
 	if(!disassembled)
 		frame.take_damage(frame.max_integrity * 0.5, sound_effect = FALSE)
@@ -473,20 +483,20 @@
 		if(BURN)
 			playsound(loc, 'sound/items/tools/welder.ogg', 100, TRUE)
 
-// returns if the light has power /but/ is manually turned off
-// if a light is turned off, it won't activate emergency power
+// возвращает, есть ли у света питание, /но/ он выключен вручную
+// если свет выключен, он не активирует аварийное питание
 /obj/machinery/light/proc/turned_off()
 	var/area/local_area = get_room_area()
 	return !local_area.lightswitch && local_area.power_light || flickering
 
-// returns whether this light has power
-// true if area has power and lightswitch is on
+// возвращает, есть ли у этого света питание
+// true, если в зоне есть питание и выключатель света включен
 /obj/machinery/light/proc/has_power()
 	var/area/local_area = get_room_area()
 	return local_area.lightswitch && local_area.power_light
 
-// returns whether this light has emergency power
-// can also return if it has access to a certain amount of that power
+// возвращает, есть ли у этого света аварийное питание
+// также может возвращать, имеет ли он доступ к определенному количеству этой энергии
 /obj/machinery/light/proc/has_emergency_power(power_usage_amount)
 	if(no_low_power || (!cell && !has_mock_cell))
 		return FALSE
@@ -496,13 +506,13 @@
 		return status == LIGHT_OK
 	return FALSE
 
-// attempts to use power from the installed emergency cell, returns true if it does and false if it doesn't
+// пытается использовать энергию из установленной аварийной ячейки, возвращает true, если это удается, и false, если нет
 /obj/machinery/light/proc/use_emergency_power(power_usage_amount = LIGHT_EMERGENCY_POWER_USE)
 	if(!has_emergency_power(power_usage_amount))
 		return FALSE
 	var/obj/item/stock_parts/power_store/real_cell = get_cell()
-	if(real_cell.charge > 2.5 * /obj/item/stock_parts/power_store/cell/emergency_light::maxcharge) //it's meant to handle 120 W, ya doofus
-		visible_message(span_warning("[src] short-circuits from too powerful of a power cell!"))
+	if(real_cell.charge > 2.5 * /obj/item/stock_parts/power_store/cell/emergency_light::maxcharge) //он предназначен для работы с 120 Вт, балбес
+		visible_message(span_warning("[src] закоротило от слишком мощной батарейки!"))
 		burn_out()
 		return FALSE
 	real_cell.use(power_usage_amount)
@@ -518,7 +528,7 @@
 	if(flickering || !on || status != LIGHT_OK)
 		return
 
-	. = TRUE // did we actually flicker? Send this now because we expect immediate response, before sleeping.
+	. = TRUE // мы действительно мигнули? Отправляем это сейчас, потому что ожидаем немедленного ответа перед сном.
 	set_light(
 		l_range = brightness * bulb_low_power_brightness_mul,
 		l_power = bulb_low_power_pow_mul,
@@ -544,16 +554,16 @@
 	flickering = FALSE
 	update(FALSE)
 
-// ai attack - make lights flicker, because why not
+// атака ии - заставить свет мигать, потому что почему бы и нет
 
 /obj/machinery/light/attack_ai(mob/user)
 	no_low_power = !no_low_power
-	to_chat(user, span_notice("Emergency lights for this fixture have been [no_low_power ? "disabled" : "enabled"]."))
+	to_chat(user, span_notice("Аварийное освещение для этого прибора было [no_low_power ? "отключено" : "включено"]."))
 	update(FALSE)
 	return
 
-// attack with hand - remove tube/bulb
-// if hands aren't protected and the light is on, burn the player
+// атака рукой - убрать трубку/лампочку
+// если руки не защищены и свет включен, обжечь игрока
 
 /obj/machinery/light/attack_hand_secondary(mob/living/carbon/human/user, list/modifiers)
 	. = ..()
@@ -563,13 +573,13 @@
 	add_fingerprint(user)
 
 	if(status == LIGHT_EMPTY)
-		to_chat(user, span_warning("There is no [fitting] in this light!"))
+		to_chat(user, span_warning("В светильнике отсутствует [fitting]!"))
 		return
 
-	// make it burn hands unless you're wearing heat insulated gloves or have the RESISTHEAT/RESISTHEATHANDS traits
+	// обжечь руки, если вы не носите теплоизолирующие перчатки или не имеете черт RESISTHEAT/RESISTHEATHANDS
 	if(!on)
-		to_chat(user, span_notice("You remove the light [fitting]."))
-		// create a light tube/bulb item and put it in the user's hand
+		to_chat(user, span_notice("Вы вынимаете [fitting]."))
+		// создать предмет лампа-трубка/лампочка и положить его в руку пользователя
 		drop_light_tube(user)
 		return
 
@@ -581,15 +591,15 @@
 			var/obj/item/organ/stomach/ethereal/stomach = maybe_stomach
 			if(stomach.drain_time > world.time)
 				return
-			to_chat(user, span_notice("You start channeling some power through the [fitting] into your body."))
+			to_chat(user, span_notice("Вы начинаете перекачивать энергию через [fitting] в своё тело."))
 			stomach.drain_time = world.time + LIGHT_DRAIN_TIME
 			while(do_after(user, LIGHT_DRAIN_TIME, target = src))
 				stomach.drain_time = world.time + LIGHT_DRAIN_TIME
 				if(istype(stomach))
-					to_chat(user, span_notice("You receive some charge from the [fitting]."))
+					to_chat(user, span_notice("Вы получаете заряд."))
 					stomach.adjust_charge(LIGHT_POWER_GAIN)
 				else
-					to_chat(user, span_warning("You can't receive charge from the [fitting]!"))
+					to_chat(user, span_warning("Вы не можете получить заряд от [fitting]!"))
 			return
 
 		if(user.gloves)
@@ -600,23 +610,23 @@
 		protected = TRUE
 
 	if(protected || HAS_TRAIT(user, TRAIT_RESISTHEAT) || HAS_TRAIT(user, TRAIT_RESISTHEATHANDS))
-		to_chat(user, span_notice("You remove the light [fitting]."))
+		to_chat(user, span_notice("Вы вынимаете [fitting]."))
 	else if(istype(user) && user.dna.check_mutation(/datum/mutation/telekinesis))
-		to_chat(user, span_notice("You telekinetically remove the light [fitting]."))
+		to_chat(user, span_notice("Вы телекинетически вынимаете [fitting]."))
 	else
 		var/obj/item/bodypart/affecting = user.get_active_hand()
 		user.apply_damage(5, BURN, affecting, wound_bonus = CANT_WOUND)
 		if(HAS_TRAIT(user, TRAIT_LIGHTBULB_REMOVER))
-			to_chat(user, span_notice("You feel your [affecting.plaintext_zone] burning, but the light begins to budge..."))
+			to_chat(user, span_notice("Вы чувствуете, как [affecting.plaintext_zone] горит, но лампа поддаётся..."))
 			if(!do_after(user, 5 SECONDS, target = src))
 				return
 			user.apply_damage(10, BURN, user.get_active_hand(), wound_bonus = CANT_WOUND)
-			to_chat(user, span_notice("You manage to remove the light [fitting], shattering it in process."))
+			to_chat(user, span_notice("Вам удаётся вынуть [fitting], разбивая её в процессе."))
 			break_light_tube()
 		else
-			to_chat(user, span_warning("You try to remove the light [fitting], but you burn your hand on it!"))
+			to_chat(user, span_warning("Вы пытаетесь вынуть [fitting], но обжигаете руку!"))
 			return
-	// create a light tube/bulb item and put it in the user's hand
+	// создать предмет лампа-трубка/лампочка и положить его в руку пользователя
 	drop_light_tube(user)
 
 /obj/machinery/light/proc/set_major_emergency_light()
@@ -635,14 +645,14 @@
 	light_object.status = status
 	light_object.brightness = brightness
 
-	// light item inherits the switchcount, then zero it
+	// предмет света наследует switchcount, затем обнуляет его
 	light_object.switchcount = switchcount
 	switchcount = 0
 
 	light_object.update_appearance()
 	light_object.forceMove(loc)
 
-	if(user) //puts it in our active hand
+	if(user) //кладет его в нашу активную руку
 		light_object.add_fingerprint(user)
 		user.put_in_active_hand(light_object)
 
@@ -652,15 +662,15 @@
 
 /obj/machinery/light/attack_tk(mob/user)
 	if(status == LIGHT_EMPTY)
-		to_chat(user, span_warning("There is no [fitting] in this light!"))
+		to_chat(user, span_warning("В этом светильнике нет [fitting]!"))
 		return
 
-	to_chat(user, span_notice("You telekinetically remove the light [fitting]."))
-	// create a light tube/bulb item and put it in the user's hand
+	to_chat(user, span_notice("Вы телекинетически вынимаете [fitting]."))
+	// создать предмет лампа-трубка/лампочка и положить его в руку пользователя
 	var/obj/item/light/light_tube = drop_light_tube()
 	return light_tube.attack_tk(user)
 
-// break the light and make sparks if was on
+// разбить свет и создать искры, если он был включен
 /obj/machinery/light/proc/break_light_tube(skip_sound_and_sparks = FALSE)
 	if(status == LIGHT_EMPTY || status == LIGHT_BROKEN)
 		return
@@ -689,19 +699,19 @@
 		explosion(src, flame_range = 5, adminlog = FALSE)
 		qdel(src)
 
-// called when area power state changes
+// вызывается при изменении состояния питания зоны
 /obj/machinery/light/power_change()
 	SHOULD_CALL_PARENT(FALSE)
 	var/area/local_area = get_room_area()
 	set_on(local_area.lightswitch && local_area.power_light)
 
-// called when heated
+// вызывается при нагреве
 
 /obj/machinery/light/should_atmos_process(datum/gas_mixture/air, exposed_temperature)
 	return exposed_temperature > 673
 
 /obj/machinery/light/atmos_expose(datum/gas_mixture/air, exposed_temperature)
-	if(prob(max(0, exposed_temperature - 673)))   //0% at <400C, 100% at >500C
+	if(prob(max(0, exposed_temperature - 673)))   //0% при <400C, 100% при >500C
 		break_light_tube()
 
 /obj/machinery/light/proc/on_light_eater(obj/machinery/light/source, datum/light_eater)
@@ -724,18 +734,28 @@
 
 /obj/machinery/light/floor
 	name = "floor light"
-	desc = "A lightbulb you can walk on without breaking it, amazing."
+	desc = "Лампочка, по которой можно ходить и не разбить её. Потрясающе."
 	icon = 'icons/obj/lighting.dmi'
-	base_state = "floor" // base description and icon_state
+	base_state = "floor" // базовое описание и icon_state
 	icon_state = "floor"
 	brightness = 4
 	light_angle = 360
 	layer = BELOW_CATWALK_LAYER
 	plane = FLOOR_PLANE
 	light_type = /obj/item/light/bulb
-	fitting = "floor bulb"
+	fitting = "напольная лампочка"
 	nightshift_brightness = 4
 	fire_brightness = 4.5
+
+/obj/machinery/light/floor/get_ru_names()
+	return list(
+		NOMINATIVE = "напольная лампа",
+		GENITIVE = "напольной лампы",
+		DATIVE = "напольной лампе",
+		ACCUSATIVE = "напольную лампу",
+		INSTRUMENTAL = "напольной лампой",
+		PREPOSITIONAL = "напольной лампе",
+	)
 
 /obj/machinery/light/floor/get_turfs_to_mount_on()
 	return list(get_turf(src))
@@ -770,6 +790,16 @@
 /obj/machinery/light/floor/transport
 	name = "transport light"
 	break_if_moved = FALSE
-	// has to render above tram things (trams are stupid)
+	// должен рендериться над объектами трамвая (трамваи тупые)
 	layer = BELOW_OPEN_DOOR_LAYER
 	plane = GAME_PLANE
+
+/obj/machinery/light/floor/transport/get_ru_names()
+	return list(
+		NOMINATIVE = "транспортная лампа",
+		GENITIVE = "транспортной лампы",
+		DATIVE = "транспортной лампе",
+		ACCUSATIVE = "транспортную лампу",
+		INSTRUMENTAL = "транспортной лампой",
+		PREPOSITIONAL = "транспортной лампе",
+	)

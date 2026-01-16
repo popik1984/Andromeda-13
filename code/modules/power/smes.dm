@@ -3,7 +3,7 @@
 
 /obj/machinery/power/smes
 	name = "power storage unit"
-	desc = "A high-capacity superconducting magnetic energy storage (SMES) unit."
+	desc = "Сверхпроводящий магнитный накопитель энергии (СМЭС) большой ёмкости."
 	icon_state = "smes"
 	density = TRUE
 	use_power = NO_POWER_USE
@@ -41,6 +41,16 @@
 	var/show_display_lights = TRUE
 	/// Terminal for charging this smes
 	var/obj/machinery/power/terminal/terminal = null
+
+/obj/machinery/power/smes/get_ru_names()
+	return list(
+		NOMINATIVE = "СМЭС",
+		GENITIVE = "СМЭСа",
+		DATIVE = "СМЭСу",
+		ACCUSATIVE = "СМЭС",
+		INSTRUMENTAL = "СМЭСом",
+		PREPOSITIONAL = "СМЭСе",
+	)
 
 /obj/machinery/power/smes/Initialize(mapload)
 	. = ..()
@@ -97,35 +107,35 @@
 		return
 
 	if(istype(held_item, /obj/item/stack/cable_coil) && !terminal && can_place_terminal(user, held_item, silent = TRUE))
-		context[SCREENTIP_CONTEXT_LMB] = "Install terminal"
+		context[SCREENTIP_CONTEXT_LMB] = "Установить терминал"
 		return CONTEXTUAL_SCREENTIP_SET
 
 	if(held_item.tool_behaviour == TOOL_SCREWDRIVER)
-		context[SCREENTIP_CONTEXT_LMB] = "[panel_open ? "Close" : "Open"] panel"
+		context[SCREENTIP_CONTEXT_LMB] = "[panel_open ? "Закрыть" : "Открыть"] панель"
 		return CONTEXTUAL_SCREENTIP_SET
 	if(held_item.tool_behaviour == TOOL_WRENCH && panel_open)
-		context[SCREENTIP_CONTEXT_LMB] = "Rotate"
+		context[SCREENTIP_CONTEXT_LMB] = "Повернуть"
 		return CONTEXTUAL_SCREENTIP_SET
 	else if(held_item.tool_behaviour == TOOL_WIRECUTTER && terminal && panel_open)
-		context[SCREENTIP_CONTEXT_LMB] = "Cut terminal"
+		context[SCREENTIP_CONTEXT_LMB] = "Обрезать терминал"
 		return CONTEXTUAL_SCREENTIP_SET
 	else if(held_item.tool_behaviour == TOOL_CROWBAR && !terminal && panel_open)
-		context[SCREENTIP_CONTEXT_LMB] = "Deconstruct"
+		context[SCREENTIP_CONTEXT_LMB] = "Разобрать"
 		return CONTEXTUAL_SCREENTIP_SET
 
 /obj/machinery/power/smes/examine(user)
 	. = ..()
 
-	. += span_notice("it's maintainence panel can be [EXAMINE_HINT("screwed")] [panel_open ? "closed" : "opened"]")
+	. += span_notice("Его техническую панель можно [EXAMINE_HINT("отвинтить")] [panel_open ? "чтобы закрыть" : "чтобы открыть"].")
 	if(panel_open)
 		if(!terminal)
-			. += span_notice("It can be [EXAMINE_HINT("pried")] apart.")
-		. += span_notice("It can [EXAMINE_HINT("wrenched")] to rotate.")
+			. += span_notice("Его можно [EXAMINE_HINT("поддеть")], чтобы разобрать.")
+		. += span_notice("Его можно [EXAMINE_HINT("повернуть")] гаечным ключом.")
 
 	if(!terminal)
-		. += span_warning("A terminal that requires [EXAMINE_HINT("10 cable pieces")] needs to be installed!.")
+		. += span_warning("Необходимо установить терминал, для этого нужно [EXAMINE_HINT("10 кусков кабеля")].")
 	else if(panel_open)
-		. += span_notice("The terminal can be [EXAMINE_HINT("cut")] apart.")
+		. += span_notice("Терминал можно [EXAMINE_HINT("обрезать")].")
 
 /obj/machinery/power/smes/update_overlays()
 	. = ..()
@@ -213,19 +223,19 @@
 	var/turf/terminal_turf = get_turf(user)
 	if(!panel_open)
 		if(!silent && user)
-			balloon_alert(user, "open the maintenance panel!")
+			balloon_alert(user, "откройте тех. панель!")
 		return FALSE
 	if(terminal_turf.underfloor_accessibility < UNDERFLOOR_INTERACTABLE)
 		if(!silent && user)
-			balloon_alert(user, "remove the floor plating!")
+			balloon_alert(user, "снимите покрытие пола!")
 		return FALSE
 	if(terminal)
 		if(!silent && user)
-			balloon_alert(user, "already wired!")
+			balloon_alert(user, "уже подключено!")
 		return FALSE
 	if(installing_cable.get_amount() < 10)
 		if(!silent && user)
-			balloon_alert(user, "need ten lengths of cable!")
+			balloon_alert(user, "нужно десять кусков кабеля!")
 		return FALSE
 	return TRUE
 
@@ -240,7 +250,7 @@
 		//select cable layer
 		var/terminal_cable_layer = installing_cable.target_layer
 		if(LAZYACCESS(modifiers, RIGHT_CLICK))
-			var/choice = tgui_input_list(user, "Select Power Input Cable Layer", "Select Cable Layer", GLOB.cable_name_to_layer)
+			var/choice = tgui_input_list(user, "Выберите слой кабеля входного питания", "Выбор слоя кабеля", GLOB.cable_name_to_layer)
 			if(isnull(choice) \
 				|| !user.is_holding(installing_cable) \
 				|| !user.Adjacent(src) \
@@ -249,8 +259,8 @@
 			)
 				return ITEM_INTERACT_BLOCKING
 			terminal_cable_layer = GLOB.cable_name_to_layer[choice]
-		user.visible_message(span_notice("[user.name] starts adding cables to [src]."))
-		balloon_alert(user, "adding cables...")
+		user.visible_message(span_notice("[user.name] начинает добавлять кабели к [src]."))
+		balloon_alert(user, "добавляю кабели...")
 		playsound(src, 'sound/items/deconstruct.ogg', 50, TRUE)
 
 		//use cable
@@ -265,8 +275,8 @@
 			do_sparks(5, TRUE, src)
 			return ITEM_INTERACT_BLOCKING
 		cable.use(10)
-		user.visible_message(span_notice("[user.name] adds cables to [src]."))
-		balloon_alert(user, "cables added")
+		user.visible_message(span_notice("[user.name] добавляет кабели к [src]."))
+		balloon_alert(user, "кабели добавлены")
 
 		//build the terminal and link it to the network
 		terminal = new(turf)
@@ -294,7 +304,7 @@
 /obj/machinery/power/smes/crowbar_act(mob/living/user, obj/item/tool)
 	. = ITEM_INTERACT_FAILURE
 	if(terminal)
-		balloon_alert(user, "remove the power terminal!")
+		balloon_alert(user, "удалите терминал питания!")
 		return
 
 	if(default_deconstruction_crowbar(tool))
@@ -313,15 +323,15 @@
 			if(term && term.dir == REVERSE_DIR(dir))
 				terminal = term
 				terminal.master = src
-				to_chat(user, span_notice("Terminal found."))
+				to_chat(user, span_notice("Терминал найден."))
 				set_machine_stat(machine_stat & ~BROKEN)
 				update_appearance(UPDATE_OVERLAYS)
 				return ITEM_INTERACT_SUCCESS
-		to_chat(user, span_alert("No power terminal found."))
+		to_chat(user, span_alert("Терминал питания не найден."))
 
 /obj/machinery/power/smes/cable_layer_act(mob/living/user, obj/item/tool)
 	if(!panel_open)
-		balloon_alert(user, "open panel first!")
+		balloon_alert(user, "сначала откройте панель!")
 		return ITEM_INTERACT_BLOCKING
 	return ..()
 
@@ -521,8 +531,18 @@
 // Variant of SMES that starts with super power cells for higher longevity
 /obj/machinery/power/smes/super
 	name = "super capacity power storage unit"
-	desc = "A super-capacity superconducting magnetic energy storage (SMES) unit. Relatively rare, and typically installed in long-range outposts where minimal maintenance is expected."
+	desc = "Сверхпроводящий магнитный накопитель энергии (СМЭС) супер-емкости. Относительно редкий и обычно устанавливается на отдаленных аванпостах, где ожидается минимальное обслуживание."
 	circuit = /obj/item/circuitboard/machine/smes/super
+
+/obj/machinery/power/smes/super/get_ru_names()
+	return list(
+		NOMINATIVE = "супер-емкий СМЭС",
+		GENITIVE = "супер-емкого СМЭСа",
+		DATIVE = "супер-емкому СМЭСу",
+		ACCUSATIVE = "супер-емкий СМЭС",
+		INSTRUMENTAL = "супер-емким СМЭСом",
+		PREPOSITIONAL = "супер-емком СМЭСе",
+	)
 
 /obj/machinery/power/smes/super/full
 	charge = 100 * STANDARD_BATTERY_CHARGE
@@ -539,7 +559,17 @@
 
 /obj/machinery/power/smes/magical
 	name = "magical power storage unit"
-	desc = "A high-capacity superconducting magnetic energy storage (SMES) unit. Magically produces power."
+	desc = "Сверхпроводящий магнитный накопитель энергии (СМЭС) высокой емкости. Магически производит энергию."
+
+/obj/machinery/power/smes/magical/get_ru_names()
+	return list(
+		NOMINATIVE = "магический СМЭС",
+		GENITIVE = "магического СМЭСа",
+		DATIVE = "магическому СМЭСу",
+		ACCUSATIVE = "магический СМЭС",
+		INSTRUMENTAL = "магическим СМЭСом",
+		PREPOSITIONAL = "магическом СМЭСе",
+	)
 
 /obj/machinery/power/smes/magical/adjust_charge(charge_adjust)
 	//give charge without consuming anything

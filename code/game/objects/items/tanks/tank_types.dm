@@ -18,14 +18,14 @@
 
 /obj/item/tank/internals/examine(mob/user)
 	. = ..()
-	. += span_notice("Alt-click the tank to toggle the valve.")
+	. += span_notice("[EXAMINE_HINT("Альт-клик")] по баку, чтобы переключить клапан.")
 
 /*
  * Oxygen
  */
 /obj/item/tank/internals/oxygen
 	name = "oxygen tank"
-	desc = "A tank of oxygen, this one is blue."
+	desc = "Бак с кислородом, этот синий."
 	icon_state = "oxygen"
 	inhand_icon_state = "oxygen_tank"
 	tank_holder_icon_state = "holder_oxygen"
@@ -33,6 +33,15 @@
 	force = 10
 	dog_fashion = /datum/dog_fashion/back
 
+/obj/item/tank/internals/oxygen/get_ru_names()
+	return list(
+		NOMINATIVE = "кислородный бак",
+		GENITIVE = "кислородного бака",
+		DATIVE = "кислородному баку",
+		ACCUSATIVE = "кислородный бак",
+		INSTRUMENTAL = "кислородным баком",
+		PREPOSITIONAL = "кислородном баке",
+	)
 
 /obj/item/tank/internals/oxygen/populate_gas()
 	air_contents.assert_gas(/datum/gas/oxygen)
@@ -40,14 +49,14 @@
 
 
 /obj/item/tank/internals/oxygen/yellow
-	desc = "A tank of oxygen, this one is yellow."
+	desc = "Бак с кислородом, этот жёлтый."
 	icon_state = "oxygen_f"
 	inhand_icon_state = "oxygen_f_tank"
 	tank_holder_icon_state = "holder_oxygen_f"
 	dog_fashion = null
 
 /obj/item/tank/internals/oxygen/red
-	desc = "A tank of oxygen, this one is red."
+	desc = "Бак с кислородом, этот красный."
 	icon_state = "oxygen_fr"
 	inhand_icon_state = "oxygen_fr_tank"
 	tank_holder_icon_state = "holder_oxygen_fr"
@@ -61,11 +70,21 @@
  */
 /obj/item/tank/internals/anesthetic
 	name = "anesthetic tank"
-	desc = "A tank with an N2O/O2 gas mix."
+	desc = "Бак со смесью газов N2O/O2."
 	icon_state = "anesthetic"
 	inhand_icon_state = "an_tank"
 	tank_holder_icon_state = "holder_anesthetic"
 	force = 10
+
+/obj/item/tank/internals/anesthetic/get_ru_names()
+	return list(
+		NOMINATIVE = "бак анестетика",
+		GENITIVE = "бака анестетика",
+		DATIVE = "баку анестетика",
+		ACCUSATIVE = "бак анестетика",
+		INSTRUMENTAL = "баком анестетика",
+		PREPOSITIONAL = "баке анестетика",
+	)
 
 /obj/item/tank/internals/anesthetic/populate_gas()
 	air_contents.assert_gases(/datum/gas/oxygen, /datum/gas/nitrous_oxide)
@@ -74,11 +93,11 @@
 
 /obj/item/tank/internals/anesthetic/examine(mob/user)
 	. = ..()
-	. += span_notice("A warning is etched into [src]...")
-	. += span_warning("There is no process in the body that uses N2O, so patients will exhale the N2O... exposing you to it. Make sure to work in a well-ventilated space to avoid sleepy mishaps.")
+	. += span_notice("На [declent_ru(PREPOSITIONAL)] выгравировано предупреждение...")
+	. += span_warning("В организме нет процессов, использующих N2O, поэтому пациенты будут выдыхать N2O... подвергая вас его воздействию. Убедитесь, что работаете в хорошо проветриваемом помещении, чтобы избежать сонных инцидентов.")
 
 /obj/item/tank/internals/anesthetic/pure
-	desc = "A tank with pure N2O. There is a warning sticker crudely slapped onto the tank."
+	desc = "Бак с чистым N2O. На бак грубо наклеена наклейка с предупреждением."
 	icon_state = "anesthetic_warning"
 
 /obj/item/tank/internals/anesthetic/pure/populate_gas()
@@ -90,7 +109,7 @@
  */
 /obj/item/tank/internals/plasma
 	name = "plasma tank"
-	desc = "Contains dangerous plasma. Do not inhale. Warning: extremely flammable."
+	desc = "Содержит опасную плазму. Не вдыхать. Внимание: чрезвычайно легко воспламеняется."
 	icon_state = "plasma"
 	inhand_icon_state = "plasma_tank"
 	worn_icon_state = "plasmatank"
@@ -99,6 +118,15 @@
 	slot_flags = null //they have no straps!
 	force = 8
 
+/obj/item/tank/internals/plasma/get_ru_names()
+	return list(
+		NOMINATIVE = "бак плазмы",
+		GENITIVE = "бака плазмы",
+		DATIVE = "баку плазмы",
+		ACCUSATIVE = "бак плазмы",
+		INSTRUMENTAL = "баком плазмы",
+		PREPOSITIONAL = "баке плазмы",
+	)
 
 /obj/item/tank/internals/plasma/populate_gas()
 	air_contents.assert_gas(/datum/gas/plasma)
@@ -130,12 +158,22 @@
 
 /obj/item/tank/internals/plasmaman
 	name = "plasma internals tank"
-	desc = "A tank of plasma gas designed specifically for use as internals, particularly for plasma-based lifeforms. If you're not a Plasmaman, you probably shouldn't use this."
+	desc = "Бак с газом плазмы, разработанный специально для использования в качестве дыхательного аппарата, в частности для плазменных форм жизни. Если вы не плазмамен, вам, вероятно, не следует это использовать."
 	icon_state = "plasmaman_tank"
 	inhand_icon_state = "plasmaman_tank"
 	tank_holder_icon_state = null
 	force = 10
 	distribute_pressure = TANK_PLASMAMAN_RELEASE_PRESSURE
+
+/obj/item/tank/internals/plasmaman/get_ru_names()
+	return list(
+		NOMINATIVE = "дыхательный бак плазмы",
+		GENITIVE = "дыхательного бака плазмы",
+		DATIVE = "дыхательному баку плазмы",
+		ACCUSATIVE = "дыхательный бак плазмы",
+		INSTRUMENTAL = "дыхательным баком плазмы",
+		PREPOSITIONAL = "дыхательном баке плазмы",
+	)
 
 /obj/item/tank/internals/plasmaman/populate_gas()
 	air_contents.assert_gas(/datum/gas/plasma)
@@ -171,7 +209,7 @@
  */
 /obj/item/tank/internals/emergency_oxygen
 	name = "emergency oxygen tank"
-	desc = "Used for emergencies. Contains very little oxygen, so try to conserve it until you actually need it."
+	desc = "Используется в чрезвычайных ситуациях. Содержит очень мало кислорода, поэтому старайтесь экономить его, пока он вам действительно не понадобится."
 	icon_state = "emergency"
 	inhand_icon_state = "emergency_tank"
 	worn_icon_state = "emergency"
@@ -184,6 +222,15 @@
 	distribute_pressure = TANK_DEFAULT_RELEASE_PRESSURE
 	volume = 3 //Tiny. Real life equivalents only have 21 breaths of oxygen in them. They're EMERGENCY tanks anyway -errorage (dangercon 2011)
 
+/obj/item/tank/internals/emergency_oxygen/get_ru_names()
+	return list(
+		NOMINATIVE = "аварийный кислородный бак",
+		GENITIVE = "аварийного кислородного бака",
+		DATIVE = "аварийному кислородному баку",
+		ACCUSATIVE = "аварийный кислородный бак",
+		INSTRUMENTAL = "аварийным кислородным баком",
+		PREPOSITIONAL = "аварийном кислородном баке",
+	)
 
 /obj/item/tank/internals/emergency_oxygen/populate_gas()
 	air_contents.assert_gas(/datum/gas/oxygen)
@@ -202,6 +249,16 @@
 	worn_icon = null
 	volume = 6 // should last 24 minutes if full
 
+/obj/item/tank/internals/emergency_oxygen/engi/get_ru_names()
+	return list(
+		NOMINATIVE = "аварийный кислородный бак увеличенной ёмкости",
+		GENITIVE = "аварийного кислородного бака увеличенной ёмкости",
+		DATIVE = "аварийному кислородному баку увеличенной ёмкости",
+		ACCUSATIVE = "аварийный кислородный бак увеличенной ёмкости",
+		INSTRUMENTAL = "аварийным кислородным баком увеличенной ёмкости",
+		PREPOSITIONAL = "аварийном кислородном баке увеличенной ёмкости",
+	)
+
 /obj/item/tank/internals/emergency_oxygen/engi/empty/populate_gas()
 	return
 
@@ -212,6 +269,16 @@
 	tank_holder_icon_state = "holder_emergency_engi"
 	volume = 12 //If it's double of the above, shouldn't it be double the volume??
 
+/obj/item/tank/internals/emergency_oxygen/double/get_ru_names()
+	return list(
+		NOMINATIVE = "двойной аварийный кислородный бак",
+		GENITIVE = "двойного аварийного кислородного бака",
+		DATIVE = "двойному аварийному кислородному баку",
+		ACCUSATIVE = "двойной аварийный кислородный бак",
+		INSTRUMENTAL = "двойным аварийным кислородным баком",
+		PREPOSITIONAL = "двойном аварийном кислородном баке",
+	)
+
 /obj/item/tank/internals/emergency_oxygen/double/empty/populate_gas()
 	return
 
@@ -221,12 +288,22 @@
 
 /obj/item/tank/internals/generic
 	name = "gas tank"
-	desc = "A generic tank used for storing and transporting gasses. Can be used for internals."
+	desc = "Универсальный бак, используемый для хранения и транспортировки газов. Может использоваться для дыхания."
 	icon_state = "generic"
 	inhand_icon_state = "generic_tank"
 	distribute_pressure = TANK_DEFAULT_RELEASE_PRESSURE
 	force = 10
 	dog_fashion = /datum/dog_fashion/back
+
+/obj/item/tank/internals/generic/get_ru_names()
+	return list(
+		NOMINATIVE = "газовый бак",
+		GENITIVE = "газового бака",
+		DATIVE = "газовому баку",
+		ACCUSATIVE = "газовый бак",
+		INSTRUMENTAL = "газовым баком",
+		PREPOSITIONAL = "газовом баке",
+	)
 
 /obj/item/tank/internals/generic/populate_gas()
 	return
@@ -236,12 +313,22 @@
  */
 /obj/item/tank/internals/emergency_oxygen/engi/clown
 	name = "funny emergency oxygen tank"
-	desc = "Used for emergencies. Contains very little oxygen with an extra of a funny gas, so try to conserve it until you actually need it."
+	desc = "Используется в чрезвычайных ситуациях. Содержит очень мало кислорода с добавлением веселящего газа, так что постарайтесь экономить его, пока он вам действительно не понадобится."
 	icon_state = "emergency_clown"
 	inhand_icon_state = "emergency_clown"
 	worn_icon_state = "emergency_clown"
 	tank_holder_icon_state = "holder_emergency_clown"
 	distribute_pressure = TANK_CLOWN_RELEASE_PRESSURE
+
+/obj/item/tank/internals/emergency_oxygen/engi/clown/get_ru_names()
+	return list(
+		NOMINATIVE = "смешной аварийный кислородный бак",
+		GENITIVE = "смешного аварийного кислородного бака",
+		DATIVE = "смешному аварийному кислородному баку",
+		ACCUSATIVE = "смешной аварийный кислородный бак",
+		INSTRUMENTAL = "смешным аварийным кислородным баком",
+		PREPOSITIONAL = "смешном аварийном кислородном баке",
+	)
 
 /obj/item/tank/internals/emergency_oxygen/engi/clown/n2o
 
