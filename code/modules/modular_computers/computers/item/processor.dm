@@ -2,7 +2,7 @@
 //TODO: REFACTOR THIS SPAGHETTI CODE
 /obj/item/modular_computer/processor
 	name = "processing unit"
-	desc = "An advanced computer." //modular PCs examine us
+	desc = "Продвинутый компьютер." //modular PCs examine us
 	icon = null
 	icon_state = null
 	icon_state_unpowered = null
@@ -12,6 +12,16 @@
 
 	///The modular computer MACHINE that hosts us.
 	var/obj/machinery/modular_computer/machinery_computer
+
+/obj/item/modular_computer/processor/get_ru_names()
+	return alist(
+		NOMINATIVE = "процессорный блок",
+		GENITIVE = "процессорного блока",
+		DATIVE = "процессорному блоку",
+		ACCUSATIVE = "процессорный блок",
+		INSTRUMENTAL = "процессорным блоком",
+		PREPOSITIONAL = "процессорном блоке",
+	)
 
 /obj/item/modular_computer/processor/UpdateDisplay()
 	. = ..()
@@ -55,4 +65,4 @@
 	qdel(machinery_computer)
 
 /obj/item/modular_computer/processor/get_messenger_ending()
-	return "Sent from my Desktop"
+	return "Отправлено с моего настольного компьютера"
