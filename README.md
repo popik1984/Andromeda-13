@@ -1,67 +1,56 @@
-## /tg/station codebase
+## Кодовая база /tg/station
 
-[![Build Status](https://github.com/tgstation/tgstation/workflows/CI%20Suite/badge.svg)](https://github.com/tgstation/tgstation/actions?query=workflow%3A%22CI+Suite%22)
-[![Percentage of issues still open](https://isitmaintained.com/badge/open/tgstation/tgstation.svg)](https://isitmaintained.com/project/tgstation/tgstation "Percentage of issues still open")
-[![Average time to resolve an issue](https://isitmaintained.com/badge/resolution/tgstation/tgstation.svg)](https://isitmaintained.com/project/tgstation/tgstation "Average time to resolve an issue")
-![Coverage](https://img.shields.io/badge/coverage---4%25-red.svg)
+TGstation - [https://github.com/tgstation/tgstation](https://github.com/tgstation/tgstation)
 
-[![resentment](.github/images/badges/built-with-resentment.svg)](.github/images/comics/131-bug-free.png) [![technical debt](.github/images/badges/contains-technical-debt.svg)](.github/images/comics/106-tech-debt-modified.png) [![forinfinityandbyond](.github/images/badges/made-in-byond.gif)](https://www.reddit.com/r/SS13/comments/5oplxp/what_is_the_main_problem_with_byond_as_an_engine/dclbu1a)
+## АНДРОМЕДА-13
 
-| Website             | Link                                                  |
-| ------------------- | ----------------------------------------------------- |
-| Website             | https://tgstation13.org                               |
-| Code                | https://github.com/tgstation/tgstation                |
-| Server Config       | https://github.com/tgstation-operations/server-config |
-| Wiki                | https://tgstation13.org/wiki/Main_Page                |
-| Codedocs            | https://codedocs.tgstation13.org/                     |
-| /tg/station Discord | https://tgstation13.org/phpBB/viewforum.php?f=60      |
-| Coderbus Discord    | https://discord.gg/Vh8TJp9                            |
+Этот форк был обработан темнейшим из преисподни говнокодеров.. Дальше бога нет.
 
-This is the codebase for the /tg/station flavoured fork of SpaceStation 13.
+Дальше только Rewokin и его код, что походит на говноруны...
 
-Space Station 13 is a paranoia-laden round-based roleplaying game set against the backdrop of a nonsensical, metal death trap masquerading as a space station, with charming spritework designed to represent the sci-fi setting and its dangerous undertones. Have fun, and survive!
+![Говнокод](.github/images/kartinochki/сultist.gif)
 
-_All github inquiries (such as moderation actions) may be handled via the /tg/station discord [#coding-general](https://discord.com/channels/326822144233439242/326831214667235328). Simply ping the `@Maintainer` role, following the guide on asking questions located in the channel description, with your issue!_
+Андромеда-13 - это комьюнити по 2D космонавтикам, что было сформировано 24.12.2022, было в пике и падении. Но основной пласт игроков по сей день держится вместе.
 
-## DOWNLOADING
+Space Station 13 — это адский симулятор космического хаоса с ролевой отыгровкой, где ты можешь быть клоуном, устроившим кровавый карнавал в отделе безопасности, предателем, подрывающим реактор под маской мирного инженера, или генетиком, случайно превратившим весь экипаж в ходячих бананов. Здесь двери ущемляют анробастов, провода убивают, в атмосферу выпускают плазму, а клоуна бьют за то, что он клоун. Админ то спавнит метеоритный дождь из бананов, то устраивает зомби-апокалипсис посреди смены. Это игра, где твой лучший друг может внезапно выстрелить тебе в спину, а капитан станции — оказаться клонированным шесть раз подряд. Здесь нет правил, есть только веселье, предательство и тонны крови на полу.
 
-[Downloading](.github/guides/DOWNLOADING.md)
+## Ссылки
 
-[Running a server](.github/guides/RUNNING_A_SERVER.md)
+[Дискорд](https://discord.gg/NxTZeUPtRf)
 
-[Maps and Away Missions](.github/guides/MAPS_AND_AWAY_MISSIONS.md)
+## Документация
 
-## Compilation
+- Для локализации на Русский язык, ознакомьтесь с [документацией](.github/guides/LOCALIZATION.md).
+- Чтобы познать древние руны, нужна волшебная [книга](https://secure.byond.com/docs/ref/#/DM).
 
-**The quick way**. Find `bin/server.cmd` in this folder and double click it to automatically build and host the server on port 1337.
+![Святой и свободный BYOND](.github/images/kartinochki/made-in-byond.gif)
 
-**The long way**. Find `bin/build.cmd` in this folder, and double click it to initiate the build. It consists of multiple steps and might take around 1-5 minutes to compile. If it closes, it means it has finished its job. You can then [setup the server](.github/guides/RUNNING_A_SERVER.md) normally by opening `tgstation.dmb` in DreamDaemon.
+## Контрибьют (Помощь в разработке)
 
-**Building tgstation in DreamMaker directly is deprecated and might produce errors**, such as `'tgui.bundle.js': cannot find file`.
+Мы рады принять вклад от любого человека. Заходите в Discord, если хотите помочь.
+Только убедитесь, что ваши изменения и PRы/ПРы соответствуют простым пунктам.
 
-**[How to compile in VSCode and other build options](tools/build/README.md).**
+1. Не говнокодить, используйте мозг
+2. Провести тест, пожалейте Ревокина
+3. Название и описание (фото/видио к ПРу по желанию)
+4. Перед отправкой зайти обновить свой форк (Sync fork), если это не сделать, ожидайте спортиков у двери.
+5. Если ваш ворк давно не обновлялся, то после (Sync fork) проведите тесты ещё раз. Ведь за это время могло что-то измениться и ваш красивый код, превратится в нерабочий кусок говна.
 
-## Getting started
+## Сборка
 
-For contribution guidelines refer to the [Guides for Contributors](.github/CONTRIBUTING.md).
+- Сборка через DreamMaker устарела и может вызывать ошибки, например, `'tgui.bundle.js': cannot find file`.
+- **Как компилировать в VSCode и другие варианты сборки?** Изучите вот эту [документацию](tools/build/README.md).
 
-For getting started (dev env, compilation) see the HackMD document [here](https://hackmd.io/@tgstation/HJ8OdjNBc#tgstation-Development-Guide).
+## ЛИЦЕНЗИЯ
 
-For overall design documentation see [HackMD](https://hackmd.io/@tgstation).
+Весь код после [коммита 333c566b88108de218d882840e61928a9b759d8f от 31.12.2014, 16:38 PST](https://github.com/tgstation/tgstation/commit/333c566b88108de218d882840e61928a9b759d8f) распространяется под лицензией [GNU AGPL v3](https://www.gnu.org/licenses/agpl-3.0.html).
 
-For lore, [see Common Core](https://github.com/tgstation/common_core).
+Весь код до [коммита 333c566b88108de218d882840e61928a9b759d8f от 31.12.2014, 16:38 PST](https://github.com/tgstation/tgstation/commit/333c566b88108de218d882840e61928a9b759d8f) распространяется под лицензией [GNU GPL v3](https://www.gnu.org/licenses/gpl-3.0.html). (Включая инструменты, если иное не указано в их файлах README.)
 
-## LICENSE
+Подробности см. в файлах LICENSE и GPLv3.txt.
 
-All code after [commit 333c566b88108de218d882840e61928a9b759d8f on 2014/12/31 at 4:38 PM PST](https://github.com/tgstation/tgstation/commit/333c566b88108de218d882840e61928a9b759d8f) is licensed under [GNU AGPL v3](https://www.gnu.org/licenses/agpl-3.0.html).
+DMAPI для TGS распространяется как подпроект под лицензией MIT.
 
-All code before [commit 333c566b88108de218d882840e61928a9b759d8f on 2014/12/31 at 4:38 PM PST](https://github.com/tgstation/tgstation/commit/333c566b88108de218d882840e61928a9b759d8f) is licensed under [GNU GPL v3](https://www.gnu.org/licenses/gpl-3.0.html).
-(Including tools unless their readme specifies otherwise.)
+Текст лицензии MIT см. в подвале файла [code/\_\_DEFINES/tgs.dm](./code/__DEFINES/tgs.dm) и в [code/modules/tgs/LICENSE](./code/modules/tgs/LICENSE).
 
-See LICENSE and GPLv3.txt for more details.
-
-The TGS DMAPI is licensed as a subproject under the MIT license.
-
-See the footer of [code/\_\_DEFINES/tgs.dm](./code/__DEFINES/tgs.dm) and [code/modules/tgs/LICENSE](./code/modules/tgs/LICENSE) for the MIT license.
-
-All assets including icons and sound are under a [Creative Commons 3.0 BY-SA license](https://creativecommons.org/licenses/by-sa/3.0/) unless otherwise indicated.
+Все ресурсы, включая иконки и звуки, распространяются под лицензией [Creative Commons 3.0 BY-SA](https://creativecommons.org/licenses/by-sa/3.0/), если не указано иное.
