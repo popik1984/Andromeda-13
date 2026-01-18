@@ -47,7 +47,7 @@
 	acid = 10
 
 /obj/machinery/space_heater/get_ru_names()
-	return list(
+	return alist(
 		NOMINATIVE = "космический обогреватель",
 		GENITIVE = "космического обогревателя",
 		DATIVE = "космическому обогревателю",
@@ -343,7 +343,7 @@
 	var/datum/controller/subsystem/processing/our_subsystem
 
 /obj/machinery/space_heater/improvised_chem_heater/get_ru_names()
-	return list(
+	return alist(
 		NOMINATIVE = "импровизированный хим. нагреватель",
 		GENITIVE = "импровизированного хим. нагревателя",
 		DATIVE = "импровизированному хим. нагревателю",

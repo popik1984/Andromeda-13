@@ -11,7 +11,7 @@
 	var/datum/reagent/dispensedreagent = /datum/reagent/water
 
 /obj/structure/water_source/get_ru_names()
-	return list(
+	return alist(
 		NOMINATIVE = "источник воды",
 		GENITIVE = "источника воды",
 		DATIVE = "источнику воды",
@@ -128,7 +128,7 @@
 	resistance_flags = UNACIDABLE
 
 /obj/structure/water_source/puddle/get_ru_names()
-	return list(
+	return alist(
 		NOMINATIVE = "лужа",
 		GENITIVE = "лужи",
 		DATIVE = "луже",

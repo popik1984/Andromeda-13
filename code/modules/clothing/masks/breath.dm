@@ -20,7 +20,7 @@
 	bio = 50
 
 /obj/item/clothing/mask/breath/get_ru_names()
-	return list(
+	return alist(
 		NOMINATIVE = "дыхательная маска",
 		GENITIVE = "дыхательной маски",
 		DATIVE = "дыхательной маске",
@@ -57,7 +57,7 @@
 	equip_delay_other = 1 SECONDS
 
 /obj/item/clothing/mask/breath/medical/get_ru_names()
-	return list(
+	return alist(
 		NOMINATIVE = "медицинская маска",
 		GENITIVE = "медицинской маски",
 		DATIVE = "медицинской маске",
@@ -84,7 +84,7 @@
 	adjustable = FALSE
 
 /obj/item/clothing/mask/breath/muzzle/get_ru_names()
-	return list(
+	return alist(
 		NOMINATIVE = "хирургическая маска",
 		GENITIVE = "хирургической маски",
 		DATIVE = "хирургической маске",

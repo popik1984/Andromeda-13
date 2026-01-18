@@ -442,7 +442,7 @@ GLOBAL_VAR_INIT(disposals_animals_spawned, 0)
 	var/contained_animal
 
 /obj/machinery/disposal/bin/get_ru_names()
-	return list(
+	return alist(
 		NOMINATIVE = "утилизатор",
 		GENITIVE = "утилизатора",
 		DATIVE = "утилизатору",
@@ -716,7 +716,7 @@ GLOBAL_VAR_INIT(disposals_animals_spawned, 0)
 	pressure_charging = FALSE // the chute doesn't need charging and always works
 
 /obj/machinery/disposal/delivery_chute/get_ru_names()
-	return list(
+	return alist(
 		NOMINATIVE = "приемный лоток",
 		GENITIVE = "приемного лотка",
 		DATIVE = "приемному лотку",

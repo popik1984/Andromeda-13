@@ -43,7 +43,7 @@
 	var/obj/machinery/power/terminal/terminal = null
 
 /obj/machinery/power/smes/get_ru_names()
-	return list(
+	return alist(
 		NOMINATIVE = "СМЭС",
 		GENITIVE = "СМЭСа",
 		DATIVE = "СМЭСу",
@@ -535,7 +535,7 @@
 	circuit = /obj/item/circuitboard/machine/smes/super
 
 /obj/machinery/power/smes/super/get_ru_names()
-	return list(
+	return alist(
 		NOMINATIVE = "супер-емкий СМЭС",
 		GENITIVE = "супер-емкого СМЭСа",
 		DATIVE = "супер-емкому СМЭСу",
@@ -562,7 +562,7 @@
 	desc = "Сверхпроводящий магнитный накопитель энергии (СМЭС) высокой емкости. Магически производит энергию."
 
 /obj/machinery/power/smes/magical/get_ru_names()
-	return list(
+	return alist(
 		NOMINATIVE = "магический СМЭС",
 		GENITIVE = "магического СМЭСа",
 		DATIVE = "магическому СМЭСу",

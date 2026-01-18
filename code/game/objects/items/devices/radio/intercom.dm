@@ -20,7 +20,7 @@
 	var/icon_off = "intercom-p"
 
 /obj/item/radio/intercom/get_ru_names()
-	return list(
+	return alist(
 		NOMINATIVE = "станционный интерком",
 		GENITIVE = "станционного интеркома",
 		DATIVE = "станционному интеркому",
@@ -39,7 +39,7 @@
 	icon_off = "intercom_prison-p"
 
 /obj/item/radio/intercom/prison/get_ru_names()
-	return list(
+	return alist(
 		NOMINATIVE = "интерком (только приём)",
 		GENITIVE = "интеркома (только приём)",
 		DATIVE = "интеркому (только приём)",
@@ -220,7 +220,7 @@
 	custom_materials = list(/datum/material/iron = SHEET_MATERIAL_AMOUNT * 2)
 
 /obj/item/wallframe/intercom/get_ru_names()
-	return list(
+	return alist(
 		NOMINATIVE = "каркас интеркома",
 		GENITIVE = "каркаса интеркома",
 		DATIVE = "каркасу интеркома",
@@ -238,7 +238,7 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/item/radio/intercom, 27)
 	freqlock = RADIO_FREQENCY_EMAGGABLE_LOCK
 
 /obj/item/radio/intercom/chapel/get_ru_names()
-	return list(
+	return alist(
 		NOMINATIVE = "интерком исповедальни",
 		GENITIVE = "интеркома исповедальни",
 		DATIVE = "интеркому исповедальни",
@@ -261,7 +261,7 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/item/radio/intercom, 27)
 	icon_off = "intercom_command-p"
 
 /obj/item/radio/intercom/command/get_ru_names()
-	return list(
+	return alist(
 		NOMINATIVE = "командный интерком",
 		GENITIVE = "командного интеркома",
 		DATIVE = "командному интеркому",
@@ -277,7 +277,7 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/item/radio/intercom, 27)
 	special_channels = RADIO_SPECIAL_SYNDIE
 
 /obj/item/radio/intercom/syndicate/get_ru_names()
-	return list(
+	return alist(
 		NOMINATIVE = "интерком Синдиката",
 		GENITIVE = "интеркома Синдиката",
 		DATIVE = "интеркому Синдиката",
@@ -292,7 +292,7 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/item/radio/intercom, 27)
 	freerange = TRUE
 
 /obj/item/radio/intercom/syndicate/freerange/get_ru_names()
-	return list(
+	return alist(
 		NOMINATIVE = "широкополосный интерком Синдиката",
 		GENITIVE = "широкополосного интеркома Синдиката",
 		DATIVE = "широкополосному интеркому Синдиката",

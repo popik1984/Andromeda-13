@@ -83,7 +83,7 @@
 	var/break_if_moved = TRUE
 
 /obj/machinery/light/get_ru_names()
-	return list(
+	return alist(
 		NOMINATIVE = "светильник",
 		GENITIVE = "светильника",
 		DATIVE = "светильнику",
@@ -748,7 +748,7 @@
 	fire_brightness = 4.5
 
 /obj/machinery/light/floor/get_ru_names()
-	return list(
+	return alist(
 		NOMINATIVE = "напольная лампа",
 		GENITIVE = "напольной лампы",
 		DATIVE = "напольной лампе",
@@ -795,7 +795,7 @@
 	plane = GAME_PLANE
 
 /obj/machinery/light/floor/transport/get_ru_names()
-	return list(
+	return alist(
 		NOMINATIVE = "транспортная лампа",
 		GENITIVE = "транспортной лампы",
 		DATIVE = "транспортной лампе",

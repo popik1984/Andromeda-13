@@ -71,7 +71,7 @@
 	acid = 30
 
 /obj/item/tank/get_ru_names()
-	return list(
+	return alist(
 		NOMINATIVE = "бак",
 		GENITIVE = "бака",
 		DATIVE = "баку",

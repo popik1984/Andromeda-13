@@ -34,7 +34,7 @@
 	dog_fashion = /datum/dog_fashion/back
 
 /obj/item/tank/internals/oxygen/get_ru_names()
-	return list(
+	return alist(
 		NOMINATIVE = "кислородный бак",
 		GENITIVE = "кислородного бака",
 		DATIVE = "кислородному баку",
@@ -77,7 +77,7 @@
 	force = 10
 
 /obj/item/tank/internals/anesthetic/get_ru_names()
-	return list(
+	return alist(
 		NOMINATIVE = "бак анестетика",
 		GENITIVE = "бака анестетика",
 		DATIVE = "баку анестетика",
@@ -119,7 +119,7 @@
 	force = 8
 
 /obj/item/tank/internals/plasma/get_ru_names()
-	return list(
+	return alist(
 		NOMINATIVE = "бак плазмы",
 		GENITIVE = "бака плазмы",
 		DATIVE = "баку плазмы",
@@ -166,7 +166,7 @@
 	distribute_pressure = TANK_PLASMAMAN_RELEASE_PRESSURE
 
 /obj/item/tank/internals/plasmaman/get_ru_names()
-	return list(
+	return alist(
 		NOMINATIVE = "дыхательный бак плазмы",
 		GENITIVE = "дыхательного бака плазмы",
 		DATIVE = "дыхательному баку плазмы",
@@ -223,7 +223,7 @@
 	volume = 3 //Tiny. Real life equivalents only have 21 breaths of oxygen in them. They're EMERGENCY tanks anyway -errorage (dangercon 2011)
 
 /obj/item/tank/internals/emergency_oxygen/get_ru_names()
-	return list(
+	return alist(
 		NOMINATIVE = "аварийный кислородный бак",
 		GENITIVE = "аварийного кислородного бака",
 		DATIVE = "аварийному кислородному баку",
@@ -250,7 +250,7 @@
 	volume = 6 // should last 24 minutes if full
 
 /obj/item/tank/internals/emergency_oxygen/engi/get_ru_names()
-	return list(
+	return alist(
 		NOMINATIVE = "аварийный кислородный бак увеличенной ёмкости",
 		GENITIVE = "аварийного кислородного бака увеличенной ёмкости",
 		DATIVE = "аварийному кислородному баку увеличенной ёмкости",
@@ -270,7 +270,7 @@
 	volume = 12 //If it's double of the above, shouldn't it be double the volume??
 
 /obj/item/tank/internals/emergency_oxygen/double/get_ru_names()
-	return list(
+	return alist(
 		NOMINATIVE = "двойной аварийный кислородный бак",
 		GENITIVE = "двойного аварийного кислородного бака",
 		DATIVE = "двойному аварийному кислородному баку",
@@ -296,7 +296,7 @@
 	dog_fashion = /datum/dog_fashion/back
 
 /obj/item/tank/internals/generic/get_ru_names()
-	return list(
+	return alist(
 		NOMINATIVE = "газовый бак",
 		GENITIVE = "газового бака",
 		DATIVE = "газовому баку",
@@ -321,7 +321,7 @@
 	distribute_pressure = TANK_CLOWN_RELEASE_PRESSURE
 
 /obj/item/tank/internals/emergency_oxygen/engi/clown/get_ru_names()
-	return list(
+	return alist(
 		NOMINATIVE = "смешной аварийный кислородный бак",
 		GENITIVE = "смешного аварийного кислородного бака",
 		DATIVE = "смешному аварийному кислородному баку",

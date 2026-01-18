@@ -25,7 +25,7 @@
 	var/folder_type_name = "папку"
 
 /obj/item/folder/get_ru_names()
-	return list(
+	return alist(
 		NOMINATIVE = "папка",
 		GENITIVE = "папки",
 		DATIVE = "папке",
