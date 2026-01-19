@@ -433,12 +433,17 @@
 
 	var/obj/item/wallframe/light_fixture/frame = null
 	switch(fitting)
-		if("лампа-трубка")
+		if("лампа-трубка", "tube") // Добавляем английские варианты
 			frame = new /obj/item/wallframe/light_fixture(drop_point)
-		if("лампочка")
+		if("лампочка", "bulb") // Обрабатываем и "лампочка", и "bulb"
 			frame = new /obj/item/wallframe/light_fixture/small(drop_point)
-		if("напольная лампочка")
+		if("напольная лампочка", "floor bulb") // И для напольных
 			frame = new /obj/item/wallframe/light_fixture/small(drop_point)
+		else
+			// Логируем неожиданное значение, но создаем дефолтный фрейм
+			stack_trace("Unknown light fitting type: '[fitting]' for light [type]. Using default small frame.")
+			frame = new /obj/item/wallframe/light_fixture/small(drop_point)
+
 	if(!disassembled)
 		frame.take_damage(frame.max_integrity * 0.5, sound_effect = FALSE)
 		if(status != LIGHT_BROKEN)

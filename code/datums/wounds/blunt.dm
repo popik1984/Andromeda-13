@@ -91,7 +91,7 @@
 			active_trauma = victim.gain_trauma_type(brain_trauma_group, TRAUMA_RESILIENCE_WOUND) // УСТОЙЧИВОСТЬ_К_ТРАВМЕ_РАНА
 		next_trauma_cycle = world.time + (rand(100-WOUND_BONE_HEAD_TIME_VARIANCE, 100+WOUND_BONE_HEAD_TIME_VARIANCE) * 0.01 * trauma_cycle_cooldown)
 
-	var/is_bone_limb = ((limb.biological_state & BIO_BONE) && !(limb.biological_state & BIO_FLESH)) // БИО_КОСТЬ, БИО_ПЛОТЬ
+	var/is_bone_limb = ((limb.biological_state & BIO_BONE) && !(limb.biological_state & (BIO_FLESH|BIO_CHITIN)))
 	if(!gelled || (!taped && !is_bone_limb))
 		return
 
@@ -436,6 +436,9 @@
 	simple_treat_text = "<b>Перевязка</b> раны slightly уменьшит ее воздействие до <b>хирургического лечения</b> костным гелем и хирургической лентой."
 	homemade_treat_text = "Хотя это extremely сложно и медленно действует, <b>Костный гель и хирургическая лента</b> могут быть нанесены прямо на рану, хотя это почти невозможно для большинства людей сделать самостоятельно, если они не приняли одно или несколько <b>обезболивающих</b> (известно, что Морфин и Шахтерская мазь помогают)"
 
+	/// Tracks if a surgeon has reset the bone (part one of the surgical treatment process)
+	VAR_FINAL/reset = FALSE
+
 /datum/wound_pregen_data/bone/compound
 	abstract = FALSE
 
@@ -453,7 +456,7 @@
 /// если кто-то использует костный гель на нашей ране
 /datum/wound/blunt/bone/proc/gel(obj/item/stack/medical/bone_gel/I, mob/user)
 	// скелеты получают более щадящее лечение костным гелем, поскольку их способность "reattach dismembered limbs by hand" отстой, когда конечность все еще критически ранена
-	if((limb.biological_state & BIO_BONE) && !(limb.biological_state & BIO_FLESH))
+	if((limb.biological_state & BIO_BONE) && !(limb.biological_state & (BIO_FLESH|BIO_CHITIN)))
 		return skelly_gel(I, user)
 
 	if(gelled)
@@ -533,6 +536,10 @@
 	processes = TRUE
 	return TRUE
 
+/datum/wound/blunt/bone/item_can_treat(obj/item/potential_treater, mob/user)
+	// assume that - if working on a ready-to-operate limb - the surgery wants to do the real surgery instead of bone regeneration
+	return ..() && !HAS_TRAIT(limb, TRAIT_READY_TO_OPERATE)
+
 /datum/wound/blunt/bone/treat(obj/item/tool, mob/user)
 	if(istype(tool, /obj/item/stack/medical/bone_gel))
 		gel(tool, user)
@@ -545,7 +552,7 @@
 	. += "<div class='ml-3'>"
 
 	if(severity > WOUND_SEVERITY_MODERATE)
-		if((limb.biological_state & BIO_BONE) && !(limb.biological_state & BIO_FLESH))
+		if((limb.biological_state & BIO_BONE) && !(limb.biological_state & (BIO_FLESH|BIO_CHITIN)))
 			if(!gelled)
 				. += "Рекомендуемое лечение: Нанесите костный гель непосредственно на поврежденную конечность. Существа из чистой кости, кажется, не против нанесения костного геля так сильно, как существа из плоти. Хирургическая лента также не потребуется.\n"
 			else

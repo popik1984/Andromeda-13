@@ -40,6 +40,8 @@
 	var/internal_bleeding_chance
 	/// Если мы выделяем кровь при ударе, максимальная потеря крови равна этому * входящий урон
 	var/internal_bleeding_coefficient
+	/// If TRUE we are ready to be mended in surgery
+	VAR_FINAL/mend_state = FALSE
 
 /datum/wound/pierce/bleed/wound_injury(datum/wound/old_wound = null, attack_direction = null)
 	set_blood_flow(initial_flow)
@@ -183,7 +185,7 @@
 /datum/wound_pregen_data/flesh_pierce // ПЛОТЬ_ПРОКОЛ
 	abstract = TRUE
 
-	required_limb_biostate = (BIO_FLESH)
+	required_limb_biostate = BIO_FLESH
 	required_wounding_type = WOUND_PIERCE
 
 	wound_series = WOUND_SERIES_FLESH_PUNCTURE_BLEED // СЕРИЯ_РАН_ПЛОТЬ_ПРОКОЛ_КРОВОТЕЧЕНИЕ
@@ -243,7 +245,7 @@
 	internal_bleeding_coefficient = 1
 	threshold_penalty = 5
 
-/datum/wound_pregen_data/flesh_pierce/open_puncture/open_puncture/pinprick // ОТКРЫТЫЙ_ПРОКОЛ/УКОЛ
+/datum/wound_pregen_data/flesh_pierce/open_puncture/pinprick // ОТКРЫТЫЙ_ПРОКОЛ/УКОЛ
 	wound_path_to_generate = /datum/wound/pierce/bleed/moderate/needle_fail
 	can_be_randomly_generated = FALSE
 	abstract = FALSE

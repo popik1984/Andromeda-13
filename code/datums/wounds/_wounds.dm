@@ -88,8 +88,6 @@
 
 	/// Какой эффект статуса мы назначаем при применении
 	var/status_effect_type
-	/// Если мы оперируем эту рану и она заживает, мы также отменим операцию
-	var/datum/surgery/attached_surgery
 	/// если вы ленивый тип и просто бросите их в криокамеру, рана исчезнет после накопления тяжесть * [base_xadone_progress_to_qdel] мощности
 	var/cryo_progress
 
@@ -118,7 +116,6 @@
 	update_actionspeed_modifier()
 
 /datum/wound/Destroy()
-	QDEL_NULL(attached_surgery)
 	if (limb)
 		remove_wound()
 
@@ -503,18 +500,6 @@
 
 /// Возвращает TRUE, если предмет может быть использован для лечения наших ран. Перехватывается в treat() - только вещи, возвращающие TRUE здесь, могут быть использованы там.
 /datum/wound/proc/item_can_treat(obj/item/potential_treater, mob/user)
-	// операции имеют приоритет
-	for(var/datum/surgery/operation as anything in victim.surgeries)
-		if(isnull(operation.operated_bodypart) || operation.operated_bodypart != limb)
-			continue
-		var/datum/surgery_step/next_step = operation.get_surgery_next_step()
-		if(isnull(next_step))
-			continue
-		if(potential_treater.tool_behaviour in next_step.implements)
-			return FALSE
-		if(is_type_in_list(potential_treater, next_step.implements))
-			return FALSE
-
 	// проверяем, есть ли у нас действительный лечащий инструмент
 	if(potential_treater.tool_behaviour in treatable_tools)
 		return TRUE
