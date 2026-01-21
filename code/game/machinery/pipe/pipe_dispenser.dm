@@ -138,7 +138,7 @@
 			if (ISNOTSTUB(target_dir))
 				p_init_dir = target_dir
 			else
-				to_chat(usr, span_warning("Экран [declent_ru(GENITIVE)] мигает предупреждением: Невозможно настроить трубу для соединения только в одном направлении."))
+				to_chat(usr, span_warning("Экран [RU_SRC_GEN] мигает предупреждением: Невозможно настроить трубу для соединения только в одном направлении."))
 
 		if("init_reset")
 			p_init_dir = ALL_CARDINALS
@@ -154,7 +154,7 @@
 /obj/machinery/pipedispenser/attackby(obj/item/W, mob/user, list/modifiers, list/attack_modifiers)
 	add_fingerprint(user)
 	if (istype(W, /obj/item/pipe) || istype(W, /obj/item/pipe_meter))
-		to_chat(usr, span_notice("Вы кладёте [W] обратно в [declent_ru(ACCUSATIVE)]."))
+		to_chat(usr, span_notice("Вы кладёте [W] обратно в [RU_SRC_ACC]."))
 		qdel(W)
 		return
 	else

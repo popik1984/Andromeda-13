@@ -387,7 +387,7 @@
 		else
 			is_disabled += " и"
 
-	check_list += "<span class='[no_damage ? "notice" : "warning"]'>Ваша [declent_plaintext_ru(NOMINATIVE)][is_disabled][self_aware ? " имеет " : " выглядит "][status].</span>"
+	check_list += "<span class='[no_damage ? "notice" : "warning"]'>Ваша [RU_SRC_NOM][is_disabled][self_aware ? " имеет " : " выглядит "][status].</span>"
 
 	var/adept_organ_feeler = owner == examiner && HAS_TRAIT(examiner, TRAIT_SELF_AWARE)
 	for(var/obj/item/organ/organ in src)
@@ -548,17 +548,17 @@
 			if(!human_victim.get_bodypart(body_zone))
 				user.temporarilyRemoveItemFromInventory(src, TRUE)
 				if(!try_attach_limb(victim))
-					to_chat(user, span_warning("Тело [human_victim] отвергает [declent_ru(ACCUSATIVE)]!"))
+					to_chat(user, span_warning("Тело [human_victim] отвергает [RU_SRC_ACC]!"))
 					forceMove(human_victim.loc)
 					return
 				if(check_for_frankenstein(victim))
 					bodypart_flags |= BODYPART_IMPLANTED
 				if(human_victim == user)
-					human_victim.visible_message(span_warning("[human_victim] вклинивает [declent_ru(ACCUSATIVE)] в пустой сокет на своём теле!"),\
-					span_notice("Вы вставляете [declent_ru(ACCUSATIVE)] в свой пустой сокет, и встаёт на место!"))
+					human_victim.visible_message(span_warning("[human_victim] вклинивает [RU_SRC_ACC] в пустой сокет на своём теле!"),\
+					span_notice("Вы вставляете [RU_SRC_ACC] в свой пустой сокет, и встаёт на место!"))
 				else
-					human_victim.visible_message(span_warning("[user] вклинивает [declent_ru(ACCUSATIVE)] в пустой сокет на теле [human_victim]!"),\
-					span_notice("[user] вставляет [declent_ru(ACCUSATIVE)] в свой пустой сокет, и встаёт на место!"))
+					human_victim.visible_message(span_warning("[user] вклинивает [RU_SRC_ACC] в пустой сокет на теле [human_victim]!"),\
+					span_notice("[user] вставляет [RU_SRC_ACC] в свой пустой сокет, и встаёт на место!"))
 				return
 	return ..()
 
@@ -568,11 +568,11 @@
 	if(weapon.get_sharpness())
 		add_fingerprint(user)
 		if(!contents.len)
-			to_chat(user, span_warning("Внутри [declent_ru(GENITIVE)] ничего не осталось!"))
+			to_chat(user, span_warning("Внутри [RU_SRC_GEN] ничего не осталось!"))
 			return
 		playsound(loc, 'sound/items/weapons/slice.ogg', 50, TRUE, -1)
-		user.visible_message(span_warning("[user] начинает вскрывать [declent_ru(ACCUSATIVE)]."),\
-			span_notice("Вы начинаете вскрывать [declent_ru(ACCUSATIVE)]..."))
+		user.visible_message(span_warning("[user] начинает вскрывать [RU_SRC_ACC]."),\
+			span_notice("Вы начинаете вскрывать [RU_SRC_ACC]..."))
 		if(do_after(user, 5.4 SECONDS, target = src))
 			drop_organs(user, TRUE)
 	else
@@ -1578,7 +1578,7 @@
 		return
 	current_gauze.absorption_capacity -= seep_amt
 	if(current_gauze.absorption_capacity <= 0)
-		owner.visible_message(span_danger("[current_gauze.name] на [owner.declent_ru(PREPOSITIONAL)] [declent_ru(PREPOSITIONAL)] сваливается в лохмотья."), span_warning("[current_gauze.name] на вашей [declent_ru(PREPOSITIONAL)] сваливается в лохмотья."), vision_distance=COMBAT_MESSAGE_RANGE)
+		owner.visible_message(span_danger("[RU_NOM(current_gauze)] на [RU_PRE(owner)] [RU_SRC_PRE] сваливается в лохмотья."), span_warning("[RU_NOM(current_gauze)] на вашей [RU_SRC_PRE] сваливается в лохмотья."), vision_distance=COMBAT_MESSAGE_RANGE)
 		QDEL_NULL(current_gauze)
 
 ///A multi-purpose setter for all things immediately important to the icon and iconstate of the limb.

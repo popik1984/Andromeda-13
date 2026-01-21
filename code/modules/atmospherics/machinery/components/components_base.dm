@@ -271,12 +271,12 @@
 		default_deconstruction_crowbar(tool)
 		return ITEM_INTERACT_SUCCESS
 
-	to_chat(user, span_notice("Вы начинаете откручивать [declent_ru(ACCUSATIVE)]..."))
+	to_chat(user, span_notice("Вы начинаете откручивать [RU_SRC_ACC]..."))
 
 	internal_pressure -= environment_air.return_pressure()
 
 	if(internal_pressure > 2 * ONE_ATMOSPHERE)
-		to_chat(user, span_warning("Как только вы начинаете разбирать [declent_ru(ACCUSATIVE)], поток воздуха дует вам в лицо... может, стоит передумать?"))
+		to_chat(user, span_warning("Как только вы начинаете разбирать [RU_SRC_ACC], поток воздуха дует вам в лицо... может, стоит передумать?"))
 		unsafe_wrenching = TRUE
 
 	if(!do_after(user, 2 SECONDS, src))

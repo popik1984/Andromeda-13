@@ -140,14 +140,14 @@
 			var/tissue_text = hit_bodypart.get_external_description()
 			extra_wound_details = ", [weapon.get_sharpness() == SHARP_EDGED ? "разрезая" : "пронзая"] оставшиеся [tissue_text]"
 
-	var/attack_message_spectator = "[declent_ru(NOMINATIVE)] [message_verb_continuous][message_hit_area] [weapon.declent_ru(INSTRUMENTAL)][extra_wound_details]!"
-	var/attack_message_victim = "Вас [message_verb_continuous][message_hit_area] [weapon.declent_ru(INSTRUMENTAL)][extra_wound_details]!"
-	var/attack_message_attacker = "Вы [message_verb_simple] [declent_ru(NOMINATIVE)][message_hit_area] [weapon.declent_ru(INSTRUMENTAL)][extra_wound_details]!"
+	var/attack_message_spectator = "[RU_SRC_NOM] [message_verb_continuous][message_hit_area] [RU_INS(weapon)][extra_wound_details]!"
+	var/attack_message_victim = "Вас [message_verb_continuous][message_hit_area] [RU_INS(weapon)][extra_wound_details]!"
+	var/attack_message_attacker = "Вы [message_verb_simple] [RU_SRC_NOM][message_hit_area] [RU_INS(weapon)][extra_wound_details]!"
 	if(user in viewers(src, null))
-		attack_message_spectator = "[user] [message_verb_continuous] [declent_ru(NOMINATIVE)][message_hit_area] [weapon.declent_ru(INSTRUMENTAL)][extra_wound_details]!"
-		attack_message_victim = "[user] [message_verb_continuous] вас[message_hit_area] [weapon.declent_ru(INSTRUMENTAL)][extra_wound_details]!"
+		attack_message_spectator = "[RU_USER_NOM] [message_verb_continuous] [RU_SRC_NOM][message_hit_area] [RU_INS(weapon)][extra_wound_details]!"
+		attack_message_victim = "[RU_USER_NOM] [message_verb_continuous] вас[message_hit_area] [RU_INS(weapon)][extra_wound_details]!"
 	if(user == src)
-		attack_message_victim = "Вы [message_verb_simple] себя[message_hit_area] [weapon.declent_ru(INSTRUMENTAL)][extra_wound_details]!"
+		attack_message_victim = "Вы [message_verb_simple] себя[message_hit_area] [RU_INS(weapon)][extra_wound_details]!"
 	visible_message(span_danger("[attack_message_spectator]"),\
 		span_userdanger("[attack_message_victim]"), null, COMBAT_MESSAGE_RANGE, user)
 	if(user != src)
@@ -321,7 +321,7 @@
 
 /mob/living/carbon/proc/help_shake_act(mob/living/carbon/helper, force_friendly)
 	if(on_fire)
-		to_chat(helper, span_warning("Вы не можете потушить [declent_ru(ACCUSATIVE)] голыми руками!"))
+		to_chat(helper, span_warning("Вы не можете потушить [RU_SRC_ACC] голыми руками!"))
 		return
 
 	if(SEND_SIGNAL(src, COMSIG_CARBON_PRE_MISC_HELP, helper) & COMPONENT_BLOCK_MISC_HELP)
@@ -333,37 +333,37 @@
 
 	if(body_position == LYING_DOWN)
 		if(buckled)
-			to_chat(helper, span_warning("Сначала нужно отстегнуть [declent_ru(ACCUSATIVE)]!"))
+			to_chat(helper, span_warning("Сначала нужно отстегнуть [RU_SRC_ACC]!"))
 			return
-		helper.visible_message(span_notice("[helper] трясёт [declent_ru(ACCUSATIVE)], пытаясь привести в чувство!"), \
+		helper.visible_message(span_notice("[helper] трясёт [RU_SRC_ACC], пытаясь привести в чувство!"), \
 						null, span_hear("Слышно шуршание одежды."), DEFAULT_MESSAGE_RANGE, list(helper, src))
-		to_chat(helper, span_notice("Вы трясёте [declent_ru(ACCUSATIVE)], пытаясь привести в чувство!"))
+		to_chat(helper, span_notice("Вы трясёте [RU_SRC_ACC], пытаясь привести в чувство!"))
 		to_chat(src, span_notice("[helper] трясёт вас, пытаясь привести в чувство!"))
 	else if(check_zone(helper.zone_selected) == BODY_ZONE_HEAD && get_bodypart(BODY_ZONE_HEAD)) //Headpats!
-		helper.visible_message(span_notice("[helper] гладит [declent_ru(ACCUSATIVE)] по голове, чтобы успокоить!"), \
+		helper.visible_message(span_notice("[helper] гладит [RU_SRC_ACC] по голове, чтобы успокоить!"), \
 					null, span_hear("Слышно мягкое похлопывание."), DEFAULT_MESSAGE_RANGE, list(helper, src))
-		to_chat(helper, span_notice("Вы гладите [declent_ru(ACCUSATIVE)] по голове, чтобы успокоить!"))
+		to_chat(helper, span_notice("Вы гладите [RU_SRC_ACC] по голове, чтобы успокоить!"))
 		to_chat(src, span_notice("[helper] гладит вас по голове, чтобы успокоить!"))
 
 		share_blood_on_touch(helper, ITEM_SLOT_HEAD|ITEM_SLOT_MASK)
 		if(HAS_TRAIT(src, TRAIT_BADTOUCH))
-			to_chat(helper, span_warning("[declent_ru(NOMINATIVE)] выглядит расстроенно, когда вы гладите [declent_ru(ACCUSATIVE)] по голове."))
+			to_chat(helper, span_warning("[RU_SRC_NOM] выглядит расстроенно, когда вы гладите [RU_SRC_ACC] по голове."))
 
 	else if ((helper.zone_selected == BODY_ZONE_PRECISE_GROIN) && !isnull(src.get_organ_by_type(/obj/item/organ/tail)))
-		helper.visible_message(span_notice("[helper] дёргает [declent_ru(ACCUSATIVE)] за хвост!"), \
+		helper.visible_message(span_notice("[helper] дёргает [RU_SRC_ACC] за хвост!"), \
 					null, span_hear("Слышно мягкое похлопывание."), DEFAULT_MESSAGE_RANGE, list(helper, src))
-		to_chat(helper, span_notice("Вы дёргаете [declent_ru(ACCUSATIVE)] за хвост!"))
+		to_chat(helper, span_notice("Вы дёргаете [RU_SRC_ACC] за хвост!"))
 		to_chat(src, span_notice("[helper] дёргает вас за хвост!"))
 		if(HAS_TRAIT(src, TRAIT_BADTOUCH)) //How dare they!
-			to_chat(helper, span_warning("[declent_ru(NOMINATIVE)] издаёт ворчащий звук, когда вы дёргаете [declent_ru(ACCUSATIVE)] за хвост."))
+			to_chat(helper, span_warning("[RU_SRC_NOM] издаёт ворчащий звук, когда вы дёргаете [RU_SRC_ACC] за хвост."))
 		else
 			add_mood_event("tailpulled", /datum/mood_event/tailpulled)
 
 	else if ((helper.zone_selected == BODY_ZONE_PRECISE_GROIN) && (istype(head, /obj/item/clothing/head/costume/kitty) || istype(head, /obj/item/clothing/head/collectable/kitty)))
 		var/obj/item/clothing/head/faketail = head
-		helper.visible_message(span_danger("[helper] дёргает [declent_ru(ACCUSATIVE)] за хвост... и отрывает его!"), \
+		helper.visible_message(span_danger("[helper] дёргает [RU_SRC_ACC] за хвост... и отрывает его!"), \
 					null, span_hear("Слышен звук разрывающейся ткани."), DEFAULT_MESSAGE_RANGE, list(helper, src))
-		to_chat(helper, span_danger("Вы дёргаете [declent_ru(ACCUSATIVE)] за хвост... и отрываете его!"))
+		to_chat(helper, span_danger("Вы дёргаете [RU_SRC_ACC] за хвост... и отрываете его!"))
 		to_chat(src, span_userdanger("[helper] дёргает вас за хвост... и отрывает его!"))
 		playsound(loc, 'sound/effects/cloth_rip.ogg', 75, TRUE)
 		dropItemToGround(faketail)
@@ -372,14 +372,14 @@
 
 	else
 		if (helper.grab_state >= GRAB_AGGRESSIVE)
-			helper.visible_message(span_notice("[helper] заключает [declent_ru(ACCUSATIVE)] в крепкие медвежьи объятия!"), \
+			helper.visible_message(span_notice("[helper] заключает [RU_SRC_ACC] в крепкие медвежьи объятия!"), \
 						null, span_hear("Слышно шуршание одежды."), DEFAULT_MESSAGE_RANGE, list(helper, src))
-			to_chat(helper, span_notice("Вы заключаете [declent_ru(ACCUSATIVE)] в крепкие медвежьи объятия!"))
+			to_chat(helper, span_notice("Вы заключаете [RU_SRC_ACC] в крепкие медвежьи объятия!"))
 			to_chat(src, span_notice("[helper] очень крепко сжимает вас в медвежьих объятиях!"))
 		else
-			helper.visible_message(span_notice("[helper] обнимает [declent_ru(ACCUSATIVE)], чтобы подбодрить!"), \
+			helper.visible_message(span_notice("[helper] обнимает [RU_SRC_ACC], чтобы подбодрить!"), \
 						null, span_hear("Слышно шуршание одежды."), DEFAULT_MESSAGE_RANGE, list(helper, src))
-			to_chat(helper, span_notice("Вы обнимаете [declent_ru(ACCUSATIVE)], чтобы подбодрить!"))
+			to_chat(helper, span_notice("Вы обнимаете [RU_SRC_ACC], чтобы подбодрить!"))
 			to_chat(src, span_notice("[helper] обнимает вас, чтобы подбодрить!"))
 
 		share_blood_on_touch(helper, ITEM_SLOT_HEAD|ITEM_SLOT_MASK|ITEM_SLOT_GLOVES)
@@ -408,9 +408,9 @@
 			to_chat(src, span_warning("[helper] кажется ледяным, когда обнимает вас."))
 
 		if(bodytemperature > BODYTEMP_HEAT_DAMAGE_LIMIT)
-			to_chat(helper, span_warning("[src] кажется перегретым, когда вы обнимаете [declent_ru(ACCUSATIVE)]."))
+			to_chat(helper, span_warning("[src] кажется перегретым, когда вы обнимаете [RU_SRC_ACC]."))
 		else if(bodytemperature < BODYTEMP_COLD_DAMAGE_LIMIT)
-			to_chat(helper, span_warning("[src] кажется ледяным, когда вы обнимаете [declent_ru(ACCUSATIVE)]."))
+			to_chat(helper, span_warning("[src] кажется ледяным, когда вы обнимаете [RU_SRC_ACC]."))
 
 		if(HAS_TRAIT(helper, TRAIT_FRIENDLY) || force_friendly)
 			if (helper.mob_mood.sanity >= SANITY_GREAT)
@@ -420,7 +420,7 @@
 				add_mood_event("friendly_hug", /datum/mood_event/betterhug, helper)
 
 		if(HAS_TRAIT(src, TRAIT_BADTOUCH))
-			to_chat(helper, span_warning("[src] выглядит расстроенно, когда вы обнимаете [declent_ru(ACCUSATIVE)]."))
+			to_chat(helper, span_warning("[src] выглядит расстроенно, когда вы обнимаете [RU_SRC_ACC]."))
 
 	SEND_SIGNAL(src, COMSIG_CARBON_HELP_ACT, helper)
 	SEND_SIGNAL(helper, COMSIG_CARBON_HELPED, src)
@@ -453,11 +453,11 @@
 			if(!embeds)
 				embeds = TRUE
 				// this way, we only visibly try to examine ourselves if we have something embedded, otherwise we'll still hug ourselves :)
-				visible_message(span_notice("[declent_ru(NOMINATIVE)] осматривает себя."), \
+				visible_message(span_notice("[RU_SRC_NOM] осматривает себя."), \
 					span_notice("Вы проверяете себя на наличие осколков."), visible_message_flags = ALWAYS_SHOW_SELF_MESSAGE)
 			var/harmless = weapon.get_embed().is_harmless()
 			var/stuck_wordage = harmless ? "прилип к" : "вонзился в"
-			var/embed_text = "\t <a href='byond://?src=[REF(src)];embedded_object=[REF(weapon)];embedded_limb=[REF(limb)]'> [icon2html(weapon, src)] [weapon.declent_ru(NOMINATIVE)] [stuck_wordage] [limb.name]!</a>"
+			var/embed_text = "\t <a href='byond://?src=[REF(src)];embedded_object=[REF(weapon)];embedded_limb=[REF(limb)]'> [icon2html(weapon, src)] [RU_NOM(weapon)] [stuck_wordage] [RU_PRE(limb)]!</a>"
 			if (harmless)
 				to_chat(src, span_italics(span_notice(embed_text)))
 			else

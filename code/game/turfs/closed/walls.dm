@@ -167,8 +167,8 @@
 	else
 		playsound(src, 'sound/effects/bang.ogg', 50, TRUE)
 		add_dent(WALL_DENT_HIT)
-		user.visible_message(span_danger("[user] крушит [declent_ru(ACCUSATIVE)]!"), \
-					span_danger("Вы крушите [declent_ru(ACCUSATIVE)]!"), \
+		user.visible_message(span_danger("[user] крушит [RU_SRC_ACC]!"), \
+					span_danger("Вы крушите [RU_SRC_ACC]!"), \
 					span_hear("Слышишь оглушительный удар!"))
 	return TRUE
 
@@ -334,6 +334,6 @@
 	else
 		smoothing_flags |= SMOOTH_DIAGONAL_CORNERS
 	QUEUE_SMOOTH(src)
-	to_chat(user, span_notice("Вы настраиваете [declent_ru(ACCUSATIVE)]."))
+	to_chat(user, span_notice("Вы настраиваете [RU_SRC_ACC]."))
 	tool.play_tool_sound(src)
 	return ITEM_INTERACT_SUCCESS

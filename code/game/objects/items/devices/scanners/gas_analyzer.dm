@@ -64,16 +64,16 @@
 
 /obj/item/analyzer/examine(mob/user)
 	. = ..()
-	. += span_notice("ПКМ по [declent_ru(DATIVE)], чтобы открыть справочник газов.")
-	. += span_notice("[EXAMINE_HINT("Альт-клик")] по [declent_ru(DATIVE)], чтобы активировать функцию барометра.")
+	. += span_notice("ПКМ по [RU_SRC_DAT], чтобы открыть справочник газов.")
+	. += span_notice("[EXAMINE_HINT("Альт-клик")] по [RU_SRC_DAT], чтобы активировать функцию барометра.")
 
 /obj/item/analyzer/suicide_act(mob/living/carbon/user)
-	user.visible_message(span_suicide("[user] начинает анализировать себя [declent_ru(INSTRUMENTAL)]! Дисплей показывает, что [user.p_theyre()] мертв!"))
+	user.visible_message(span_suicide("[user] начинает анализировать себя [RU_SRC_INS]! Дисплей показывает, что [user.p_theyre()] мертв!"))
 	return BRUTELOSS
 
 /obj/item/analyzer/click_alt(mob/user) //Barometer output for measuring when the next storm happens
 	if(cooldown)
-		to_chat(user, span_warning("Барометр [declent_ru(GENITIVE)] подготавливается."))
+		to_chat(user, span_warning("Барометр [RU_SRC_GEN] подготавливается."))
 		return CLICK_ACTION_BLOCKING
 
 	var/turf/T = get_turf(user)
@@ -85,7 +85,7 @@
 	var/datum/weather/ongoing_weather = null
 
 	if(!user_area.outdoors)
-		to_chat(user, span_warning("Барометр [declent_ru(GENITIVE)] не работает в помещении!"))
+		to_chat(user, span_warning("Барометр [RU_SRC_GEN] не работает в помещении!"))
 		return CLICK_ACTION_BLOCKING
 
 	for(var/V in SSweather.processing)
@@ -96,19 +96,19 @@
 
 	if(ongoing_weather)
 		if((ongoing_weather.stage == MAIN_STAGE) || (ongoing_weather.stage == WIND_DOWN_STAGE))
-			to_chat(user, span_warning("Барометр [declent_ru(GENITIVE)] не может ничего отследить, пока буря [ongoing_weather.stage == MAIN_STAGE ? "уже здесь!" : "стихает."]"))
+			to_chat(user, span_warning("Барометр [RU_SRC_GEN] не может ничего отследить, пока буря [ongoing_weather.stage == MAIN_STAGE ? "уже здесь!" : "стихает."]"))
 			return CLICK_ACTION_BLOCKING
 
 		to_chat(user, span_notice("Следующая [ongoing_weather] ударит через [butchertime(ongoing_weather.next_hit_time - world.time)]."))
 		if(!(ongoing_weather.weather_flags & FUNCTIONAL_WEATHER))
-			to_chat(user, span_warning("Барометр [declent_ru(GENITIVE)] сообщает, что следующая буря пройдёт мимо."))
+			to_chat(user, span_warning("Барометр [RU_SRC_GEN] сообщает, что следующая буря пройдёт мимо."))
 	else
 		var/next_hit = SSweather.next_hit_by_zlevel["[T.z]"]
 		var/fixed = next_hit ? timeleft(next_hit) : -1
 		if(fixed < 0)
-			to_chat(user, span_warning("Барометр [declent_ru(GENITIVE)] не смог обнаружить погодные аномалии."))
+			to_chat(user, span_warning("Барометр [RU_SRC_GEN] не смог обнаружить погодные аномалии."))
 		else
-			to_chat(user, span_warning("Барометр [declent_ru(GENITIVE)] сообщает, что буря начнётся примерно через [butchertime(fixed)]."))
+			to_chat(user, span_warning("Барометр [RU_SRC_GEN] сообщает, что буря начнётся примерно через [butchertime(fixed)]."))
 	cooldown = TRUE
 	addtimer(CALLBACK(src, TYPE_PROC_REF(/obj/item/analyzer, ping)), cooldown_time)
 	return CLICK_ACTION_SUCCESS
@@ -116,7 +116,7 @@
 /obj/item/analyzer/proc/ping()
 	if(isliving(loc))
 		var/mob/living/L = loc
-		to_chat(L, span_notice("Барометр [declent_ru(GENITIVE)] готов!"))
+		to_chat(L, span_notice("Барометр [RU_SRC_GEN] готов!"))
 	playsound(src, 'sound/machines/click.ogg', 100)
 	cooldown = FALSE
 

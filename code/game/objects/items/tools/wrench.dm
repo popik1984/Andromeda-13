@@ -45,7 +45,7 @@
 	AddElement(/datum/element/falling_hazard, damage = force, wound_bonus = wound_bonus, hardhat_safety = TRUE, crushes = FALSE, impact_sound = hitsound)
 
 /obj/item/wrench/suicide_act(mob/living/user)
-	user.visible_message(span_suicide("[user] забивает себя до смерти [declent_ru(INSTRUMENTAL)]! Похоже, [user.p_theyre()] пытается совершить суицид!"))
+	user.visible_message(span_suicide("[user] забивает себя до смерти [RU_SRC_INS]! Похоже, [user.p_theyre()] пытается совершить суицид!"))
 	playsound(loc, 'sound/items/weapons/genhit.ogg', 50, TRUE, -1)
 	return BRUTELOSS
 
@@ -97,7 +97,7 @@
 		. += span_notice("По какой-то причине он напоминает вам о [suicider].")
 
 /obj/item/wrench/medical/suicide_act(mob/living/user)
-	user.visible_message(span_suicide("[user] молится на [declent_ru(ACCUSATIVE)], чтобы тот забрал [user.p_their()] душу. Похоже, [user.p_theyre()] пытается совершить суицид!"))
+	user.visible_message(span_suicide("[user] молится на [RU_SRC_ACC], чтобы тот забрал [user.p_their()] душу. Похоже, [user.p_theyre()] пытается совершить суицид!"))
 	user.Stun(100, ignore_canstun = TRUE)// Stun stops them from wandering off
 	user.set_light_color(COLOR_VERY_SOFT_YELLOW)
 	user.set_light(2)

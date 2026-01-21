@@ -350,7 +350,7 @@
 /obj/machinery/atmospherics/components/unary/vent_pump/can_unwrench(mob/user)
 	. = ..()
 	if(. && on && is_operational)
-		to_chat(user, span_warning("Нельзя откручивать [declent_ru(ACCUSATIVE)], сначала выключите её!"))
+		to_chat(user, span_warning("Нельзя откручивать [RU_SRC_ACC], сначала выключите её!"))
 		return FALSE
 
 /obj/machinery/atmospherics/components/unary/vent_pump/power_change()
@@ -360,7 +360,7 @@
 /obj/machinery/atmospherics/components/unary/vent_pump/attack_alien(mob/user, list/modifiers)
 	if(!welded || !(do_after(user, 2 SECONDS, target = src)))
 		return
-	user.visible_message(span_warning("[user] яростно когтит [declent_ru(ACCUSATIVE)]!"), span_notice("Вам удаётся расчистить то, что блокировало вентиляцию."), span_hear("Вы слышите громкий скрежет."))
+	user.visible_message(span_warning("[user] яростно когтит [RU_SRC_ACC]!"), span_notice("Вам удаётся расчистить то, что блокировало вентиляцию."), span_hear("Вы слышите громкий скрежет."))
 	welded = FALSE
 	update_appearance(UPDATE_ICON)
 	pipe_vision_img = image(src, loc, dir = dir)

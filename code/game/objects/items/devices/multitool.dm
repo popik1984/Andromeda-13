@@ -115,7 +115,7 @@
 	QDEL_IN(arrow, 1.5 SECONDS)
 
 /obj/item/multitool/suicide_act(mob/living/carbon/user)
-	user.visible_message(span_suicide("[user] прикладывает [declent_ru(ACCUSATIVE)] к своей груди. Похоже, [user.p_theyre()] пытается подать импульс на своё сердце!"))
+	user.visible_message(span_suicide("[user] прикладывает [RU_SRC_ACC] к своей груди. Похоже, [user.p_theyre()] пытается подать импульс на своё сердце!"))
 	return OXYLOSS//there's a reason it wasn't recommended by doctors
 
 /**
@@ -223,7 +223,7 @@
 /obj/item/multitool/ai_detect/proc/toggle_hud(mob/user)
 	hud_on = !hud_on
 	if(user)
-		to_chat(user, span_notice("Вы [hud_on ? "включаете" : "выключаете"] функцию обнаружения ИИ на [declent_ru(PREPOSITIONAL)]."))
+		to_chat(user, span_notice("Вы [hud_on ? "включаете" : "выключаете"] функцию обнаружения ИИ на [RU_SRC_PRE]."))
 	if(hud_on)
 		START_PROCESSING(SSfastprocess, src)
 		show_hud(user)

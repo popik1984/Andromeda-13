@@ -81,7 +81,7 @@
 	if(resistance_flags & INDESTRUCTIBLE)
 		return
 	if(C.tool_behaviour == TOOL_WIRECUTTER)
-		to_chat(user, span_notice("Разрезание креплений [src.declent_ru(PREPOSITIONAL)]..."))
+		to_chat(user, span_notice("Разрезание креплений [RU_SRC_PRE]..."))
 		deconstruct()
 	else
 		var/turf/T = get_turf(src)
@@ -229,9 +229,9 @@
 		return
 	var/obj/item/stack/tile/iron/attacking_tiles = attacking_item
 	if(!attacking_tiles.use(1))
-		to_chat(user, span_warning("Вам нужна одна напольная плитка, чтобы строить поверх [src.declent_ru(GENITIVE)]."))
+		to_chat(user, span_warning("Вам нужна одна напольная плитка, чтобы строить поверх [RU_SRC_GEN]."))
 		return
-	to_chat(user, span_notice("Вы сооружаете новое покрытие, используя [src.declent_ru(ACCUSATIVE)] в качестве опоры."))
+	to_chat(user, span_notice("Вы сооружаете новое покрытие, используя [RU_SRC_ACC] в качестве опоры."))
 	playsound(src, 'sound/items/weapons/genhit.ogg', 50, TRUE)
 
 	var/turf/turf_we_place_on = get_turf(src)

@@ -526,9 +526,9 @@ GLOBAL_LIST_INIT(wire_node_generating_types, typecacheof(list(
 
 /obj/item/stack/cable_coil/suicide_act(mob/living/user)
 	if(locate(/obj/structure/chair/stool) in get_turf(user))
-		user.visible_message(span_suicide("[user] делает петлю из [declent_ru(GENITIVE)]! Похоже, [user.p_theyre()] пытается совершить суицид!"))
+		user.visible_message(span_suicide("[user] делает петлю из [RU_SRC_GEN]! Похоже, [user.p_theyre()] пытается совершить суицид!"))
 	else
-		user.visible_message(span_suicide("[user] душит себя [declent_ru(INSTRUMENTAL)]! Похоже, [user.p_theyre()] пытается совершить суицид!"))
+		user.visible_message(span_suicide("[user] душит себя [RU_SRC_INS]! Похоже, [user.p_theyre()] пытается совершить суицид!"))
 	return OXYLOSS
 
 /obj/item/stack/cable_coil/proc/check_menu(mob/living/user)
@@ -634,8 +634,8 @@ GLOBAL_LIST_INIT(wire_node_generating_types, typecacheof(list(
 		balloon_alert(user, "конечность не повреждена")
 		return ITEM_INTERACT_BLOCKING
 
-	user.visible_message(span_notice("[user] начинает чинить провода в [affecting.declent_ru(PREPOSITIONAL)][attacked_humanoid == user ? "" : " [attacked_humanoid.declent_ru(GENITIVE)]"]."),
-		span_notice("Вы начинаете чинить провода в [affecting.declent_ru(PREPOSITIONAL)][attacked_humanoid == user ? "" : " [attacked_humanoid.declent_ru(GENITIVE)]"]."))
+	user.visible_message(span_notice("[RU_USER_NOM] начинает чинить провода в [RU_PRE(affecting)][attacked_humanoid == user ? "" : " у [RU_GEN(attacked_humanoid)]"]."),
+		span_notice("Вы начинаете чинить провода в [RU_PRE(affecting)][attacked_humanoid == user ? "" : " у [RU_GEN(attacked_humanoid)]"]."))
 
 	var/use_delay = repeating ? 1 SECONDS : 0
 	if(user == attacked_humanoid)

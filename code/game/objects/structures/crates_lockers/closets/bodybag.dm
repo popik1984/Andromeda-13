@@ -60,7 +60,7 @@
 
 /obj/structure/closet/body_bag/attackby(obj/item/interact_tool, mob/user, list/modifiers, list/attack_modifiers)
 	if(interact_tool.tool_behaviour == TOOL_WIRECUTTER || interact_tool.get_sharpness())
-		to_chat(user, span_notice("Вы срезаете бирку с [declent_ru(GENITIVE)]."))
+		to_chat(user, span_notice("Вы срезаете бирку с [RU_SRC_GEN]."))
 		playsound(src, SFX_WRITING_PEN, 50, TRUE, SHORT_RANGE_SOUND_EXTRARANGE, SOUND_FALLOFF_EXPONENT + 3, ignore_walls = FALSE)
 		tag_name = null
 		update_appearance()
@@ -106,11 +106,11 @@
 	if(!istype(the_folder))
 		return
 	if(opened)
-		to_chat(the_folder, span_warning("Вы возитесь с [declent_ru(GENITIVE)], но его не свернуть, пока он расстёгнут."))
+		to_chat(the_folder, span_warning("Вы возитесь с [RU_SRC_GEN], но его не свернуть, пока он расстёгнут."))
 		return
 	for(var/content_thing in contents)
 		if(istype(content_thing, /mob) || isobj(content_thing))
-			to_chat(the_folder, span_warning("Внутри [declent_ru(GENITIVE)] слишком много вещей, чтобы свернуть его!"))
+			to_chat(the_folder, span_warning("Внутри [RU_SRC_GEN] слишком много вещей, чтобы свернуть его!"))
 			return
 	// toto we made it!
 	return TRUE
@@ -122,7 +122,7 @@
 		* * the_folder - aka user
 		*/
 /obj/structure/closet/body_bag/proc/perform_fold(mob/living/carbon/human/the_folder)
-	visible_message(span_notice("[the_folder] сворачивает [declent_ru(NOMINATIVE)]."))
+	visible_message(span_notice("[the_folder] сворачивает [RU_SRC_NOM]."))
 	the_folder.put_in_hands(undeploy_bodybag(the_folder.loc))
 
 /// Makes the bag into an item, returns that item
@@ -165,15 +165,15 @@
 	if(!istype(the_folder))
 		return
 	if(opened)
-		to_chat(the_folder, span_warning("Вы возитесь с [declent_ru(INSTRUMENTAL)], но его не свернуть, пока он расстёгнут."))
+		to_chat(the_folder, span_warning("Вы возитесь с [RU_SRC_INS], но его не свернуть, пока он расстёгнут."))
 		return
 	//end copypaste zone
 	if(contents.len >= mob_storage_capacity / 2)
-		to_chat(the_folder, span_warning("Внутри [declent_ru(GENITIVE)] слишком много вещей, чтобы свернуть его!"))
+		to_chat(the_folder, span_warning("Внутри [RU_SRC_GEN] слишком много вещей, чтобы свернуть его!"))
 		return
 
 	if(the_folder.in_contents_of(src))
-		to_chat(the_folder, span_warning("Вы не можете свернуть [declent_ru(NOMINATIVE)], пока находитесь внутри!"))
+		to_chat(the_folder, span_warning("Вы не можете свернуть [RU_SRC_NOM], пока находитесь внутри!"))
 		return
 
 	for(var/obj/item/bodybag/bluespace/B in src)
@@ -182,7 +182,7 @@
 	return TRUE
 
 /obj/structure/closet/body_bag/bluespace/perform_fold(mob/living/carbon/human/the_folder)
-	visible_message(span_notice("[the_folder] сворачивает [declent_ru(NOMINATIVE)]."))
+	visible_message(span_notice("[the_folder] сворачивает [RU_SRC_NOM]."))
 	var/obj/item/bodybag/folding_bodybag = undeploy_bodybag(the_folder.loc)
 	var/max_weight_of_contents = initial(folding_bodybag.w_class)
 	for(var/am in contents)
@@ -315,7 +315,7 @@
 
 /obj/structure/closet/body_bag/environmental/prisoner/attempt_fold(mob/living/carbon/human/the_folder)
 	if(sinched)
-		to_chat(the_folder, span_warning("Вы возитесь с [declent_ru(INSTRUMENTAL)], но его не свернуть, пока его ремни затянуты."))
+		to_chat(the_folder, span_warning("Вы возитесь с [RU_SRC_INS], но его не свернуть, пока его ремни затянуты."))
 		return FALSE
 	return ..()
 
@@ -325,7 +325,7 @@
 		return FALSE
 
 	if(sinched && !force)
-		to_chat(user, span_danger("Пряжки на [declent_ru(PREPOSITIONAL)] затянуты, не давая ему открыться."))
+		to_chat(user, span_danger("Пряжки на [RU_SRC_PRE] затянуты, не давая ему открыться."))
 		return FALSE
 
 	sinched = FALSE //in case it was forced open unsinch it
@@ -345,21 +345,21 @@
 
 	user.changeNext_move(CLICK_CD_BREAKOUT)
 	user.last_special = world.time + CLICK_CD_BREAKOUT
-	user.visible_message(span_warning("Кто-то в [declent_ru(PREPOSITIONAL)] начинает извиваться!"), \
-		span_notice("Вы начинаете извиваться, пытаясь ослабить пряжки [declent_ru(GENITIVE)]... (это займёт около [DisplayTimeText(breakout_time)].)"), \
-		span_hear("Вы слышите натяжение ткани из [declent_ru(GENITIVE)]."))
+	user.visible_message(span_warning("Кто-то в [RU_SRC_PRE] начинает извиваться!"), \
+		span_notice("Вы начинаете извиваться, пытаясь ослабить пряжки [RU_SRC_GEN]... (это займёт около [DisplayTimeText(breakout_time)].)"), \
+		span_hear("Вы слышите натяжение ткани из [RU_SRC_GEN]."))
 	if(do_after(user,(breakout_time), target = src))
 		if(!user || user.stat != CONSCIOUS || user.loc != src || opened || !sinched )
 			return
 		//we check after a while whether there is a point of resisting anymore and whether the user is capable of resisting
-		user.visible_message(span_danger("[user] успешно вырывается из [declent_ru(GENITIVE)]!"),
-							span_notice("Вы успешно вырвались из [declent_ru(GENITIVE)]!"))
+		user.visible_message(span_danger("[user] успешно вырывается из [RU_SRC_GEN]!"),
+							span_notice("Вы успешно вырвались из [RU_SRC_GEN]!"))
 		if(istype(loc, /obj/machinery/disposal))
 			return ..()
 		bust_open()
 	else
 		if(user.loc == src) //so we don't get the message if we resisted multiple times and succeeded.
-			to_chat(user, span_warning("Вам не удалось выбраться из [declent_ru(GENITIVE)]!"))
+			to_chat(user, span_warning("Вам не удалось выбраться из [RU_SRC_GEN]!"))
 
 
 /obj/structure/closet/body_bag/environmental/prisoner/bust_open()
@@ -375,7 +375,7 @@
 
 /obj/structure/closet/body_bag/environmental/prisoner/togglelock(mob/living/user, silent)
 	if(opened)
-		to_chat(user, span_warning("Вы не можете закрыть пряжки, пока [declent_ru(NOMINATIVE)] расстёгнут!"))
+		to_chat(user, span_warning("Вы не можете закрыть пряжки, пока [RU_SRC_NOM] расстёгнут!"))
 		return
 	if(user in contents)
 		to_chat(user, span_warning("Вы не можете дотянуться до пряжек отсюда!"))
@@ -384,16 +384,16 @@
 		add_fingerprint(user)
 	if(!sinched)
 		for(var/mob/living/target in contents)
-			to_chat(target, span_userdanger("Вы чувствуете, как подкладка [declent_ru(GENITIVE)] затягивается вокруг вас! Скоро вы не сможете сбежать!"))
-		user.visible_message(span_notice("[user] начинает затягивать пряжки на [declent_ru(PREPOSITIONAL)]."))
+			to_chat(target, span_userdanger("Вы чувствуете, как подкладка [RU_SRC_GEN] затягивается вокруг вас! Скоро вы не сможете сбежать!"))
+		user.visible_message(span_notice("[user] начинает затягивать пряжки на [RU_SRC_PRE]."))
 		if(!(do_after(user,(sinch_time),target = src)))
 			return
 	sinched = !sinched
 	if(sinched)
 		playsound(loc, sinch_sound, 15, TRUE, -2)
-	user.visible_message(span_notice("[user] [sinched ? "затягивает" : "ослабляет"] [declent_ru(NOMINATIVE)]."),
-							span_notice("Вы [sinched ? "затягиваете" : "ослабляете"] [declent_ru(NOMINATIVE)]."),
-							span_hear("Вы слышите растяжение, за которым следуют металлические щелчки от [declent_ru(GENITIVE)]."))
+	user.visible_message(span_notice("[user] [sinched ? "затягивает" : "ослабляет"] [RU_SRC_NOM]."),
+							span_notice("Вы [sinched ? "затягиваете" : "ослабляете"] [RU_SRC_NOM]."),
+							span_hear("Вы слышите растяжение, за которым следуют металлические щелчки от [RU_SRC_GEN]."))
 	user.log_message("[sinched ? "sinched":"unsinched"] secure environmental bag [src]", LOG_GAME)
 	update_appearance()
 

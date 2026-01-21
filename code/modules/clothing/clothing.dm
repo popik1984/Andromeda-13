@@ -131,9 +131,9 @@
 		if(CLOTHING_SHREDDED)
 			var/obj/item/stack/cloth_repair = weapon
 			if(cloth_repair.amount < 3)
-				to_chat(user, span_warning("Вам требуется три [cloth_repair.declent_ru(GENITIVE)], чтобы починить [declent_ru(NOMINATIVE)]."))
+				to_chat(user, span_warning("Вам требуется три [RU_GEN(cloth_repair)], чтобы починить [RU_SRC_NOM]."))
 				return ITEM_INTERACT_BLOCKING
-			to_chat(user, span_notice("Вы начинаете чинить повреждения на [declent_ru(PREPOSITIONAL)]..."))
+			to_chat(user, span_notice("Вы начинаете чинить повреждения на [RU_SRC_PRE]..."))
 			if(!do_after(user, 6 SECONDS, src) || !cloth_repair.use(3))
 				return ITEM_INTERACT_BLOCKING
 			repair(user)
@@ -149,7 +149,7 @@
 	damage_by_parts = null
 	if(user)
 		UnregisterSignal(user, COMSIG_MOVABLE_MOVED)
-		to_chat(user, span_notice("Вы починили повреждения на [declent_ru(PREPOSITIONAL)]."))
+		to_chat(user, span_notice("Вы починили повреждения на [RU_SRC_PRE]."))
 	update_appearance()
 
 /**
@@ -200,7 +200,7 @@
 	if(iscarbon(loc))
 		var/mob/living/carbon/carbon_loc = loc
 		zone_name = carbon_loc.parse_zone_with_bodypart(def_zone)
-		carbon_loc.visible_message(span_danger("[zone_name] [break_verb] на [declent_ru(PREPOSITIONAL)] у [carbon_loc.declent_ru(PREPOSITIONAL)]!"), span_userdanger("[zone_name] [break_verb] на вашем [declent_ru(PREPOSITIONAL)]!"), vision_distance = COMBAT_MESSAGE_RANGE)
+		carbon_loc.visible_message(span_danger("[zone_name] [break_verb] на [RU_SRC_PRE] у [RU_PRE(carbon_loc)]!"), span_userdanger("[zone_name] [break_verb] на вашем [RU_SRC_PRE]!"), vision_distance = COMBAT_MESSAGE_RANGE)
 		RegisterSignal(carbon_loc, COMSIG_MOVABLE_MOVED, PROC_REF(bristle), override = TRUE)
 	else
 		zone_name = parse_zone(def_zone)
@@ -329,17 +329,17 @@
 	if(atom_storage)
 		var/list/how_cool_are_your_threads = list("<span class='notice'>")
 		if(atom_storage.attack_hand_interact)
-			how_cool_are_your_threads += "Хранилище [declent_ru(GENITIVE)] открывается при нажатии.\n"
+			how_cool_are_your_threads += "Хранилище [RU_SRC_GEN] открывается при нажатии.\n"
 		else
-			how_cool_are_your_threads += "Хранилище [declent_ru(GENITIVE)] открывается при перетаскивании на себя.\n"
+			how_cool_are_your_threads += "Хранилище [RU_SRC_GEN] открывается при перетаскивании на себя.\n"
 		if (atom_storage.can_hold?.len) // If pocket type can hold anything, vs only specific items
 			how_cool_are_your_threads += "[capitalize(declent_ru(NOMINATIVE))] может хранить [atom_storage.max_slots] <a href='byond://?src=[REF(src)];show_valid_pocket_items=1'>предмета</a>.\n"
 		else
 			how_cool_are_your_threads += "[capitalize(declent_ru(NOMINATIVE))] может хранить [atom_storage.max_slots] предмета размером [weight_class_to_text(atom_storage.max_specific_storage)] или меньше.\n"
 		if(atom_storage.quickdraw)
-			how_cool_are_your_threads += "Вы можете достать предмет из [declent_ru(GENITIVE)], используя ПКМ.\n"
+			how_cool_are_your_threads += "Вы можете достать предмет из [RU_SRC_GEN], используя ПКМ.\n"
 		if(atom_storage.silent)
-			how_cool_are_your_threads += "Вы можете положить или достать предмет из [declent_ru(GENITIVE)], не издавая шума.\n"
+			how_cool_are_your_threads += "Вы можете положить или достать предмет из [RU_SRC_GEN], не издавая шума.\n"
 		how_cool_are_your_threads += "</span>"
 		. += how_cool_are_your_threads.Join()
 
@@ -351,7 +351,7 @@
 	if (clothing_flags & THICKMATERIAL)
 		.["плотный"] = "Защищает от большинства инъекций и спреев."
 	if (clothing_flags & CASTING_CLOTHES)
-		.["магический"] = "Позволяет магическим существам произносить заклинания, пока надет [declent_ru(NOMINATIVE)]."
+		.["магический"] = "Позволяет магическим существам произносить заклинания, пока надет [RU_SRC_NOM]."
 	if((clothing_flags & STOPSPRESSUREDAMAGE) || (visor_flags & STOPSPRESSUREDAMAGE))
 		.["герметичный"] = "Защищает носителя от чрезвычайно низкого и высокого давления, например как вакуум космоса."
 	if(flags_cover & PEPPERPROOF)
@@ -541,9 +541,9 @@ BLIND     // can't see anything
 
 	var/message
 	if(up)
-		message = src.alt_toggle_message || "Вы убираете [declent_ru(NOMINATIVE)]."
+		message = src.alt_toggle_message || "Вы убираете [RU_SRC_NOM]."
 	else
-		message = src.toggle_message || "Вы ставите обратно [declent_ru(NOMINATIVE)]."
+		message = src.toggle_message || "Вы ставите обратно [RU_SRC_NOM]."
 
 	to_chat(user, span_notice("[message]"))
 
@@ -600,7 +600,7 @@ BLIND     // can't see anything
 		new /obj/effect/decal/cleanable/shreds(current_position, name)
 		if(isliving(loc))
 			var/mob/living/possessing_mob = loc
-			possessing_mob.visible_message(span_danger("[capitalize(declent_ru(NOMINATIVE))] поглощается, оставляя от себя только небольшие ошмётки!"), span_boldwarning("[capitalize(declent_ru(NOMINATIVE))] распадается на маленькие кусочки!"))
+			possessing_mob.visible_message(span_danger("[capitalize(RU_SRC_NOM)] поглощается, оставляя от себя только небольшие ошмётки!"), span_boldwarning("[capitalize(RU_SRC_NOM)] распадается на маленькие кусочки!"))
 		deconstruct(FALSE)
 	else
 		body_parts_covered = NONE
@@ -609,10 +609,10 @@ BLIND     // can't see anything
 		if(isliving(loc))
 			var/mob/living/M = loc
 			if(src in M.get_equipped_items()) //make sure they were wearing it and not attacking the item in their hands
-				M.visible_message(span_danger("[capitalize(declent_ru(NOMINATIVE))] спадает c [M.declent_ru(PREPOSITIONAL)], полностью развалившись на кусочки!"), span_warning("<b>[capitalize(declent_ru(NOMINATIVE))] спадает с вас, полностью развалившись на кусочки!</b>"), vision_distance = COMBAT_MESSAGE_RANGE)
+				M.visible_message(span_danger("[capitalize(RU_SRC_NOM)] спадает c [RU_PRE(M)], полностью развалившись на кусочки!"), span_warning("<b>[capitalize(RU_SRC_NOM)] спадает с вас, полностью развалившись на кусочки!</b>"), vision_distance = COMBAT_MESSAGE_RANGE)
 				M.dropItemToGround(src)
 			else
-				M.visible_message(span_danger("[capitalize(declent_ru(NOMINATIVE))] разваливается на кусочки!"), vision_distance = COMBAT_MESSAGE_RANGE)
+				M.visible_message(span_danger("[capitalize(RU_SRC_NOM)] разваливается на кусочки!"), vision_distance = COMBAT_MESSAGE_RANGE)
 		name = "измельченн[GEND_YI_AYA_OE_YE(src)] [initial(name)]" // change the name -after- the message, not before.
 		update_appearance()
 	SEND_SIGNAL(src, COMSIG_ATOM_DESTRUCTION, damage_flag)
@@ -624,7 +624,7 @@ BLIND     // can't see anything
 	if(!istype(L))
 		return
 	if(prob(0.2))
-		to_chat(L, span_warning("Порванные нити на [declent_ru(PREPOSITIONAL)] трутся и натирают кожу!"))
+		to_chat(L, span_warning("Порванные нити на [RU_SRC_PRE] трутся и натирают кожу!"))
 
 /obj/item/clothing/apply_fantasy_bonuses(bonus)
 	. = ..()

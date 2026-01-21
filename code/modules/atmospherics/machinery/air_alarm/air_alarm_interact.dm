@@ -1,7 +1,7 @@
 /obj/machinery/airalarm/crowbar_act(mob/living/user, obj/item/tool)
 	if(buildstage != AIR_ALARM_BUILD_NO_WIRES)
 		return
-	user.visible_message(span_notice("[user] вытаскивает электронику из [declent_ru(GENITIVE)]."), \
+	user.visible_message(span_notice("[user] вытаскивает электронику из [RU_SRC_GEN]."), \
 						span_notice("Вы начинаете выковыривать плату..."))
 	tool.play_tool_sound(src)
 	if (tool.use_tool(src, user, 20))
@@ -36,7 +36,7 @@
 /obj/machinery/airalarm/wrench_act(mob/living/user, obj/item/tool)
 	if(buildstage != AIR_ALARM_BUILD_NO_CIRCUIT)
 		return
-	to_chat(user, span_notice("Вы открепляете [declent_ru(ACCUSATIVE)] от стены."))
+	to_chat(user, span_notice("Вы открепляете [RU_SRC_ACC] от стены."))
 	tool.play_tool_sound(src)
 	var/obj/item/wallframe/airalarm/alarm_frame = new(drop_location())
 	user.put_in_hands(alarm_frame)
@@ -85,7 +85,7 @@
 	if(obj_flags & EMAGGED)
 		return FALSE
 	obj_flags |= EMAGGED
-	visible_message(span_warning("Из [declent_ru(GENITIVE)] вылетают искры!"))
+	visible_message(span_warning("Из [RU_SRC_GEN] вылетают искры!"))
 	balloon_alert(user, "сенсоры аутентификации повреждены")
 	playsound(src, SFX_SPARKS, 50, TRUE, SHORT_RANGE_SOUND_EXTRARANGE)
 	return TRUE
@@ -143,7 +143,7 @@
 				var/obj/item/electroadaptive_pseudocircuit/P = W
 				if(!P.adapt_circuit(user, circuit_cost = 0.025 * STANDARD_CELL_CHARGE))
 					return
-				user.visible_message(span_notice("[user] создаёт плату и помещает её в [declent_ru(ACCUSATIVE)]."), \
+				user.visible_message(span_notice("[user] создаёт плату и помещает её в [RU_SRC_ACC]."), \
 				span_notice("Вы адаптируете плату воздушной тревоги и устанавливаете её в корпус."))
 				buildstage = AIR_ALARM_BUILD_NO_WIRES
 				update_appearance()

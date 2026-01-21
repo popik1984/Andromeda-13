@@ -51,7 +51,7 @@ GLOBAL_LIST_INIT(glass_recipes, list ( \
 	acid = 100
 
 /obj/item/stack/sheet/glass/suicide_act(mob/living/carbon/user)
-	user.visible_message(span_suicide("[user] начинает резать своё [pick("запястья", "горло")] [declent_ru(INSTRUMENTAL)]! Похоже, [GEND_HE_SHE(user)] пытается покончить с собой!"))
+	user.visible_message(span_suicide("[user] начинает резать своё [pick("запястья", "горло")] [RU_SRC_INS]! Похоже, [GEND_HE_SHE(user)] пытается покончить с собой!"))
 	return BRUTELOSS
 
 /obj/item/stack/sheet/glass/fifty
@@ -73,7 +73,7 @@ GLOBAL_LIST_INIT(glass_recipes, list ( \
 			return
 		CC.use(5)
 		use(1)
-		to_chat(user, span_notice("Вы прикрепляете провода к [declent_ru(DATIVE)]."))
+		to_chat(user, span_notice("Вы прикрепляете провода к [RU_SRC_DAT]."))
 		var/obj/item/stack/light_w/new_tile = new(user.loc)
 		if (!QDELETED(new_tile))
 			new_tile.add_fingerprint(user)
@@ -404,7 +404,7 @@ GLOBAL_LIST_INIT(plastitaniumglass_recipes, list(
 	acid = 100
 
 /obj/item/shard/suicide_act(mob/living/user)
-	user.visible_message(span_suicide("[user] начинает резать своё [pick("запястья", "горло")] [declent_ru(INSTRUMENTAL)]! Похоже, [GEND_HE_SHE(user)] пытается покончить с собой."))
+	user.visible_message(span_suicide("[user] начинает резать своё [pick("запястья", "горло")] [RU_SRC_INS]! Похоже, [GEND_HE_SHE(user)] пытается покончить с собой."))
 	return BRUTELOSS
 
 /obj/item/shard/Initialize(mapload)
@@ -451,7 +451,7 @@ GLOBAL_LIST_INIT(plastitaniumglass_recipes, list(
 	if(jab.get_all_covered_flags() & HANDS)
 		return
 
-	to_chat(user, span_warning("[declent_ru(NOMINATIVE)] врезается вам в руку!"))
+	to_chat(user, span_warning("[RU_SRC_NOM] врезается вам в руку!"))
 	jab.apply_damage(force * 0.5, BRUTE, user.get_active_hand(), attacking_item = src)
 
 /obj/item/shard/attackby(obj/item/item, mob/user, list/modifiers, list/attack_modifiers)
@@ -460,12 +460,12 @@ GLOBAL_LIST_INIT(plastitaniumglass_recipes, list(
 		lightreplacer.attackby(src, user)
 	else if(istype(item, /obj/item/stack/sheet/cloth))
 		var/obj/item/stack/sheet/cloth/cloth = item
-		to_chat(user, span_notice("Вы начинаете обматывать [cloth.declent_ru(NOMINATIVE)] вокруг [declent_ru(GENITIVE)]..."))
+		to_chat(user, span_notice("Вы начинаете обматывать [RU_NOM(cloth)] вокруг [RU_SRC_GEN]..."))
 		if(do_after(user, craft_time, target = src))
 			var/obj/item/knife/shiv/shiv = new shiv_type
 			shiv.set_custom_materials(custom_materials)
 			cloth.use(1)
-			to_chat(user, span_notice("Вы оборачиваете [cloth.declent_ru(NOMINATIVE)] вокруг [declent_ru(GENITIVE)], создав импровизированное оружие."))
+			to_chat(user, span_notice("Вы оборачиваете [RU_NOM(cloth)] вокруг [RU_SRC_GEN], создав импровизированное оружие."))
 			remove_item_from_storage(src, user)
 			qdel(src)
 			user.put_in_hands(shiv)
@@ -476,7 +476,7 @@ GLOBAL_LIST_INIT(plastitaniumglass_recipes, list(
 /obj/item/shard/welder_act(mob/living/user, obj/item/I)
 	if(I.use_tool(src, user, 0, volume=50))
 		var/obj/item/stack/sheet/new_glass = new weld_material
-		to_chat(user, span_notice("Вы переплавляете [declent_ru(NOMINATIVE)] в [new_glass.declent_ru(GENITIVE)]."))
+		to_chat(user, span_notice("Вы переплавляете [RU_SRC_NOM] в [RU_GEN(new_glass)]."))
 		new_glass.forceMove((Adjacent(user) ? user.drop_location() : loc)) //stack merging is handled automatically.
 		qdel(src)
 		return ITEM_INTERACT_SUCCESS

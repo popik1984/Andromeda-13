@@ -47,16 +47,6 @@
 		PREPOSITIONAL = "груди",
 	)
 
-/obj/item/bodypart/chest/get_ru_plaintext_names()
-	return alist(
-		NOMINATIVE = "грудь",
-		GENITIVE = "груди",
-		DATIVE = "груди",
-		ACCUSATIVE = "грудь",
-		INSTRUMENTAL = "грудью",
-		PREPOSITIONAL = "груди",
-	)
-
 /obj/item/bodypart/chest/forced_removal(dismembered, special, move_to_floor)
 	var/mob/living/carbon/old_owner = owner
 	..(special = TRUE) //special because we're self destructing
@@ -190,16 +180,6 @@
 		PREPOSITIONAL = "руке",
 	)
 
-/obj/item/bodypart/arm/get_ru_plaintext_names()
-	return alist(
-		NOMINATIVE = "рука",
-		GENITIVE = "руки",
-		DATIVE = "руке",
-		ACCUSATIVE = "руку",
-		INSTRUMENTAL = "рукой",
-		PREPOSITIONAL = "руке",
-	)
-
 /obj/item/bodypart/arm/Destroy()
 	QDEL_NULL(worn_glove_offset)
 	QDEL_NULL(held_hand_offset)
@@ -262,16 +242,6 @@
 		PREPOSITIONAL = "левой руке",
 	)
 
-/obj/item/bodypart/arm/left/get_ru_plaintext_names()
-	return alist(
-		NOMINATIVE = "левая рука",
-		GENITIVE = "левой руки",
-		DATIVE = "левой руке",
-		ACCUSATIVE = "левую руку",
-		INSTRUMENTAL = "левой рукой",
-		PREPOSITIONAL = "левой руке",
-	)
-
 /obj/item/bodypart/arm/left/apply_ownership(mob/living/carbon/new_owner)
 	if(HAS_TRAIT(new_owner, TRAIT_PARALYSIS_L_ARM))
 		ADD_TRAIT(src, TRAIT_PARALYSIS, TRAIT_PARALYSIS_L_ARM)
@@ -312,7 +282,7 @@
 		if(bodypart_disabled)
 			owner.set_usable_hands(owner.usable_hands - 1)
 			if(owner.stat < UNCONSCIOUS)
-				to_chat(owner, span_userdanger("Вы теряете контроль над своей [declent_plaintext_ru(INSTRUMENTAL)]!"))
+				to_chat(owner, span_userdanger("Вы теряете контроль над своей [RU_SRC_INS]!"))
 			if(held_index)
 				owner.dropItemToGround(owner.get_item_for_held_index(held_index))
 	else if(!bodypart_disabled)
@@ -381,16 +351,6 @@
 		PREPOSITIONAL = "правой руке",
 	)
 
-/obj/item/bodypart/arm/right/get_ru_plaintext_names()
-	return alist(
-		NOMINATIVE = "правая рука",
-		GENITIVE = "правой руки",
-		DATIVE = "правой руке",
-		ACCUSATIVE = "правую руку",
-		INSTRUMENTAL = "правой рукой",
-		PREPOSITIONAL = "правой руке",
-	)
-
 /obj/item/bodypart/arm/right/apply_ownership(mob/living/carbon/new_owner)
 	if(HAS_TRAIT(new_owner, TRAIT_PARALYSIS_R_ARM))
 		ADD_TRAIT(src, TRAIT_PARALYSIS, TRAIT_PARALYSIS_R_ARM)
@@ -431,7 +391,7 @@
 		if(bodypart_disabled)
 			owner.set_usable_hands(owner.usable_hands - 1)
 			if(owner.stat < UNCONSCIOUS)
-				to_chat(owner, span_userdanger("Вы теряете контроль над своей [declent_plaintext_ru(INSTRUMENTAL)]!"))
+				to_chat(owner, span_userdanger("Вы теряете контроль над своей [RU_SRC_INS]!"))
 			if(held_index)
 				owner.dropItemToGround(owner.get_item_for_held_index(held_index))
 	else if(!bodypart_disabled)
@@ -514,16 +474,6 @@
 		PREPOSITIONAL = "ноге",
 	)
 
-/obj/item/bodypart/leg/get_ru_plaintext_names()
-	return alist(
-		NOMINATIVE = "нога",
-		GENITIVE = "ноги",
-		DATIVE = "ноге",
-		ACCUSATIVE = "ногу",
-		INSTRUMENTAL = "ногой",
-		PREPOSITIONAL = "ноге",
-	)
-
 /obj/item/bodypart/leg/Initialize(mapload)
 	. = ..()
 	if(PERFORM_ALL_TESTS(focus_only/humanstep_validity))
@@ -556,16 +506,6 @@
 	bodypart_trait_source = LEFT_LEG_TRAIT
 
 /obj/item/bodypart/leg/left/get_ru_names()
-	return alist(
-		NOMINATIVE = "левая нога",
-		GENITIVE = "левой ноги",
-		DATIVE = "левой ноге",
-		ACCUSATIVE = "левую ногу",
-		INSTRUMENTAL = "левой ногой",
-		PREPOSITIONAL = "левой ноге",
-	)
-
-/obj/item/bodypart/leg/left/get_ru_plaintext_names()
 	return alist(
 		NOMINATIVE = "левая нога",
 		GENITIVE = "левой ноги",
@@ -615,7 +555,7 @@
 		if(bodypart_disabled)
 			owner.set_usable_legs(owner.usable_legs - 1)
 			if(owner.stat < UNCONSCIOUS)
-				to_chat(owner, span_userdanger("Вы теряете контроль над своей [declent_plaintext_ru(INSTRUMENTAL)]!"))
+				to_chat(owner, span_userdanger("Вы теряете контроль над своей [RU_SRC_INS]!"))
 	else if(!bodypart_disabled)
 		owner.set_usable_legs(owner.usable_legs + 1)
 
@@ -674,16 +614,6 @@
 		PREPOSITIONAL = "правой ноге",
 	)
 
-/obj/item/bodypart/leg/right/get_ru_plaintext_names()
-	return alist(
-		NOMINATIVE = "правая нога",
-		GENITIVE = "правой ноги",
-		DATIVE = "правой ноге",
-		ACCUSATIVE = "правую ногу",
-		INSTRUMENTAL = "правой ногой",
-		PREPOSITIONAL = "правой ноге",
-	)
-
 /obj/item/bodypart/leg/right/apply_ownership(mob/living/carbon/new_owner)
 	if(HAS_TRAIT(new_owner, TRAIT_PARALYSIS_R_LEG))
 		ADD_TRAIT(src, TRAIT_PARALYSIS, TRAIT_PARALYSIS_R_LEG)
@@ -725,7 +655,7 @@
 		if(bodypart_disabled)
 			owner.set_usable_legs(owner.usable_legs - 1)
 			if(owner.stat < UNCONSCIOUS)
-				to_chat(owner, span_userdanger("Вы теряете контроль над своей [declent_plaintext_ru(INSTRUMENTAL)]!"))
+				to_chat(owner, span_userdanger("Вы теряете контроль над своей [RU_SRC_INS]!"))
 	else if(!bodypart_disabled)
 		owner.set_usable_legs(owner.usable_legs + 1)
 

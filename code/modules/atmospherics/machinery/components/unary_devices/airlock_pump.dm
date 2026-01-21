@@ -177,10 +177,10 @@
 /obj/machinery/atmospherics/components/unary/airlock_pump/can_unwrench(mob/user)
 	. = ..()
 	if(!.)
-		to_chat(user, span_warning("Вы не можете открутить [declent_ru(NOMINATIVE)], он крепко закреплён!"))
+		to_chat(user, span_warning("Вы не можете открутить [RU_SRC_NOM], он крепко закреплён!"))
 		return FALSE
 	if(. && on)
-		to_chat(user, span_warning("Вы не можете открутить [declent_ru(NOMINATIVE)], дождитесь завершения цикла!"))
+		to_chat(user, span_warning("Вы не можете открутить [RU_SRC_NOM], дождитесь завершения цикла!"))
 		return FALSE
 
 /obj/machinery/atmospherics/components/unary/airlock_pump/set_on(active)
@@ -612,7 +612,7 @@
 		// unbolt all the doors but don't open them
 		for(var/obj/machinery/door/airlock/airlock as anything in (internal_airlocks + external_airlocks))
 			airlock.unbolt()
-		audible_message(span_notice("[declent_ru(NOMINATIVE)] жужжит, теряя питание и отключая болты шлюза."))
+		audible_message(span_notice("[RU_SRC_NOM] жужжит, теряя питание и отключая болты шлюза."))
 	else if(!was_operational && is_operational)
 		// upon regaining power, re-bolt relevant airlocks
 		for(var/obj/machinery/door/airlock/airlock as anything in external_airlocks)
@@ -620,7 +620,7 @@
 		for(var/obj/machinery/door/airlock/airlock as anything in internal_airlocks)
 			if(open_airlock_on_cycle)
 				INVOKE_ASYNC(airlock, TYPE_PROC_REF(/obj/machinery/door/airlock, secure_open))
-		audible_message(span_notice("[declent_ru(NOMINATIVE)] жужжит, восстанавливая питание и снова включая болты шлюза."))
+		audible_message(span_notice("[RU_SRC_NOM] жужжит, восстанавливая питание и снова включая болты шлюза."))
 
 /obj/machinery/atmospherics/components/unary/airlock_pump/unbolt_only
 	open_airlock_on_cycle = FALSE

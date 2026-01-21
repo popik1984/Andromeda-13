@@ -113,7 +113,7 @@
 /obj/machinery/atmospherics/components/binary/pump/can_unwrench(mob/user)
 	. = ..()
 	if(. && on && is_operational)
-		to_chat(user, span_warning("Нельзя откручивать [declent_ru(ACCUSATIVE)], сначала выключите её!"))
+		to_chat(user, span_warning("Нельзя откручивать [RU_SRC_ACC], сначала выключите её!"))
 		return FALSE
 
 /obj/machinery/atmospherics/components/binary/pump/layer2

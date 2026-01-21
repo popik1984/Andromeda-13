@@ -220,14 +220,14 @@ GLOBAL_LIST_INIT(metal_recipes, list ( \
 	. += GLOB.metal_recipes
 
 /obj/item/stack/sheet/iron/suicide_act(mob/living/carbon/user)
-	user.visible_message(span_suicide("[user] начинает бить себя по голове [declent_ru(INSTRUMENTAL)]! Похоже, [GEND_HE_SHE(user)] пытается покончить с собой!"))
+	user.visible_message(span_suicide("[RU_USER_NOM] начинает бить себя по голове [RU_SRC_INS]! Похоже, [GEND_HE_SHE(user)] пытается покончить с собой!"))
 	return BRUTELOSS
 
 /obj/item/stack/sheet/iron/welder_act(mob/living/user, obj/item/tool)
 	if(tool.use_tool(src, user, delay = 0, volume = 40))
 		var/obj/item/stack/rods/two/new_item = new(user.loc)
 		user.visible_message(
-			span_notice("[user.name] придал [declent_ru(DATIVE)]] форму напольных арматурин с помощью [tool.declent_ru(GENITIVE)]."),
+			span_notice("[RU_USER_NOM] придал [RU_SRC_DAT] форму напольных арматурин с помощью [RU_GEN(tool)]."),
 			blind_message = span_hear("Вы слышите сварку."),
 			vision_distance = COMBAT_MESSAGE_RANGE,
 			ignored_mobs = user
@@ -240,7 +240,7 @@ GLOBAL_LIST_INIT(metal_recipes, list ( \
 	if(tool.use_tool(src, user, delay = 0, volume = 40))
 		var/obj/item/stack/tile/iron/four/new_item = new(user.loc)
 		user.visible_message(
-			span_notice("[user.name] придал [declent_ru(DATIVE)] форму напольных плиток с помощью [tool.declent_ru(GENITIVE)]."),
+			span_notice("[RU_USER_NOM] придал [RU_SRC_DAT] форму напольных плиток с помощью [RU_GEN(tool)]."),
 			blind_message = span_hear("Вы слышите сварку."),
 			vision_distance = COMBAT_MESSAGE_RANGE,
 			ignored_mobs = user

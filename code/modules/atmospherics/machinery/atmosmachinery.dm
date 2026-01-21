@@ -120,7 +120,7 @@
 
 /obj/machinery/atmospherics/examine(mob/user)
 	. = ..()
-	. += span_notice("[declent_ru(NOMINATIVE)] на слое [piping_layer].")
+	. += span_notice("[RU_SRC_NOM] на слое [piping_layer].")
 	if((vent_movement & VENTCRAWL_ENTRANCE_ALLOWED) && isliving(user))
 		var/mob/living/L = user
 		if(HAS_TRAIT(L, TRAIT_VENTCRAWLER_NUDE) || HAS_TRAIT(L, TRAIT_VENTCRAWLER_ALWAYS))
@@ -445,16 +445,16 @@
 		empty_pipe = TRUE
 
 	if(!empty_pipe)
-		to_chat(user, span_notice("Вы начинаете откручивать [declent_ru(ACCUSATIVE)]..."))
+		to_chat(user, span_notice("Вы начинаете откручивать [RU_SRC_ACC]..."))
 
 	if (internal_pressure > 2 * ONE_ATMOSPHERE)
-		to_chat(user, span_warning("Как только вы начинаете откручивать [declent_ru(ACCUSATIVE)], поток воздуха дует вам в лицо... может, стоит передумать?"))
+		to_chat(user, span_warning("Как только вы начинаете откручивать [RU_SRC_ACC], поток воздуха дует вам в лицо... может, стоит передумать?"))
 		unsafe_wrenching = TRUE //Oh dear oh dear
 
 	if(I.use_tool(src, user, empty_pipe ? 0 : 2 SECONDS, volume = 50))
 		user.visible_message( \
-			"[user] откручивает [declent_ru(ACCUSATIVE)].", \
-			span_notice("Вы открутили [declent_ru(ACCUSATIVE)]."), \
+			"[user] откручивает [RU_SRC_ACC].", \
+			span_notice("Вы открутили [RU_SRC_ACC]."), \
 			span_hear("Вы слышите звук трещотки."))
 		investigate_log("was [span_warning("REMOVED")] by [key_name(usr)]", INVESTIGATE_ATMOS)
 

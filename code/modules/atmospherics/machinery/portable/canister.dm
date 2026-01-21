@@ -692,12 +692,12 @@
 
 	var/pressure = air_contents.return_pressure()
 	if(pressure > 300)
-		to_chat(user, span_alert("Манометр на [declent_ru(PREPOSITIONAL)] показывает высокое давление внутри... может, стоит передумать?"))
+		to_chat(user, span_alert("Манометр на [RU_SRC_PRE] показывает высокое давление внутри... может, стоит передумать?"))
 		message_admins("[src] deconstructed by [ADMIN_LOOKUPFLW(user)]")
 		user.log_message("deconstructed [src] with a welder.", LOG_GAME)
-	to_chat(user, span_notice("Вы начинаете разрезать [declent_ru(ACCUSATIVE)]..."))
+	to_chat(user, span_notice("Вы начинаете разрезать [RU_SRC_ACC]..."))
 	if(I.use_tool(src, user, 3 SECONDS, volume=50))
-		to_chat(user, span_notice("Вы разрезали [declent_ru(ACCUSATIVE)]."))
+		to_chat(user, span_notice("Вы разрезали [RU_SRC_ACC]."))
 		deconstruct(TRUE)
 
 	return ITEM_INTERACT_SUCCESS

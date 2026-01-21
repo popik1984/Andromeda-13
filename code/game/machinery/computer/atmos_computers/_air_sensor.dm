@@ -151,8 +151,8 @@
 		if(INLET, OUTLET)
 			var/port = "[type == INLET ? "входной" : "выходной"] порт"
 			user.balloon_alert(user, "[port] настроен")
-			to_chat(user, span_notice("[declent_ru(NOMINATIVE)] подключил[GEND_A_O_I(src)] [multi_tool.buffer] к своему [port]у."))
-	to_chat(user, span_notice("[declent_ru(NOMINATIVE)] добавлен в буфер мультитула."))
+			to_chat(user, span_notice("[RU_SRC_NOM] подключил[GEND_A_O_I(src)] [multi_tool.buffer] к своему [port]у."))
+	to_chat(user, span_notice("[RU_SRC_NOM] добавлен в буфер мультитула."))
 	multi_tool.set_buffer(src)
 
 	return ITEM_INTERACT_SUCCESS

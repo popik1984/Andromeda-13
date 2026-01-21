@@ -138,3 +138,79 @@
 			else
 				stack_trace("Invalid data sent to genderize_decode proc.")
 	return msg
+
+// ==================== МАКРОСЫ ДЛЯ ОБЩЕГО ИСПОЛЬЗОВАНИЯ ====================
+
+// "[hanging_parent] falls apart!"
+// "[RU_NOM(hanging_parent))] разваливается!" - "стул разваливается!"
+
+#define RU_NOM(target) declent_ru(target, NOMINATIVE)      // именительный
+#define RU_GEN(target) declent_ru(target, GENITIVE)        // родительный
+#define RU_DAT(target) declent_ru(target, DATIVE)          // дательный
+#define RU_ACC(target) declent_ru(target, ACCUSATIVE)      // винительный - Ахахахах АСС. Ну типо ЭЭЭЭЭССССССС. Как типо как ASS. Не смешно? Иди нахуй.
+#define RU_INS(target) declent_ru(target, INSTRUMENTAL)    // творительный
+#define RU_PRE(target) declent_ru(target, PREPOSITIONAL)   // предложный
+
+// ==================== МАКРОСЫ С ЗАГЛАВНОЙ БУКВОЙ ====================
+
+// "[hanging_parent] falls apart!"
+// "[CAP_RU_NOM(hanging_parent))] разваливается!" - "Стул разваливается!"
+
+#define CAP_RU_NOM(target) capitalize(RU_NOM(target))      // "Стол"
+#define CAP_RU_GEN(target) capitalize(RU_GEN(target))      // "Стола"
+#define CAP_RU_DAT(target) capitalize(RU_DAT(target))      // "Столу"
+#define CAP_RU_ACC(target) capitalize(RU_ACC(target))      // "Стол" - Ахахахах АС.. Бля, я уже шутил про это. Ладно.
+#define CAP_RU_INS(target) capitalize(RU_INS(target))      // "Столом"
+#define CAP_RU_PRE(target) capitalize(RU_PRE(target))      // "Столе"
+
+// ==================== МАКРОСЫ ДЛЯ SRC ====================
+
+// "You hit [scr]!"
+// "Вы ударили [RU_SRC_ACC]!" - "Вы ударили обезъяну!"
+
+#define RU_SRC(case) declent_ru(src, case)
+#define RU_SRC_NOM RU_SRC(NOMINATIVE)                      // src в именительном
+#define RU_SRC_GEN RU_SRC(GENITIVE)                        // src в родительном
+#define RU_SRC_DAT RU_SRC(DATIVE)                          // src в дательном
+#define RU_SRC_ACC RU_SRC(ACCUSATIVE)                      // src в винительном
+#define RU_SRC_INS RU_SRC(INSTRUMENTAL)                    // src в творительном
+#define RU_SRC_PRE RU_SRC(PREPOSITIONAL)                   // src в предложном
+
+// ==================== МАКРОСЫ ДЛЯ TARGET ====================
+
+// "You hit [scr]!"
+// "Вы ударили [RU_TAR_ACC]!" - "Вы ударили обезъяну!"
+
+#define RU_TAR(case) declent_ru(target, case)
+#define RU_TAR_NOM RU_TAR(NOMINATIVE)              // target в именительном
+#define RU_TAR_GEN RU_TAR(GENITIVE)                // target в родительном
+#define RU_TAR_DAT RU_TAR(DATIVE)                  // target в дательном
+#define RU_TAR_ACC RU_TAR(ACCUSATIVE)              // target в винительном
+#define RU_TAR_INS RU_TAR(INSTRUMENTAL)            // target в творительном
+#define RU_TAR_PRE RU_TAR(PREPOSITIONAL)           // target в предложном
+
+// ==================== МАКРОСЫ ДЛЯ USER ====================
+
+// "[user] hit [scr]!"
+// "[RU_USER_NOM] ударили [RU_TAR_ACC]!" - "Человек ударили обезъяну!"
+
+#define RU_USER(case) declent_ru(user, case)
+#define RU_USER_NOM RU_USER(NOMINATIVE)              // user в именительном
+#define RU_USER_GEN RU_USER(GENITIVE)                // user в родительном
+#define RU_USER_DAT RU_USER(DATIVE)                  // user в дательном
+#define RU_USER_ACC RU_USER(ACCUSATIVE)              // user в винительном
+#define RU_USER_INS RU_USER(INSTRUMENTAL)            // user в творительном
+#define RU_USER_PRE RU_USER(PREPOSITIONAL)           // user в предложном
+
+// ==================== МАКРОСЫ ДЛЯ OWNER ====================
+
+// "[owner] hit [scr]!"
+// "[RU_OWN_NOM] ударили [RU_TAR_ACC]!" - "Человек ударили обезъяну!"
+
+#define RU_OWN(case) declent_ru(owner, case)
+#define RU_OWN_NOM RU_OWN(NOMINATIVE)              // owner в именительном
+#define RU_OWN_GEN RU_OWN(GENITIVE)                // owner в родительном
+#define RU_OWN_DAT RU_OWN(DATIVE)                  // owner в дательном
+#define RU_OWN_ACC RU_OWN(ACCUSATIVE)              // owner в винительном
+#define RU_OWN_INS RU_OWN(INSTRUMENTAL)            // owner в творительном
+#define RU_OWN_PRE RU_OWN(PREPOSITIONAL)           // owner в предложном

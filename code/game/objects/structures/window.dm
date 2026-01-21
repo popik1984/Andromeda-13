@@ -172,7 +172,7 @@
 
 /obj/structure/window/attack_tk(mob/user)
 	user.changeNext_move(CLICK_CD_MELEE)
-	user.visible_message(span_notice("Кто-то постучал в [declent_ru(NOMINATIVE)]."))
+	user.visible_message(span_notice("Кто-то постучал в [RU_SRC_NOM]."))
 	add_fingerprint(user)
 	playsound(src, knock_sound, 50, TRUE)
 	return COMPONENT_CANCEL_ATTACK_CHAIN
@@ -192,12 +192,12 @@
 	user.changeNext_move(CLICK_CD_MELEE)
 
 	if(!user.combat_mode)
-		user.visible_message(span_notice("[user] стучит по [declent_ru(DATIVE)]."), \
-			span_notice("Вы стучите по [declent_ru(DATIVE)]."))
+		user.visible_message(span_notice("[user] стучит по [RU_SRC_DAT]."), \
+			span_notice("Вы стучите по [RU_SRC_DAT]."))
 		playsound(src, knock_sound, 50, TRUE)
 	else
-		user.visible_message(span_warning("[user] бьёт по [declent_ru(DATIVE)]!"), \
-			span_warning("Вы бьёте по [declent_ru(DATIVE)]!"))
+		user.visible_message(span_warning("[user] бьёт по [RU_SRC_DAT]!"), \
+			span_warning("Вы бьёте по [RU_SRC_DAT]!"))
 		playsound(src, bash_sound, 100, TRUE)
 
 /obj/structure/window/attack_paw(mob/user, list/modifiers)
@@ -220,10 +220,10 @@
 		return ITEM_INTERACT_SUCCESS
 	if(!tool.tool_start_check(user, amount = 0))
 		return FALSE
-	to_chat(user, span_notice("Вы начинаете чинить [declent_ru(NOMINATIVE)]..."))
+	to_chat(user, span_notice("Вы начинаете чинить [RU_SRC_NOM]..."))
 	if(tool.use_tool(src, user, 4 SECONDS, volume = 50))
 		repair_damage(max_integrity)
-		to_chat(user, span_notice("Вы починили [declent_ru(NOMINATIVE)]."))
+		to_chat(user, span_notice("Вы починили [RU_SRC_NOM]."))
 	return ITEM_INTERACT_SUCCESS
 
 /obj/structure/window/screwdriver_act(mob/living/user, obj/item/tool)
@@ -257,14 +257,14 @@
 	if(reinf && state >= RWINDOW_FRAME_BOLTED)
 		return FALSE
 
-	to_chat(user, span_notice("Вы начинаете разбирать [declent_ru(NOMINATIVE)]..."))
+	to_chat(user, span_notice("Вы начинаете разбирать [RU_SRC_NOM]..."))
 	if(!tool.use_tool(src, user, decon_speed, volume = 75, extra_checks = CALLBACK(src, PROC_REF(check_state_and_anchored), state, anchored)))
 		return ITEM_INTERACT_SUCCESS
 	var/obj/item/stack/sheet/G = new glass_type(user.loc, glass_amount)
 	if (!QDELETED(G))
 		G.add_fingerprint(user)
 	playsound(src, 'sound/items/deconstruct.ogg', 50, TRUE)
-	to_chat(user, span_notice("Вы успешно разобрали [declent_ru(NOMINATIVE)]."))
+	to_chat(user, span_notice("Вы успешно разобрали [RU_SRC_NOM]."))
 	qdel(src)
 	return ITEM_INTERACT_SUCCESS
 
@@ -544,8 +544,8 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/structure/window/unanchored/spawner, 0)
 		if(RWINDOW_SECURE)
 			if(tool.tool_behaviour == TOOL_WELDER)
 				if(tool.tool_start_check(user, heat_required = HIGH_TEMPERATURE_REQUIRED))
-					user.visible_message(span_notice("[user] подносит [tool.declent_ru(DATIVE)] к защитным винтам на [declent_ru(GENITIVE)]..."),
-						span_notice("Вы начинаете нагревать защитные винты на [declent_ru(PREPOSITIONAL)]..."))
+					user.visible_message(span_notice("[RU_USER_NOM] подносит [RU_DAT(tool)] к защитным винтам на [RU_SRC_GEN]..."),
+						span_notice("Вы начинаете нагревать защитные винты на [RU_SRC_PRE]..."))
 					if(tool.use_tool(src, user, 15 SECONDS, volume = 100))
 						to_chat(user, span_notice("Защитные винты раскалились докрасна и готовы к удалению."))
 						state = RWINDOW_BOLTS_HEATED
@@ -565,8 +565,8 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/structure/window/unanchored/spawner, 0)
 
 		if(RWINDOW_BOLTS_OUT)
 			if(tool.tool_behaviour == TOOL_CROWBAR)
-				user.visible_message(span_notice("[user] вставляет [tool.declent_ru(DATIVE)] в щель в раме и начинает поддевать..."),
-										span_notice("Вы вставляете [tool.declent_ru(DATIVE)] в щель в раме и начинаете поддевать..."))
+				user.visible_message(span_notice("[RU_USER_NOM] вставляет [RU_DAT(tool)] в щель в раме и начинает поддевать..."),
+										span_notice("Вы вставляете [RU_DAT(tool)] в щель в раме и начинаете поддевать..."))
 				if(tool.use_tool(src, user, 40, volume = 50))
 					state = RWINDOW_POPPED
 					to_chat(user, span_notice("Панель выскакивает из рамы, обнажая тонкие металлические прутья, которые можно перекусить."))
@@ -575,8 +575,8 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/structure/window/unanchored/spawner, 0)
 
 		if(RWINDOW_POPPED)
 			if(tool.tool_behaviour == TOOL_WIRECUTTER)
-				user.visible_message(span_notice("[user] начинает перекусывать оголённые прутья на [declent_ru(PREPOSITIONAL)]..."),
-										span_notice("Вы начинаете перекусывать оголённые прутья на [declent_ru(PREPOSITIONAL)]"))
+				user.visible_message(span_notice("[RU_USER_NOM] начинает перекусывать оголённые прутья на [RU_SRC_PRE]..."),
+										span_notice("Вы начинаете перекусывать оголённые прутья на [RU_SRC_PRE]"))
 				if(tool.use_tool(src, user, 20, volume = 50))
 					state = RWINDOW_BARS_CUT
 					to_chat(user, span_notice("Панель отваливается, обнажая болты рамы."))
@@ -585,7 +585,7 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/structure/window/unanchored/spawner, 0)
 
 		if(RWINDOW_BARS_CUT)
 			if(tool.tool_behaviour == TOOL_WRENCH)
-				user.visible_message(span_notice("[user] начинает откручивать [declent_ru(NOMINATIVE)] от рамы..."),
+				user.visible_message(span_notice("[RU_USER_NOM] начинает откручивать [RU_SRC_NOM] от рамы..."),
 					span_notice("Вы начинаете откручивать болты от рамы..."))
 				if(tool.use_tool(src, user, 40, volume = 50))
 					to_chat(user, span_notice("Вы открутили болты от рамы, и окно освободилось."))
@@ -614,7 +614,7 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/structure/window/unanchored/spawner, 0)
 /obj/structure/window/proc/cool_bolts()
 	if(state == RWINDOW_BOLTS_HEATED)
 		state = RWINDOW_SECURE
-		visible_message(span_notice("Болты на [declent_ru(PREPOSITIONAL)] выглядят остывшими..."))
+		visible_message(span_notice("Болты на [RU_SRC_PRE] выглядят остывшими..."))
 
 /obj/structure/window/reinforced/examine(mob/user)
 	. = ..()
@@ -1121,11 +1121,11 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/structure/window/reinforced/tinted/frosted/spaw
 	if(user.combat_mode)
 		return ..()
 	if(istype(W, /obj/item/paper) && atom_integrity < max_integrity)
-		user.visible_message(span_notice("[user] начинает заделывать дыры в [declent_ru(PREPOSITIONAL)]."))
+		user.visible_message(span_notice("[user] начинает заделывать дыры в [RU_SRC_PRE]."))
 		if(do_after(user, 2 SECONDS, target = src))
 			atom_integrity = min(atom_integrity+4,max_integrity)
 			qdel(W)
-			user.visible_message(span_notice("[user] заделал некоторые дыры в [declent_ru(PREPOSITIONAL)]."))
+			user.visible_message(span_notice("[user] заделал некоторые дыры в [RU_SRC_PRE]."))
 			if(atom_integrity == max_integrity)
 				update_appearance()
 			return

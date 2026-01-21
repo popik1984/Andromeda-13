@@ -393,9 +393,9 @@
 		add_fingerprint(user)
 		if(status != LIGHT_EMPTY)
 			drop_light_tube(user)
-			to_chat(user, span_notice("Вы заменяете [light_object.declent_ru(ACCUSATIVE)]."))
+			to_chat(user, span_notice("Вы заменяете [RU_ACC(light_object)]."))
 		else
-			to_chat(user, span_notice("Вы вставляете [light_object.declent_ru(ACCUSATIVE)]."))
+			to_chat(user, span_notice("Вы вставляете [RU_ACC(light_object)]."))
 		if(length(light_object.reagents.reagent_list))
 			create_reagents(LIGHT_REAGENT_CAPACITY, SEALED_CONTAINER | TRANSPARENT)
 			light_object.reagents.trans_to(reagents, LIGHT_REAGENT_CAPACITY)
@@ -414,15 +414,15 @@
 		return ..()
 	if(tool.tool_behaviour == TOOL_SCREWDRIVER) //Если это отвертка, открыть его.
 		tool.play_tool_sound(src, 75)
-		user.visible_message(span_notice("[user.name] открывает корпус [declent_ru(GENITIVE)]."), \
-			span_notice("Вы открываете корпус [declent_ru(GENITIVE)]."), span_hear("Вы слышите шум."))
+		user.visible_message(span_notice("[RU_USER_NOM] открывает корпус [RU_SRC_GEN]."), \
+			span_notice("Вы открываете корпус [RU_SRC_GEN]."), span_hear("Вы слышите шум."))
 		deconstruct()
 		return
 
 	if(tool.item_flags & ABSTRACT)
 		return
 
-	to_chat(user, span_userdanger("Вы засовываете [tool.declent_ru(ACCUSATIVE)] в патрон светильника!"))
+	to_chat(user, span_userdanger("Вы засовываете [RU_ACC(tool)] в патрон светильника!"))
 	if(has_power() && (tool.obj_flags & CONDUCTS_ELECTRICITY))
 		do_sparks(3, TRUE, src)
 		if (prob(75))

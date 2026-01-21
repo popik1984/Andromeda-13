@@ -46,11 +46,11 @@
 	display_results(
 		surgeon,
 		limb.owner,
-		span_notice("Вы начинаете делать разрез на [limb.declent_ru(PREPOSITIONAL)]..."),
-		span_notice("[surgeon] начинает делать разрез на [limb.declent_ru(PREPOSITIONAL)]."),
-		span_notice("[surgeon] начинает делать разрез на [limb.declent_ru(PREPOSITIONAL)]."),
+		span_notice("Вы начинаете делать разрез на [RU_PRE(limb)]..."),
+		span_notice("[surgeon] начинает делать разрез на [RU_PRE(limb)]."),
+		span_notice("[surgeon] начинает делать разрез на [RU_PRE(limb)]."),
 	)
-	display_pain(limb.owner, "Вы чувствуете покалывание на [limb.declent_ru(PREPOSITIONAL)].")
+	display_pain(limb.owner, "Вы чувствуете покалывание на [RU_PRE(limb)].")
 
 /datum/surgery_operation/limb/incise_skin/on_success(obj/item/bodypart/limb, mob/living/surgeon, obj/item/tool, list/operation_args)
 	. = ..() // default success message
@@ -68,9 +68,9 @@
 	display_results(
 		surgeon,
 		limb.owner,
-		span_notice("Кровь скапливается у разреза на [limb.declent_ru(PREPOSITIONAL)]."),
-		span_notice("Кровь скапливается у разреза на [limb.declent_ru(PREPOSITIONAL)]."),
-		span_notice("Кровь скапливается у разреза на [limb.declent_ru(PREPOSITIONAL)]."),
+		span_notice("Кровь скапливается у разреза на [RU_PRE(limb)]."),
+		span_notice("Кровь скапливается у разреза на [RU_PRE(limb)]."),
+		span_notice("Кровь скапливается у разреза на [RU_PRE(limb)]."),
 	)
 
 /// Subtype for thick skinned creatures (Xenomorphs)
@@ -123,11 +123,11 @@
 	display_results(
 		surgeon,
 		limb.owner,
-		span_notice("Вы начинаете раздвигать кожу на [limb.declent_ru(PREPOSITIONAL)]..."),
-		span_notice("[surgeon] начинает раздвигать кожу на [limb.declent_ru(PREPOSITIONAL)]."),
-		span_notice("[surgeon] начинает раздвигать кожу на [limb.declent_ru(PREPOSITIONAL)]."),
+		span_notice("Вы начинаете раздвигать кожу на [RU_PRE(limb)]..."),
+		span_notice("[surgeon] начинает раздвигать кожу на [RU_PRE(limb)]."),
+		span_notice("[surgeon] начинает раздвигать кожу на [RU_PRE(limb)]."),
 	)
-	display_pain(limb.owner, "Вы чувствуете жгучую боль, распространяющуюся по всей вашей [limb.declent_ru(PREPOSITIONAL)], когда кожа раздвигается.")
+	display_pain(limb.owner, "Вы чувствуете жгучую боль, распространяющуюся по всей вашей [RU_PRE(limb)], когда кожа раздвигается.")
 
 /datum/surgery_operation/limb/retract_skin/on_success(obj/item/bodypart/limb)
 	. = ..()
@@ -192,11 +192,11 @@
 	display_results(
 		surgeon,
 		limb.owner,
-		span_notice("Вы начинаете прижигать разрез на [limb.declent_ru(PREPOSITIONAL)]..."),
-		span_notice("[surgeon] начинает прижигать разрез на [limb.declent_ru(PREPOSITIONAL)]."),
-		span_notice("[surgeon] начинает прижигать разрез на [limb.declent_ru(PREPOSITIONAL)]."),
+		span_notice("Вы начинаете прижигать разрез на [RU_PRE(limb)]..."),
+		span_notice("[surgeon] начинает прижигать разрез на [RU_PRE(limb)]."),
+		span_notice("[surgeon] начинает прижигать разрез на [RU_PRE(limb)]."),
 	)
-	display_pain(limb.owner, "Вашу [limb.declent_ru(PREPOSITIONAL)] начинают [istype(tool, /obj/item/stack/medical/suture) ? "сшивать" : "прижигать"]!")
+	display_pain(limb.owner, "Вашу [RU_PRE(limb)] начинают [istype(tool, /obj/item/stack/medical/suture) ? "сшивать" : "прижигать"]!")
 
 /datum/surgery_operation/limb/close_skin/on_success(obj/item/bodypart/limb, mob/living/surgeon, obj/item/tool, list/operation_args)
 	. = ..()
@@ -233,11 +233,11 @@
 	display_results(
 		surgeon,
 		limb.owner,
-		span_notice("Вы начинаете зажимать кровеносные сосуды в [limb.declent_ru(PREPOSITIONAL)]..."),
-		span_notice("[surgeon] начинает зажимать кровеносные сосуды в [limb.declent_ru(PREPOSITIONAL)]."),
-		span_notice("[surgeon] начинает зажимать кровеносные сосуды в [limb.declent_ru(PREPOSITIONAL)]."),
+		span_notice("Вы начинаете зажимать кровеносные сосуды в [RU_PRE(limb)]..."),
+		span_notice("[surgeon] начинает зажимать кровеносные сосуды в [RU_PRE(limb)]."),
+		span_notice("[surgeon] начинает зажимать кровеносные сосуды в [RU_PRE(limb)]."),
 	)
-	display_pain(limb.owner, "Вы чувствуете покалывание, когда кровотечение в вашей [limb.declent_ru(PREPOSITIONAL)] замедляется.")
+	display_pain(limb.owner, "Вы чувствуете покалывание, когда кровотечение в вашей [RU_PRE(limb)] замедляется.")
 
 /datum/surgery_operation/limb/clamp_bleeders/on_success(obj/item/bodypart/limb)
 	. = ..()
@@ -282,11 +282,11 @@
 	display_results(
 		surgeon,
 		limb.owner,
-		span_notice("Вы начинаете разжимать кровеносные сосуды в [limb.declent_ru(PREPOSITIONAL)]..."),
-		span_notice("[surgeon] начинает разжимать кровеносные сосуды в [limb.declent_ru(PREPOSITIONAL)]."),
-		span_notice("[surgeon] начинает разжимать кровеносные сосуды в [limb.declent_ru(PREPOSITIONAL)]."),
+		span_notice("Вы начинаете разжимать кровеносные сосуды в [RU_PRE(limb)]..."),
+		span_notice("[surgeon] начинает разжимать кровеносные сосуды в [RU_PRE(limb)]."),
+		span_notice("[surgeon] начинает разжимать кровеносные сосуды в [RU_PRE(limb)]."),
 	)
-	display_pain(limb.owner, "Вы чувствуете, как снижается давление, когда в [limb.declent_ru(PREPOSITIONAL)] начинает течь кровь.")
+	display_pain(limb.owner, "Вы чувствуете, как снижается давление, когда в [RU_PRE(limb)] начинает течь кровь.")
 
 /datum/surgery_operation/limb/unclamp_bleeders/on_success(obj/item/bodypart/limb)
 	. = ..()
@@ -340,11 +340,11 @@
 	display_results(
 		surgeon,
 		limb.owner,
-		span_notice("Вы начинаете пилить кости в [limb.declent_ru(PREPOSITIONAL)]..."),
-		span_notice("[surgeon] начинает пилить кости в [limb.declent_ru(PREPOSITIONAL)]."),
-		span_notice("[surgeon] начинает пилить кости в [limb.declent_ru(PREPOSITIONAL)]."),
+		span_notice("Вы начинаете пилить кости в [RU_PRE(limb)]..."),
+		span_notice("[surgeon] начинает пилить кости в [RU_PRE(limb)]."),
+		span_notice("[surgeon] начинает пилить кости в [RU_PRE(limb)]."),
 	)
-	display_pain(limb.owner, "Вы чувствуете, как ужасная боль распространяется по [limb.declent_ru(PREPOSITIONAL)]!")
+	display_pain(limb.owner, "Вы чувствуете, как ужасная боль распространяется по [RU_PRE(limb)]!")
 
 /datum/surgery_operation/limb/saw_bones/on_success(obj/item/bodypart/limb, mob/living/surgeon, obj/item/tool, list/operation_args)
 	. = ..()
@@ -353,11 +353,11 @@
 	display_results(
 		surgeon,
 		limb.owner,
-		span_notice("Вы распилили кости в [limb.declent_ru(PREPOSITIONAL)]."),
-		span_notice("[surgeon] распилил кости в [limb.declent_ru(PREPOSITIONAL)]!"),
-		span_notice("[surgeon] распилил кости в [limb.declent_ru(PREPOSITIONAL)]!"),
+		span_notice("Вы распилили кости в [RU_PRE(limb)]."),
+		span_notice("[surgeon] распилил кости в [RU_PRE(limb)]!"),
+		span_notice("[surgeon] распилил кости в [RU_PRE(limb)]!"),
 	)
-	display_pain(limb.owner, "Вы чувствуете, как будто что-то сломалось в [limb.declent_ru(PREPOSITIONAL)]!")
+	display_pain(limb.owner, "Вы чувствуете, как будто что-то сломалось в [RU_PRE(limb)]!")
 
 /// Fixes sawed bones back together
 /datum/surgery_operation/limb/fix_bones
@@ -395,11 +395,11 @@
 	display_results(
 		surgeon,
 		limb.owner,
-		span_notice("Вы начинаете лечить кости в [limb.declent_ru(PREPOSITIONAL)]..."),
-		span_notice("[surgeon] начинает лечить кости в [limb.declent_ru(PREPOSITIONAL)]."),
-		span_notice("[surgeon] начинает лечить кости в [limb.declent_ru(PREPOSITIONAL)]."),
+		span_notice("Вы начинаете лечить кости в [RU_PRE(limb)]..."),
+		span_notice("[surgeon] начинает лечить кости в [RU_PRE(limb)]."),
+		span_notice("[surgeon] начинает лечить кости в [RU_PRE(limb)]."),
 	)
-	display_pain(limb.owner, "Вы чувствуете скрежещущее ощущение в своей [limb.declent_ru(PREPOSITIONAL)], когда кости встают на место.")
+	display_pain(limb.owner, "Вы чувствуете скрежещущее ощущение в своей [RU_PRE(limb)], когда кости встают на место.")
 
 /datum/surgery_operation/limb/fix_bones/on_success(obj/item/bodypart/limb)
 	. = ..()
@@ -440,11 +440,11 @@
 	display_results(
 		surgeon,
 		limb.owner,
-		span_notice("Вы начинаете просверливать кость в [limb.declent_ru(PREPOSITIONAL)]..."),
-		span_notice("[surgeon] начинает просверливать кость в [limb.declent_ru(PREPOSITIONAL)]."),
-		span_notice("[surgeon] начинает просверливать кость в [limb.declent_ru(PREPOSITIONAL)]."),
+		span_notice("Вы начинаете просверливать кость в [RU_PRE(limb)]..."),
+		span_notice("[surgeon] начинает просверливать кость в [RU_PRE(limb)]."),
+		span_notice("[surgeon] начинает просверливать кость в [RU_PRE(limb)]."),
 	)
-	display_pain(limb.owner, "Вы чувствуете ужасную колющую боль в [limb.declent_ru(PREPOSITIONAL)]!")
+	display_pain(limb.owner, "Вы чувствуете ужасную колющую боль в [RU_PRE(limb)]!")
 
 /datum/surgery_operation/limb/drill_bones/on_success(obj/item/bodypart/limb, mob/living/surgeon, obj/item/tool, list/operation_args)
 	. = ..()
@@ -452,9 +452,9 @@
 	display_results(
 		surgeon,
 		limb.owner,
-		span_notice("Вы просверлили кость в [limb.declent_ru(PREPOSITIONAL)]."),
-		span_notice("[surgeon] просверлил кость в [limb.declent_ru(PREPOSITIONAL)]!"),
-		span_notice("[surgeon] просверлил кость в [limb.declent_ru(PREPOSITIONAL)]!"),
+		span_notice("Вы просверлили кость в [RU_PRE(limb)]."),
+		span_notice("[surgeon] просверлил кость в [RU_PRE(limb)]!"),
+		span_notice("[surgeon] просверлил кость в [RU_PRE(limb)]!"),
 	)
 
 /datum/surgery_operation/limb/incise_organs
@@ -492,11 +492,11 @@
 	display_results(
 		surgeon,
 		limb.owner,
-		span_notice("Вы начинаете делать разрез органа в [limb.declent_ru(PREPOSITIONAL)]..."),
-		span_notice("[surgeon] начинает делать разрез органа в [limb.declent_ru(PREPOSITIONAL)]."),
-		span_notice("[surgeon] начинает делать разрез органа в [limb.declent_ru(PREPOSITIONAL)]."),
+		span_notice("Вы начинаете делать разрез органа в [RU_PRE(limb)]..."),
+		span_notice("[surgeon] начинает делать разрез органа в [RU_PRE(limb)]."),
+		span_notice("[surgeon] начинает делать разрез органа в [RU_PRE(limb)]."),
 	)
-	display_pain(limb.owner, "Вы чувствуете покалывание в [limb.declent_ru(PREPOSITIONAL)].")
+	display_pain(limb.owner, "Вы чувствуете покалывание в [RU_PRE(limb)].")
 
 /datum/surgery_operation/limb/incise_organs/on_success(obj/item/bodypart/limb, mob/living/surgeon, obj/item/tool, list/operation_args)
 	. = ..()
@@ -505,11 +505,11 @@
 	display_results(
 		surgeon,
 		limb.owner,
-		span_notice("Вы сделали разрез органа в [limb.declent_ru(PREPOSITIONAL)]."),
-		span_notice("[surgeon] сделал надрез органа в [limb.declent_ru(PREPOSITIONAL)]!"),
-		span_notice("[surgeon] сделал надрез органа в [limb.declent_ru(PREPOSITIONAL)]!"),
+		span_notice("Вы сделали разрез органа в [RU_PRE(limb)]."),
+		span_notice("[surgeon] сделал надрез органа в [RU_PRE(limb)]!"),
+		span_notice("[surgeon] сделал надрез органа в [RU_PRE(limb)]!"),
 	)
-	display_pain(limb.owner, "Вы чувствуете острую боль внутри [limb.declent_ru(PREPOSITIONAL)]!")
+	display_pain(limb.owner, "Вы чувствуете острую боль внутри [RU_PRE(limb)]!")
 
 /datum/surgery_operation/limb/incise_organs/abductor
 	operation_flags = parent_type::operation_flags | OPERATION_IGNORE_CLOTHES | OPERATION_LOCKED  | OPERATION_NO_WIKI

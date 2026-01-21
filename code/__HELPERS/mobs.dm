@@ -626,36 +626,121 @@ GLOBAL_LIST_INIT(skin_tone_names, list(
 /mob/living/proc/parse_zone_with_bodypart(zone, case_id = NOMINATIVE)
     var/obj/item/bodypart/part = get_bodypart(zone)
     if(part)
-        return part.declent_plaintext_ru(case_id)
-    return parse_zone(zone)
+        // Новая система: используем declent_ru() вместо declent_plaintext_ru()
+        return declent_ru(part, case_id)
+    return parse_zone(zone, case_id)  // Передаём case_id дальше
 
-///Return a string for the specified body zone. Should be used for parsing non-instantiated bodyparts, otherwise use [/obj/item/bodypart/var/plaintext_zone]
-/proc/parse_zone(zone)
-	switch(zone)
-		if(BODY_ZONE_CHEST)
-			return "грудь"
-		if(BODY_ZONE_HEAD)
-			return "голова"
-		if(BODY_ZONE_PRECISE_R_HAND)
-			return "правая кисть"
-		if(BODY_ZONE_PRECISE_L_HAND)
-			return "левая кисть"
-		if(BODY_ZONE_L_ARM)
-			return "левая рука"
-		if(BODY_ZONE_R_ARM)
-			return "правая рука"
-		if(BODY_ZONE_L_LEG)
-			return "левая нога"
-		if(BODY_ZONE_R_LEG)
-			return "правая нога"
-		if(BODY_ZONE_PRECISE_L_FOOT)
-			return "левая ступня"
-		if(BODY_ZONE_PRECISE_R_FOOT)
-			return "правая ступня"
-		if(BODY_ZONE_PRECISE_GROIN)
-			return "паховая область"
-		else
-			return zone
+/// Return a string for the specified body zone with proper case.
+/proc/parse_zone(zone, case_id = NOMINATIVE)
+    // Сначала получаем базовое название зоны
+    var/zone_name = get_base_zone_name(zone)
+
+    // Если нужно склонение (не именительный падеж), склоняем
+    if(case_id != NOMINATIVE && zone_name)
+        return decline_bodypart_name(zone_name, case_id)
+
+    return zone_name || zone
+
+/// Get base name for body zone (nominative case).
+/proc/get_base_zone_name(zone)
+    switch(zone)
+        if(BODY_ZONE_CHEST)
+            return "грудь"
+        if(BODY_ZONE_HEAD)
+            return "голова"
+        if(BODY_ZONE_PRECISE_R_HAND)
+            return "правая кисть"
+        if(BODY_ZONE_PRECISE_L_HAND)
+            return "левая кисть"
+        if(BODY_ZONE_L_ARM)
+            return "левая рука"
+        if(BODY_ZONE_R_ARM)
+            return "правая рука"
+        if(BODY_ZONE_L_LEG)
+            return "левая нога"
+        if(BODY_ZONE_R_LEG)
+            return "правая нога"
+        if(BODY_ZONE_PRECISE_L_FOOT)
+            return "левая ступня"
+        if(BODY_ZONE_PRECISE_R_FOOT)
+            return "правая ступня"
+        if(BODY_ZONE_PRECISE_GROIN)
+            return "паховая область"
+    return null
+
+/// Decline bodypart name for specified case.
+/proc/decline_bodypart_name(base_name, case_id)
+    // Простые правила склонения для частей тела
+    // Можно расширить для более сложных случаев
+
+    var/list/parts = splittext(base_name, " ")
+    if(length(parts) == 2)
+        // Составные имена: "левая рука"
+        var/adjective = parts[1]  // "левая"
+        var/noun = parts[2]       // "рука"
+
+        // Склоняем только существительную часть
+        var/declined_noun = decline_simple_noun(noun, case_id)
+        return "[adjective] [declined_noun]"
+    else
+        // Простые имена: "голова", "грудь"
+        return decline_simple_noun(base_name, case_id)
+
+/// Simple noun declension rules for body parts.
+/proc/decline_simple_noun(noun, case_id)
+    switch(noun)
+        if("голова")
+            switch(case_id)
+                if(GENITIVE) return "головы"
+                if(DATIVE) return "голове"
+                if(ACCUSATIVE) return "голову"
+                if(INSTRUMENTAL) return "головой"
+                if(PREPOSITIONAL) return "голове"
+        if("рука")
+            switch(case_id)
+                if(GENITIVE) return "руки"
+                if(DATIVE) return "руке"
+                if(ACCUSATIVE) return "руку"
+                if(INSTRUMENTAL) return "рукой"
+                if(PREPOSITIONAL) return "руке"
+        if("нога")
+            switch(case_id)
+                if(GENITIVE) return "ноги"
+                if(DATIVE) return "ноге"
+                if(ACCUSATIVE) return "ногу"
+                if(INSTRUMENTAL) return "ногой"
+                if(PREPOSITIONAL) return "ноге"
+        if("кисть")
+            switch(case_id)
+                if(GENITIVE) return "кисти"
+                if(DATIVE) return "кисти"
+                if(ACCUSATIVE) return "кисть"
+                if(INSTRUMENTAL) return "кистью"
+                if(PREPOSITIONAL) return "кисти"
+        if("ступня")
+            switch(case_id)
+                if(GENITIVE) return "ступни"
+                if(DATIVE) return "ступне"
+                if(ACCUSATIVE) return "ступню"
+                if(INSTRUMENTAL) return "ступнёй"
+                if(PREPOSITIONAL) return "ступне"
+        if("грудь")
+            switch(case_id)
+                if(GENITIVE) return "груди"
+                if(DATIVE) return "груди"
+                if(ACCUSATIVE) return "грудь"
+                if(INSTRUMENTAL) return "грудью"
+                if(PREPOSITIONAL) return "груди"
+        if("паховая область")
+            switch(case_id)
+                if(GENITIVE) return "паховой области"
+                if(DATIVE) return "паховой области"
+                if(ACCUSATIVE) return "паховую область"
+                if(INSTRUMENTAL) return "паховой областью"
+                if(PREPOSITIONAL) return "паховой области"
+
+    // Если не нашли правило, возвращаем как есть (для английских названий)
+    return noun
 
 ///Takes a zone and returns its "parent" zone, if it has one.
 /proc/deprecise_zone(precise_zone)

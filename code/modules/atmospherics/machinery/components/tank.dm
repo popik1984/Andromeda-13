@@ -810,7 +810,7 @@
 	if(construction_state != TANK_FRAME)
 		return
 	. = TRUE
-	to_chat(user, span_notice("Вы начинаете разбирать [declent_ru(ACCUSATIVE)]."))
+	to_chat(user, span_notice("Вы начинаете разбирать [RU_SRC_ACC]."))
 	if(!tool.use_tool(src, user, 1 SECONDS))
 		return
 	deconstruct(TRUE)
@@ -826,7 +826,7 @@
 		return
 
 	. = TRUE
-	to_chat(user, span_notice("Вы начинаете добавлять [stack] к [declent_ru(DATIVE)]..."))
+	to_chat(user, span_notice("Вы начинаете добавлять [stack] к [RU_SRC_DAT]..."))
 	if(!stack.use_tool(src, user, 3 SECONDS))
 		return
 	if(!stack.use(TANK_PLATING_SHEETS))
@@ -844,13 +844,13 @@
 				amount_more = "совсем немного больше"
 			else
 				amount_more = "неопределённое количество"
-		to_chat(user, span_notice("У вас недостаточно [stack.declent_ru(GENITIVE)], чтобы добавить всю обшивку. Может, нужно [amount_more]."))
+		to_chat(user, span_notice("У вас недостаточно [RU_GEN(stack)], чтобы добавить всю обшивку. Может, нужно [amount_more]."))
 		return
 
 	material_end_product = stack_mat
 	construction_state = TANK_PLATING_UNSECURED
 	update_appearance(UPDATE_ICON)
-	to_chat(user, span_notice("Вы заканчиваете прикреплять [stack] к [declent_ru(DATIVE)]."))
+	to_chat(user, span_notice("Вы заканчиваете прикреплять [stack] к [RU_SRC_DAT]."))
 
 /obj/structure/tank_frame/crowbar_act_secondary(mob/living/user, obj/item/tool)
 	. = ..()
@@ -871,7 +871,7 @@
 		return
 	. = TRUE
 	if(!anchored)
-		to_chat(user, span_notice("Вам нужно <b>прикрутить</b> [declent_ru(ACCUSATIVE)] к полу, прежде чем закончить."))
+		to_chat(user, span_notice("Вам нужно <b>прикрутить</b> [RU_SRC_ACC] к полу, прежде чем закончить."))
 		return
 	if(!tool.tool_start_check(user, amount = 0, heat_required = HIGH_TEMPERATURE_REQUIRED))
 		return

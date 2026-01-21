@@ -152,7 +152,7 @@
 
 /obj/machinery/atmospherics/miner/attack_ai(mob/living/silicon/user)
 	if(broken)
-		to_chat(user, "[declent_ru(NOMINATIVE)] кажется сломанным. Его отладочный интерфейс выводит: [broken_message]")
+		to_chat(user, "[RU_SRC_NOM] кажется сломанным. Его отладочный интерфейс выводит: [broken_message]")
 	..()
 
 /obj/machinery/atmospherics/miner/n2o

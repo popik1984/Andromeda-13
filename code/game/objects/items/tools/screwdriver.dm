@@ -63,7 +63,7 @@
 	)
 
 /obj/item/screwdriver/suicide_act(mob/living/user)
-	user.visible_message(span_suicide("[user] вонзает [src.declent_ru(ACCUSATIVE)] себе в [pick("висок", "сердце")]! Похоже, [user.p_theyre()] пытается совершить суицид!"))
+	user.visible_message(span_suicide("[RU_USER_NOM] вонзает [RU_SRC_ACC] себе в [pick("висок", "сердце")]! Похоже, [GEND_HE_SHE(user)] пытается совершить суицид!"))
 	return BRUTELOSS
 
 /obj/item/screwdriver/Initialize(mapload)
@@ -177,9 +177,9 @@
 
 /obj/item/screwdriver/power/suicide_act(mob/living/user)
 	if(tool_behaviour == TOOL_SCREWDRIVER)
-		user.visible_message(span_suicide("[user] приставляет [src.declent_ru(ACCUSATIVE)] к своему виску! Похоже, [user.p_theyre()] пытается совершить суицид!"))
+		user.visible_message(span_suicide("[RU_USER_NOM] приставляет [RU_SRC_ACC] к своему виску! Похоже, [GEND_HE_SHE(user)] пытается совершить суицид!"))
 	else
-		user.visible_message(span_suicide("[user] прижимает [src.declent_ru(ACCUSATIVE)] к своей голове! Похоже, [user.p_theyre()] пытается совершить суицид!"))
+		user.visible_message(span_suicide("[RU_USER_NOM] прижимает [RU_SRC_ACC] к своей голове! Похоже, [GEND_HE_SHE(user)] пытается совершить суицид!"))
 	playsound(loc, 'sound/items/tools/drill_use.ogg', 50, TRUE, -1)
 	return BRUTELOSS
 

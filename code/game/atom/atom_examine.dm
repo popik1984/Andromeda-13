@@ -116,7 +116,7 @@
 	var/mats_list = list()
 	for(var/custom_material in custom_materials)
 		var/datum/material/current_material = GET_MATERIAL_REF(custom_material)
-		mats_list += span_tooltip("Объект сделан из [current_material.declent_ru(GENITIVE)].", current_material.declent_ru(GENITIVE))
+		mats_list += span_tooltip("Объект сделан из [RU_GEN(current_material)].", RU_GEN(current_material))
 	. += "из [english_list(mats_list)]"
 
 /**
@@ -151,7 +151,7 @@
 	if(!isnull(override[EXAMINE_POSITION_BEFORE]))
 		override -= null // Нет артикля, не пытаться объединить
 		return "[jointext(override, " ")]"
-	return "[declent_ru(declent)]"
+	return RU_SRC(declent)
 
 /mob/living/get_examine_name(mob/user)
 	var/visible_name = get_visible_name()
@@ -195,4 +195,4 @@
  * * force_real_name - Если TRUE, всегда возвращает real_name и добавляет (как face_name/id_name), если оно не соответствует внешности
  */
 /atom/proc/get_visible_name(add_id_name = TRUE, force_real_name = FALSE, declent = NOMINATIVE)
-	return declent_ru(declent)
+	return RU_SRC(declent)

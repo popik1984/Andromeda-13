@@ -61,7 +61,7 @@
 					neckgrab_throw = TRUE
 				stop_pulling()
 				if(HAS_TRAIT(src, TRAIT_PACIFISM) || HAS_TRAIT(src, TRAIT_NO_THROWING))
-					to_chat(src, span_notice("Вы аккуратно отпускаете [throwable_mob.declent_ru(ACCUSATIVE)]."))
+					to_chat(src, span_notice("Вы аккуратно отпускаете [RU_ACC(throwable_mob)]."))
 					return FALSE
 	else
 		thrown_thing = held_item.on_thrown(src, target)
@@ -107,8 +107,8 @@
 	frequency_number = frequency_number + (rand(-5,5)/100); //Adds a bit of randomness in the frequency to not sound exactly the same.
 	//The volume of the sound takes the minimum between the distance thrown or the max range an item, but no more than 50. Short throws are quieter. A fast throwing speed also makes the noise sharper.
 	playsound(src, throwsound, clamp(8*min(get_dist(loc,target),thrown_thing.throw_range), 10, 50), vary = TRUE, extrarange = -1, frequency = frequency_number)
-	visible_message(span_danger("[declent_ru(NOMINATIVE)] [verb_text] [thrown_thing.declent_ru(ACCUSATIVE)][power_throw_text]"), \
-					span_danger("Вы бросаете [thrown_thing.declent_ru(ACCUSATIVE)][power_throw_text]"))
+	visible_message(span_danger("[RU_SRC_NOM] [verb_text] [RU_ACC(thrown_thing)][power_throw_text]"), \
+					span_danger("Вы бросаете [RU_ACC(thrown_thing)][power_throw_text]"))
 	log_message("has thrown [thrown_thing] [power_throw_text]", LOG_ATTACK)
 
 	var/drift_force = max(0.5 NEWTONS, 1 NEWTONS + power_throw)
@@ -145,25 +145,25 @@
 	if(offered)
 		if(offered == src)
 			if(!swap_hand(get_inactive_hand_index())) //have to swap hands first to take something
-				to_chat(src, span_warning("Вы пытаетесь взять [offered_item.declent_ru(ACCUSATIVE)] у себя, но не можете."))
+				to_chat(src, span_warning("Вы пытаетесь взять [RU_ACC(offered_item)] у себя, но не можете."))
 				return
 			if(!put_in_active_hand(offered_item))
-				to_chat(src, span_warning("Вы пытаетесь взять [offered_item.declent_ru(ACCUSATIVE)] у себя, но не можете."))
+				to_chat(src, span_warning("Вы пытаетесь взять [RU_ACC(offered_item)] у себя, но не можете."))
 				return
 			else
-				to_chat(src, span_notice("Вы берёте [offered_item.declent_ru(ACCUSATIVE)] у себя."))
+				to_chat(src, span_notice("Вы берёте [RU_ACC(offered_item)] у себя."))
 				return
 
 		if(IS_DEAD_OR_INCAP(offered))
-			to_chat(src, span_warning("[offered] не может ничего взять в текущем состоянии!"))
+			to_chat(src, span_warning("[RU_NOM(offered)] не может ничего взять в текущем состоянии!"))
 			return
 
 		if(!offered.IsReachableBy(src))
-			to_chat(src, span_warning("Вы должны быть рядом с [offered.declent_ru(INSTRUMENTAL)]!"))
+			to_chat(src, span_warning("Вы должны быть рядом с [RU_INS(offered)]!"))
 			return
 
 		if(!HAS_TRAIT(offered, TRAIT_CAN_HOLD_ITEMS))
-			to_chat(src, span_warning("[offered] не может держать то, что вы предлагаете!"))
+			to_chat(src, span_warning("[RU_NOM(offered)] не может держать то, что вы предлагаете!"))
 			return
 	else if(!(locate(/mob/living) in orange(1, src)))
 		to_chat(src, span_warning("Рядом никого нет, чтобы взять это!"))
@@ -173,8 +173,8 @@
 		return
 
 	balloon_alert_to_viewers("предлагает предмет")
-	visible_message(span_notice("[declent_ru(NOMINATIVE)] предлагает [offered ? "[offered.declent_ru(DATIVE)] " : ""][offered_item.declent_ru(ACCUSATIVE)]."), \
-					span_notice("Вы предлагаете [offered ? "[offered.declent_ru(DATIVE)] " : ""][offered_item.declent_ru(ACCUSATIVE)]."), null, 2)
+	visible_message(span_notice("[RU_SRC_NOM] предлагает [offered ? "[RU_DAT(offered)] " : ""][RU_ACC(offered_item)]."), \
+					span_notice("Вы предлагаете [offered ? "[RU_DAT(offered)] " : ""][RU_ACC(offered_item)]."), null, 2)
 
 	apply_status_effect(/datum/status_effect/offering, offered_item, null, offered)
 
@@ -193,10 +193,10 @@
 		to_chat(src, span_warning("Вы не можете ничего брать в текущем состоянии!"))
 		return
 	if(get_dist(src, offerer) > 1)
-		to_chat(src, span_warning("[offerer] слишком далеко!"))
+		to_chat(src, span_warning("[RU_SRC_NOM] слишком далеко!"))
 		return
 	if(!offered_item || offerer.get_active_held_item() != offered_item)
-		to_chat(src, span_warning("[offerer] больше не держит предлагаемый предмет!"))
+		to_chat(src, span_warning("[RU_SRC_NOM] больше не держит предлагаемый предмет!"))
 		return
 	if(!get_empty_held_indexes())
 		to_chat(src, span_warning("У вас нет свободных рук!"))
@@ -206,11 +206,11 @@
 		return
 
 	if(!offerer.temporarilyRemoveItemFromInventory(offered_item))
-		visible_message(span_notice("[offerer] пытается передать [offered_item.declent_ru(ACCUSATIVE)], но предмет прилип..."))
+		visible_message(span_notice("[RU_SRC_NOM] пытается передать [RU_ACC(offered_item)], но предмет прилип..."))
 		return
 
-	visible_message(span_notice("[declent_ru(NOMINATIVE)] берёт [offered_item.declent_ru(ACCUSATIVE)] у [offerer.declent_ru(GENITIVE)]."), \
-					span_notice("Вы берёте [offered_item.declent_ru(ACCUSATIVE)] у [offerer.declent_ru(GENITIVE)]."))
+	visible_message(span_notice("[RU_SRC_NOM] берёт [RU_ACC(offered_item)] у [RU_GEN(offerer)]."), \
+					span_notice("Вы берёте [RU_ACC(offered_item)] у [RU_GEN(offerer)]."))
 	offered_item.do_pickup_animation(src, offerer)
 	put_in_hands(offered_item)
 

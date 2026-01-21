@@ -509,12 +509,12 @@
 	user.changeNext_move(CLICK_CD_MELEE)
 
 	if(!user.combat_mode)
-		user.visible_message(span_notice("[user] стучит по [declent_ru(DATIVE)]."), \
-			span_notice("Вы стучите по [declent_ru(DATIVE)]."))
+		user.visible_message(span_notice("[user] стучит по [RU_SRC_DAT]."), \
+			span_notice("Вы стучите по [RU_SRC_DAT]."))
 		playsound(src, knock_sound, 50, TRUE)
 	else
-		user.visible_message(span_warning("[user] бьёт [declent_ru(NOMINATIVE)]!"), \
-			span_warning("Вы бьёте [declent_ru(NOMINATIVE)]!"))
+		user.visible_message(span_warning("[user] бьёт [RU_SRC_NOM]!"), \
+			span_warning("Вы бьёте [RU_SRC_NOM]!"))
 		playsound(src, bash_sound, 100, TRUE)
 
 /obj/machinery/door/firedoor/wrench_act(mob/living/user, obj/item/tool)
@@ -526,21 +526,21 @@
 		to_chat(user, span_notice("Винты фиксируют болты на месте!"))
 		return ITEM_INTERACT_SUCCESS
 	tool.play_tool_sound(src)
-	user.visible_message(span_notice("[user] начинает откручивать болты [declent_ru(DATIVE)]..."), \
-		span_notice("Вы начинаете откручивать напольные болты [declent_ru(DATIVE)]..."))
+	user.visible_message(span_notice("[user] начинает откручивать болты [RU_SRC_DAT]..."), \
+		span_notice("Вы начинаете откручивать напольные болты [RU_SRC_DAT]..."))
 	if(!tool.use_tool(src, user, DEFAULT_STEP_TIME))
 		return ITEM_INTERACT_SUCCESS
 	playsound(get_turf(src), 'sound/items/deconstruct.ogg', 50, TRUE)
-	user.visible_message(span_notice("[user] откручивает болты [declent_ru(DATIVE)]."), \
-		span_notice("Вы откручиваете напольные болты [declent_ru(DATIVE)]."))
+	user.visible_message(span_notice("[user] откручивает болты [RU_SRC_DAT]."), \
+		span_notice("Вы откручиваете напольные болты [RU_SRC_DAT]."))
 	deconstruct(TRUE)
 	return ITEM_INTERACT_SUCCESS
 
 /obj/machinery/door/firedoor/screwdriver_act(mob/living/user, obj/item/tool)
 	if(operating || !welded)
 		return FALSE
-	user.visible_message(span_notice("[user] [boltslocked ? "разблокирует" : "блокирует"] болты [declent_ru(DATIVE)]."), \
-				span_notice("Вы [boltslocked ? "разблокируете" : "блокируете"] напольные болты [declent_ru(DATIVE)]."))
+	user.visible_message(span_notice("[user] [boltslocked ? "разблокирует" : "блокирует"] болты [RU_SRC_DAT]."), \
+				span_notice("Вы [boltslocked ? "разблокируете" : "блокируете"] напольные болты [RU_SRC_DAT]."))
 	tool.play_tool_sound(src)
 	boltslocked = !boltslocked
 	return ITEM_INTERACT_SUCCESS
@@ -551,10 +551,10 @@
 /obj/machinery/door/firedoor/try_to_weld_secondary(obj/item/weldingtool/W, mob/user)
 	if(!W.tool_start_check(user, amount=1))
 		return
-	user.visible_message(span_notice("[user] начинает [welded ? "разваривать" : "заваривать"] [declent_ru(NOMINATIVE)]."), span_notice("Вы начинаете заваривать [declent_ru(NOMINATIVE)]."))
+	user.visible_message(span_notice("[user] начинает [welded ? "разваривать" : "заваривать"] [RU_SRC_NOM]."), span_notice("Вы начинаете заваривать [RU_SRC_NOM]."))
 	if(W.use_tool(src, user, DEFAULT_STEP_TIME, volume=50))
 		welded = !welded
-		user.visible_message(span_danger("[user] [welded?"заваривает":"разваривает"] [declent_ru(NOMINATIVE)]."), span_notice("Вы [welded ? "завариваете" : "развариваете"] [declent_ru(NOMINATIVE)]."))
+		user.visible_message(span_danger("[user] [welded?"заваривает":"разваривает"] [RU_SRC_NOM]."), span_notice("Вы [welded ? "завариваете" : "развариваете"] [RU_SRC_NOM]."))
 		user.log_message("[welded ? "welded":"unwelded"] firedoor [src] with [W].", LOG_GAME)
 		update_appearance()
 		correct_state()
@@ -883,15 +883,15 @@
 		if(CONSTRUCTION_PANEL_OPEN)
 			if(attacking_object.tool_behaviour == TOOL_CROWBAR)
 				attacking_object.play_tool_sound(src)
-				user.visible_message(span_notice("[user] начинает извлекать плату из [declent_ru(GENITIVE)]..."), \
-					span_notice("Вы начинаете вынимать плату из [declent_ru(GENITIVE)]..."))
+				user.visible_message(span_notice("[user] начинает извлекать плату из [RU_SRC_GEN]..."), \
+					span_notice("Вы начинаете вынимать плату из [RU_SRC_GEN]..."))
 				if(!attacking_object.use_tool(src, user, DEFAULT_STEP_TIME))
 					return
 				if(constructionStep != CONSTRUCTION_PANEL_OPEN)
 					return
 				playsound(get_turf(src), 'sound/items/deconstruct.ogg', 50, TRUE)
-				user.visible_message(span_notice("[user] извлекает плату из [declent_ru(GENITIVE)]."), \
-					span_notice("Вы извлекаете плату из [declent_ru(GENITIVE)]."))
+				user.visible_message(span_notice("[user] извлекает плату из [RU_SRC_GEN]."), \
+					span_notice("Вы извлекаете плату из [RU_SRC_GEN]."))
 				new /obj/item/electronics/firelock(drop_location())
 				constructionStep = CONSTRUCTION_NO_CIRCUIT
 				update_appearance()
@@ -901,8 +901,8 @@
 					to_chat(user, span_warning("Здесь уже есть пожарный шлюз."))
 					return
 				attacking_object.play_tool_sound(src)
-				user.visible_message(span_notice("[user] начинает прикручивать [declent_ru(NOMINATIVE)]..."), \
-					span_notice("Вы начинаете прикручивать [declent_ru(NOMINATIVE)]..."))
+				user.visible_message(span_notice("[user] начинает прикручивать [RU_SRC_NOM]..."), \
+					span_notice("Вы начинаете прикручивать [RU_SRC_NOM]..."))
 				if(!attacking_object.use_tool(src, user, DEFAULT_STEP_TIME))
 					return
 				if(locate(/obj/machinery/door/firedoor) in get_turf(src))
@@ -922,38 +922,38 @@
 				return
 			if(istype(attacking_object, /obj/item/stack/sheet/plasteel))
 				if(directional)
-					to_chat(user, span_warning("[declent_ru(NOMINATIVE)] нельзя укрепить."))
+					to_chat(user, span_warning("[RU_SRC_NOM] нельзя укрепить."))
 					return
 				var/obj/item/stack/sheet/plasteel/plasteel_sheet = attacking_object
 				if(reinforced)
-					to_chat(user, span_warning("[declent_ru(NOMINATIVE)] уже укреплена."))
+					to_chat(user, span_warning("[RU_SRC_NOM] уже укреплена."))
 					return
 				if(plasteel_sheet.get_amount() < 2)
-					to_chat(user, span_warning("Вам нужно больше пластали, чтобы укрепить [declent_ru(NOMINATIVE)]."))
+					to_chat(user, span_warning("Вам нужно больше пластали, чтобы укрепить [RU_SRC_NOM]."))
 					return
-				user.visible_message(span_notice("[user] начинает укреплять [declent_ru(NOMINATIVE)]..."), \
-					span_notice("Вы начинаете укреплять [declent_ru(NOMINATIVE)]..."))
+				user.visible_message(span_notice("[user] начинает укреплять [RU_SRC_NOM]..."), \
+					span_notice("Вы начинаете укреплять [RU_SRC_NOM]..."))
 				playsound(get_turf(src), 'sound/items/deconstruct.ogg', 50, TRUE)
 				if(do_after(user, DEFAULT_STEP_TIME, target = src))
 					if(constructionStep != CONSTRUCTION_PANEL_OPEN || reinforced || plasteel_sheet.get_amount() < 2 || !plasteel_sheet)
 						return
-					user.visible_message(span_notice("[user] укрепляет [declent_ru(NOMINATIVE)]."), \
-						span_notice("Вы укрепляете [declent_ru(NOMINATIVE)]."))
+					user.visible_message(span_notice("[user] укрепляет [RU_SRC_NOM]."), \
+						span_notice("Вы укрепляете [RU_SRC_NOM]."))
 					playsound(get_turf(src), 'sound/items/deconstruct.ogg', 50, TRUE)
 					plasteel_sheet.use(2)
 					reinforced = 1
 				return
 		if(CONSTRUCTION_NO_CIRCUIT)
 			if(istype(attacking_object, /obj/item/electronics/firelock))
-				user.visible_message(span_notice("[user] начинает добавлять [attacking_object] в [declent_ru(NOMINATIVE)]..."), \
-					span_notice("Вы начинаете вставлять микросхему в [declent_ru(NOMINATIVE)]..."))
+				user.visible_message(span_notice("[user] начинает добавлять [attacking_object] в [RU_SRC_NOM]..."), \
+					span_notice("Вы начинаете вставлять микросхему в [RU_SRC_NOM]..."))
 				playsound(get_turf(src), 'sound/items/deconstruct.ogg', 50, TRUE)
 				if(!do_after(user, DEFAULT_STEP_TIME, target = src))
 					return
 				if(constructionStep != CONSTRUCTION_NO_CIRCUIT)
 					return
 				qdel(attacking_object)
-				user.visible_message(span_notice("[user] добавляет схему в [declent_ru(NOMINATIVE)]."), \
+				user.visible_message(span_notice("[user] добавляет схему в [RU_SRC_NOM]."), \
 					span_notice("Вы вставляете и закрепляете [attacking_object]."))
 				playsound(get_turf(src), 'sound/items/deconstruct.ogg', 50, TRUE)
 				constructionStep = CONSTRUCTION_PANEL_OPEN
@@ -962,14 +962,14 @@
 			if(attacking_object.tool_behaviour == TOOL_WELDER)
 				if(!attacking_object.tool_start_check(user, amount=1))
 					return
-				user.visible_message(span_notice("[user] начинает разрезать раму [declent_ru(GENITIVE)]..."), \
-					span_notice("Вы начинаете разрезать [declent_ru(NOMINATIVE)] на части..."))
+				user.visible_message(span_notice("[user] начинает разрезать раму [RU_SRC_GEN]..."), \
+					span_notice("Вы начинаете разрезать [RU_SRC_NOM] на части..."))
 
 				if(attacking_object.use_tool(src, user, DEFAULT_STEP_TIME, volume=50))
 					if(constructionStep != CONSTRUCTION_NO_CIRCUIT)
 						return
-					user.visible_message(span_notice("[user] разрезает [declent_ru(NOMINATIVE)]!"), \
-						span_notice("Вы разрезаете [declent_ru(NOMINATIVE)] на металл."))
+					user.visible_message(span_notice("[user] разрезает [RU_SRC_NOM]!"), \
+						span_notice("Вы разрезаете [RU_SRC_NOM] на металл."))
 					var/turf/targetloc = get_turf(src)
 					new /obj/item/stack/sheet/iron(targetloc, directional ? 2 : 3)
 					if(reinforced)
@@ -980,7 +980,7 @@
 				var/obj/item/electroadaptive_pseudocircuit/raspberrypi = attacking_object
 				if(!raspberrypi.adapt_circuit(user, circuit_cost = DEFAULT_STEP_TIME * 0.0005 * STANDARD_CELL_CHARGE))
 					return
-				user.visible_message(span_notice("[user] создаёт схему и помещает её в [declent_ru(NOMINATIVE)]."), \
+				user.visible_message(span_notice("[user] создаёт схему и помещает её в [RU_SRC_NOM]."), \
 				span_notice("Вы адаптируете схему пожарного шлюза и вставляете её в сборку."))
 				constructionStep = CONSTRUCTION_PANEL_OPEN
 				update_appearance()

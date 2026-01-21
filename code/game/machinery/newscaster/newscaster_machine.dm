@@ -505,7 +505,7 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/machinery/newscaster, 30)
 		if(!user.temporarilyRemoveItemFromInventory(attacking_item))
 			return
 		paper_remaining++
-		to_chat(user, span_notice("Вы вставляете [attacking_item.declent_ru(ACCUSATIVE)] в [declent_ru(ACCUSATIVE)]! Теперь в нём [paper_remaining] листов бумаги."))
+		to_chat(user, span_notice("Вы вставляете [RU_ACC(attacking_item)] в [RU_SRC_ACC]! Теперь в нём [paper_remaining] лист[DECL_CREDIT(paper_remaining)] бумаги."))
 		qdel(attacking_item)
 		return
 	return ..()

@@ -84,7 +84,7 @@
 	var/obj/item/organ/lungs/L = user.get_organ_slot(ORGAN_SLOT_LUNGS)
 
 	if(can_use(user) && L)
-		user.visible_message(span_suicide("[user] вдыхает тонер из [declent_ru(GENITIVE)]! Похоже, [user.p_theyre()] пытается совершить суицид!"))
+		user.visible_message(span_suicide("[RU_USER_NOM] вдыхает тонер из [RU_SRC_GEN]! Похоже, [GEND_HE_SHE(user)] пытается совершить суицид!"))
 		use(user)
 
 		// Once you've inhaled the toner, you throw up your lungs
@@ -110,20 +110,20 @@
 
 		// TODO maybe add some colorful vomit?
 
-		user.visible_message(span_suicide("[user] выплёвывает [user.p_their()] [L.declent_ru(ACCUSATIVE)]!"))
+		user.visible_message(span_suicide("[RU_USER_NOM] выплёвывает [RU_ACC(L)]!"))
 		playsound(user.loc, 'sound/effects/splat.ogg', 50, TRUE)
 
 		L.forceMove(T)
 
 		return (TOXLOSS|OXYLOSS)
 	else if(can_use(user) && !L)
-		user.visible_message(span_suicide("[user] распыляет на себя тонер из [declent_ru(GENITIVE)]! Похоже, [user.p_theyre()] пытается совершить суицид."))
+		user.visible_message(span_suicide("[RU_USER_NOM] распыляет на себя тонер из [RU_SRC_GEN]! Похоже, [GEND_HE_SHE(user)] пытается совершить суицид."))
 		user.reagents.add_reagent(/datum/reagent/colorful_reagent, 1)
 		user.reagents.expose(user, TOUCH, 1)
 		return TOXLOSS
 
 	else
-		user.visible_message(span_suicide("[user] пытается вдохнуть тонер из [declent_ru(GENITIVE)]! Это могло бы быть попыткой суицида, если бы в [declent_ru(PREPOSITIONAL)] был тонер."))
+		user.visible_message(span_suicide("[RU_USER_NOM] пытается вдохнуть тонер из [RU_SRC_GEN]! Это могло бы быть попыткой суицида, если бы в [RU_SRC_PRE] был тонер."))
 		return SHAME
 
 
@@ -144,11 +144,11 @@
 /obj/item/airlock_painter/attackby(obj/item/W, mob/user, list/modifiers, list/attack_modifiers)
 	if(istype(W, /obj/item/toner))
 		if(ink)
-			to_chat(user, span_warning("[declent_ru(NOMINATIVE)] уже содержит [ink.declent_ru(ACCUSATIVE)]!"))
+			to_chat(user, span_warning("[RU_SRC_NOM] уже содержит [RU_ACC(ink)]!"))
 			return
 		if(!user.transferItemToLoc(W, src))
 			return
-		to_chat(user, span_notice("Вы устанавливаете [W.declent_ru(ACCUSATIVE)] в [declent_ru(ACCUSATIVE)]."))
+		to_chat(user, span_notice("Вы устанавливаете [RU_ACC(W)] в [RU_SRC_ACC]."))
 		ink = W
 		playsound(src.loc, 'sound/machines/click.ogg', 50, TRUE)
 	else
@@ -161,6 +161,6 @@
 	playsound(src.loc, 'sound/machines/click.ogg', 50, TRUE)
 	ink.forceMove(user.drop_location())
 	user.put_in_hands(ink)
-	to_chat(user, span_notice("Вы извлекаете [ink.declent_ru(ACCUSATIVE)] из [declent_ru(GENITIVE)]."))
+	to_chat(user, span_notice("Вы извлекаете [RU_ACC(ink)] из [RU_SRC_GEN]."))
 	ink = null
 	return CLICK_ACTION_SUCCESS

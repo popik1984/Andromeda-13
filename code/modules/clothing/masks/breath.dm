@@ -30,7 +30,7 @@
 	)
 
 /obj/item/clothing/mask/breath/suicide_act(mob/living/carbon/user)
-	user.visible_message(span_suicide("[user] оборачивает трубку [declent_ru(GENITIVE)] вокруг своей шеи! Похоже, [user.p_theyre()] пытается совершить суицид!"))
+	user.visible_message(span_suicide("[user] оборачивает трубку [RU_SRC_GEN] вокруг своей шеи! Похоже, [user.p_theyre()] пытается совершить суицид!"))
 	return OXYLOSS
 
 /obj/item/clothing/mask/breath/attack_self(mob/user)
@@ -46,7 +46,7 @@
 /obj/item/clothing/mask/breath/examine(mob/user)
 	. = ..()
 	if(adjustable)
-		. += span_notice("[EXAMINE_HINT("Альт-клик")] по [declent_ru(DATIVE)], чтобы отрегулировать её.")
+		. += span_notice("[EXAMINE_HINT("Альт-клик")] по [RU_SRC_DAT], чтобы отрегулировать её.")
 
 /obj/item/clothing/mask/breath/medical
 	desc = "Плотная стерильная маска, которую можно подключить к источнику воздуха."

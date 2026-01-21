@@ -200,7 +200,7 @@
 /obj/item/stock_parts/power_store/examine(mob/user)
 	. = ..()
 	if(rigged)
-		. += span_danger("Эта [declent_ru(NOMINATIVE)] кажется неисправной!")
+		. += span_danger("Эта [RU_SRC_NOM] кажется неисправной!")
 	else if(!isnull(charge_light_type))
 		. += "Индикатор заряда показывает [CEILING(percent(), 0.1)]%." //чтобы не говорило 0% заряда, когда оверлей показывает что заряд ещё есть
 

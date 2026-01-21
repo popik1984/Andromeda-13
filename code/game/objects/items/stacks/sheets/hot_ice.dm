@@ -20,5 +20,5 @@
 	)
 
 /obj/item/stack/sheet/hot_ice/suicide_act(mob/living/carbon/user)
-	user.visible_message(span_suicide("[user] начинает облизывать [declent_ru(NOMINATIVE)]! Похоже, [GEND_HE_SHE(user)] пытается покончить с собой!"))
+	user.visible_message(span_suicide("[user] начинает облизывать [RU_SRC_NOM]! Похоже, [GEND_HE_SHE(user)] пытается покончить с собой!"))
 	return FIRELOSS//dont you kids know that stuff is toxic?

@@ -131,9 +131,9 @@ GLOBAL_VAR_INIT(disposals_animals_spawned, 0)
 			if(!I.tool_start_check(user, amount=1, heat_required = HIGH_TEMPERATURE_REQUIRED))
 				return
 
-			to_chat(user, span_notice("Вы начинаете срезать напольный шов [declent_ru(GENITIVE)]..."))
+			to_chat(user, span_notice("Вы начинаете срезать напольный шов [RU_SRC_GEN]..."))
 			if(I.use_tool(src, user, 20, volume=SMALL_MATERIAL_AMOUNT) && panel_open)
-				to_chat(user, span_notice("Вы срезали напольный шов [declent_ru(GENITIVE)]."))
+				to_chat(user, span_notice("Вы срезали напольный шов [RU_SRC_GEN]."))
 				deconstruct()
 			return
 

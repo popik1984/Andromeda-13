@@ -75,7 +75,7 @@
 	PRIVATE_PROC(TRUE)
 
 	var/obj/hanging_parent = parent
-	hanging_parent.visible_message(message = span_warning("[capitalize(hanging_parent.declent_ru(NOMINATIVE))] разваливается!"), vision_distance = 5)
+	hanging_parent.visible_message(message = span_warning("[CAP_RU_NOM(hanging_parent)] разваливается!"), vision_distance = 5)
 	hanging_parent.deconstruct(FALSE)
 
 

@@ -53,11 +53,11 @@
 		var/datum/pipeline/parent1 = parents[1]
 		parent1.reconcile_air()
 		investigate_log("was opened by [usr ? key_name(usr) : "a remote signal"]", INVESTIGATE_ATMOS)
-		balloon_alert_to_viewers("[declent_ru(NOMINATIVE)] открыт", "[declent_ru(NOMINATIVE)] открыт")
+		balloon_alert_to_viewers("[RU_SRC_NOM] открыт", "[RU_SRC_NOM] открыт")
 		vent_movement |= VENTCRAWL_ALLOWED
 	else
 		investigate_log("was closed by [usr ? key_name(usr) : "a remote signal"]", INVESTIGATE_ATMOS)
-		balloon_alert_to_viewers("[declent_ru(NOMINATIVE)] закрыт", "[declent_ru(NOMINATIVE)] закрыт")
+		balloon_alert_to_viewers("[RU_SRC_NOM] закрыт", "[RU_SRC_NOM] закрыт")
 		vent_movement &= ~VENTCRAWL_ALLOWED
 
 // Это обрабатывает фактическую функциональность объединения двух сетей труб, когда вентиль открыт

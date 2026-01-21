@@ -41,4 +41,4 @@
 
 /obj/structure/closet/infinite/proc/close_on_my_own()
 	if(close())
-		visible_message(span_notice("[declent_ru(NOMINATIVE)] закрывается сам по себе."))
+		visible_message(span_notice("[RU_SRC_NOM] закрывается сам по себе."))

@@ -251,9 +251,9 @@
 	parent_item.update_appearance()
 
 	if(iscyborg(user))
-		to_chat(user, span_notice("Вы переключаете модуль на [parent_item.declent_ru(ACCUSATIVE)]."))
+		to_chat(user, span_notice("Вы переключаете модуль на [RU_ACC(parent_item)]."))
 	else
-		to_chat(user, span_notice("Вы берёте [parent_item.declent_ru(ACCUSATIVE)] в обе руки."))
+		to_chat(user, span_notice("Вы берёте [RU_ACC(parent_item)] в обе руки."))
 
 	// Play sound if one is set
 	if(wieldsound)
@@ -261,8 +261,8 @@
 
 	// Let's reserve the other hand
 	offhand_item = new(user)
-	offhand_item.name = "[parent_item.declent_ru(NOMINATIVE)] - вторая рука"
-	offhand_item.desc = "Ваш второй хват на [parent_item.declent_ru(PREPOSITIONAL)]."
+	offhand_item.name = "[RU_NOM(parent_item)] - вторая рука"
+	offhand_item.desc = "Ваш второй хват на [RU_PRE(parent_item)]."
 	offhand_item.wielded = TRUE
 	RegisterSignal(offhand_item, COMSIG_ITEM_DROPPED, PROC_REF(on_drop))
 	RegisterSignal(offhand_item, COMSIG_QDELETING, PROC_REF(on_destroy))
@@ -321,11 +321,9 @@
 			if(iscyborg(user))
 				to_chat(user, span_notice("Вы освобождаете модуль."))
 			else if(HAS_TRAIT(parent, TRAIT_NEEDS_TWO_HANDS))
-				// ИСПРАВЛЕНО: parent -> parent_item
-				to_chat(user, span_notice("Вы роняете [parent_item.declent_ru(ACCUSATIVE)]."))
+				to_chat(user, span_notice("Вы роняете [RU_ACC(parent_item)]."))
 			else
-				// ИСПРАВЛЕНО: parent -> parent_item
-				to_chat(user, span_notice("Теперь вы держите [parent_item.declent_ru(ACCUSATIVE)] в одной руке."))
+				to_chat(user, span_notice("Теперь вы держите [RU_ACC(parent_item)] в одной руке."))
 
 	// Play sound if set
 	if(unwieldsound)

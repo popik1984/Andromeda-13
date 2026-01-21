@@ -27,7 +27,7 @@
 			to_chat(user, span_warning("[atmos_device] уже содержит кристалл гиперноблия!"))
 			return ITEM_INTERACT_BLOCKING
 		atmos_device.insert_nob_crystal()
-		to_chat(user, span_notice("Вы вставляете [declent_ru(ACCUSATIVE)] в [atmos_device.declent_ru(ACCUSATIVE)]."))
+		to_chat(user, span_notice("Вы вставляете [RU_SRC_ACC] в [RU_ACC(atmos_device)]."))
 
 	if(istype(worn_item))
 		if(istype(worn_item, /obj/item/clothing/suit/space))

@@ -27,7 +27,7 @@
 	)
 
 /obj/item/storage/belt/suicide_act(mob/living/carbon/user)
-	user.visible_message(span_suicide("[user] начинает пороть себя [declent_ru(INSTRUMENTAL)]! Похоже, [user.p_theyre()] пытается совершить суицид!"))
+	user.visible_message(span_suicide("[user] начинает пороть себя [RU_SRC_INS]! Похоже, [user.p_theyre()] пытается совершить суицид!"))
 	return BRUTELOSS
 
 /obj/item/storage/belt/update_overlays()
@@ -926,14 +926,14 @@
 /obj/item/storage/belt/sheath/examine(mob/user)
 	. = ..()
 	if(length(contents))
-		. += span_notice("[EXAMINE_HINT("Альт-клик")] по [declent_ru(DATIVE)], чтобы быстро выхватить клинок.")
+		. += span_notice("[EXAMINE_HINT("Альт-клик")] по [RU_SRC_DAT], чтобы быстро выхватить клинок.")
 
 /obj/item/storage/belt/sheath/click_alt(mob/user)
 	if(!length(contents))
 		balloon_alert(user, "пусто!")
 		return CLICK_ACTION_BLOCKING
 	var/obj/item/stored_item = contents[1]
-	user.visible_message(span_notice("[user] достаёт [stored_item.declent_ru(ACCUSATIVE)] из [declent_ru(GENITIVE)]."), span_notice("Вы достаёте [stored_item.declent_ru(ACCUSATIVE)] из [declent_ru(GENITIVE)]."))
+	user.visible_message(span_notice("[RU_USER_NOM] достаёт [RU_ACC(stored_item)] из [RU_SRC_GEN]."), span_notice("Вы достаёте [RU_ACC(stored_item)] из [RU_SRC_GEN]."))
 	user.put_in_hands(stored_item)
 	update_appearance()
 	return CLICK_ACTION_SUCCESS

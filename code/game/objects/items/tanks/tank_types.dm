@@ -93,7 +93,7 @@
 
 /obj/item/tank/internals/anesthetic/examine(mob/user)
 	. = ..()
-	. += span_notice("На [declent_ru(PREPOSITIONAL)] выгравировано предупреждение...")
+	. += span_notice("На [RU_SRC_PRE] выгравировано предупреждение...")
 	. += span_warning("В организме нет процессов, использующих N2O, поэтому пациенты будут выдыхать N2O... подвергая вас его воздействию. Убедитесь, что работаете в хорошо проветриваемом помещении, чтобы избежать сонных инцидентов.")
 
 /obj/item/tank/internals/anesthetic/pure

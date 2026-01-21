@@ -235,7 +235,7 @@
 		var/obj/item/stack/sheet/sheet = tool
 		if(!glass && (istype(sheet, /obj/item/stack/sheet/rglass) || istype(sheet, /obj/item/stack/sheet/glass)))
 			if(noglass)
-				to_chat(user, span_warning("Вы не можете добавить [sheet] к [declent_ru(DATIVE)]!"))
+				to_chat(user, span_warning("Вы не можете добавить [sheet] к [RU_SRC_DAT]!"))
 				return
 			playsound(src, 'sound/items/tools/crowbar.ogg', 100, TRUE)
 			user.visible_message(span_notice("[user] добавляет [sheet.name] в сборку шлюза."), \
@@ -256,13 +256,13 @@
 
 		if(istype(sheet, /obj/item/stack/sheet/mineral) && sheet.construction_path_type)
 			if(nomineral || mineral)
-				to_chat(user, span_warning("Вы не можете добавить [sheet] к [declent_ru(DATIVE)]!"))
+				to_chat(user, span_warning("Вы не можете добавить [sheet] к [RU_SRC_DAT]!"))
 				return
 
 			var/M = sheet.construction_path_type
 			var/mineralassembly = text2path("/obj/structure/door_assembly/door_assembly_[M]")
 			if(!ispath(mineralassembly))
-				to_chat(user, span_warning("Вы не можете добавить [sheet] к [declent_ru(DATIVE)]!"))
+				to_chat(user, span_warning("Вы не можете добавить [sheet] к [RU_SRC_DAT]!"))
 				return
 			if(sheet.get_amount() < 2)
 				to_chat(user, span_warning("Вам нужно как минимум два листа, чтобы добавить покрытие из материала!"))

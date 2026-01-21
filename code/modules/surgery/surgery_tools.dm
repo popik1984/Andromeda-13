@@ -109,7 +109,7 @@
 	return surgical_tray_overlay
 
 /obj/item/cautery/ignition_effect(atom/ignitable_atom, mob/user)
-	return span_rose("[user] подносит конец [declent_ru(GENITIVE)] [ignitable_atom], поджигая его высокой температурой.")
+	return span_rose("[user] подносит конец [RU_SRC_GEN] [ignitable_atom], поджигая его высокой температурой.")
 
 /*
  * MARK: Дрель

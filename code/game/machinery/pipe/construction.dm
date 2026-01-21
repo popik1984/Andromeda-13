@@ -308,8 +308,8 @@
 
 	wrench.play_tool_sound(src)
 	user.visible_message( \
-		span_notice("[user] закрепляет [declent_ru(ACCUSATIVE)]."), \
-		span_notice("Вы закрепляете [declent_ru(ACCUSATIVE)]."), \
+		span_notice("[user] закрепляет [RU_SRC_ACC]."), \
+		span_notice("Вы закрепляете [RU_SRC_ACC]."), \
 		span_hear("Слышен звук трещотки."))
 
 	qdel(src)
@@ -325,8 +325,8 @@
 	if(welder.use_tool(src, user, 2 SECONDS, volume=2))
 		new /obj/item/sliced_pipe(drop_location())
 		user.visible_message( \
-			"[user] разрезает [declent_ru(ACCUSATIVE)] пополам сваркой.", \
-			span_notice("Вы разрезаете [declent_ru(ACCUSATIVE)] пополам сваркой."), \
+			"[user] разрезает [RU_SRC_ACC] пополам сваркой.", \
+			span_notice("Вы разрезаете [RU_SRC_ACC] пополам сваркой."), \
 			span_hear("Слышен звук сварки."))
 
 		qdel(src)
@@ -422,7 +422,7 @@
 	T.flipped = flipped
 
 /obj/item/pipe/suicide_act(mob/living/user)
-	user.visible_message(span_suicide("[user] засовывает [declent_ru(ACCUSATIVE)] в рот и включает! Похоже, [user] пытается покончить с собой!"))
+	user.visible_message(span_suicide("[user] засовывает [RU_SRC_ACC] в рот и включает! Похоже, [user] пытается покончить с собой!"))
 	if(iscarbon(user))
 		var/mob/living/carbon/C = user
 		for(var/i in 1 to 20)
@@ -495,7 +495,7 @@
 
 	new /obj/machinery/meter/turf(loc, piping_layer)
 	S.play_tool_sound(src)
-	to_chat(user, span_notice("Вы прикрепляете измеритель к [declent_ru(PREPOSITIONAL, loc)]."))
+	to_chat(user, span_notice("Вы прикрепляете измеритель к [RU_PRE(loc)]."))
 	qdel(src)
 
 /obj/item/pipe_meter/dropped()

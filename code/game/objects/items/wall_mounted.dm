@@ -43,8 +43,8 @@
 		return ITEM_INTERACT_FAILURE
 
 	playsound(loc, 'sound/machines/click.ogg', 75, TRUE)
-	user.visible_message(span_notice("[user.name] прикрепляет [declent_ru(ACCUSATIVE)] к стене."),
-		span_notice("Вы прикрепляете [declent_ru(ACCUSATIVE)] к стене."),
+	user.visible_message(span_notice("[user.name] прикрепляет [RU_SRC_ACC] к стене."),
+		span_notice("Вы прикрепляете [RU_SRC_ACC] к стене."),
 		span_hear("Вы слышите щелчки."))
 
 	var/floor_to_support = get_dir(user, support_structure)
@@ -61,7 +61,7 @@
 			if(WEST)
 				hanging_object.pixel_x = -pixel_shift
 	if(!hanging_object.find_and_mount_on_atom())
-		to_chat(user, span_warning("[declent_ru(NOMINATIVE)] не может найти опору для крепления!"))
+		to_chat(user, span_warning("[RU_SRC_NOM] не может найти опору для крепления!"))
 		return
 	after_attach(hanging_object)
 	qdel(src)
@@ -111,7 +111,7 @@
 
 	if(!metal_amt && !glass_amt)
 		return FALSE
-	to_chat(user, span_notice("Вы разбираете [declent_ru(ACCUSATIVE)]."))
+	to_chat(user, span_notice("Вы разбираете [RU_SRC_ACC]."))
 	tool.play_tool_sound(src)
 	if(metal_amt)
 		new /obj/item/stack/sheet/iron(get_turf(src), metal_amt)

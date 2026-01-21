@@ -70,7 +70,7 @@
 	return ..()
 
 /obj/item/wirecutters/suicide_act(mob/living/user)
-	user.visible_message(span_suicide("[user] перерезает свои артерии [declent_ru(INSTRUMENTAL)]! Похоже, [user.p_theyre()] пытается совершить суицид!"))
+	user.visible_message(span_suicide("[user] перерезает свои артерии [RU_SRC_INS]! Похоже, [user.p_theyre()] пытается совершить суицид!"))
 	playsound(loc, usesound, 50, TRUE, -1)
 	return BRUTELOSS
 

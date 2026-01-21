@@ -45,7 +45,7 @@
 	AddElement(/datum/element/falling_hazard, damage = force, wound_bonus = wound_bonus, hardhat_safety = TRUE, crushes = FALSE, impact_sound = hitsound)
 
 /obj/item/crowbar/suicide_act(mob/living/user)
-	user.visible_message(span_suicide("[user] забивает себя до смерти [declent_ru(INSTRUMENTAL)]! Похоже, [user.p_theyre()] пытается совершить суицид!"))
+	user.visible_message(span_suicide("[user] забивает себя до смерти [RU_SRC_INS]! Похоже, [user.p_theyre()] пытается совершить суицид!"))
 	playsound(loc, 'sound/items/weapons/genhit.ogg', 50, TRUE, -1)
 	return BRUTELOSS
 
@@ -330,10 +330,10 @@
 
 /obj/item/crowbar/power/suicide_act(mob/living/user)
 	if(tool_behaviour == TOOL_CROWBAR)
-		user.visible_message(span_suicide("[user] засовывает свою голову в [declent_ru(ACCUSATIVE)], похоже, [user.p_theyre()] пытается совершить суицид!"))
+		user.visible_message(span_suicide("[user] засовывает свою голову в [RU_SRC_ACC], похоже, [user.p_theyre()] пытается совершить суицид!"))
 		playsound(loc, 'sound/items/tools/jaws_pry.ogg', 50, TRUE, -1)
 	else
-		user.visible_message(span_suicide("[user] оборачивает [declent_ru(ACCUSATIVE)] вокруг своей шеи. Похоже, [user.p_theyre()] пытается оторвать себе голову!"))
+		user.visible_message(span_suicide("[user] оборачивает [RU_SRC_ACC] вокруг своей шеи. Похоже, [user.p_theyre()] пытается оторвать себе голову!"))
 		playsound(loc, 'sound/items/tools/jaws_cut.ogg', 50, TRUE, -1)
 		if(iscarbon(user))
 			var/mob/living/carbon/suicide_victim = user

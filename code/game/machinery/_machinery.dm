@@ -786,8 +786,8 @@
 		//	hit_with_what_noun += plural_s(hit_with_what_noun) // hit with "their hands"
 
 	user.visible_message(
-		span_danger("[user] бьёт [declent_ru(ACCUSATIVE)] [user.p_their()] [hit_with_what_noun][damage ? "." : ", [no_damage_feedback]!"]"),
-		span_danger("Вы бьёте [declent_ru(ACCUSATIVE)] своими [hit_with_what_noun][damage ? "." : ", [no_damage_feedback]!"]"),
+		span_danger("[user] бьёт [RU_SRC_ACC] [user.p_their()] [hit_with_what_noun][damage ? "." : ", [no_damage_feedback]!"]"),
+		span_danger("Вы бьёте [RU_SRC_ACC] своими [hit_with_what_noun][damage ? "." : ", [no_damage_feedback]!"]"),
 		span_hear("Вы слышите [damage ? "удар" : "глухой стук"]."),
 		COMBAT_MESSAGE_RANGE,
 	)
@@ -1030,10 +1030,10 @@
 	toggle_panel_open()
 	if(panel_open)
 		icon_state = icon_state_open
-		to_chat(user, span_notice("Вы открываете техническую панель [declent_ru(GENITIVE)]."))
+		to_chat(user, span_notice("Вы открываете техническую панель [RU_SRC_GEN]."))
 	else
 		icon_state = icon_state_closed
-		to_chat(user, span_notice("Вы закрываете техническую панель [declent_ru(GENITIVE)]."))
+		to_chat(user, span_notice("Вы закрываете техническую панель [RU_SRC_GEN]."))
 	return TRUE
 
 /obj/machinery/proc/default_change_direction_wrench(mob/user, obj/item/wrench)
@@ -1042,7 +1042,7 @@
 
 	wrench.play_tool_sound(src, 50)
 	setDir(turn(dir,-90))
-	to_chat(user, span_notice("Вы поворачиваете [declent_ru(ACCUSATIVE)]."))
+	to_chat(user, span_notice("Вы поворачиваете [RU_SRC_ACC]."))
 	SEND_SIGNAL(src, COMSIG_MACHINERY_DEFAULT_ROTATE_WRENCH, user, wrench)
 	return TRUE
 

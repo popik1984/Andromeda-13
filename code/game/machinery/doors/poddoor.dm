@@ -64,7 +64,7 @@
 	if(panel_open)
 		if(deconstruction == BLASTDOOR_FINISHED)
 			. += span_notice("Техническая панель открыта, электронику можно <b>вынуть</b>.")
-			. += span_notice("[declent_ru(NOMINATIVE)] может быть откалиброван под ID контроллера гермозатворов с помощью <b>контроллера гермозатворов</b>.")
+			. += span_notice("[RU_SRC_NOM] может быть откалиброван под ID контроллера гермозатворов с помощью <b>контроллера гермозатворов</b>.")
 		else if(deconstruction == BLASTDOOR_NEEDS_ELECTRONICS)
 			. += span_notice("<i>Электроника</i> отсутствует, и торчат <b>провода</b>.")
 		else if(deconstruction == BLASTDOOR_NEEDS_WIRES)
@@ -273,8 +273,8 @@
 /obj/machinery/door/poddoor/attack_alien(mob/living/carbon/alien/adult/user, list/modifiers)
 	if(density & !(resistance_flags & INDESTRUCTIBLE))
 		add_fingerprint(user)
-		user.visible_message(span_warning("[user] начинает вскрывать [declent_ru(NOMINATIVE)]."),\
-					span_noticealien("Вы начинаете вгрызаться когтями в [declent_ru(NOMINATIVE)] изо всех сил!"),\
+		user.visible_message(span_warning("[user] начинает вскрывать [RU_SRC_NOM]."),\
+					span_noticealien("Вы начинаете вгрызаться когтями в [RU_SRC_NOM] изо всех сил!"),\
 					span_warning("Слышен скрежет металла..."))
 		playsound(src, 'sound/machines/airlock/airlock_alien_prying.ogg', 100, TRUE)
 
@@ -284,7 +284,7 @@
 
 		if(do_after(user, time_to_open, src))
 			if(density && !open(TRUE)) //The airlock is still closed, but something prevented it opening. (Another player noticed and bolted/welded the airlock in time!)
-				to_chat(user, span_warning("Несмотря на ваши усилия, [declent_ru(NOMINATIVE)] смог устоять перед попытками открыть его!"))
+				to_chat(user, span_warning("Несмотря на ваши усилия, [RU_SRC_NOM] смог устоять перед попытками открыть его!"))
 
 	else
 		return ..()

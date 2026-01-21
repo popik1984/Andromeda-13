@@ -597,9 +597,9 @@ GLOBAL_LIST_INIT(bear_pelt_recipes, list ( \
 /obj/item/stack/sheet/animalhide/attackby(obj/item/W, mob/user, list/modifiers, list/attack_modifiers)
 	if(W.get_sharpness())
 		playsound(loc, 'sound/items/weapons/slice.ogg', 50, TRUE, -1)
-		user.visible_message(span_notice("[user] начинает срезать шерсть с [declent_ru(GENITIVE)]."), span_notice("Вы начинаете срезать шерсть с [declent_ru(GENITIVE)]..."), span_hear("Вы слышите звук ножа, трущегося о плоть."))
+		user.visible_message(span_notice("[user] начинает срезать шерсть с [RU_SRC_GEN]."), span_notice("Вы начинаете срезать шерсть с [RU_SRC_GEN]..."), span_hear("Вы слышите звук ножа, трущегося о плоть."))
 		if(do_after(user, 5 SECONDS, target = src))
-			to_chat(user, span_notice("Вы срезали шерсть с [declent_ru(GENITIVE)]."))
+			to_chat(user, span_notice("Вы срезали шерсть с [RU_SRC_GEN]."))
 			new /obj/item/stack/sheet/hairlesshide(user.drop_location(), amount)
 			use(amount)
 	else

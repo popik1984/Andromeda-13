@@ -202,11 +202,11 @@
 		. += span_notice("Дисплей показывает: Эффективность <b>[efficiency * 100]</b>%.")
 		if(occupant)
 			if(on)
-				. += span_notice("Внутри [declent_ru(GENITIVE)] кто-то есть!")
+				. += span_notice("Внутри [RU_SRC_GEN] кто-то есть!")
 			else
-				. += span_notice("Вы едва можете различить фигуру, плавающую в [declent_ru(PREPOSITIONAL)].")
+				. += span_notice("Вы едва можете различить фигуру, плавающую в [RU_SRC_PRE].")
 		else
-			. += span_notice("[declent_ru(NOMINATIVE)] кажется пустой.")
+			. += span_notice("[RU_SRC_NOM] кажется пустой.")
 		if(beaker)
 			. += span_notice("Внутри находится мензурка объемом [beaker.reagents.maximum_volume] ед.")
 		else
@@ -217,10 +217,10 @@
 
 		. += span_notice("Её техническую панель можно [EXAMINE_HINT("открутить")].")
 		if(panel_open)
-			. += span_notice("[declent_ru(ACCUSATIVE)] можно [EXAMINE_HINT("разобрать")].")
-			. += span_notice("[declent_ru(ACCUSATIVE)] можно повернуть [EXAMINE_HINT("гаечным ключом")].")
+			. += span_notice("[RU_SRC_ACC] можно [EXAMINE_HINT("разобрать")].")
+			. += span_notice("[RU_SRC_ACC] можно повернуть [EXAMINE_HINT("гаечным ключом")].")
 		else if(machine_stat & NOPOWER)
-			. += span_notice("[declent_ru(ACCUSATIVE)] можно [EXAMINE_HINT("вскрыть")].")
+			. += span_notice("[RU_SRC_ACC] можно [EXAMINE_HINT("вскрыть")].")
 
 /obj/machinery/cryo_cell/update_icon()
 	SET_PLANE_IMPLICIT(src, initial(plane))
@@ -298,7 +298,7 @@
 
 	var/unsafe_release = FALSE
 	if(internal_pressure > 2 * ONE_ATMOSPHERE)
-		to_chat(user, span_warning("Когда вы начинаете вскрывать [declent_ru(NOMINATIVE)], поток воздуха бьет вам в лицо... может стоит передумать?"))
+		to_chat(user, span_warning("Когда вы начинаете вскрывать [RU_SRC_NOM], поток воздуха бьет вам в лицо... может стоит передумать?"))
 		if(!do_after(user, 2 SECONDS, target = src))
 			return
 		unsafe_release = TRUE
@@ -535,9 +535,9 @@
 /obj/machinery/cryo_cell/container_resist_act(mob/living/user)
 	user.changeNext_move(CLICK_CD_BREAKOUT)
 	user.last_special = world.time + CLICK_CD_BREAKOUT
-	user.visible_message(span_notice("Вы видите, как [user] бьёт по стеклу [declent_ru(GENITIVE)]!"), \
-		span_notice("Вы боретесь внутри [declent_ru(GENITIVE)], ударяя ногой по кнопке открытия... (это займёт около [DisplayTimeText(CRYO_BREAKOUT_TIME)].)"), \
-		span_hear("Вы слышите стук из [declent_ru(GENITIVE)]."))
+	user.visible_message(span_notice("Вы видите, как [user] бьёт по стеклу [RU_SRC_GEN]!"), \
+		span_notice("Вы боретесь внутри [RU_SRC_GEN], ударяя ногой по кнопке открытия... (это займёт около [DisplayTimeText(CRYO_BREAKOUT_TIME)].)"), \
+		span_hear("Вы слышите стук из [RU_SRC_GEN]."))
 	if(do_after(user, CRYO_BREAKOUT_TIME, target = src, hidden = TRUE))
 		if(!user || user.stat != CONSCIOUS || user.loc != src )
 			return

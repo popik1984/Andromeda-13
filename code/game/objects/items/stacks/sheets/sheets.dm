@@ -88,7 +88,7 @@
 	if(!shards.len)
 		return FALSE
 	if(!use(1))
-		to_chat(user, is_cyborg ? span_warning("В синтезаторе недостаточно материала для создания осколка!") : span_warning("Как-то так вышло, что [declent_ru(GENITIVE)] недостаточно для разбивания!"))
+		to_chat(user, is_cyborg ? span_warning("В синтезаторе недостаточно материала для создания осколка!") : span_warning("Как-то так вышло, что [RU_SRC_GEN] недостаточно для разбивания!"))
 		if(!is_cyborg)
 			stack_trace("Стопка листового материала пыталась быть разбита на осколки, имея менее 1 листа в остатке.")
 		return FALSE
@@ -98,8 +98,8 @@
 	for(var/shard_to_create in shards)
 		var/obj/item/new_shard = new shard_to_create(target)
 		new_shard.add_fingerprint(user)
-		shards_created += "[new_shard.declent_ru(NOMINATIVE)]"
-	user.visible_message(span_notice("[user] разбивает лист [declent_ru(GENITIVE)] о [target.declent_ru(GENITIVE)], оставляя [english_list(shards_created)]."), \
-		span_notice("Вы разбиваете лист [declent_ru(GENITIVE)] о [target.declent_ru(GENITIVE)], оставляя [english_list(shards_created)]."))
+		shards_created += "[RU_NOM(new_shard)]"
+	user.visible_message(span_notice("[RU_USER_NOM] разбивает лист [RU_SRC_GEN] о [RU_TAR_GEN], оставляя [english_list(shards_created)]."), \
+		span_notice("Вы разбиваете лист [RU_SRC_GEN] о [RU_TAR_GEN], оставляя [english_list(shards_created)]."))
 	return TRUE
 

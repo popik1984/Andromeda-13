@@ -63,8 +63,8 @@
 		user.wash(CLEAN_WASH)
 
 	user.visible_message(
-		span_notice("[user] моет [washing_face ? "своё лицо" : "свои руки"], используя [declent_ru(ACCUSATIVE)]."),
-		span_notice("Вы моете [washing_face ? "своё лицо" : "свои руки"], используя [declent_ru(ACCUSATIVE)]."),
+		span_notice("[RU_USER_NOM] моет [washing_face ? "своё лицо" : "свои руки"], используя [RU_SRC_ACC]."),
+		span_notice("Вы моете [washing_face ? "своё лицо" : "свои руки"], используя [RU_SRC_ACC]."),
 	)
 
 /obj/structure/water_source/attackby(obj/item/attacking_item, mob/living/user, list/modifiers, list/attack_modifiers)
@@ -80,9 +80,9 @@
 		if(container.is_refillable())
 			if(!container.reagents.holder_full())
 				container.reagents.add_reagent(dispensedreagent, min(container.volume - container.reagents.total_volume, container.amount_per_transfer_from_this))
-				to_chat(user, span_notice("Вы наполняете [container.declent_ru(ACCUSATIVE)] из [declent_ru(GENITIVE)]."))
+				to_chat(user, span_notice("Вы наполняете [RU_ACC(container)] из [RU_SRC_GEN]."))
 				return TRUE
-			to_chat(user, span_notice("[container.declent_ru(NOMINATIVE)] полон."))
+			to_chat(user, span_notice("[RU_NOM(container)] полон."))
 			return FALSE
 
 	if(istype(attacking_item, /obj/item/melee/baton/security))
@@ -93,19 +93,19 @@
 			user.set_stutter(baton.knockdown_time)
 			baton.cell.use(baton.cell_hit_cost)
 			user.visible_message(
-				span_warning("[user] бьёт себя током при попытке помыть [baton.declent_ru(ACCUSATIVE)] в активном состоянии!"),
-				span_userdanger("Вы опрометчиво пытаетесь помыть [baton.declent_ru(ACCUSATIVE)] во включённом состоянии."))
+				span_warning("[RU_USER_NOM] бьёт себя током при попытке помыть [RU_ACC(baton)] в активном состоянии!"),
+				span_userdanger("Вы опрометчиво пытаетесь помыть [RU_ACC(baton)] во включённом состоянии."))
 			playsound(src, baton.on_stun_sound, 50, TRUE)
 			return
 
 	if(istype(attacking_item, /obj/item/mop))
 		attacking_item.reagents.add_reagent(dispensedreagent, 5)
-		to_chat(user, span_notice("Вы смачиваете [attacking_item.declent_ru(ACCUSATIVE)] в [declent_ru(PREPOSITIONAL)]."))
+		to_chat(user, span_notice("Вы смачиваете [RU_ACC(attacking_item)] в [RU_SRC_PRE]."))
 		playsound(loc, 'sound/effects/slosh.ogg', 25, TRUE)
 		return
 
 	if(!user.combat_mode || (attacking_item.item_flags & NOBLUDGEON))
-		to_chat(user, span_notice("Вы начинаете мыть [attacking_item.declent_ru(ACCUSATIVE)]..."))
+		to_chat(user, span_notice("Вы начинаете мыть [RU_ACC(attacking_item)]..."))
 		busy = TRUE
 		if(!do_after(user, 4 SECONDS, target = src))
 			busy = FALSE
@@ -114,8 +114,8 @@
 		attacking_item.wash(CLEAN_WASH)
 		reagents.expose(attacking_item, TOUCH, 5 / max(reagents.total_volume, 5))
 		user.visible_message(
-			span_notice("[user] моет [attacking_item.declent_ru(ACCUSATIVE)], используя [declent_ru(ACCUSATIVE)]."),
-			span_notice("Вы моете [attacking_item.declent_ru(ACCUSATIVE)], используя [declent_ru(ACCUSATIVE)]."))
+			span_notice("[RU_USER_NOM] моет [RU_ACC(attacking_item)], используя [RU_SRC_ACC]."),
+			span_notice("Вы моете [RU_ACC(attacking_item)], используя [RU_SRC_ACC]."))
 		return TRUE
 
 	return ..()

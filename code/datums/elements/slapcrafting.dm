@@ -127,7 +127,7 @@
 		already_used_names += initial(result.name)
 		string_results += list("\a [initial(result.name)]")
 
-	examine_list["используемый в крафте"] = "Вы думаете, что [source.declent_ru(ACCUSATIVE)] можно использовать для создания [english_list(string_results)]! Осмотрите снова, чтобы увидеть детали..."
+	examine_list["используемый в крафте"] = "Вы думаете, что [RU_ACC(source)] можно использовать для создания [english_list(string_results)]! Осмотрите снова, чтобы увидеть детали..."
 
 /// Alerts any examiners to the details of the recipe.
 /datum/element/slapcrafting/proc/get_examine_more_info(atom/source, mob/user, list/examine_list)

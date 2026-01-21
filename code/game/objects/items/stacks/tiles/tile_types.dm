@@ -59,7 +59,7 @@
 /obj/item/stack/tile/examine(mob/user)
 	. = ..()
 	if(tile_reskin_types || tile_rotate_dirs)
-		. += span_notice("Используйте в руке, чтобы изменить тип [src.declent_ru(GENITIVE)].")
+		. += span_notice("Используйте в руке, чтобы изменить тип [RU_SRC_GEN].")
 	if(throwforce && !is_cyborg) //do not want to divide by zero or show the message to borgs who can't throw
 		var/damage_value
 		switch(CEILING(MAX_LIVING_HEALTH / throwforce, 1)) //throws to crit a human

@@ -145,7 +145,7 @@
 
 	if(material_flags & MATERIAL_ADD_PREFIX)
 		var/prefixes = get_material_prefixes(materials)
-		name = "[prefixes] [declent_ru(GENITIVE)]"
+		name = "[prefixes] [RU_SRC_NOM]"
 
 	SEND_SIGNAL(src, COMSIG_ATOM_FINALIZE_MATERIAL_EFFECTS, materials, main_material)
 
@@ -197,14 +197,14 @@
 /atom/proc/get_material_prefixes(list/materials)
 	var/list/mat_names = list()
 	for(var/datum/material/material as anything in materials)
-		mat_names |= material.declent_ru(GENITIVE)
+		mat_names |= RU_GEN(material)
 	return mat_names.Join("-")
 
 ///Returns a string like "plasma, paper and glass" from a list of materials
 /atom/proc/get_material_english_list(list/materials)
 	var/list/mat_names = list()
 	for(var/datum/material/material as anything in materials)
-		mat_names += material.declent_ru(GENITIVE)
+		mat_names |= RU_GEN(material)
 	return english_list(mat_names)
 
 ///Searches for a subtype of config_type that is to be used in its place for specific materials (like shimmering gold for cleric maces)

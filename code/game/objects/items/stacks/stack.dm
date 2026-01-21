@@ -238,9 +238,9 @@
 		return
 	if(singular_name)
 		if(get_amount()>1)
-			. += "В стопке находится [get_amount()] [declent_ru(GENITIVE)]."
+			. += "В стопке находится [get_amount()] [RU_SRC_GEN]."
 		else
-			. += "В стопке находится [get_amount()] [declent_ru(GENITIVE)]."
+			. += "В стопке находится [get_amount()] [RU_SRC_GEN]."
 	else if(get_amount()>1)
 		. += "В стопке находится [get_amount()] предметов."
 	else

@@ -20,8 +20,8 @@
 			audible_message(span_hear("Слышна сварка."))
 			if(!tool.use_tool(src, user, 100, volume=50))
 				return ITEM_INTERACT_BLOCKING
-			user.visible_message(span_warning("[user] разваривает [declent_ru(NOMINATIVE)], оставляя только раму, прикрученную к стене."),
-				span_warning("Вы развариваете [declent_ru(NOMINATIVE)], оставляя только раму, прикрученную к стене"))
+			user.visible_message(span_warning("[RU_USER_NOM] разваривает [RU_SRC_NOM], оставляя только раму, прикрученную к стене."),
+				span_warning("Вы развариваете [RU_SRC_NOM], оставляя только раму, прикрученную к стене"))
 			deconstruct(TRUE)
 			return ITEM_INTERACT_SUCCESS
 	return ..()
@@ -73,7 +73,7 @@
 /obj/machinery/camera/wrench_act(mob/user, obj/item/tool)
 	if(camera_construction_state == CAMERA_STATE_WRENCHED)
 		tool.play_tool_sound(src)
-		to_chat(user, span_notice("Вы отсоединяете [declent_ru(NOMINATIVE)] от места крепления."))
+		to_chat(user, span_notice("Вы отсоединяете [RU_SRC_NOM] от места крепления."))
 		deconstruct(TRUE)
 		return ITEM_INTERACT_SUCCESS
 	return ..()
@@ -96,7 +96,7 @@
 			return ITEM_INTERACT_BLOCKING
 		if(!user.can_perform_action(src, FORBID_TELEKINESIS_REACH))
 			return ITEM_INTERACT_BLOCKING
-		to_chat(user, span_notice("Вы извлекаете [choice] из [declent_ru(GENITIVE)]."))
+		to_chat(user, span_notice("Вы извлекаете [RU_ACC(choice)] из [RU_SRC_GEN]."))
 		if(choice == xray_module)
 			drop_upgrade(xray_module)
 			removeXRay()
@@ -126,35 +126,35 @@
 				if(!user.temporarilyRemoveItemFromInventory(attacking_item, newloc = src))
 					return
 				upgradeXRay(FALSE, TRUE)
-				to_chat(user, span_notice("Вы прикрепляете [attacking_item] во внутренние схемы [name]."))
+				to_chat(user, span_notice("Вы прикрепляете [RU_ACC(attacking_item)] во внутренние схемы [RU_SRC_GEN]."))
 				qdel(attacking_item)
 			else
-				to_chat(user, span_warning("У [declent_ru(GENITIVE)] уже есть это улучшение!"))
+				to_chat(user, span_warning("У [RU_SRC_GEN] уже есть это улучшение!"))
 			return
 		else if(istype(attacking_item, /obj/item/stack/sheet/mineral/plasma))
 			if(!isEmpProof(TRUE)) //don't reveal it was already upgraded if was done via MALF AI Upgrade Camera Network ability
 				if(attacking_item.use_tool(src, user, 0, amount=1))
 					upgradeEmpProof(FALSE, TRUE)
-					to_chat(user, span_notice("Вы прикрепляете [attacking_item] во внутренние схемы [name]."))
+					to_chat(user, span_notice("Вы прикрепляете [RU_ACC(attacking_item)] во внутренние схемы [RU_SRC_GEN]."))
 			else
-				to_chat(user, span_warning("У [declent_ru(GENITIVE)] уже есть это улучшение!"))
+				to_chat(user, span_warning("У [RU_SRC_GEN] уже есть это улучшение!"))
 			return
 		else if(isprox(attacking_item))
 			if(!isMotion())
 				if(!user.temporarilyRemoveItemFromInventory(attacking_item, newloc = src))
 					return
 				upgradeMotion()
-				to_chat(user, span_notice("Вы прикрепляете [attacking_item] во внутренние схемы [name]."))
+				to_chat(user, span_notice("Вы прикрепляете [RU_ACC(attacking_item)] во внутренние схемы [RU_SRC_GEN]."))
 				qdel(attacking_item)
 			else
-				to_chat(user, span_warning("У [declent_ru(GENITIVE)] уже есть это улучшение!"))
+				to_chat(user, span_warning("У [RU_SRC_GEN] уже есть это улучшение!"))
 			return
 	switch(camera_construction_state)
 		if(CAMERA_STATE_WELDED)
 			if(istype(attacking_item, /obj/item/stack/cable_coil))
 				var/obj/item/stack/cable_coil/attacking_cable = attacking_item
 				if(attacking_cable.use(2))
-					to_chat(user, span_notice("Вы добавляете провода к [declent_ru(INSTRUMENTAL)]."))
+					to_chat(user, span_notice("Вы добавляете провода к [RU_SRC_INS]."))
 					camera_construction_state = CAMERA_STATE_WIRED
 				else
 					to_chat(user, span_warning("Вам нужно два куска кабеля, чтобы подключить камеру!"))
@@ -191,11 +191,11 @@
 						if(user.name == "Unknown")
 							to_chat(ai, "[span_name(user)] подносит <a href='byond://?_src_=usr;show_tablet_note=1;'>[itemname]</a> к одной из ваших камер ...")
 						else
-							to_chat(ai, "<b><a href='byond://?src=[REF(ai)];track=[html_encode(user.name)]'>[user]</a></b> подносит <a href='byond://?_src_=usr;show_tablet_note=1;'>[itemname]</a> к одной из ваших камер ...")
+							to_chat(ai, "<b><a href='byond://?src=[REF(ai)];track=[html_encode(user.name)]'>[RU_USER_NOM]</a></b> подносит <a href='byond://?_src_=usr;show_tablet_note=1;'>[itemname]</a> к одной из ваших камер ...")
 						continue
 
 					if (potential_viewer.client?.eye == src)
-						to_chat(potential_viewer, "[span_name("[user]")] подносит [itemname] к одной из камер ...")
+						to_chat(potential_viewer, "[span_name("[RU_USER_NOM]")] подносит [itemname] к одной из камер ...")
 						potential_viewer.log_talk(itemname, LOG_VICTIM, tag="Pressed to camera from [key_name(user)]", log_globally=FALSE)
 						potential_viewer << browse("<HTML><HEAD><TITLE>[itemname]</TITLE></HEAD><BODY><TT>[info]</TT></BODY></HTML>", "window=[itemname]")
 				return
@@ -211,7 +211,7 @@
 				var/item_name = sanitize(last_shown_paper.name)
 
 				// Start the process of holding it up to the camera.
-				to_chat(user, span_notice("Вы подносите [item_name] к камере..."))
+				to_chat(user, span_notice("Вы подносите [RU_ACC(item_name)] к камере..."))
 				user.log_talk(item_name, LOG_GAME, log_globally=TRUE, tag="Pressed to camera")
 				user.changeNext_move(CLICK_CD_MELEE)
 
@@ -234,7 +234,7 @@
 						if(user.name == "Unknown")
 							to_chat(ai, "[span_name(user.name)] подносит <a href='byond://?_src_=usr;show_paper_note=[REF(last_shown_paper)];'>[item_name]</a> к одной из ваших камер ...")
 						else
-							to_chat(ai, "<b><a href='byond://?src=[REF(ai)];track=[html_encode(user.name)]'>[user]</a></b> подносит <a href='byond://?_src_=usr;show_paper_note=[REF(last_shown_paper)];'>[item_name]</a> к одной из ваших камер ...")
+							to_chat(ai, "<b><a href='byond://?src=[REF(ai)];track=[html_encode(user.name)]'>[RU_USER_NOM]</a></b> подносит <a href='byond://?_src_=usr;show_paper_note=[REF(last_shown_paper)];'>[item_name]</a> к одной из ваших камер ...")
 						continue
 
 					// If it's not an AI, eye if the client's eye is set to the camera. I wonder if this even works anymore with tgui camera apps and stuff?

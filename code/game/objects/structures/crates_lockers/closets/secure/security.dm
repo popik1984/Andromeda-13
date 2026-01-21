@@ -294,7 +294,7 @@
 
 /obj/structure/closet/secure_closet/brig/genpop/examine(mob/user)
 	. = ..()
-	. += span_notice("<b>Нажмите ПКМ</b> с ID картой уровня СБ, чтобы сбросить зарегистрированный ID на [src.declent_ru(PREPOSITIONAL)].")
+	. += span_notice("<b>Нажмите ПКМ</b> с ID картой уровня СБ, чтобы сбросить зарегистрированный ID на [RU_SRC_PRE].")
 
 /obj/structure/closet/secure_closet/brig/genpop/attackby(obj/item/card/id/advanced/prisoner/user_id, mob/user, list/modifiers, list/attack_modifiers)
 	if(!secure || !istype(user_id))

@@ -226,7 +226,7 @@ GLOBAL_LIST_INIT(uranium_recipes, list ( \
 	)
 
 /obj/item/stack/sheet/mineral/plasma/suicide_act(mob/living/carbon/user)
-	user.visible_message(span_suicide("[user] начинает лизать [declent_ru(NOMINATIVE)]! Похоже, [GEND_HE_SHE(user)] пытается покончить с собой!"))
+	user.visible_message(span_suicide("[user] начинает лизать [RU_SRC_NOM]! Похоже, [GEND_HE_SHE(user)] пытается покончить с собой!"))
 	return TOXLOSS//dont you kids know that stuff is toxic?
 
 GLOBAL_LIST_INIT(plasma_recipes, list ( \

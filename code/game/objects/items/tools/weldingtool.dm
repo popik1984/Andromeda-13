@@ -115,7 +115,7 @@
 
 
 /obj/item/weldingtool/suicide_act(mob/living/user)
-	user.visible_message(span_suicide("[user] заваривает себе все отверстия! Похоже, [user.p_theyre()] пытается совершить суицид!"))
+	user.visible_message(span_suicide("[RU_USER_NOM] заваривает себе все отверстия! Похоже, [GEND_HE_SHE(user)] пытается совершить суицид!"))
 	return FIRELOSS
 
 /obj/item/weldingtool/screwdriver_act(mob/living/user, obj/item/tool)
@@ -150,7 +150,7 @@
 /obj/item/weldingtool/interact_with_atom(atom/interacting_with, mob/living/user, list/modifiers)
 	if(!status && interacting_with.is_refillable())
 		reagents.trans_to(interacting_with, reagents.total_volume, transferred_by = user)
-		to_chat(user, span_notice("Вы опустошаете топливный бак [declent_ru(GENITIVE)] в [interacting_with.declent_ru(ACCUSATIVE)]."))
+		to_chat(user, span_notice("Вы опустошаете топливный бак [RU_SRC_GEN] в [RU_ACC(interacting_with)]."))
 		update_appearance()
 		return ITEM_INTERACT_SUCCESS
 	if(!ishuman(interacting_with))
@@ -170,8 +170,8 @@
 		balloon_alert(user, "конечность не повреждена")
 		return ITEM_INTERACT_BLOCKING
 
-	user.visible_message(span_notice("[user] начинает исправлять вмятины на [affecting.declent_ru(PREPOSITIONAL)][attacked_humanoid == user ? "" : " [attacked_humanoid.declent_ru(GENITIVE)]"]."),
-		span_notice("Вы начинаете исправлять вмятины на [affecting.declent_ru(PREPOSITIONAL)][attacked_humanoid == user ? "" : " [attacked_humanoid.declent_ru(GENITIVE)]"]."))
+	user.visible_message(span_notice("[RU_USER_NOM] начинает исправлять вмятины на [RU_PRE(affecting)][attacked_humanoid == user ? "" : " [RU_GEN(attacked_humanoid)]"]."),
+		span_notice("Вы начинаете исправлять вмятины на [RU_PRE(affecting)][attacked_humanoid == user ? "" : " [RU_GEN(attacked_humanoid)]"]."))
 	var/use_delay = repeating ? 1 SECONDS : 0
 	if(user == attacked_humanoid)
 		use_delay = 5 SECONDS
@@ -308,10 +308,10 @@
 		return
 	status = !status
 	if(status)
-		to_chat(user, span_notice("Вы закрепляете [declent_ru(ACCUSATIVE)] и закрываете топливный бак."))
+		to_chat(user, span_notice("Вы закрепляете [RU_SRC_ACC] и закрываете топливный бак."))
 		reagents.flags &= ~(OPENCONTAINER)
 	else
-		to_chat(user, span_notice("Теперь [declent_ru(ACCUSATIVE)] можно прикрепить, модифицировать или заправить."))
+		to_chat(user, span_notice("Теперь [RU_SRC_ACC] можно прикрепить, модифицировать или заправить."))
 		reagents.flags |= OPENCONTAINER
 	add_fingerprint(user)
 
@@ -332,7 +332,7 @@
 
 /obj/item/weldingtool/ignition_effect(atom/ignitable_atom, mob/user)
 	if(use_tool(ignitable_atom, user, 0))
-		return span_rose("[user] небрежно поджигает [ignitable_atom.declent_ru(ACCUSATIVE)] при помощи [declent_ru(GENITIVE)], ну и крутышка.")
+		return span_rose("[RU_USER_NOM] небрежно поджигает [RU_ACC(ignitable_atom)] при помощи [RU_SRC_GEN], ну и крутышка.")
 	else
 		return ""
 

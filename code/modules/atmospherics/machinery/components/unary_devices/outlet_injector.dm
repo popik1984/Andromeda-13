@@ -159,7 +159,7 @@
 /obj/machinery/atmospherics/components/unary/outlet_injector/can_unwrench(mob/user)
 	. = ..()
 	if(. && on && is_operational)
-		to_chat(user, span_warning("Нельзя откручивать [declent_ru(ACCUSATIVE)], сначала выключите его!"))
+		to_chat(user, span_warning("Нельзя откручивать [RU_SRC_ACC], сначала выключите его!"))
 		return FALSE
 
 // mapping

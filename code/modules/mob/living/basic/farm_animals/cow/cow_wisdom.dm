@@ -52,7 +52,7 @@
 ///Give intense wisdom to the attacker if they're being friendly about it
 /mob/living/basic/cow/wisdom/attack_hand(mob/living/carbon/user, list/modifiers)
 	if(!stat && !user.combat_mode)
-		to_chat(user, span_nicegreen("[declent_ru(NOMINATIVE)] шепчет вам глубочайшую мудрость, а затем исчезает!"))
+		to_chat(user, span_nicegreen("[RU_SRC_NOM] шепчет вам глубочайшую мудрость, а затем исчезает!"))
 		user.mind?.adjust_experience(granted_wisdom, granted_experience)
 		do_smoke(1, holder = src, location = get_turf(src))
 		qdel(src)

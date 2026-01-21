@@ -601,7 +601,7 @@
 	. = ..()
 	var/message = high_production_profile ? "режим урана высокой мощности" : "режим плазмы средней мощности"
 	. += span_notice("Установлен [message].")
-	. += span_notice("Вы можете переключить режим, используя отвёртку на [declent_ru(PREPOSITIONAL)].")
+	. += span_notice("Вы можете переключить режим, используя отвёртку на [RU_SRC_PRE].")
 
 /obj/item/circuitboard/machine/pacman/screwdriver_act(mob/living/user, obj/item/tool)
 	high_production_profile = !high_production_profile
@@ -1078,7 +1078,7 @@
 	else
 		build_path = /obj/machinery/holopad/secure
 		secure = TRUE
-	to_chat(user, span_notice("Вы [secure? "вк" : "вык"]лючаете защиту на [declent_ru(PREPOSITIONAL)]"))
+	to_chat(user, span_notice("Вы [secure? "вк" : "вык"]лючаете защиту на [RU_SRC_PRE]"))
 	return TRUE
 
 /obj/item/circuitboard/machine/holopad/examine(mob/user)
@@ -1220,7 +1220,7 @@
 	. = ..()
 	if(is_special_type)
 		return
-	. += span_info("[declent_ru(NOMINATIVE)] установлена на [fridges_name_paths[build_path]]. Вы можете использовать отвертку для перенастройки.")
+	. += span_info("[RU_SRC_NOM] установлена на [fridges_name_paths[build_path]]. Вы можете использовать отвертку для перенастройки.")
 
 /obj/item/circuitboard/machine/dehydrator
 	name = "Dehydrator"
@@ -3011,14 +3011,14 @@
 		return ITEM_INTERACT_BLOCKING
 
 	venue_type = radial_results[choice]
-	to_chat(user, span_notice("Вы изменяете место проведения, связанное с [declent_ru(INSTRUMENTAL)]."))
+	to_chat(user, span_notice("Вы изменяете место проведения, связанное с [RU_SRC_INS]."))
 	return ITEM_INTERACT_SUCCESS
 
 /obj/item/circuitboard/machine/restaurant_portal/examine(mob/user)
 	. = ..()
 	if (venue_type)
 		var/datum/venue/as_venue = venue_type
-		. += span_notice("[declent_ru(NOMINATIVE)] связан с заведением [initial(as_venue.name)].")
+		. += span_notice("[RU_SRC_NOM] связан с заведением [initial(as_venue.name)].")
 
 /obj/item/circuitboard/machine/restaurant_portal/configure_machine(obj/machinery/restaurant_portal/machine)
 	if(!istype(machine))

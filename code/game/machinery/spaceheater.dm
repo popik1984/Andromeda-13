@@ -106,7 +106,7 @@
 
 /obj/machinery/space_heater/examine(mob/user)
 	. = ..()
-	. += "[declent_ru(NOMINATIVE)] [on ? "включён" : "выключен"], а люк [panel_open ? "открыт" : "закрыт"]."
+	. += "[RU_SRC_NOM] [on ? "включён" : "выключен"], а люк [panel_open ? "открыт" : "закрыт"]."
 	if(cell)
 		. += "Индикатор заряда показывает [cell ? round(cell.percent(), 1) : 0]%."
 	else
@@ -220,7 +220,7 @@
 	add_fingerprint(user)
 
 	if(default_deconstruction_screwdriver(user, icon_state, icon_state, I))
-		user.visible_message(span_notice("[user] [panel_open ? "открывает" : "закрывает"] люк [declent_ru(GENITIVE)]."), span_notice("Вы [panel_open ? "открываете" : "закрываете"] люк [declent_ru(GENITIVE)]."))
+		user.visible_message(span_notice("[user] [panel_open ? "открывает" : "закрывает"] люк [RU_SRC_GEN]."), span_notice("Вы [panel_open ? "открываете" : "закрываете"] люк [RU_SRC_GEN]."))
 		update_appearance()
 		return TRUE
 
@@ -238,7 +238,7 @@
 			return
 		cell = I
 		I.add_fingerprint(usr)
-		user.visible_message(span_notice("[user] вставляет энергоячейку в [declent_ru(ACCUSATIVE)]."), span_notice("Вы вставляете энергоячейку в [declent_ru(ACCUSATIVE)]."))
+		user.visible_message(span_notice("[user] вставляет энергоячейку в [RU_SRC_ACC]."), span_notice("Вы вставляете энергоячейку в [RU_SRC_ACC]."))
 		SStgui.update_uis(src)
 		return TRUE
 	return ..()
@@ -449,7 +449,7 @@
 		cell = item
 		item.add_fingerprint(usr)
 
-		user.visible_message(span_notice("[user] вставляет энергоячейку в [declent_ru(ACCUSATIVE)]."), span_notice("Вы вставляете энергоячейку в [declent_ru(ACCUSATIVE)]."))
+		user.visible_message(span_notice("[user] вставляет энергоячейку в [RU_SRC_ACC]."), span_notice("Вы вставляете энергоячейку в [RU_SRC_ACC]."))
 		SStgui.update_uis(src)
 	//reagent containers
 	if(is_reagent_container(item) && !(item.item_flags & ABSTRACT) && item.is_open_container())
@@ -458,7 +458,7 @@
 		if(!user.transferItemToLoc(container, src))
 			return
 		replace_beaker(user, container)
-		to_chat(user, span_notice("Вы добавляете [container.declent_ru(ACCUSATIVE)] в водяную баню [declent_ru(GENITIVE)]."))
+		to_chat(user, span_notice("Вы добавляете [RU_ACC(container)] в водяную баню [RU_SRC_GEN]."))
 		ui_interact(user)
 		return
 	//Dropper tools

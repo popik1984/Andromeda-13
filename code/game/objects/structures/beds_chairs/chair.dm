@@ -46,14 +46,14 @@
 
 	if(being_buckled == buckler)
 		being_buckled.visible_message(
-			span_notice("[buckler] садится на [declent_ru(NOMINATIVE)]."),
-			span_notice("Вы садитесь на [declent_ru(NOMINATIVE)]."),
+			span_notice("[buckler] садится на [RU_SRC_NOM]."),
+			span_notice("Вы садитесь на [RU_SRC_NOM]."),
 			visible_message_flags = ALWAYS_SHOW_SELF_MESSAGE,
 		)
 	else
 		being_buckled.visible_message(
-			span_notice("[buckler] усаживает [being_buckled] на [declent_ru(NOMINATIVE)]."),
-			span_notice("[buckler] усаживает вас на [declent_ru(NOMINATIVE)]."),
+			span_notice("[buckler] усаживает [being_buckled] на [RU_SRC_NOM]."),
+			span_notice("[buckler] усаживает вас на [RU_SRC_NOM]."),
 			visible_message_flags = ALWAYS_SHOW_SELF_MESSAGE,
 		)
 
@@ -63,14 +63,14 @@
 
 	if(being_unbuckled == unbuckler)
 		being_unbuckled.visible_message(
-			span_notice("[unbuckler] встаёт с [declent_ru(GENITIVE)]."),
-			span_notice("Вы встаёте с [declent_ru(GENITIVE)]."),
+			span_notice("[unbuckler] встаёт с [RU_SRC_GEN]."),
+			span_notice("Вы встаёте с [RU_SRC_GEN]."),
 			visible_message_flags = ALWAYS_SHOW_SELF_MESSAGE,
 		)
 	else
 		being_unbuckled.visible_message(
-			span_notice("[unbuckler] поднимает [being_unbuckled] с [declent_ru(GENITIVE)]."),
-			span_notice("[unbuckler] поднимает вас с [declent_ru(GENITIVE)]."),
+			span_notice("[unbuckler] поднимает [being_unbuckled] с [RU_SRC_GEN]."),
+			span_notice("[unbuckler] поднимает вас с [RU_SRC_GEN]."),
 			visible_message_flags = ALWAYS_SHOW_SELF_MESSAGE,
 		)
 
@@ -78,7 +78,7 @@
 	. = ..()
 	. += span_notice("Он скреплён парой <b>болтов</b>.")
 	if(!has_buckled_mobs() && can_buckle)
-		. += span_notice("Стоя на [declent_ru(PREPOSITIONAL)], перетащите свой спрайт на [declent_ru(ACCUSATIVE)], чтобы пристегнуться.")
+		. += span_notice("Стоя на [RU_SRC_PRE], перетащите свой спрайт на [RU_SRC_ACC], чтобы пристегнуться.")
 
 ///This proc adds the rotate component, overwrite this if you for some reason want to change some specific args.
 /obj/structure/chair/proc/MakeRotate()
@@ -132,10 +132,10 @@
 		AddComponent(/datum/component/electrified_buckle, (SHOCK_REQUIREMENT_ITEM | SHOCK_REQUIREMENT_LIVE_CABLE | SHOCK_REQUIREMENT_SIGNAL_RECEIVED_TOGGLE), input_shock_kit, overlays_from_child_procs, FALSE)
 
 	if(HAS_TRAIT(src, TRAIT_ELECTRIFIED_BUCKLE))
-		to_chat(user, span_notice("Вы подключаете шоковый набор к [declent_ru(DATIVE)], электризуя его."))
+		to_chat(user, span_notice("Вы подключаете шоковый набор к [RU_SRC_DAT], электризуя его."))
 	else
 		user.put_in_active_hand(input_shock_kit)
-		to_chat(user, span_notice("Вы не можете прикрепить шоковый набор к [declent_ru(DATIVE)]!"))
+		to_chat(user, span_notice("Вы не можете прикрепить шоковый набор к [RU_SRC_DAT]!"))
 
 
 /obj/structure/chair/wrench_act_secondary(mob/living/user, obj/item/weapon)
@@ -298,28 +298,28 @@
 /obj/structure/chair/comfy/shuttle/buckle_feedback(mob/living/being_buckled, mob/buckler)
 	if(being_buckled == buckler)
 		being_buckled.visible_message(
-			span_notice("[buckler] садится на [declent_ru(NOMINATIVE)], опуская защитную дугу, чтобы закрепить себя."),
-			span_notice("Вы садитесь на [declent_ru(NOMINATIVE)], опуская защитную дугу, чтобы закрепить себя."),
+			span_notice("[buckler] садится на [RU_SRC_NOM], опуская защитную дугу, чтобы закрепить себя."),
+			span_notice("Вы садитесь на [RU_SRC_NOM], опуская защитную дугу, чтобы закрепить себя."),
 			visible_message_flags = ALWAYS_SHOW_SELF_MESSAGE,
 		)
 	else
 		being_buckled.visible_message(
-			span_notice("[buckler] усаживает [being_buckled] на [declent_ru(NOMINATIVE)], опуская защитную дугу, чтобы закрепить [being_buckled.p_them()]."),
-			span_notice("[buckler] усаживает вас на [declent_ru(NOMINATIVE)], опуская защитную дугу, чтобы закрепить вас."),
+			span_notice("[buckler] усаживает [being_buckled] на [RU_SRC_NOM], опуская защитную дугу, чтобы закрепить [being_buckled.p_them()]."),
+			span_notice("[buckler] усаживает вас на [RU_SRC_NOM], опуская защитную дугу, чтобы закрепить вас."),
 			visible_message_flags = ALWAYS_SHOW_SELF_MESSAGE,
 		)
 
 /obj/structure/chair/comfy/shuttle/unbuckle_feedback(mob/living/being_unbuckled, mob/unbuckler)
 	if(being_unbuckled == unbuckler)
 		being_unbuckled.visible_message(
-			span_notice("[unbuckler] поднимает защитную дугу, вставая с [declent_ru(GENITIVE)]."),
-			span_notice("Вы поднимаете защитную дугу, вставая с [declent_ru(GENITIVE)]."),
+			span_notice("[unbuckler] поднимает защитную дугу, вставая с [RU_SRC_GEN]."),
+			span_notice("Вы поднимаете защитную дугу, вставая с [RU_SRC_GEN]."),
 			visible_message_flags = ALWAYS_SHOW_SELF_MESSAGE,
 		)
 	else
 		being_unbuckled.visible_message(
-			span_notice("[unbuckler] поднимает защитную дугу, поднимая [being_unbuckled] с [declent_ru(GENITIVE)]."),
-			span_notice("[unbuckler] поднимает защитную дугу, поднимая вас с [declent_ru(GENITIVE)]."),
+			span_notice("[unbuckler] поднимает защитную дугу, поднимая [being_unbuckled] с [RU_SRC_GEN]."),
+			span_notice("[unbuckler] поднимает защитную дугу, поднимая вас с [RU_SRC_GEN]."),
 			visible_message_flags = ALWAYS_SHOW_SELF_MESSAGE,
 		)
 
@@ -449,11 +449,11 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/structure/chair/stool, 0)
 	if(!item_chair || has_buckled_mobs())
 		return
 	if(flags_1 & HOLOGRAM_1)
-		to_chat(user, span_notice("Вы пытаетесь поднять [declent_ru(ACCUSATIVE)], но он исчезает!"))
+		to_chat(user, span_notice("Вы пытаетесь поднять [RU_SRC_ACC], но он исчезает!"))
 		qdel(src)
 		return
 
-	user.visible_message(span_notice("[user] хватает [declent_ru(ACCUSATIVE)]."), span_notice("Вы хватаете [declent_ru(ACCUSATIVE)]."))
+	user.visible_message(span_notice("[user] хватает [RU_SRC_ACC]."), span_notice("Вы хватаете [RU_SRC_ACC]."))
 	var/obj/item/chair_item = new item_chair(loc)
 	chair_item.set_custom_materials(custom_materials)
 	TransferComponents(chair_item)
@@ -549,7 +549,7 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/structure/chair/stool/bar, 0)
 	AddElement(/datum/element/cuffable_item)
 
 /obj/item/chair/suicide_act(mob/living/carbon/user)
-	user.visible_message(span_suicide("[user] начинает бить себя [declent_ru(INSTRUMENTAL)]! Похоже, [user.p_theyre()] пытается совершить самоубийство!"))
+	user.visible_message(span_suicide("[user] начинает бить себя [RU_SRC_INS]! Похоже, [user.p_theyre()] пытается совершить самоубийство!"))
 	playsound(src,hitsound,50,TRUE)
 	return BRUTELOSS
 
@@ -570,7 +570,7 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/structure/chair/stool/bar, 0)
 		to_chat(user, span_warning("[src] прилип к вашей руке!"))
 		return
 	if(flags_1 & HOLOGRAM_1)
-		to_chat(user, span_notice("Вы пытаетесь поставить [declent_ru(ACCUSATIVE)], но он исчезает!"))
+		to_chat(user, span_notice("Вы пытаетесь поставить [RU_SRC_ACC], но он исчезает!"))
 		qdel(src)
 		return
 
@@ -582,7 +582,7 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/structure/chair/stool/bar, 0)
 			to_chat(user, span_warning("Здесь уже что-то есть!"))
 			return
 
-	user.visible_message(span_notice("[user] ставит [declent_ru(ACCUSATIVE)]."), span_notice("Вы ставите [declent_ru(ACCUSATIVE)]."))
+	user.visible_message(span_notice("[user] ставит [RU_SRC_ACC]."), span_notice("Вы ставите [RU_SRC_ACC]."))
 	var/obj/structure/chair/chair = new origin_type(turf)
 	chair.set_custom_materials(custom_materials)
 	TransferComponents(chair)
@@ -605,7 +605,7 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/structure/chair/stool/bar, 0)
 
 /obj/item/chair/hit_reaction(mob/living/carbon/human/owner, atom/movable/hitby, attack_text = "атаку", final_block_chance = 0, damage = 0, attack_type = MELEE_ATTACK, damage_type = BRUTE)
 	if(attack_type == UNARMED_ATTACK && prob(hit_reaction_chance) || attack_type == LEAP_ATTACK && prob(hit_reaction_chance))
-		owner.visible_message(span_danger("[owner] отбивает [attack_text] при помощи [declent_ru(GENITIVE)]!"))
+		owner.visible_message(span_danger("[owner] отбивает [attack_text] при помощи [RU_SRC_GEN]!"))
 		if(take_chair_damage(damage, damage_type, MELEE)) // Our chair takes our incoming damage for us, which can result in it smashing.
 			smash(owner)
 		return TRUE
@@ -626,7 +626,7 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/structure/chair/stool/bar, 0)
 	if(!take_chair_damage(damage_to_inflict, damtype, MELEE)) // If we would do enough damage to bring our chair's integrity to 0, we instead go past the check to smash it against our target
 		return
 
-	user.visible_message(span_danger("[user] разбивает [declent_ru(NOMINATIVE)] вдребезги об [give_this_fucker_the_chair]"))
+	user.visible_message(span_danger("[user] разбивает [RU_SRC_NOM] вдребезги об [give_this_fucker_the_chair]"))
 	if(!HAS_TRAIT(give_this_fucker_the_chair, TRAIT_BRAWLING_KNOCKDOWN_BLOCKED))
 		if(vulnerable_hit || give_this_fucker_the_chair.get_timed_status_effect_duration(/datum/status_effect/staggered))
 			give_this_fucker_the_chair.Knockdown(2 SECONDS, daze_amount = daze_amount)
@@ -802,12 +802,12 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/structure/chair/stool/bar, 0)
 /obj/structure/chair/bronze/click_alt(mob/user)
 	turns = 0
 	if(!(datum_flags & DF_ISPROCESSING))
-		user.visible_message(span_notice("[user] раскручивает [declent_ru(ACCUSATIVE)], и последние отголоски Ратварской технологии заставляют его вращаться ВЕЧНО."), \
+		user.visible_message(span_notice("[user] раскручивает [RU_SRC_ACC], и последние отголоски Ратварской технологии заставляют его вращаться ВЕЧНО."), \
 		span_notice("Автоматизированные вращающиеся стулья. Вершина древней Ратварской технологии."))
 		START_PROCESSING(SSfastprocess, src)
 	else
-		user.visible_message(span_notice("[user] останавливает бесконтрольное вращение [declent_ru(GENITIVE)]."), \
-		span_notice("Вы хватаете [declent_ru(ACCUSATIVE)] и останавливаете его дикое вращение."))
+		user.visible_message(span_notice("[user] останавливает бесконтрольное вращение [RU_SRC_GEN]."), \
+		span_notice("Вы хватаете [RU_SRC_ACC] и останавливаете его дикое вращение."))
 		STOP_PROCESSING(SSfastprocess, src)
 	return CLICK_ACTION_SUCCESS
 
@@ -992,8 +992,8 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/structure/chair/stool/bar, 0)
 /obj/structure/handrail/proc/stop_buckle(mob/living/source, ...)
 	SIGNAL_HANDLER
 	source.visible_message(
-		span_warning("[source] теряет хватку за [declent_ru(ACCUSATIVE)]!"),
-		span_warning("Вы теряете хватку за [declent_ru(ACCUSATIVE)]!"),
+		span_warning("[source] теряет хватку за [RU_SRC_ACC]!"),
+		span_warning("Вы теряете хватку за [RU_SRC_ACC]!"),
 		visible_message_flags = ALWAYS_SHOW_SELF_MESSAGE,
 		vision_distance = COMBAT_MESSAGE_RANGE,
 	)
@@ -1001,8 +1001,8 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/structure/chair/stool/bar, 0)
 
 /obj/structure/handrail/buckle_feedback(mob/living/being_buckled, mob/buckler)
 	buckler.visible_message(
-		span_notice("[buckler] крепко хватается за [declent_ru(ACCUSATIVE)], удерживаясь на ногах."),
-		span_notice("Вы крепко хватаетесь за [declent_ru(ACCUSATIVE)], удерживаясь на ногах."),
+		span_notice("[buckler] крепко хватается за [RU_SRC_ACC], удерживаясь на ногах."),
+		span_notice("Вы крепко хватаетесь за [RU_SRC_ACC], удерживаясь на ногах."),
 		visible_message_flags = ALWAYS_SHOW_SELF_MESSAGE,
 		vision_distance = COMBAT_MESSAGE_RANGE,
 	)
@@ -1010,15 +1010,15 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/structure/chair/stool/bar, 0)
 /obj/structure/handrail/unbuckle_feedback(mob/living/being_unbuckled, mob/unbuckler)
 	if(being_unbuckled == unbuckler)
 		being_unbuckled.visible_message(
-			span_notice("[unbuckler] отпускает [declent_ru(ACCUSATIVE)]."),
-			span_notice("Вы отпускаете [declent_ru(ACCUSATIVE)]."),
+			span_notice("[unbuckler] отпускает [RU_SRC_ACC]."),
+			span_notice("Вы отпускаете [RU_SRC_ACC]."),
 			visible_message_flags = ALWAYS_SHOW_SELF_MESSAGE,
 			vision_distance = COMBAT_MESSAGE_RANGE,
 		)
 	else
 		being_unbuckled.visible_message(
-			span_warning("[unbuckler] заставляет [being_unbuckled] отпустить [declent_ru(ACCUSATIVE)]!"),
-			span_warning("[unbuckler] заставляет вас отпустить [declent_ru(ACCUSATIVE)]!"),
+			span_warning("[unbuckler] заставляет [being_unbuckled] отпустить [RU_SRC_ACC]!"),
+			span_warning("[unbuckler] заставляет вас отпустить [RU_SRC_ACC]!"),
 			visible_message_flags = ALWAYS_SHOW_SELF_MESSAGE,
 			vision_distance = COMBAT_MESSAGE_RANGE,
 		)

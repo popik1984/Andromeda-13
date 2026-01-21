@@ -82,7 +82,7 @@
 	if(istype(Item))
 		Item.forceMove(user.loc)
 		user.put_in_hands(Item)
-		to_chat(user, span_notice("Вы достаёте [Item.declent_ru(ACCUSATIVE)] из [declent_ru(GENITIVE)]."))
+		to_chat(user, span_notice("Вы достаёте [RU_ACC(Item)] из [RU_SRC_GEN]."))
 		update_icon()
 
 /obj/item/folder/attack_hand(mob/user, list/modifiers)

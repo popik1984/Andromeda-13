@@ -386,7 +386,7 @@ GLOBAL_LIST_EMPTY(roundstart_station_closets)
 	if(length(paint_jobs))
 		. += span_notice("Его можно [EXAMINE_HINT("покрасить")] в другую текстуру.")
 	if(HAS_TRAIT(user, TRAIT_SKITTISH) && divable)
-		. += span_notice("Если вы врежетесь в [src.declent_ru(ACCUSATIVE)] на бегу, вы запрыгнете внутрь.")
+		. += span_notice("Если вы врежетесь в [RU_SRC_ACC] на бегу, вы запрыгнете внутрь.")
 
 	if(can_install_electronics)
 		if(!secure)
@@ -471,13 +471,13 @@ GLOBAL_LIST_EMPTY(roundstart_station_closets)
 		if(!(user.mobility_flags & MOBILITY_USE))
 			return FALSE
 	if(pulledby && user && HAS_TRAIT(src, TRAIT_STRONGPULL) && user != pulledby)
-		to_chat(user, span_danger("[pulledby] невероятно крепко держит [declent_ru(ACCUSATIVE)], не давая ему открыться."))
+		to_chat(user, span_danger("[pulledby] невероятно крепко держит [RU_SRC_ACC], не давая ему открыться."))
 		return FALSE
 	var/turf/T = get_turf(src)
 	for(var/mob/living/L in T)
 		if(L.anchored || horizontal && L.mob_size > MOB_SIZE_TINY && L.density)
 			if(user)
-				to_chat(user, span_danger("Сверху на [declent_ru(PREPOSITIONAL)] что-то большое, не даёт открыть."))
+				to_chat(user, span_danger("Сверху на [RU_SRC_PRE] что-то большое, не даёт открыть."))
 			return FALSE
 	return TRUE
 
@@ -491,7 +491,7 @@ GLOBAL_LIST_EMPTY(roundstart_station_closets)
 	for(var/mob/living/L in T)
 		if(L.anchored || horizontal && L.mob_size > MOB_SIZE_TINY && L.density)
 			if(user)
-				to_chat(user, span_danger("В [declent_ru(PREPOSITIONAL)] что-то слишком большое, не даёт закрыть."))
+				to_chat(user, span_danger("В [RU_SRC_PRE] что-то слишком большое, не даёт закрыть."))
 			return FALSE
 	return TRUE
 
@@ -771,8 +771,8 @@ GLOBAL_LIST_EMPTY(roundstart_station_closets)
 		update_appearance()
 
 	else if(istype(weapon, /obj/item/electronics/airlock) && can_install_airlock_electronics(user))
-		user.visible_message(span_notice("[user] устанавливает электронику в [declent_ru(NOMINATIVE)]."),\
-			span_notice("Вы начинаете устанавливать электронику в [declent_ru(NOMINATIVE)]..."))
+		user.visible_message(span_notice("[user] устанавливает электронику в [RU_SRC_NOM]."),\
+			span_notice("Вы начинаете устанавливать электронику в [RU_SRC_NOM]..."))
 
 		if(!do_after(user, 4 SECONDS, target = src, extra_checks = CALLBACK(src, PROC_REF(can_install_airlock_electronics), user)))
 			return
@@ -787,8 +787,8 @@ GLOBAL_LIST_EMPTY(roundstart_station_closets)
 		update_appearance()
 
 	else if(weapon.tool_behaviour == TOOL_SCREWDRIVER && can_unscrew_airlock_electronics(user))
-		user.visible_message(span_notice("[user] начинает извлекать электронику из [declent_ru(GENITIVE)]."),\
-			span_notice("Вы начинаете извлекать электронику из [declent_ru(GENITIVE)]..."))
+		user.visible_message(span_notice("[user] начинает извлекать электронику из [RU_SRC_GEN]."),\
+			span_notice("Вы начинаете извлекать электронику из [RU_SRC_GEN]..."))
 
 		if (!weapon.use_tool(src, user, 40, volume = 50, extra_checks = CALLBACK(src, PROC_REF(can_unscrew_airlock_electronics), user)))
 			return
@@ -821,8 +821,8 @@ GLOBAL_LIST_EMPTY(roundstart_station_closets)
 		balloon_alert(user, "картридер установлен")
 
 	else if(weapon.tool_behaviour == TOOL_CROWBAR && can_pryout_card_reader(user))
-		user.visible_message(span_notice("[user] начинает выламывать картридер из [declent_ru(GENITIVE)]."),\
-			span_notice("Вы начинаете выламывать картридер из [declent_ru(GENITIVE)]..."))
+		user.visible_message(span_notice("[user] начинает выламывать картридер из [RU_SRC_GEN]."),\
+			span_notice("Вы начинаете выламывать картридер из [RU_SRC_GEN]..."))
 
 		if(!weapon.use_tool(src, user, 4 SECONDS, extra_checks = CALLBACK(src, PROC_REF(can_pryout_card_reader), user)))
 			return
@@ -873,18 +873,18 @@ GLOBAL_LIST_EMPTY(roundstart_station_closets)
 				if(!weapon.tool_start_check(user, amount=1))
 					return
 
-				to_chat(user, span_notice("Вы начинаете разрезать [declent_ru(ACCUSATIVE)] на части..."))
+				to_chat(user, span_notice("Вы начинаете разрезать [RU_SRC_ACC] на части..."))
 				if(weapon.use_tool(src, user, 40, volume=50))
 					if(!opened)
 						return
-					user.visible_message(span_notice("[user] разрезает [declent_ru(ACCUSATIVE)]."),
-									span_notice("Вы разрезаете [declent_ru(ACCUSATIVE)] с помощью [weapon.declent_ru(GENITIVE)]."),
+					user.visible_message(span_notice("[RU_USER_NOM] разрезает [RU_SRC_ACC]."),
+									span_notice("Вы разрезаете [RU_SRC_ACC] с помощью [RU_GEN(weapon)]."),
 									span_hear("Слышна сварка."))
 					deconstruct(TRUE)
 				return
 			else // for example cardboard box is cut with wirecutters
-				user.visible_message(span_notice("[user] разрезает [declent_ru(ACCUSATIVE)]."), \
-									span_notice("Вы разрезаете [declent_ru(ACCUSATIVE)] с помощью [weapon.declent_ru(GENITIVE)]."))
+				user.visible_message(span_notice("[RU_USER_NOM] разрезает [RU_SRC_ACC]."), \
+									span_notice("Вы разрезаете [RU_SRC_ACC] с помощью [RU_GEN(weapon)]."))
 				deconstruct(TRUE)
 				return
 		if (user.combat_mode)
@@ -901,8 +901,8 @@ GLOBAL_LIST_EMPTY(roundstart_station_closets)
 				return
 			welded = !welded
 			after_weld(welded)
-			user.visible_message(span_notice("[user] [welded ? "заваривает" : "разваривает"] [declent_ru(ACCUSATIVE)]."),
-							span_notice("Вы [welded ? "завариваете" : "развариваете"] [declent_ru(ACCUSATIVE)] с помощью [weapon.declent_ru(GENITIVE)]."),
+			user.visible_message(span_notice("[RU_USER_NOM] [welded ? "заваривает" : "разваривает"] [RU_SRC_ACC]."),
+							span_notice("Вы [welded ? "завариваете" : "развариваете"] [RU_SRC_ACC] с помощью [RU_GEN(weapon)]."),
 							span_hear("Слышна сварка."))
 			user.log_message("[welded ? "welded":"unwelded"] closet [src] with [weapon]", LOG_GAME)
 			update_appearance()
@@ -948,13 +948,13 @@ GLOBAL_LIST_EMPTY(roundstart_station_closets)
 		return
 	var/turf/T = get_turf(src)
 	add_fingerprint(user)
-	user.visible_message(span_warning("[user] [actuallyismob ? "пытается запихнуть ":""] [O] в [declent_ru(NOMINATIVE)]."), \
-		span_warning("Вы [actuallyismob ? "пытаетесь запихнуть ":""] [O] в [declent_ru(NOMINATIVE)]."), \
+	user.visible_message(span_warning("[RU_USER_NOM] [actuallyismob ? "пытается запихнуть ":""] [RU_ACC(O)] в [RU_SRC_NOM]."), \
+		span_warning("Вы [actuallyismob ? "пытаетесь запихнуть ":""] [RU_ACC(O)] в [RU_SRC_NOM]."), \
 		span_hear("Слышен звон."))
 	if(actuallyismob)
 		if(do_after(user, 4 SECONDS, O))
-			user.visible_message(span_notice("[user] запихивает [O] в [declent_ru(NOMINATIVE)]."), \
-				span_notice("Вы запихиваете [O] в [declent_ru(NOMINATIVE)]."), \
+			user.visible_message(span_notice("[RU_USER_NOM] запихивает [RU_ACC(O)] в [RU_SRC_NOM]."), \
+				span_notice("Вы запихиваете [RU_ACC(O)] в [RU_SRC_NOM]."), \
 				span_hear("Слышен громкий металлический удар."))
 			var/mob/living/L = O
 			if(!issilicon(L))
@@ -974,7 +974,7 @@ GLOBAL_LIST_EMPTY(roundstart_station_closets)
 	if(locked)
 		if(message_cooldown <= world.time)
 			message_cooldown = world.time + 50
-			to_chat(user, span_warning("Дверь [src.declent_ru(GENITIVE)] не поддаётся!"))
+			to_chat(user, span_warning("Дверь [RU_SRC_GEN] не поддаётся!"))
 		return
 	container_resist_act(user)
 
@@ -1049,9 +1049,9 @@ GLOBAL_LIST_EMPTY(roundstart_station_closets)
 	//okay, so the closet is either welded or locked... resist!!!
 	user.changeNext_move(CLICK_CD_BREAKOUT)
 	user.last_special = world.time + CLICK_CD_BREAKOUT
-	user.visible_message(span_warning("[declent_ru(NOMINATIVE)] начинает сильно трястись!"), \
-		span_notice("Вы наваливаетесь на заднюю стенку [declent_ru(GENITIVE)] и начинаете толкать дверь... (это займёт около [DisplayTimeText(breakout_time)].)"), \
-		span_hear("Вы слышите удары из [declent_ru(GENITIVE)]."))
+	user.visible_message(span_warning("[RU_SRC_NOM] начинает сильно трястись!"), \
+		span_notice("Вы наваливаетесь на заднюю стенку [RU_SRC_GEN] и начинаете толкать дверь... (это займёт около [DisplayTimeText(breakout_time)].)"), \
+		span_hear("Вы слышите удары из [RU_SRC_GEN]."))
 
 	addtimer(CALLBACK(src, PROC_REF(check_if_shake)), 1 SECONDS)
 
@@ -1059,12 +1059,12 @@ GLOBAL_LIST_EMPTY(roundstart_station_closets)
 		if(!user || user.stat != CONSCIOUS || (loc_required && (user.loc != src)) || opened || (!locked && !welded) )
 			return
 		//we check after a while whether there is a point of resisting anymore and whether the user is capable of resisting
-		user.visible_message(span_danger("[user] успешно вырывается из [declent_ru(NOMINATIVE)]!"),
-							span_notice("Вы успешно вырвались из [declent_ru(GENITIVE)]!"))
+		user.visible_message(span_danger("[user] успешно вырывается из [RU_SRC_NOM]!"),
+							span_notice("Вы успешно вырвались из [RU_SRC_GEN]!"))
 		bust_open()
 	else
 		if(user.loc == src) //so we don't get the message if we resisted multiple times and succeeded.
-			to_chat(user, span_warning("Вам не удалось выбраться из [declent_ru(NOMINATIVE)]!"))
+			to_chat(user, span_warning("Вам не удалось выбраться из [RU_SRC_NOM]!"))
 /obj/structure/closet/relay_container_resist_act(mob/living/user, obj/container)
 	container_resist_act(user)
 
@@ -1144,8 +1144,8 @@ GLOBAL_LIST_EMPTY(roundstart_station_closets)
 	locked = !locked
 	play_closet_lock_sound()
 	user.visible_message(
-		span_notice("[user] [locked ? "блокирует" : "разблокирует"] [declent_ru(NOMINATIVE)]."),
-		span_notice("Вы [locked ? "заблокировали" : "разблокировали"] [declent_ru(NOMINATIVE)]."),
+		span_notice("[user] [locked ? "блокирует" : "разблокирует"] [RU_SRC_NOM]."),
+		span_notice("Вы [locked ? "заблокировали" : "разблокировали"] [RU_SRC_NOM]."),
 	)
 	update_appearance()
 
@@ -1171,7 +1171,7 @@ GLOBAL_LIST_EMPTY(roundstart_station_closets)
 
 /obj/structure/closet/emag_act(mob/user, obj/item/card/emag/emag_card)
 	if(secure && !broken)
-		visible_message(span_warning("Искры летят из [declent_ru(GENITIVE)]!"), blind_message = span_hear("Вы слышите слабую электрическую искру."))
+		visible_message(span_warning("Искры летят из [RU_SRC_GEN]!"), blind_message = span_hear("Вы слышите слабую электрическую искру."))
 		balloon_alert(user, "замок взломан")
 		playsound(src, SFX_SPARKS, 50, TRUE, SHORT_RANGE_SOUND_EXTRARANGE)
 		broken = TRUE
@@ -1236,11 +1236,11 @@ GLOBAL_LIST_EMPTY(roundstart_station_closets)
 	else
 		target.Knockdown(SHOVE_KNOCKDOWN_SOLID)
 	update_icon()
-	target.visible_message(span_danger("[shover.name] запихивает [target.name] в [declent_ru(NOMINATIVE)]!"),
-		span_userdanger("[shover.name] запихивает вас в [declent_ru(NOMINATIVE)]!"),
+	target.visible_message(span_danger("[shover.name] запихивает [target.name] в [RU_SRC_NOM]!"),
+		span_userdanger("[shover.name] запихивает вас в [RU_SRC_NOM]!"),
 		span_hear("Вы слышите агрессивное шарканье, за которым следует громкий удар!"), COMBAT_MESSAGE_RANGE, shover)
-	to_chat(src, span_danger("Вы запихиваете [target.name] в [declent_ru(NOMINATIVE)]!"))
-	log_combat(shover, target, "shoved", "into [declent_ru(NOMINATIVE)] (locker/crate)[weapon ? " with [weapon]" : ""]")
+	to_chat(src, span_danger("Вы запихиваете [target.name] в [RU_SRC_NOM]!"))
+	log_combat(shover, target, "shoved", "into [RU_SRC_NOM] (locker/crate)[weapon ? " with [weapon]" : ""]")
 	return COMSIG_LIVING_SHOVE_HANDLED
 
 /// Signal proc for [COMSIG_ATOM_MAGICALLY_UNLOCKED]. Unlock and open up when we get knock casted.
@@ -1273,8 +1273,8 @@ GLOBAL_LIST_EMPTY(roundstart_station_closets)
 		HIDE_ATTACK_MESSAGES(attack_modifiers)
 		MODIFY_ATTACK_FORCE_MULTIPLIER(attack_modifiers, 2)
 		user.visible_message(
-			span_danger("[user] точно пронзает электронику [declent_ru(GENITIVE)] с помощью [attacking_item]!"),
-			span_danger("Вы точно пронзаете электронику [declent_ru(GENITIVE)] с помощью [attacking_item]!"),
+			span_danger("[user] точно пронзает электронику [RU_SRC_GEN] с помощью [attacking_item]!"),
+			span_danger("Вы точно пронзаете электронику [RU_SRC_GEN] с помощью [attacking_item]!"),
 			null,
 			COMBAT_MESSAGE_RANGE,
 		)

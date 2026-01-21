@@ -102,7 +102,7 @@
 		return NONE
 
 	// ИСПРАВЛЕНИЕ: Первым аргументом передаем cutter (инструмент), а не carbon_target (моба)
-	if(check_cuffs_strength(cutter, target, cutter_user, cuffs, span_notice("[cutter_user] пытается срезать оковы с [target.declent_ru(GENITIVE)] [cutter.declent_ru(INSTRUMENTAL)], но безуспешно!")))
+	if(check_cuffs_strength(cutter, target, cutter_user, cuffs, span_notice("[RU_NOM(cutter_user)] пытается срезать оковы с [RU_GEN(target)] [RU_INS(cutter)], но безуспешно!")))
 		INVOKE_ASYNC(src, PROC_REF(do_cuffsnap_target), cutter, target, cutter_user, cuffs)
 
 	return COMPONENT_SKIP_ATTACK
@@ -122,16 +122,16 @@
 		return
 	log_combat(cutter_user, target, "cut or tried to cut [target]'s cuffs", cutter)
 
-	do_snip_snap(cutter, target, cutter_user, cuffs, span_notice("[cutter_user] срезает оковы с [target.declent_ru(GENITIVE)] [cutter.declent_ru(INSTRUMENTAL)]!"))
+	do_snip_snap(cutter, target, cutter_user, cuffs, span_notice("[RU_NOM(cutter_user)] срезает оковы с [RU_TAR_GEN] [RU_INS(cutter)]!"))
 
 ///Called when a player tries to remove the cuffs binding an item to their owner
 /datum/element/cuffsnapping/proc/try_cuffsnap_item(obj/item/cutter, mob/living/target, mob/living/cutter_user, obj/item/cuffed, obj/item/restraints/handcuffs/cuffs)
-	if(check_cuffs_strength(cutter, target, cutter_user, cuffs, span_notice("[cutter_user] пытается срезать оковы, приковывающие [cuffed.declent_ru(ACCUSATIVE)] к [target.declent_ru(DATIVE)], но безуспешно!")))
+	if(check_cuffs_strength(cutter, target, cutter_user, cuffs, span_notice("[RU_NOM(cutter_user)] пытается срезать оковы, приковывающие [RU_ACC(cuffed)] к [RU_TAR_DAT], но безуспешно!")))
 		return
 
 	log_combat(cutter_user, target, "cut or tried to cut restraints binding [cuffed] to")
 
-	do_snip_snap(cutter, target, cutter_user, cuffs, span_notice("[cutter_user] срезает оковы, приковывающие [cuffed.declent_ru(ACCUSATIVE)] к [target.declent_ru(DATIVE)], [cutter.declent_ru(INSTRUMENTAL)]!"))
+	do_snip_snap(cutter, target, cutter_user, cuffs, span_notice("[RU_NOM(cutter_user)] срезает оковы, приковывающие [RU_ACC(cuffed)] к [RU_TAR_DAT], [RU_INS(cutter)]!"))
 
 ////The proc responsible for the very timed action that deletes the cuffs
 /datum/element/cuffsnapping/proc/do_snip_snap(obj/item/cutter, mob/living/target, mob/cutter_user, obj/item/restraints/handcuffs/cuffs, message)

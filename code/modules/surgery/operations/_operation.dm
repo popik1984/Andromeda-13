@@ -140,8 +140,8 @@
 		return ITEM_INTERACT_BLOCKING
 
 	visible_message(
-		span_notice("[src] пытается закрыть свою [limb.declent_ru(PREPOSITIONAL)] с помощью [tool.declent_ru(GENITIVE)]..."),
-		span_notice("Вы пытаетесь закрыть свою [limb.declent_ru(PREPOSITIONAL)] с помощью [tool.declent_ru(GENITIVE)]..."),
+		span_notice("[RU_SRC_NOM] пытается закрыть свою [RU_PRE(limb)] с помощью [RU_GEN(tool)]..."),
+		span_notice("Вы пытаетесь закрыть свою [RU_PRE(limb)] с помощью [RU_GEN(tool)]..."),
 		span_hear("Вы слышите [tool?.get_temperature() ? "шипение" : "шуршание"]"),
 		vision_distance = 5,
 		visible_message_flags = ALWAYS_SHOW_SELF_MESSAGE,
@@ -156,8 +156,8 @@
 		return ITEM_INTERACT_BLOCKING
 
 	visible_message(
-		span_notice("[src] закрывает свою [limb.declent_ru(PREPOSITIONAL)] с помощью [tool.declent_ru(GENITIVE)]."),
-		span_notice("Вы закрываете свою [limb.declent_ru(PREPOSITIONAL)] с помощью [tool.declent_ru(GENITIVE)]."),
+		span_notice("[src] закрывает свою [RU_PRE(limb)] с помощью [RU_GEN(tool)]."),
+		span_notice("Вы закрываете свою [RU_PRE(limb)] с помощью [RU_GEN(tool)]."),
 		span_hear("Вы слышите [tool?.get_temperature() ? "шипение" : "шуршание"]."),
 		vision_distance = 5,
 		visible_message_flags = ALWAYS_SHOW_SELF_MESSAGE,

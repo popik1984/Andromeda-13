@@ -141,10 +141,6 @@
 	/// Generally for niche objects, atoms blacklisted can spawn if enabled by spawner.
 	var/spawn_blacklisted = FALSE
 
-	/// Список склонений русского названия атома в разных грамматических падежах.
-	/// Формат: list(CASE_ID = "name_in_case", ...)
-	var/list/ru_names
-
 /**
  * Top level of the destroy chain for most atoms
  *

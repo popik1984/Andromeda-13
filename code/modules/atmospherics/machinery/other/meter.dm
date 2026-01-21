@@ -146,11 +146,11 @@
 
 /obj/machinery/meter/wrench_act(mob/user, obj/item/wrench)
 	..()
-	to_chat(user, span_notice("Вы начинаете откручивать [declent_ru(ACCUSATIVE)]..."))
+	to_chat(user, span_notice("Вы начинаете откручивать [RU_SRC_ACC]..."))
 	if (wrench.use_tool(src, user, 40, volume=50))
 		user.visible_message(
-			"[user] откручивает [declent_ru(ACCUSATIVE)].",
-			span_notice("Вы открутили [declent_ru(ACCUSATIVE)]."),
+			"[user] откручивает [RU_SRC_ACC].",
+			span_notice("Вы открутили [RU_SRC_ACC]."),
 			span_hear("Вы слышите звук трещотки."))
 		deconstruct()
 	return TRUE

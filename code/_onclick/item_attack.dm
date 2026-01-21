@@ -306,8 +306,8 @@
 
 	var/damage = take_damage(final_force, attacking_item.damtype, MELEE, 1, get_dir(src, user))
 	//only witnesses close by and the victim see a hit message.
-	user.visible_message(span_danger("[user] бьёт [declent_ru(GENITIVE)] [attacking_item.declent_ru(INSTRUMENTAL)][damage ? "." : ", но не оставляет следов!"]"), \
-		span_danger("Вы бьёте [declent_ru(NOMINATIVE)] [attacking_item.declent_ru(INSTRUMENTAL)][damage ? "." : ", но не оставляете следов!"]"), null, COMBAT_MESSAGE_RANGE)
+	user.visible_message(span_danger("[RU_USER_NOM] бьёт [RU_SRC_GEN] [RU_INS(attacking_item)][damage ? "." : ", но не оставляет следов!"]"), \
+		span_danger("Вы бьёте [RU_SRC_NOM] [RU_INS(attacking_item)][damage ? "." : ", но не оставляете следов!"]"), null, COMBAT_MESSAGE_RANGE)
 	log_combat(user, src, "attacked", attacking_item)
 	return damage
 
@@ -347,7 +347,7 @@
 
 	if(user != src)
 		// This doesn't factor in armor, or most damage modifiers (physiology). Your mileage may vary
-		if(check_block(attacking_item, final_force, "[attacking_item.declent_ru(ACCUSATIVE)]", MELEE_ATTACK, attacking_item.armour_penetration, attacking_item.damtype))
+		if(check_block(attacking_item, final_force, "[RU_ACC(attacking_item)]", MELEE_ATTACK, attacking_item.armour_penetration, attacking_item.damtype))
 			return ATTACK_FAILED
 
 	SEND_SIGNAL(attacking_item, COMSIG_ITEM_ATTACK_ZONE, src, user, targeting)
@@ -429,7 +429,7 @@
 					adjust_organ_loss(ORGAN_SLOT_BRAIN, 20)
 					if(stat == CONSCIOUS)
 						visible_message(
-							span_danger("[declent_ru(NOMINATIVE)] контужен!"),
+							span_danger("[RU_SRC_NOM] контужен!"),
 							span_userdanger("Вы контужены!"),
 						)
 						set_confusion_if_lower(20 SECONDS)
@@ -452,7 +452,7 @@
 			if(stat == CONSCIOUS && !attacking_item.get_sharpness() && !HAS_TRAIT(src, TRAIT_BRAWLING_KNOCKDOWN_BLOCKED) && attacking_item.damtype == BRUTE)
 				if(prob(damage_done))
 					visible_message(
-						span_danger("[declent_ru(NOMINATIVE)] сбит с ног!"),
+						span_danger("[RU_SRC_NOM] сбит с ног!"),
 						span_userdanger("Вас сбили с ног!"),
 					)
 					apply_effect(6 SECONDS, EFFECT_KNOCKDOWN, armor_block)
@@ -504,14 +504,14 @@
 	if (picked_index && length(weapon.attack_verb_simple) >= picked_index)
 		message_verb_simple = weapon.attack_verb_simple[picked_index]
 
-	var/attack_message_spectator = "[declent_ru(NOMINATIVE)] [message_verb_continuous][message_hit_area] с помощью [weapon.declent_ru(GENITIVE)]!"
-	var/attack_message_victim = "Кто-то [message_verb_continuous] вас[message_hit_area] с помощью [weapon.declent_ru(GENITIVE)]!"
-	var/attack_message_attacker = "Вы [message_verb_simple] [declent_ru(NOMINATIVE)][message_hit_area] с помощью [weapon.declent_ru(GENITIVE)]!"
+	var/attack_message_spectator = "[RU_SRC_NOM] [message_verb_continuous][message_hit_area] с помощью [RU_GEN(weapon)]!"
+	var/attack_message_victim = "Кто-то [message_verb_continuous] вас[message_hit_area] с помощью [RU_GEN(weapon)]!"
+	var/attack_message_attacker = "Вы [message_verb_simple] [RU_SRC_NOM][message_hit_area] с помощью [RU_GEN(weapon)]!"
 	if(user in viewers(src, null))
-		attack_message_spectator = "[user] [message_verb_continuous] [declent_ru(NOMINATIVE)][message_hit_area] с помощью [weapon.declent_ru(GENITIVE)]!"
-		attack_message_victim = "[user] [message_verb_continuous] вас[message_hit_area] с помощью [weapon.declent_ru(GENITIVE)]!"
+		attack_message_spectator = "[RU_USER_NOM] [message_verb_continuous] [RU_SRC_NOM][message_hit_area] с помощью [RU_GEN(weapon)]!"
+		attack_message_victim = "[RU_USER_NOM] [message_verb_continuous] вас[message_hit_area] с помощью [RU_GEN(weapon)]!"
 	if(user == src)
-		attack_message_victim = "Вы [message_verb_simple] себя[message_hit_area] с помощью [weapon.declent_ru(GENITIVE)]."
+		attack_message_victim = "Вы [message_verb_simple] себя[message_hit_area] с помощью [RU_GEN(weapon)]."
 	visible_message(span_danger("[attack_message_spectator]"),\
 		span_userdanger("[attack_message_victim]"), null, COMBAT_MESSAGE_RANGE, user)
 	if(is_blind())

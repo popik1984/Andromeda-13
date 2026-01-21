@@ -187,7 +187,7 @@
 	. += span_notice("Ощущается [descriptive].")
 
 	if(tank_assembly)
-		. += span_warning("К [declent_ru(DATIVE)] прикреплено какое-то устройство!")
+		. += span_warning("К [RU_SRC_DAT] прикреплено какое-то устройство!")
 
 /obj/item/tank/atom_deconstruct(disassembled = TRUE)
 	var/atom/location = loc
@@ -198,13 +198,13 @@
 
 /obj/item/tank/suicide_act(mob/living/user)
 	var/mob/living/carbon/human/human_user = user
-	user.visible_message(span_suicide("[user] прикладывает клапан [declent_ru(GENITIVE)] к своим губам! Похоже, [user] пытается совершить суицид!"))
+	user.visible_message(span_suicide("[user] прикладывает клапан [RU_SRC_GEN] к своим губам! Похоже, [user] пытается совершить суицид!"))
 	playsound(loc, 'sound/effects/spray.ogg', 10, TRUE, -3)
 	if(!QDELETED(human_user) && air_contents && air_contents.return_pressure() >= 1000)
 		ADD_TRAIT(human_user, TRAIT_DISFIGURED, TRAIT_GENERIC)
 		human_user.inflate_gib()
 		return MANUAL_SUICIDE
-	to_chat(user, span_warning("В [declent_ru(PREPOSITIONAL)] недостаточно давления для суицида..."))
+	to_chat(user, span_warning("В [RU_SRC_PRE] недостаточно давления для суицида..."))
 	return SHAME
 
 /obj/item/tank/attackby(obj/item/attacking_item, mob/user, list/modifiers, list/attack_modifiers)
@@ -388,7 +388,7 @@
 
 	if(atom_integrity < 0) // Чтобы мы не проигрывали оповещения, пока взрываемся или разрываемся.
 		return
-	visible_message(span_warning("[declent_ru(NOMINATIVE)] дает течь!"))
+	visible_message(span_warning("[RU_SRC_NOM] дает течь!"))
 	playsound(src, 'sound/effects/spray.ogg', 10, TRUE, -3)
 
 /// Обрабатывает разрыв и фрагментацию

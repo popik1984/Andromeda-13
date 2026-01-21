@@ -51,7 +51,7 @@
 		return FALSE
 	if(camera_enabled)
 		if(alarm_manager.send_alarm(ALARM_MOTION, src, src))
-			visible_message(span_warning("На [declent_ru(PREPOSITIONAL)] мигает красная лампочка!"))
+			visible_message(span_warning("На [RU_SRC_PRE] мигает красная лампочка!"))
 	detectTime = -1
 	return TRUE
 

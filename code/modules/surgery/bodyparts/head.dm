@@ -107,16 +107,6 @@
 		PREPOSITIONAL = "голове",
 	)
 
-/obj/item/bodypart/head/get_ru_plaintext_names()
-	return alist(
-		NOMINATIVE = "голова",
-		GENITIVE = "головы",
-		DATIVE = "голове",
-		ACCUSATIVE = "голову",
-		INSTRUMENTAL = "головой",
-		PREPOSITIONAL = "голове",
-	)
-
 /obj/item/bodypart/head/Destroy()
 	QDEL_NULL(worn_ears_offset)
 	QDEL_NULL(worn_glasses_offset)
@@ -130,7 +120,7 @@
 	if(show_organs_on_examine && IS_ORGANIC_LIMB(src))
 		var/obj/item/organ/brain/brain = locate(/obj/item/organ/brain) in src
 		if(!brain)
-			. += span_info("Мозг был извлечён из [declent_ru(GENITIVE)].")
+			. += span_info("Мозг был извлечён из [RU_SRC_GEN].")
 		else if(brain.suicided || (brain.brainmob && HAS_TRAIT(brain.brainmob, TRAIT_SUICIDED)))
 			. += span_info("На лице [real_name] застыло страдальческое выражение; должно быть, они действительно ненавидели жизнь. Надежды на восстановление нет.")
 		else if(brain.brainmob)
@@ -165,10 +155,10 @@
 
 /obj/item/bodypart/head/drop_organs(mob/user, violent_removal)
 	if(user)
-		user.visible_message(span_warning("[user] распиливает [declent_ru(ACCUSATIVE)] и извлекает мозг!"), span_notice("Вы распиливаете [declent_ru(ACCUSATIVE)] и извлекаете мозг."))
+		user.visible_message(span_warning("[RU_USER_NOM] распиливает [RU_SRC_ACC] и извлекает мозг!"), span_notice("Вы распиливаете [RU_SRC_ACC] и извлекаете мозг."))
 	var/obj/item/organ/brain/brain = locate(/obj/item/organ/brain) in src
 	if(brain && violent_removal && prob(90)) //кустарная хирургия может повредить мозг.
-		to_chat(user, span_warning("[brain.declent_ru(NOMINATIVE)] был повреждён в процессе!"))
+		to_chat(user, span_warning("[RU_NOM(brain)] был повреждён в процессе!"))
 		brain.set_organ_damage(brain.maxHealth)
 
 	update_limb()

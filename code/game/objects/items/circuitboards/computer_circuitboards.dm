@@ -1059,7 +1059,7 @@
 
 /obj/item/circuitboard/computer/tram_controls/multitool_act(mob/living/user)
 	split_mode = !split_mode
-	to_chat(user, span_notice("Позиционирование [declent_ru(GENITIVE)] установлено на [split_mode ? "разделенное окно" : "нормальное окно"]."))
+	to_chat(user, span_notice("Позиционирование [RU_SRC_GEN] установлено на [split_mode ? "разделенное окно" : "нормальное окно"]."))
 	return TRUE
 
 /obj/item/circuitboard/computer/terminal
@@ -1272,8 +1272,8 @@
 		locked = !locked
 		balloon_alert(user, locked ? "заблокировано" : "разблокировано")
 		user.visible_message(
-			message = span_notice("[user] [locked ? "блокирует" : "разблокирует"] [declent_ru(NOMINATIVE)] с помощью [attacking_item]."),
-			self_message = span_notice("Вы [locked ? "блокируете" : "разблокируете"] [declent_ru(NOMINATIVE)] с помощью [attacking_item]."),
+			message = span_notice("[user] [locked ? "блокирует" : "разблокирует"] [RU_SRC_NOM] с помощью [attacking_item]."),
+			self_message = span_notice("Вы [locked ? "блокируете" : "разблокируете"] [RU_SRC_NOM] с помощью [attacking_item]."),
 			blind_message = span_hear("Слышен тихий писк."),
 		)
 	else
@@ -1554,7 +1554,7 @@
 
 	contraband = TRUE
 	obj_flags |= EMAGGED
-	to_chat(user, span_notice("Вы настраиваете маршрутизацию и спектр приёмника [declent_ru(GENITIVE)], открывая особые поставки и контрабанду."))
+	to_chat(user, span_notice("Вы настраиваете маршрутизацию и спектр приёмника [RU_SRC_GEN], открывая особые поставки и контрабанду."))
 	return TRUE
 
 /obj/item/circuitboard/computer/cargo/configure_machine(obj/machinery/computer/cargo/machine)

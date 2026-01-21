@@ -761,10 +761,10 @@
 		. += span_nicegreen("Аварийный временный доступ разрешён для ID-карт: [EXAMINE_HINT(active_reta)].")
 
 	if(issilicon(user) && !(machine_stat & BROKEN))
-		. += span_notice("Shift-клик по [declent_ru(DATIVE)], чтобы [ density ? "открыть" : "закрыть"].")
-		. += span_notice("Ctrl-клик по [declent_ru(DATIVE)], чтобы [ locked ? "поднять" : "опустить"] болты.")
-		. += span_notice("Alt-клик по [declent_ru(DATIVE)], чтобы [ secondsElectrified ? "снять напряжение" : "постоянно электризовать"].")
-		. += span_notice("Ctrl-Shift-клик по [declent_ru(DATIVE)], чтобы [ emergency ? "отключить" : "включить"] аварийный доступ.")
+		. += span_notice("Shift-клик по [RU_SRC_DAT], чтобы [ density ? "открыть" : "закрыть"].")
+		. += span_notice("Ctrl-клик по [RU_SRC_DAT], чтобы [ locked ? "поднять" : "опустить"] болты.")
+		. += span_notice("Alt-клик по [RU_SRC_DAT], чтобы [ secondsElectrified ? "снять напряжение" : "постоянно электризовать"].")
+		. += span_notice("Ctrl-Shift-клик по [RU_SRC_DAT], чтобы [ emergency ? "отключить" : "включить"] аварийный доступ.")
 
 /obj/machinery/door/airlock/add_context(atom/source, list/context, obj/item/held_item, mob/user)
 	. = ..()
@@ -914,12 +914,12 @@
 		if((HAS_TRAIT(H, TRAIT_DUMB)) && Adjacent(user))
 			playsound(src, 'sound/effects/bang.ogg', 25, TRUE)
 			if(!istype(H.head, /obj/item/clothing/head/helmet))
-				H.visible_message(span_danger("[user] бьёт головой по шлюзу."), \
+				H.visible_message(span_danger("[RU_USER_NOM] бьёт головой по шлюзу."), \
 									span_userdanger("Вы бьёте головой по шлюзу!"))
 				H.Paralyze(100)
 				H.apply_damage(10, BRUTE, BODY_ZONE_HEAD)
 			else
-				visible_message(span_danger("[user] бьёт головой по шлюзу. Хорошо, что на [user.p_them()] шлем."))
+				visible_message(span_danger("[RU_USER_NOM] бьёт головой по шлюзу. Хорошо, что на [GEND_ON_IN_HIM(user)] шлем."))
 
 /obj/machinery/door/airlock/attempt_wire_interaction(mob/user)
 	if(security_level)
@@ -944,7 +944,7 @@
 
 /obj/machinery/door/airlock/screwdriver_act(mob/living/user, obj/item/tool)
 	if(!has_access_panel)
-		to_chat(user, span_warning("У [declent_ru(DATIVE)] нет технической панели!"))
+		to_chat(user, span_warning("У [RU_SRC_DAT] нет технической панели!"))
 		return ITEM_INTERACT_SUCCESS
 	toggle_panel_open()
 	to_chat(user, span_notice("Вы [panel_open ? "открываете":"закрываете"] техническую панель шлюза."))
@@ -965,15 +965,15 @@
 			return .
 		if(!panel_open)  // double check it wasn't closed while we were trying to snip
 			return .
-		user.visible_message(span_notice("[user] прорезает внешнюю решётку [declent_ru(GENITIVE)]."),
-							span_notice("Вы прорезаете внешнюю решётку [declent_ru(GENITIVE)]."))
+		user.visible_message(span_notice("[RU_USER_NOM] прорезает внешнюю решётку [RU_SRC_GEN]."),
+							span_notice("Вы прорезаете внешнюю решётку [RU_SRC_GEN]."))
 		security_level = AIRLOCK_SECURITY_PLASTEEL_O
 		return .
 	if(note)
 		if(IsReachableBy(user))
-			user.visible_message(span_notice("[user] срезает [note] с [declent_ru(GENITIVE)]."), span_notice("Вы снимаете [note] с [declent_ru(GENITIVE)]."))
+			user.visible_message(span_notice("[RU_USER_NOM] срезает [note] с [RU_SRC_GEN]."), span_notice("Вы снимаете [note] с [RU_SRC_GEN]."))
 		else //telekinesis
-			visible_message(span_notice("[tool] срезает [note] с [declent_ru(GENITIVE)]."))
+			visible_message(span_notice("[tool] срезает [note] с [RU_SRC_GEN]."))
 		tool.play_tool_sound(src)
 		note.forceMove(tool.drop_location())
 		note = null
@@ -1000,14 +1000,14 @@
 		else
 			return ITEM_INTERACT_SUCCESS
 
-	user.visible_message(span_notice("Вы начинаете отрывать [layer_flavor] [declent_ru(NOMINATIVE)]."))
+	user.visible_message(span_notice("Вы начинаете отрывать [layer_flavor] [RU_SRC_NOM]."))
 	if(!tool.use_tool(src, user, 40, volume=100))
 		return ITEM_INTERACT_SUCCESS
 	if(!panel_open || security_level != starting_level)
 		// if the plating's already been broken, don't break it again
 		return ITEM_INTERACT_SUCCESS
-	user.visible_message(span_notice("[user] убирает защиту [declent_ru(GENITIVE)]."),
-							span_notice("Вы убираете [layer_flavor] [declent_ru(GENITIVE)]."))
+	user.visible_message(span_notice("[RU_USER_NOM] убирает защиту [RU_SRC_GEN]."),
+							span_notice("Вы убираете [layer_flavor] [RU_SRC_GEN]."))
 	security_level = next_level
 	spawn_atom_to_turf(/obj/item/stack/sheet/plasteel, user.loc, 1)
 	if(next_level == AIRLOCK_SECURITY_NONE)
@@ -1074,8 +1074,8 @@
 		return ITEM_INTERACT_SUCCESS
 
 	user.visible_message(
-		span_notice("[user] разрезает защиту [declent_ru(GENITIVE)]."),  // passers-by don't get the full picture
-		span_notice("Вы разрезаете [layer_flavor] [declent_ru(GENITIVE)]."),
+		span_notice("[RU_USER_NOM] разрезает защиту [RU_SRC_GEN]."),  // passers-by don't get the full picture
+		span_notice("Вы разрезаете [layer_flavor] [RU_SRC_GEN]."),
 		span_hear("Слышна сварка.")
 	)
 
@@ -1091,15 +1091,15 @@
 
 /obj/machinery/door/airlock/proc/try_reinforce(mob/user, obj/item/stack/sheet/material, amt_required, new_security_level)
 	if(material.get_amount() < amt_required)
-		to_chat(user, span_warning("Вам нужно как минимум [amt_required] листов [material], чтобы укрепить [declent_ru(NOMINATIVE)]."))
+		to_chat(user, span_warning("Вам нужно как минимум [amt_required] листов [material], чтобы укрепить [RU_SRC_NOM]."))
 		return FALSE
-	to_chat(user, span_notice("Вы начинаете укреплять [declent_ru(NOMINATIVE)]."))
+	to_chat(user, span_notice("Вы начинаете укреплять [RU_SRC_NOM]."))
 	if(!do_after(user, 2 SECONDS, src))
 		return FALSE
 	if(!panel_open || !material.use(amt_required))
 		return FALSE
-	user.visible_message(span_notice("[user] укрепляет [declent_ru(NOMINATIVE)] с помощью [material]."),
-						span_notice("Вы укрепляете [declent_ru(NOMINATIVE)] с помощью [material]."))
+	user.visible_message(span_notice("[RU_USER_NOM] укрепляет [RU_SRC_NOM] с помощью [material]."),
+						span_notice("Вы укрепляете [RU_SRC_NOM] с помощью [material]."))
 	security_level = new_security_level
 	update_appearance()
 	return TRUE
@@ -1133,26 +1133,26 @@
 	else if(istype(C, /obj/item/door_seal)) //adding the seal
 		var/obj/item/door_seal/airlockseal = C
 		if(!density)
-			to_chat(user, span_warning("[declent_ru(NOMINATIVE)] должен быть закрыт перед запечатыванием!"))
+			to_chat(user, span_warning("[RU_SRC_NOM] должен быть закрыт перед запечатыванием!"))
 			return
 		if(seal)
 			to_chat(user, span_warning("[src] уже запечатан!"))
 			return
-		user.visible_message(span_notice("[user] начинает запечатывать [declent_ru(NOMINATIVE)]."), span_notice("Вы начинаете запечатывать [declent_ru(NOMINATIVE)]."))
+		user.visible_message(span_notice("[RU_USER_NOM] начинает запечатывать [RU_SRC_NOM]."), span_notice("Вы начинаете запечатывать [RU_SRC_NOM]."))
 		playsound(src, 'sound/items/tools/jaws_pry.ogg', 30, TRUE)
 		if(!do_after(user, airlockseal.seal_time, target = src))
 			return
 		if(!density)
-			to_chat(user, span_warning("[declent_ru(NOMINATIVE)] должен быть закрыт перед запечатыванием!"))
+			to_chat(user, span_warning("[RU_SRC_NOM] должен быть закрыт перед запечатыванием!"))
 			return
 		if(seal)
-			to_chat(user, span_warning("[declent_ru(NOMINATIVE)] уже запечатан!"))
+			to_chat(user, span_warning("[RU_SRC_NOM] уже запечатан!"))
 			return
 		if(!user.transferItemToLoc(airlockseal, src))
 			to_chat(user, span_warning("Почему-то вы не можете прикрепить [airlockseal]!"))
 			return
 		playsound(src, 'sound/machines/airlock/airlockforced.ogg', 30, TRUE)
-		user.visible_message(span_notice("[user] заканчивает запечатывать [declent_ru(NOMINATIVE)]."), span_notice("Вы заканчиваете запечатывать [declent_ru(NOMINATIVE)]."))
+		user.visible_message(span_notice("[RU_USER_NOM] заканчивает запечатывать [RU_SRC_NOM]."), span_notice("Вы заканчиваете запечатывать [RU_SRC_NOM]."))
 		seal = airlockseal
 		modify_max_integrity(max_integrity * AIRLOCK_SEAL_MULTIPLIER)
 		update_appearance()
@@ -1164,7 +1164,7 @@
 		if(!user.transferItemToLoc(C, src))
 			to_chat(user, span_warning("Почему-то вы не можете прикрепить [C]!"))
 			return
-		user.visible_message(span_notice("[user] прикрепляет [C] к [declent_ru(DATIVE)]."), span_notice("Вы прикрепляете [C] к [declent_ru(DATIVE)]."))
+		user.visible_message(span_notice("[RU_USER_NOM] прикрепляет [C] к [RU_SRC_DAT]."), span_notice("Вы прикрепляете [C] к [RU_SRC_DAT]."))
 		note = C
 		update_appearance()
 	else
@@ -1174,19 +1174,19 @@
 /obj/machinery/door/airlock/try_to_weld(obj/item/weldingtool/W, mob/living/user)
 	if(!operating && density)
 		if(seal)
-			to_chat(user, span_warning("[declent_ru(NOMINATIVE)] заблокирован печатью!"))
+			to_chat(user, span_warning("[RU_SRC_NOM] заблокирован печатью!"))
 			return
 
 		if(atom_integrity < max_integrity)
 			if(!W.tool_start_check(user, amount=1, heat_required = HIGH_TEMPERATURE_REQUIRED))
 				return
-			user.visible_message(span_notice("[user] начинает заваривать шлюз."), \
+			user.visible_message(span_notice("[RU_USER_NOM] начинает заваривать шлюз."), \
 							span_notice("Вы начинаете ремонтировать шлюз..."), \
 							span_hear("Слышна сварка."))
 			if(W.use_tool(src, user, 40, volume=50, extra_checks = CALLBACK(src, PROC_REF(weld_checks), W, user)))
 				atom_integrity = max_integrity
 				set_machine_stat(machine_stat & ~BROKEN)
-				user.visible_message(span_notice("[user] заканчивает заваривать [declent_ru(NOMINATIVE)]."), \
+				user.visible_message(span_notice("[RU_USER_NOM] заканчивает заваривать [RU_SRC_NOM]."), \
 									span_notice("Вы заканчиваете ремонт шлюза."))
 				update_appearance()
 		else
@@ -1195,13 +1195,13 @@
 /obj/machinery/door/airlock/try_to_weld_secondary(obj/item/weldingtool/tool, mob/user)
 	if(!tool.tool_start_check(user, amount=1, heat_required = HIGH_TEMPERATURE_REQUIRED))
 		return
-	user.visible_message(span_notice("[user] начинает [welded ? "разваривать":"заваривать"] шлюз."), \
+	user.visible_message(span_notice("[RU_USER_NOM] начинает [welded ? "разваривать":"заваривать"] шлюз."), \
 		span_notice("Вы начинаете [welded ? "разваривать":"заваривать"] шлюз..."), \
 		span_hear("Слышна сварка."))
 	if(!tool.use_tool(src, user, 40, volume=50, extra_checks = CALLBACK(src, PROC_REF(weld_checks), tool, user)))
 		return
 	welded = !welded
-	user.visible_message(span_notice("[user] [welded? "заваривает":"разваривает"] [declent_ru(NOMINATIVE)]."), \
+	user.visible_message(span_notice("[RU_USER_NOM] [welded? "заваривает":"разваривает"] [RU_SRC_NOM]."), \
 		span_notice("Вы [welded ? "завариваете":"развариваете"] шлюз."))
 	user.log_message("[welded ? "welded":"unwelded"] airlock [src] with [tool].", LOG_GAME)
 	update_appearance()
@@ -1224,7 +1224,7 @@
 	if(!ishuman(user))
 		to_chat(user, span_warning("У вас недостаточно ловкости, чтобы снять печать!"))
 		return TRUE
-	user.visible_message(span_notice("[user] начинает снимать печать с [declent_ru(GENITIVE)]."), span_notice("Вы начинаете снимать пневматическую печать с [declent_ru(GENITIVE)]."))
+	user.visible_message(span_notice("[RU_USER_NOM] начинает снимать печать с [RU_SRC_GEN]."), span_notice("Вы начинаете снимать пневматическую печать с [RU_SRC_GEN]."))
 	playsound(src, 'sound/machines/airlock/airlockforced.ogg', 30, TRUE)
 	if(!do_after(user, airlockseal.unseal_time, target = src))
 		return TRUE
@@ -1232,7 +1232,7 @@
 		return TRUE
 	playsound(src, 'sound/items/tools/jaws_pry.ogg', 30, TRUE)
 	airlockseal.forceMove(get_turf(user))
-	user.visible_message(span_notice("[user] заканчивает снимать печать с [declent_ru(GENITIVE)]."), span_notice("Вы заканчиваете снимать пневматическую печать с [declent_ru(GENITIVE)]."))
+	user.visible_message(span_notice("[RU_USER_NOM] заканчивает снимать печать с [RU_SRC_GEN]."), span_notice("Вы заканчиваете снимать пневматическую печать с [RU_SRC_GEN]."))
 	seal = null
 	modify_max_integrity(max_integrity / AIRLOCK_SEAL_MULTIPLIER)
 	update_appearance()
@@ -1265,7 +1265,7 @@
 
 /obj/machinery/door/airlock/try_to_crowbar(obj/item/tool, mob/living/user, forced = FALSE)
 	if(!isnull(tool) && tool.tool_behaviour == TOOL_CROWBAR && should_try_removing_electronics() && !operating)
-		user.visible_message(span_notice("[user] вынимает электронику из сборки шлюза."), \
+		user.visible_message(span_notice("[RU_USER_NOM] вынимает электронику из сборки шлюза."), \
 			span_notice("Вы начинаете вынимать электронику из сборки шлюза..."))
 
 		if(tool.use_tool(src, user, 40, volume = 100))
@@ -1328,7 +1328,7 @@
 	open(BYPASS_DOOR_CHECKS)
 	take_damage(AIRLOCK_PRY_DAMAGE, BRUTE, 0, 0) // Enough to sometimes spark
 	if(density && !open(BYPASS_DOOR_CHECKS))
-		to_chat(user, span_warning("Несмотря на ваши усилия, [declent_ru(NOMINATIVE)] отказывается открываться."))
+		to_chat(user, span_warning("Несмотря на ваши усилия, [RU_SRC_NOM] отказывается открываться."))
 
 /obj/machinery/door/airlock/try_to_crowbar_secondary(obj/item/acting_object, mob/user)
 	try_to_crowbar(null, user, FALSE)
@@ -1564,12 +1564,12 @@
 	if(user.combat_mode)
 		return ..()
 	if(locked || welded || seal) //Extremely generic, as aliens only understand the basics of how airlocks work.
-		to_chat(user, span_warning("[declent_ru(NOMINATIVE)] не поддаётся!"))
+		to_chat(user, span_warning("[RU_SRC_NOM] не поддаётся!"))
 		user.log_message("Tried to pry open [src], located at [loc_name(src)], but failed due to the airlock being sealed.", LOG_GAME)
 		return
 	add_fingerprint(user)
-	user.visible_message(span_warning("[user] начинает вскрывать [declent_ru(NOMINATIVE)]."),\
-						span_noticealien("Вы начинаете вгрызаться когтями в [declent_ru(NOMINATIVE)] изо всех сил!"),\
+	user.visible_message(span_warning("[RU_USER_NOM] начинает вскрывать [RU_SRC_NOM]."),\
+						span_noticealien("Вы начинаете вгрызаться когтями в [RU_SRC_NOM] изо всех сил!"),\
 						span_warning("Слышен скрежет металла..."))
 	user.log_message("Started prying open [src], located at [loc_name(src)].", LOG_GAME)
 	var/time_to_open = 5 //half a second
@@ -1579,7 +1579,7 @@
 
 	if(do_after(user, time_to_open, src))
 		if(density && !open(BYPASS_DOOR_CHECKS)) //The airlock is still closed, but something prevented it opening. (Another player noticed and bolted/welded the airlock in time!)
-			to_chat(user, span_warning("Несмотря на ваши усилия, [declent_ru(NOMINATIVE)] смог устоять перед попытками открыть его!"))
+			to_chat(user, span_warning("Несмотря на ваши усилия, [RU_SRC_NOM] смог устоять перед попытками открыть его!"))
 			user.log_message("Tried and failed to pry open [src], located at [loc_name(src)], due to the airlock getting sealed during the do_after.", LOG_GAME)
 			return
 		user.log_message("Successfully pried open [src], located at [loc_name(src)].", LOG_GAME)
@@ -1690,10 +1690,10 @@
 	switch(the_rcd.mode)
 		if(RCD_DECONSTRUCT)
 			if(seal)
-				to_chat(user, span_notice("Сначала нужно убрать печать с [declent_ru(GENITIVE)]."))
+				to_chat(user, span_notice("Сначала нужно убрать печать с [RU_SRC_GEN]."))
 				return FALSE
 			if(security_level != AIRLOCK_SECURITY_NONE)
-				to_chat(user, span_notice("Сначала нужно снять укрепление с [declent_ru(GENITIVE)]."))
+				to_chat(user, span_notice("Сначала нужно снять укрепление с [RU_SRC_GEN]."))
 				return FALSE
 			return list("delay" = 5 SECONDS, "cost" = 32)
 	return FALSE

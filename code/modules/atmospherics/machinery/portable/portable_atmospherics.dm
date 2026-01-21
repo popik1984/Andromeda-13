@@ -225,7 +225,7 @@
 /obj/machinery/portable_atmospherics/click_alt(mob/living/user)
 	if(!holding)
 		return CLICK_ACTION_BLOCKING
-	to_chat(user, span_notice("Вы извлекаете [holding.declent_ru(ACCUSATIVE)] из [declent_ru(GENITIVE)]."))
+	to_chat(user, span_notice("Вы извлекаете [RU_ACC(holding)] из [RU_SRC_GEN]."))
 	replace_tank(user, TRUE)
 	return CLICK_ACTION_SUCCESS
 
@@ -233,8 +233,8 @@
 	. = ..()
 	if(!holding)
 		return
-	. += span_notice("[declent_ru(NOMINATIVE)] содержит [holding.declent_ru(ACCUSATIVE)]. [EXAMINE_HINT("Альт-клик")] по [declent_ru(DATIVE)], чтобы извлечь.")+\
-		span_notice("Нажмите на [declent_ru(ACCUSATIVE)] другим баллоном, чтобы быстро заменить [holding.declent_ru(ACCUSATIVE)].")
+	. += span_notice("[RU_SRC_NOM] содержит [RU_ACC(holding)]. [EXAMINE_HINT("Альт-клик")] по [RU_SRC_DAT], чтобы извлечь.")+\
+		span_notice("Нажмите на [RU_SRC_ACC] другим баллоном, чтобы быстро заменить [RU_ACC(holding)].")
 
 /**
  * Allow the player to place a tank inside the machine.
@@ -253,7 +253,7 @@
 
 	if(holding && new_tank)//for when we are actually switching tanks
 		investigate_log("had its internal [holding] swapped with [new_tank] by [key_name(user)].", INVESTIGATE_ATMOS)
-		to_chat(user, span_notice("Одним плавным движением вы вынимаете [holding.declent_ru(ACCUSATIVE)] из разъёма [declent_ru(GENITIVE)] и заменяете его на [new_tank.declent_ru(ACCUSATIVE)]."))
+		to_chat(user, span_notice("Одним плавным движением вы вынимаете [RU_ACC(holding)] из разъёма [RU_SRC_GEN] и заменяете его на [RU_ACC(new_tank)]."))
 		user.put_in_hands(holding)
 		UnregisterSignal(holding, COMSIG_QDELETING)
 		holding = new_tank
@@ -262,7 +262,7 @@
 		playsound(src, remove_sound, sound_vol)
 	else if(holding)//we remove a tank
 		investigate_log("had its internal [holding] removed by [key_name(user)].", INVESTIGATE_ATMOS)
-		to_chat(user, span_notice("Вы извлекаете [holding.declent_ru(ACCUSATIVE)] из [declent_ru(GENITIVE)]."))
+		to_chat(user, span_notice("Вы извлекаете [RU_ACC(holding)] из [RU_SRC_GEN]."))
 		if(Adjacent(user))
 			user.put_in_hands(holding)
 		else
@@ -272,7 +272,7 @@
 		holding = null
 	else if(new_tank)//we insert the tank
 		investigate_log("had [new_tank] inserted into it by [key_name(user)].", INVESTIGATE_ATMOS)
-		to_chat(user, span_notice("Вы вставляете [new_tank.declent_ru(ACCUSATIVE)] в [declent_ru(ACCUSATIVE)]."))
+		to_chat(user, span_notice("Вы вставляете [RU_ACC(new_tank)] в [RU_SRC_ACC]."))
 		holding = new_tank
 		playsound(src, insert_sound, sound_vol)
 		RegisterSignal(holding, COMSIG_QDELETING, PROC_REF(unregister_holding))
@@ -294,8 +294,8 @@
 		disconnect()
 		wrench.play_tool_sound(src)
 		user.visible_message( \
-			"[user] отсоединяет [declent_ru(ACCUSATIVE)].", \
-			span_notice("Вы отсоединяете [declent_ru(ACCUSATIVE)] от порта."), \
+			"[user] отсоединяет [RU_SRC_ACC].", \
+			span_notice("Вы отсоединяете [RU_SRC_ACC] от порта."), \
 			span_hear("Вы слышите звук трещотки."))
 		update_appearance()
 		return TRUE
@@ -304,12 +304,12 @@
 		to_chat(user, span_notice("Ничего не происходит."))
 		return FALSE
 	if(!connect(possible_port))
-		to_chat(user, span_notice("[declent_ru(NOMINATIVE)] не смог подключиться к порту."))
+		to_chat(user, span_notice("[RU_SRC_NOM] не смог подключиться к порту."))
 		return FALSE
 	wrench.play_tool_sound(src)
 	user.visible_message( \
-		"[user] подсоединяет [declent_ru(ACCUSATIVE)].", \
-		span_notice("Вы прикручиваете [declent_ru(ACCUSATIVE)] к порту."), \
+		"[user] подсоединяет [RU_SRC_ACC].", \
+		span_notice("Вы прикручиваете [RU_SRC_ACC] к порту."), \
 		span_hear("Вы слышите звук трещотки."))
 	update_appearance()
 	investigate_log("was connected to [possible_port] by [key_name(user)].", INVESTIGATE_ATMOS)

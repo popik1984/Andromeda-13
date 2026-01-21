@@ -668,7 +668,7 @@
 /obj/machinery/door/proc/crush()
 	for(var/turf/checked_turf in locs)
 		for(var/mob/living/future_pancake in checked_turf)
-			future_pancake.visible_message(span_warning("[declent_ru(NOMINATIVE)] закрывается на [future_pancake.declent_ru(PREPOSITIONAL)], раздавливая [future_pancake.declent_ru(ACCUSATIVE)]!"), span_userdanger("[declent_ru(NOMINATIVE)] закрывается прямо на вас и раздавливает вас!"))
+			future_pancake.visible_message(span_warning("[RU_SRC_NOM] закрывается на [RU_PRE(future_pancake)], раздавливая [GEND_HIS_HER(future_pancake)]!"), span_userdanger("[RU_SRC_NOM] закрывается прямо на вас и раздавливает вас!"))
 			var/sig_return = SEND_SIGNAL(future_pancake, COMSIG_LIVING_DOORCRUSHED, src)
 			future_pancake.add_splatter_floor(loc)
 			log_combat(src, future_pancake, "crushed")

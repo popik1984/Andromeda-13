@@ -165,7 +165,7 @@
 		manifest = null
 		return
 	if(user)
-		to_chat(user, span_notice("Вы срываете манифест с [declent_ru(GENITIVE)]."))
+		to_chat(user, span_notice("Вы срываете манифест с [RU_SRC_GEN]."))
 	playsound(src, 'sound/items/poster/poster_ripped.ogg', 75, TRUE)
 
 	our_manifest.forceMove(drop_location(src))

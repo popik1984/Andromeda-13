@@ -85,26 +85,26 @@
 
 /obj/item/radio/intercom/screwdriver_act(mob/living/user, obj/item/tool)
 	if(unscrewed)
-		user.visible_message(span_notice("[user] начинает затягивать винты [declent_ru(GENITIVE)]..."), span_notice("Вы начинаете завинчивать [declent_ru(ACCUSATIVE)]..."))
+		user.visible_message(span_notice("[user] начинает затягивать винты [RU_SRC_GEN]..."), span_notice("Вы начинаете завинчивать [RU_SRC_ACC]..."))
 		if(tool.use_tool(src, user, 30, volume=50))
-			user.visible_message(span_notice("[user] затягивает винты [declent_ru(GENITIVE)]!"), span_notice("Вы затягиваете винты [declent_ru(GENITIVE)]."))
+			user.visible_message(span_notice("[user] затягивает винты [RU_SRC_GEN]!"), span_notice("Вы затягиваете винты [RU_SRC_GEN]."))
 			unscrewed = FALSE
 	else
-		user.visible_message(span_notice("[user] начинает ослаблять винты [declent_ru(GENITIVE)]..."), span_notice("Вы начинаете отвинчивать [declent_ru(ACCUSATIVE)]..."))
+		user.visible_message(span_notice("[user] начинает ослаблять винты [RU_SRC_GEN]..."), span_notice("Вы начинаете отвинчивать [RU_SRC_ACC]..."))
 		if(tool.use_tool(src, user, 40, volume=50))
-			user.visible_message(span_notice("[user] ослабляет винты [declent_ru(GENITIVE)]!"), span_notice("Вы отвинчиваете [declent_ru(ACCUSATIVE)], ослабляя его крепление к стене."))
+			user.visible_message(span_notice("[user] ослабляет винты [RU_SRC_GEN]!"), span_notice("Вы отвинчиваете [RU_SRC_ACC], ослабляя его крепление к стене."))
 			unscrewed = TRUE
 	return TRUE
 
 /obj/item/radio/intercom/wrench_act(mob/living/user, obj/item/tool)
 	. = TRUE
 	if(!unscrewed)
-		to_chat(user, span_warning("Сначала нужно отвинтить [declent_ru(ACCUSATIVE)] от стены!"))
+		to_chat(user, span_warning("Сначала нужно отвинтить [RU_SRC_ACC] от стены!"))
 		return
-	user.visible_message(span_notice("[user] начинает откреплять [declent_ru(ACCUSATIVE)]..."), span_notice("Вы начинаете откреплять [declent_ru(ACCUSATIVE)]..."))
+	user.visible_message(span_notice("[user] начинает откреплять [RU_SRC_ACC]..."), span_notice("Вы начинаете откреплять [RU_SRC_ACC]..."))
 	tool.play_tool_sound(src)
 	if(tool.use_tool(src, user, 80))
-		user.visible_message(span_notice("[user] открепляет [declent_ru(ACCUSATIVE)]!"), span_notice("Вы снимаете [declent_ru(ACCUSATIVE)] со стены."))
+		user.visible_message(span_notice("[user] открепляет [RU_SRC_ACC]!"), span_notice("Вы снимаете [RU_SRC_ACC] со стены."))
 		playsound(src, 'sound/items/deconstruct.ogg', 50, TRUE)
 		deconstruct(TRUE)
 

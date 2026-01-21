@@ -234,10 +234,10 @@ micro-manipulator, console screen, beaker, Microlaser, matter bin, power cells.
 
 	if(amount == 1)
 		// Единственное число - именительный падеж
-		translated_name = temp_component.declent_ru(NOMINATIVE) || initial(temp_component.name)
+		translated_name = RU_GEN(temp_component)  || initial(temp_component.name)
 	else
 		// Множественное число - родительный падеж
-		translated_name = temp_component.declent_ru(GENITIVE) || initial(temp_component.name)
+		translated_name = RU_GEN(temp_component)  || initial(temp_component.name)
 
 	qdel(temp_component)
 	return translated_name

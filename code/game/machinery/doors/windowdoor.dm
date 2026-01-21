@@ -416,8 +416,8 @@
 	if(!panel_open || density || operating)
 		return
 	add_fingerprint(user)
-	user.visible_message(span_notice("[user] вынимает электронику из [declent_ru(GENITIVE)]."), \
-	span_notice("Вы начинаете вынимать электронику из [declent_ru(GENITIVE)]..."))
+	user.visible_message(span_notice("[user] вынимает электронику из [RU_SRC_GEN]."), \
+	span_notice("Вы начинаете вынимать электронику из [RU_SRC_GEN]..."))
 	if(!tool.use_tool(src, user, 40, volume=50))
 		return
 	if(!panel_open || density || operating || !loc)

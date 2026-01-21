@@ -75,7 +75,7 @@
 
 /obj/machinery/electrolyzer/examine(mob/user)
 	. = ..()
-	. += "[declent_ru(NOMINATIVE)] [on ? "включён" : "выключен"], а панель [panel_open ? "открыта" : "закрыта"]."
+	. += "[RU_SRC_NOM] [on ? "включён" : "выключен"], а панель [panel_open ? "открыта" : "закрыта"]."
 
 	if(cell)
 		. += "Индикатор заряда показывает [cell ? round(cell.percent(), 1) : 0]%."

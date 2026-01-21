@@ -98,10 +98,6 @@ Simple datum which is instanced once per type and is used for every object of sa
 	/// The multiplier of negative velocity that pulls the bait/bobber of a fishing rod down when not holding the click
 	var/fishing_gravity_mult = 1
 
-	/// Список склонений русского названия атома в разных грамматических падежах.
-	/// Формат: list(CASE_ID = "name_in_case", ...)
-	var/list/ru_names
-
 /** Handles initializing the material.
  *
  * Arguments:
