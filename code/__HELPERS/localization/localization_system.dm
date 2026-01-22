@@ -90,6 +90,13 @@
  * Иерархия fallback:
  */
 /proc/compute_fallback_name(datum/target)
+    // 0. Если это атом - используем его имя
+    if(istype(target, /atom))
+        var/atom/A = target
+        if(A.name) // если есть установленное имя
+            return A.name
+        return initial(A.name) // иначе имя по умолчанию из типа
+
     // 1. Если это часть тела - используем plaintext_zone
     if(istype(target, /obj/item/bodypart))
         var/obj/item/bodypart/BP = target

@@ -1,8 +1,10 @@
 /**
- * The base type for nearly all physical objects in SS13
+ * Базовый тип почти для всех физических объектов в SS13
 
- * Lots and lots of functionality lives here, although in general we are striving to move
- * as much as possible to the components/elements system
+ * 	REWOKIN: НЕ ТРОГАТЬ ЭТОТ КОД ИЛИ Я СЛОМАЮ ВАМ РУКИ! ЭТО БЛЯТЬ РОДИТЕЛЬ ВСЕГО НАХУЙ!
+
+ * Здесь находится огромное количество функционала, хотя в целом мы стремимся перенести
+ * как можно больше в систему компонентов/элементов
  */
 /atom
 	abstract_type = /atom
@@ -10,146 +12,146 @@
 	plane = GAME_PLANE
 	appearance_flags = TILE_BOUND|LONG_GLIDE
 
-	/// pass_flags that we are. If any of this matches a pass_flag on a moving thing, by default, we let them through.
+	/// pass_flags, которыми мы обладаем. Если любой из них совпадает с pass_flag движущегося объекта, по умолчанию мы пропускаем его.
 	var/pass_flags_self = NONE
 
-	///First atom flags var
+	///Первый флаговый var для атома
 	var/flags_1 = NONE
-	///Intearaction flags
+	///Флаги взаимодействия для атома
 	var/interaction_flags_atom = NONE
 
 	var/flags_ricochet = NONE
 
-	///When a projectile tries to ricochet off this atom, the projectile ricochet chance is multiplied by this
+	///Когда снаряд пытается рикошетить от этого атома, шанс рикошета снаряда умножается на это значение
 	var/receive_ricochet_chance_mod = 1
-	///When a projectile ricochets off this atom, it deals the normal damage * this modifier to this atom
+	///Когда снаряд рикошетирует от этого атома, он наносит нормальный урон * этот модификатор данному атому
 	var/receive_ricochet_damage_coeff = 0.33
 
-	///Reagents holder
+	///Хранилище реагентов
 	var/datum/reagents/reagents = null
 
-	///all of this atom's HUD (med/sec, etc) images. Associative list of the form: list(hud category = hud image or images for that category).
-	///most of the time hud category is associated with a single image, sometimes its associated with a list of images.
-	///not every hud in this list is actually used. for ones available for others to see, look at active_hud_list.
+	///Все HUD-изображения (мед/сек и т.д.) этого атома. Ассоциативный список вида: list(категория HUD = изображение HUD или список изображений для этой категории).
+	///В большинстве случаев категория HUD связана с одним изображением, иногда — со списком изображений.
+	///Не каждый HUD в этом списке фактически используется. Для доступных другим смотрите active_hud_list.
 	var/list/image/hud_list = null
-	///all of this atom's HUD images which can actually be seen by players with that hud
+	///Все HUD-изображения этого атома, которые действительно могут видеть игроки с этим HUD
 	var/list/image/active_hud_list = null
-	///HUD images that this atom can provide.
+	///HUD-изображения, которые может предоставлять этот атом.
 	var/list/hud_possible
 
-	///How much this atom resists explosions by, in the end
+	///Насколько этот атом устойчив к взрывам, в итоге
 	var/explosive_resistance = 0
 
-	///vis overlays managed by SSvis_overlays to automaticaly turn them like other overlays.
+	///Визуальные оверлеи, управляемые SSvis_overlays для автоматического их обновления, как и другие оверлеи.
 	var/list/managed_vis_overlays
 
-	/// Lazylist of all images (or atoms, I'm sorry) (hopefully attached to us) to update when we change z levels
-	/// You will need to manage adding/removing from this yourself, but I'll do the updating for you
+	///Ленивый список всех изображений (или атомов, простите) (надеюсь, прикрепленных к нам) для обновления при смене Z-уровня
+	///Вам нужно будет самостоятельно управлять добавлением/удалением из этого списка, но я сделаю обновление за вас
 	var/list/image/update_on_z
 
-	/// Lazylist of all overlays attached to us to update when we change z levels
-	/// You will need to manage adding/removing from this yourself, but I'll do the updating for you
-	/// Oh and note, if order of addition is important this WILL break that. so mind yourself
+	///Ленивый список всех оверлеев, прикрепленных к нам, для обновления при смене Z-уровня
+	///Вам нужно будет самостоятельно управлять добавлением/удалением из этого списка, но я сделаю обновление за вас
+	///И обратите внимание: если важен порядок добавления, это МОЖЕТ сломать его. Так что будьте осторожны
 	var/list/image/update_overlays_on_z
 
-	///Cooldown tick timer for buckle messages
+	///Тик кулдауна для сообщений о пристегивании
 	var/buckle_message_cooldown = 0
-	///Last fingerprints to touch this atom
+	///Последние отпечатки пальцев, коснувшиеся этого атома
 	var/fingerprintslast
 
-	/// Radiation insulation types
+	///Типы изоляции от радиации
 	var/rad_insulation = RAD_NO_INSULATION
 
-	/// The icon state intended to be used for the acid component. Used to override the default acid overlay icon state.
+	///Состояние иконки, предназначенное для кислотного компонента. Используется для переопределения стандартного состояния иконки кислотного оверлея.
 	var/custom_acid_overlay = null
 
 	var/datum/wires/wires = null
 
-	///Light systems, both shouldn't be active at the same time.
+	///Системы освещения, обе не должны быть активны одновременно.
 	var/light_system = COMPLEX_LIGHT
-	///Range of the light in tiles. Zero means no light.
+	///Дальность света в тайлах. Ноль означает отсутствие света.
 	var/light_range = 0
-	///Intensity of the light. The stronger, the less shadows you will see on the lit area.
+	///Интенсивность света. Чем она выше, тем меньше теней вы увидите на освещенной области.
 	var/light_power = 1
-	///Hexadecimal RGB string representing the colour of the light. White by default.
+	///Шестнадцатеричная RGB строка, представляющая цвет света. По умолчанию белый.
 	var/light_color = COLOR_WHITE
-	/// Angle of light to show in light_dir
-	/// 360 is a circle, 90 is a cone, etc.
+	///Угол света для отображения в light_dir
+	///360 — это круг, 90 — конус и т.д.
 	var/light_angle = 360
-	/// What angle to project light in
+	///В каком угле проецировать свет
 	var/light_dir = NORTH
-	///Boolean variable for toggleable lights. Has no effect without the proper light_system, light_range and light_power values.
+	///Булева переменная для переключаемых источников света. Не имеет эффекта без правильных значений light_system, light_range и light_power.
 	var/light_on = TRUE
-	/// How many tiles "up" this light is. 1 is typical, should only really change this if it's a floor light
+	/// На сколько тайлов "вверх" находится этот свет. 1 — обычно, меняйте это только если это напольный светильник
 	var/light_height = LIGHTING_HEIGHT
-	///Bitflags to determine lighting-related atom properties.
+	///Битовые флаги для определения свойств атома, связанных с освещением.
 	var/light_flags = NONE
-	///Our light source. Don't fuck with this directly unless you have a good reason!
+	///Наш источник света. Не трогайте это напрямую, если у вас нет веской причины!
 	var/tmp/datum/light_source/light
-	///Any light sources that are "inside" of us, for example, if src here was a mob that's carrying a flashlight, that flashlight's light source would be part of this list.
+	///Любые источники света, которые находятся "внутри" нас, например, если src — это моб, несущий фонарик, источник света этого фонарика будет частью этого списка.
 	var/tmp/list/light_sources
 
-	/// Last name used to calculate a color for the chatmessage overlays
+	/// Последнее имя, использованное для вычисления цвета оверлеев сообщений в чате
 	var/chat_color_name
-	/// Last color calculated for the the chatmessage overlays
+	/// Последний вычисленный цвет для оверлеев сообщений в чате
 	var/chat_color
-	/// A luminescence-shifted value of the last color calculated for chatmessage overlays
+	/// Затемненное значение последнего вычисленного цвета для оверлеев сообщений в чате, сдвинутое по яркости
 	var/chat_color_darkened
 
-	// Use SET_BASE_PIXEL(x, y) to set these in typepath definitions, it'll handle pixel_x and y for you
-	///Default pixel x shifting for the atom's icon.
+	// Используйте SET_BASE_PIXEL(x, y) для установки этих значений в определениях типов, это обработает pixel_x и y за вас
+	///Стандартный сдвиг по X для иконки атома.
 	var/base_pixel_x = 0
-	///Default pixel y shifting for the atom's icon.
+	///Стандартный сдвиг по Y для иконки атома.
 	var/base_pixel_y = 0
-	// Use SET_BASE_VISUAL_PIXEL(x, y) to set these in typepath definitions, it'll handle pixel_w and z for you
-	///Default pixel w shifting for the atom's icon.
+	// Используйте SET_BASE_VISUAL_PIXEL(x, y) для установки этих значений в определениях типов, это обработает pixel_w и z за вас
+	///Стандартный сдвиг по W для иконки атома.
 	var/base_pixel_w = 0
-	///Default pixel z shifting for the atom's icon.
+	///Стандартный сдвиг по Z для иконки атома.
 	var/base_pixel_z = 0
-	///Used for changing icon states for different base sprites.
+	///Используется для смены состояний иконки для разных базовых спрайтов.
 	var/base_icon_state
 
-	///Icon-smoothing behavior.
+	///Поведение сглаживания иконок.
 	var/smoothing_flags = NONE
-	///What directions this is currently smoothing with. IMPORTANT: This uses the smoothing direction flags as defined in icon_smoothing.dm, instead of the BYOND flags.
+	///В каких направлениях сейчас происходит сглаживание. ВАЖНО: Здесь используются флаги направлений сглаживания, определенные в icon_smoothing.dm, а не флаги BYOND.
 	var/smoothing_junction = null
-	///What smoothing groups does this atom belongs to, to match canSmoothWith. If null, nobody can smooth with it. Must be sorted.
+	///К каким группам сглаживания принадлежит этот атом, для соответствия canSmoothWith. Если null, никто не может сглаживаться с ним. Должен быть отсортирован.
 	var/list/smoothing_groups = null
-	///List of smoothing groups this atom can smooth with. If this is null and atom is smooth, it smooths only with itself. Must be sorted.
+	///Список групп сглаживания, с которыми может сглаживаться этот атом. Если это null и атом сглаживается, он сглаживается только сам с собой. Должен быть отсортирован.
 	var/list/canSmoothWith = null
 
-	///AI controller that controls this atom. type on init, then turned into an instance during runtime
+	///AI контроллер, управляющий этим атомом. Тип при инициализации, затем превращается в экземпляр во время выполнения
 	var/datum/ai_controller/ai_controller
 
-	/// forensics datum, contains fingerprints, fibres, blood_dna and hiddenprints on this atom
+	///Датум криминалистики, содержит отпечатки пальцев, волокна, blood_dna и скрытые отпечатки на этом атоме
 	var/datum/forensics/forensics = null
-	/// Cached color for all blood on us to avoid doing constant math
+	///Кэшированный цвет для всей крови на нас, чтобы избежать постоянных вычислений
 	var/cached_blood_color = null
-	/// Cached emissive alpha for all blood on us to avoid doing constant math
+	///Кэшированная эмиссивная альфа для всей крови на нас, чтобы избежать постоянных вычислений
 	var/cached_blood_emissive = null
 
-	/// How this atom should react to having its astar blocking checked
+	/// Как этот атом должен реагировать на проверку блокировки astar
 	var/can_astar_pass = CANASTARPASS_DENSITY
-	///whether ghosts can see screentips on it
+	///могут ли призраки видеть скрин-подсказки на нем
 	var/ghost_screentips = FALSE
 
-	/// Flags to check for in can_perform_action. Used in alt-click & ctrl-click checks
+	/// Флаги для проверки в can_perform_action. Используются в проверках alt-click и ctrl-click
 	var/interaction_flags_click = NONE
-	/// Flags to check for in can_perform_action for mouse drag & drop checks. To bypass checks see interaction_flags_atom mouse drop flags
+	/// Флаги для проверки в can_perform_action для проверок перетаскивания мышью. Чтобы обойти проверки, смотрите флаги mouse drop в interaction_flags_atom
 	var/interaction_flags_mouse_drop = NONE
 
-	/// Generally for niche objects, atoms blacklisted can spawn if enabled by spawner.
+	/// Обычно для нишевых объектов, атомы в черном списке могут спауниться, если разрешено спаунером.
 	var/spawn_blacklisted = FALSE
 
 /**
- * Top level of the destroy chain for most atoms
+ * Верхний уровень цепочки уничтожения для большинства атомов
  *
- * Cleans up the following:
- * * Removes alternate apperances from huds that see them
- * * qdels the reagent holder from atoms if it exists
- * * clears the orbiters list
- * * clears overlays and priority overlays
- * * clears the light object
+ * Очищает следующее:
+ * * Удаляет альтернативные внешние виды из HUD'ов, которые их видят
+ * * Удаляет держатель реагентов из атомов, если он существует
+ * * Очищает список орбитеров
+ * * Очищает оверлеи и приоритетные оверлеи
+ * * Очищает объект света
  */
 /atom/Destroy(force)
 	if(alternate_appearances)
@@ -169,9 +171,9 @@
 	if(wires)
 		QDEL_NULL(wires)
 
-	orbiters = null // The component is attached to us normaly and will be deleted elsewhere
+	orbiters = null // Компонент обычно прикреплен к нам и будет удален в другом месте
 
-	// Checking length(overlays) before cutting has significant speed benefits
+	// Проверка length(overlays) перед обрезкой дает значительный прирост производительности
 	if (length(overlays))
 		overlays.Cut()
 
@@ -187,7 +189,7 @@
 		SSicon_smooth.remove_from_queues(src)
 
 #ifndef DISABLE_DREAMLUAU
-	// These lists cease existing when src does, so we need to clear any lua refs to them that exist.
+	// Эти списки перестают существовать, когда src исчезает, поэтому нам нужно очистить любые ссылки lua на них, которые существуют.
 	if(!(datum_flags & DF_STATIC_OBJECT))
 		DREAMLUAU_CLEAR_REF_USERDATA(contents)
 		DREAMLUAU_CLEAR_REF_USERDATA(filters)
@@ -212,7 +214,7 @@
 	ricocheting_projectile.set_angle(new_angle_s)
 	return TRUE
 
-/// Whether the mover object can avoid being blocked by this atom, while arriving from (or leaving through) the border_dir.
+/// Может ли движущийся объект избежать блокировки этим атомом, перемещаясь из (или в) направлении border_dir.
 /atom/proc/CanPass(atom/movable/mover, border_dir)
 	SHOULD_CALL_PARENT(TRUE)
 	SHOULD_BE_PURE(TRUE)
@@ -221,11 +223,11 @@
 	if(mover.movement_type & PHASING)
 		return TRUE
 	. = CanAllowThrough(mover, border_dir)
-	// This is cheaper than calling the proc every time since most things dont override CanPassThrough
+	// Это дешевле, чем вызывать процедуру каждый раз, так как большинство объектов не переопределяют CanPassThrough
 	if(!mover.generic_canpass)
 		return mover.CanPassThrough(src, REVERSE_DIR(border_dir), .)
 
-/// Returns true or false to allow the mover to move through src
+/// Возвращает true или false, чтобы позволить движущемуся объекту пройти через src
 /atom/proc/CanAllowThrough(atom/movable/mover, border_dir)
 	SHOULD_CALL_PARENT(TRUE)
 	//SHOULD_BE_PURE(TRUE)
@@ -236,73 +238,73 @@
 	return !density
 
 /**
- * Is this atom currently located on centcom (or riding off into the sunset on a shuttle)
+ * Находится ли этот атом в данный момент на Ценкоме (или улетает в закат на шаттле)
  *
- * Specifically, is it on the z level and within the centcom areas.
- * You can also be in a shuttle during endgame transit.
+ * Конкретно, находится ли он на Z-уровне и в пределах зон Ценкома.
+ * Вы также можете быть в шаттле во время транзита в конце игры.
  *
- * Used in gamemode to identify mobs who have escaped and for some other areas of the code
- * who don't want atoms where they shouldn't be
+ * Используется в игровом режиме для идентификации мобов, которые сбежали, и для некоторых других частей кода,
+ * которые не хотят, чтобы атомы находились там, где им не положено.
  *
- * Returns TRUE if this atom is on centcom or an escape shuttle, or FALSE if not
+ * Возвращает TRUE, если этот атом находится на Ценкоме или шаттле побега, или FALSE, если нет.
  */
 /atom/proc/onCentCom()
 	var/turf/current_turf = get_turf(src)
 	if(!current_turf)
 		return FALSE
 
-	// This doesn't necessarily check that we're at central command,
-	// but it checks for any shuttles which have finished are still in hyperspace
-	// (IE, stuff like the whiteship which fly off into the sunset and "escape")
+	// Это не обязательно проверяет, что мы на центральном командовании,
+	// но проверяет, находятся ли какие-либо шаттлы, которые завершили полет, все еще в гиперпространстве
+	// (т.е., такие вещи, как whiteship, которые улетают в закат и "сбегают")
 	if(is_reserved_level(current_turf.z))
 		return on_escaped_shuttle(ENDGAME_TRANSIT)
 
-	// From here on we only concern ourselves with people actually on the centcom Z
+	// С этого момента мы заботимся только о людях, фактически находящихся на Z Ценкома
 	if(!is_centcom_level(current_turf.z))
 		return FALSE
 
 	if(istype(current_turf.loc, /area/centcom))
 		return TRUE
 
-	// Finally, check if we're on an escaped shuttle
+	// Наконец, проверяем, находимся ли мы на сбежавшем шаттле
 	return on_escaped_shuttle()
 
 /**
- * Is the atom in any of the syndicate areas
+ * Находится ли атом в любой из синдикатских зон
  *
- * Either in the syndie base, or any of their shuttles
+ * Либо на базе синдиката, либо на любом из их шаттлов
  *
- * Also used in gamemode code for win conditions
+ * Также используется в коде игрового режима для условий победы
  *
- * Returns TRUE if this atom is on the syndicate recon base, any of its shuttles, or an escape shuttle, or FALSE if not
+ * Возвращает TRUE, если этот атом находится на разведывательной базе синдиката, любом из его шаттлов или шаттле побега, или FALSE, если нет.
  */
 /atom/proc/onSyndieBase()
 	var/turf/current_turf = get_turf(src)
 	if(!current_turf)
 		return FALSE
 
-	// Syndicate base is loaded in a reserved level. If not reserved, we don't care.
+	// База синдиката загружена на зарезервированном уровне. Если не зарезервирован, нам все равно.
 	if(!is_reserved_level(current_turf.z))
 		return FALSE
 
 	var/static/list/syndie_typecache = typecacheof(list(
-		/area/centcom/syndicate_mothership, // syndicate base itself
-		/area/shuttle/assault_pod, // steel rain
-		/area/shuttle/syndicate, // infiltrator
+		/area/centcom/syndicate_mothership, // сама база синдиката
+		/area/shuttle/assault_pod, // стальной дождь
+		/area/shuttle/syndicate, // инфильтратор
 	))
 
 	if(is_type_in_typecache(current_turf.loc, syndie_typecache))
 		return TRUE
 
-	// Finally, check if we're on an escaped shuttle
+	// Наконец, проверяем, находимся ли мы на сбежавшем шаттле
 	return on_escaped_shuttle()
 
 /**
- * Checks that we're on a shuttle that's escaped
+ * Проверяет, что мы на шаттле, который сбежал
  *
- * * check_for_launch_status - What launch status do we check for? Generally the two you want to check for are ENDGAME_LAUNCHED or ENDGAME_TRANSIT
+ * * check_for_launch_status - Какой статус запуска мы проверяем? Обычно два, которые нужно проверить — это ENDGAME_LAUNCHED или ENDGAME_TRANSIT
  *
- * Returns TRUE if this atom is on a shuttle which is escaping or has escaped, or FALSE otherwise
+ * Возвращает TRUE, если этот атом находится на шаттле, который сбегает или уже сбежал, или FALSE в противном случае.
  */
 /atom/proc/on_escaped_shuttle(check_for_launch_status = ENDGAME_LAUNCHED)
 	var/turf/current_turf = get_turf(src)
@@ -319,11 +321,11 @@
 	return FALSE
 
 /**
- * Is the atom in an away mission
+ * Находится ли атом в миссии на отдаленном объекте
  *
- * Must be in the away mission z-level to return TRUE
+ * Должен быть на Z-уровне миссии на отдаленном объекте, чтобы вернуть TRUE
  *
- * Also used in gamemode code for win conditions
+ * Также используется в коде игрового режима для условий победы
  */
 /atom/proc/onAwayMission()
 	var/turf/current_turf = get_turf(src)
@@ -336,21 +338,21 @@
 	return FALSE
 
 /**
- * Called whenever an item is crafted, either via stack recipes or crafting recipes from the crafting menu
+ * Вызывается, когда предмет крафтится, либо через рецепты стеков, либо через рецепты крафта из меню крафта
  *
- * By default, it just cycles through the list of movables used in the recipe and calls used_in_craft() for each of them,
- * then it either moves them inside the object if they're in the list of parts for the recipe
- * or deletes them if they're not.
- * The proc can be overriden by subtypes, as long as it always call parent.
+ * По умолчанию просто перебирает список движущихся объектов, использованных в рецепте, и вызывает used_in_craft() для каждого из них,
+ * затем либо перемещает их внутрь объекта, если они находятся в списке частей рецепта,
+ * либо удаляет их, если нет.
+ * Процедура может быть переопределена подтипами, при условии, что она всегда вызывает родительскую.
  */
 /atom/proc/on_craft_completion(list/components, datum/crafting_recipe/current_recipe, atom/crafter)
 	SHOULD_CALL_PARENT(TRUE)
 	SEND_SIGNAL(src, COMSIG_ATOM_ON_CRAFT, components, current_recipe)
 	var/list/remaining_parts = current_recipe?.parts?.Copy()
 	var/list/parts_by_type = remaining_parts?.Copy()
-	for(var/parttype in parts_by_type) //necessary for our is_type_in_list() call with the zebra arg set to true
+	for(var/parttype in parts_by_type) //необходимо для нашего вызова is_type_in_list() с аргументом zebra, установленным в true
 		parts_by_type[parttype] = parttype
-	for(var/atom/movable/movable as anything in components) // machinery or structure objects in the list are guaranteed to be used up. We only check items.
+	for(var/atom/movable/movable as anything in components) // механизмы или структуры в списке гарантированно расходуются. Мы проверяем только предметы.
 		movable.used_in_craft(src, current_recipe)
 		var/matched_type = is_type_in_list(movable, parts_by_type, zebra = TRUE)
 		if(!matched_type)
@@ -367,22 +369,22 @@
 			if(remaining_parts[matched_type] <= 0)
 				remaining_parts -= matched_type
 
-///Take air from the passed in gas mixture datum
+///Забирает воздух из переданного датума газовой смеси
 /atom/proc/assume_air(datum/gas_mixture/giver)
 	return null
 
-///Remove air from this atom
+///Удаляет воздух из этого атома
 /atom/proc/remove_air(amount)
 	return null
 
-///Return the current air environment in this atom
+///Возвращает текущую воздушную среду в этом атоме
 /atom/proc/return_air()
 	if(loc)
 		return loc.return_air()
 	else
 		return null
 
-///Return the air if we can analyze it
+///Возвращает воздух, если мы можем его проанализировать
 /atom/proc/return_analyzable_air()
 	return null
 
@@ -390,36 +392,36 @@
 	set waitfor = FALSE
 	SEND_SIGNAL(src, COMSIG_ATOM_BUMPED, bumped_atom)
 
-/// Convenience proc to see if a container is open for chemistry handling
+/// Удобная процедура, чтобы проверить, открыт ли контейнер для химической обработки
 /atom/proc/is_open_container()
 	return is_refillable() && is_drainable()
 
-/// Is this atom injectable into other atoms
+/// Можно ли вводить этот атом в другие атомы
 /atom/proc/is_injectable()
 	return reagents && (reagents.flags & (INJECTABLE | REFILLABLE))
 
-/// Can we draw from this atom with an injectable atom
+/// Можем ли мы забирать из этого атома с помощью инъекционного атома
 /atom/proc/is_drawable()
 	return reagents && (reagents.flags & (DRAWABLE | DRAINABLE))
 
-/// Can this atoms reagents be refilled
+/// Можно ли пополнять реагенты этого атома
 /atom/proc/is_refillable()
 	return reagents && (reagents.flags & REFILLABLE)
 
-/// Is this atom drainable of reagents
+/// Можно ли откачивать реагенты из этого атома
 /atom/proc/is_drainable()
 	return reagents && (reagents.flags & DRAINABLE)
 
-/** Handles exposing this atom to a list of reagents.
+/** Обрабатывает воздействие на этот атом списка реагентов.
  *
- * Sends COMSIG_ATOM_EXPOSE_REAGENTS
- * Calls expose_atom() for every reagent in the reagent list.
+ * Отправляет COMSIG_ATOM_EXPOSE_REAGENTS
+ * Вызывает expose_atom() для каждого реагента в списке реагентов.
  *
- * Arguments:
- * - [reagents][/list]: The list of reagents the atom is being exposed to.
- * - [source][/datum/reagents]: The reagent holder the reagents are being sourced from.
- * - methods: How the atom is being exposed to the reagents. Bitflags.
- * - show_message: Whether to display anything to mobs when they are exposed.
+ * Аргументы:
+ * - [reagents][/list]: Список реагентов, которым подвергается атом.
+ * - [source][/datum/reagents]: Хранилище реагентов, из которого берутся реагенты.
+ * - methods: Как атом подвергается воздействию реагентов. Битовые флаги.
+ * - show_message: Показывать ли что-либо мобам при воздействии.
  */
 /atom/proc/expose_reagents(list/reagents, datum/reagents/source, methods=TOUCH, show_message=TRUE)
 	. = SEND_SIGNAL(src, COMSIG_ATOM_EXPOSE_REAGENTS, reagents, source, methods, show_message)
@@ -429,20 +431,20 @@
 	for(var/datum/reagent/current_reagent as anything in reagents)
 		. |= current_reagent.expose_atom(src, reagents[current_reagent], methods)
 
-/// Are you allowed to drop stuff inside this atom
+/// Разрешено ли бросать предметы внутрь этого атома
 /atom/proc/AllowDrop()
 	return FALSE
 
-///Is this atom within 1 tile of another atom
+///Находится ли этот атом в пределах 1 тайла от другого атома
 /atom/proc/HasProximity(atom/movable/proximity_check_mob as mob|obj)
 	return
 
-/// Sets the wire datum of an atom
+/// Устанавливает датум проводов атома
 /atom/proc/set_wires(datum/wires/new_wires)
 	wires = new_wires
 
-///Return true if we're inside the passed in atom
-/atom/proc/in_contents_of(container)//can take class or object instance as argument
+///Возвращает true, если мы внутри переданного атома
+/atom/proc/in_contents_of(container)//может принимать класс или экземпляр объекта в качестве аргумента
 	if(ispath(container))
 		if(istype(src.loc, container))
 			return TRUE
@@ -451,13 +453,13 @@
 	return FALSE
 
 /**
- * Checks the atom's loc and calls update_held_items on it if it is a mob.
+ * Проверяет лок атома и вызывает update_held_items на нем, если это моб.
  *
- * This should only be used in situations when you are unable to use /datum/element/update_icon_updates_onmob for whatever reason.
- * Check code/datums/elements/update_icon_updates_onmob.dm before using this. Adding that to the atom and calling update_appearance will work for most cases.
+ * Это следует использовать только в ситуациях, когда вы не можете использовать /datum/element/update_icon_updates_onmob по какой-либо причине.
+ * Проверьте code/datums/elements/update_icon_updates_onmob.dm перед использованием этого. Добавление этого к атому и вызов update_appearance будет работать в большинстве случаев.
  *
- * Arguments:
- * * mob/target - The mob to update the icons of. Optional argument, use if the atom's loc is not the mob you want to update.
+ * Аргументы:
+ * * mob/target - Моб, иконки которого нужно обновить. Необязательный аргумент, используйте, если лок атома — не тот моб, которого вы хотите обновить.
  */
 /atom/proc/update_inhand_icon(mob/target = loc)
 	SHOULD_CALL_PARENT(TRUE)
@@ -469,30 +471,30 @@
 	SEND_SIGNAL(src, COMSIG_ATOM_UPDATE_INHAND_ICON, target)
 
 /**
- * An atom we are buckled or is contained within us has tried to move
+ * Атом, к которому мы пристегнуты или который содержится внутри нас, попытался переместиться
  *
- * Default behaviour is to send a warning that the user can't move while buckled as long
- * as the [buckle_message_cooldown][/atom/var/buckle_message_cooldown] has expired (50 ticks)
+ * Поведение по умолчанию — отправить предупреждение, что пользователь не может двигаться, пока пристегнут, пока
+ * не истек [buckle_message_cooldown][/atom/var/buckle_message_cooldown] (50 тиков)
  */
 /atom/proc/relaymove(mob/living/user, direction)
 	if(SEND_SIGNAL(src, COMSIG_ATOM_RELAYMOVE, user, direction) & COMSIG_BLOCK_RELAYMOVE)
 		return
 	if(buckle_message_cooldown <= world.time)
 		buckle_message_cooldown = world.time + 25
-		balloon_alert(user, "can't move while buckled!")
+		balloon_alert(user, "вы пристёгнуты")
 	return
 
 /**
- * A special case of relaymove() in which the person relaying the move may be "driving" this atom
+ * Особый случай relaymove(), когда человек, передающий движение, может "управлять" этим атомом
  *
- * This is a special case for vehicles and ridden animals where the relayed movement may be handled
- * by the riding component attached to this atom. Returns TRUE as long as there's nothing blocking
- * the movement, or FALSE if the signal gets a reply that specifically blocks the movement
+ * Это особый случай для транспортных средств и ездовых животных, когда переданное движение может обрабатываться
+ * компонентом езды, прикрепленным к этому атому. Возвращает TRUE, пока ничто не блокирует
+ * движение, или FALSE, если сигнал получает ответ, который явно блокирует движение
  */
 /atom/proc/relaydrive(mob/living/user, direction)
 	return !(SEND_SIGNAL(src, COMSIG_RIDDEN_DRIVER_MOVE, user, direction) & COMPONENT_DRIVER_BLOCK_MOVE)
 
-///returns the mob's dna info as a list, to be inserted in an object's blood_DNA list
+///возвращает информацию о ДНК моба в виде списка для вставки в список blood_DNA объекта
 /mob/living/proc/get_blood_dna_list()
 	var/datum/blood_type/blood_type = get_bloodtype()
 	if (!blood_type)
@@ -500,7 +502,7 @@
 
 	return list(blood_type.dna_string = blood_type)
 
-///Get the mobs dna list
+///Получить список ДНК моба
 /mob/living/carbon/get_blood_dna_list()
 	var/datum/blood_type/blood_type = get_bloodtype()
 	if (!blood_type)
@@ -513,7 +515,7 @@
 /mob/living/silicon/get_blood_dna_list()
 	return
 
-///Is this atom in space
+///Находится ли этот атом в космосе
 /atom/proc/isinspace()
 	if(isspaceturf(get_turf(src)))
 		return TRUE
@@ -521,34 +523,34 @@
 		return FALSE
 
 /**
- * If someone's trying to dump items onto our atom, where should they be dumped to?
+ * Если кто-то пытается сбросить предметы на наш атом, куда их следует сбросить?
  *
- * Return a loc to place objects, or null to stop dumping.
+ * Верните лок для размещения объектов или null, чтобы остановить сброс.
  */
 /atom/proc/get_dumping_location()
 	return null
 
 /**
- * the vision impairment to give to the mob whose perspective is set to that atom
+ * нарушение зрения, которое нужно дать мобу, чья перспектива установлена на этот атом
  *
- * (e.g. an unfocused camera giving you an impaired vision when looking through it)
+ * (например, несфокусированная камера дает ухудшенное зрение при взгляде через нее)
  */
 /atom/proc/get_remote_view_fullscreens(mob/user)
 	return
 
 /**
- * the sight changes to give to the mob whose perspective is set to that atom
+ * изменения зрения, которые нужно дать мобу, чья перспектива установлена на этот атом
  *
- * (e.g. A mob with nightvision loses its nightvision while looking through a normal camera)
+ * (например, моб с ночным зрением теряет его при взгляде через обычную камеру)
  */
 /atom/proc/update_remote_sight(mob/living/user)
 	return
 
 
 /**
- * Hook for running code when a dir change occurs
+ * Хук для выполнения кода при изменении направления
  *
- * Not recommended to use, listen for the [COMSIG_ATOM_DIR_CHANGE] signal instead (sent by this proc)
+ * Не рекомендуется к использованию, лучше слушать сигнал [COMSIG_ATOM_DIR_CHANGE] (отправляется этой процедурой)
  */
 /atom/proc/setDir(newdir)
 	SHOULD_CALL_PARENT(TRUE)
@@ -563,13 +565,13 @@
 		QUEUE_SMOOTH_NEIGHBORS(src)
 
 /**
- * Wash this atom
+ * Помыть этот атом
  *
- * This will clean it off any temporary stuff like blood. Override this in your item to add custom cleaning behavior.
- * Returns true if any washing was necessary and thus performed
- * Arguments:
- * * clean_types: any of the CLEAN_ constants
- * Returns: A bitflag if it successfully cleaned something: e.g. COMPONENT_CLEANED, or NONE if not. COMPONENT_CLEANED_GAIN_XP being flipped on signals whether the cleaning should yield cleaning xp.
+ * Это очистит его от любых временных загрязнений, таких как кровь. Переопределите это в вашем предмете, чтобы добавить пользовательское поведение очистки.
+ * Возвращает true, если какая-либо мойка была необходима и, следовательно, выполнена
+ * Аргументы:
+ * * clean_types: любые из констант CLEAN_
+ * Возвращает: Битфлаг, если что-то было успешно очищено: например, COMPONENT_CLEANED, или NONE, если нет. Установка COMPONENT_CLEANED_GAIN_XP сигнализирует о том, должна ли очистка давать опыт очистки.
  */
 /atom/proc/wash(clean_types)
 	SHOULD_CALL_PARENT(TRUE)
@@ -577,13 +579,13 @@
 	if(.)
 		return
 
-	// Basically "if has washable coloration"
+	// По сути "если имеет моющуюся окраску"
 	if(length(atom_colours) >= WASHABLE_COLOUR_PRIORITY && atom_colours[WASHABLE_COLOUR_PRIORITY])
 		remove_atom_colour(WASHABLE_COLOUR_PRIORITY)
 		return COMPONENT_CLEANED|COMPONENT_CLEANED_GAIN_XP
 	return NONE
 
-///Where atoms should drop if taken from this atom
+///Куда должны падать атомы, если взяты из этого атома
 /atom/proc/drop_location()
 	var/atom/location = loc
 	if(!location)
@@ -591,22 +593,22 @@
 	return location.AllowDrop() ? location : location.drop_location()
 
 /**
- * An atom has entered this atom's contents
+ * Атом вошел в содержимое этого атома
  *
- * Default behaviour is to send the [COMSIG_ATOM_ENTERED]
+ * Поведение по умолчанию — отправить сигнал [COMSIG_ATOM_ENTERED]
  */
 /atom/Entered(atom/movable/arrived, atom/old_loc, list/atom/old_locs)
 	SEND_SIGNAL(src, COMSIG_ATOM_ENTERED, arrived, old_loc, old_locs)
 	SEND_SIGNAL(arrived, COMSIG_ATOM_ENTERING, src, old_loc, old_locs)
 
 /**
- * An atom is attempting to exit this atom's contents
+ * Атом пытается покинуть содержимое этого атома
  *
- * Default behaviour is to send the [COMSIG_ATOM_EXIT]
+ * Поведение по умолчанию — отправить сигнал [COMSIG_ATOM_EXIT]
  */
 /atom/Exit(atom/movable/leaving, direction)
-	// Don't call `..()` here, otherwise `Uncross()` gets called.
-	// See the doc comment on `Uncross()` to learn why this is bad.
+	// Не вызывайте `..()` здесь, иначе будет вызван `Uncross()`.
+	// Смотрите комментарий к `Uncross()`, чтобы узнать, почему это плохо.
 
 	if(SEND_SIGNAL(src, COMSIG_ATOM_EXIT, leaving, direction) & COMPONENT_ATOM_BLOCK_EXIT)
 		return FALSE
@@ -614,29 +616,29 @@
 	return TRUE
 
 /**
- * An atom has exited this atom's contents
+ * Атом покинул содержимое этого атома
  *
- * Default behaviour is to send the [COMSIG_ATOM_EXITED]
+ * Поведение по умолчанию — отправить сигнал [COMSIG_ATOM_EXITED]
  */
 /atom/Exited(atom/movable/gone, direction)
 	SEND_SIGNAL(src, COMSIG_ATOM_EXITED, gone, direction)
 	SEND_SIGNAL(gone, COMSIG_ATOM_EXITING, src, direction)
 
-///Return atom temperature
+///Возвращает температуру атома
 /atom/proc/return_temperature()
 	return
 
 /atom/proc/process_recipes(mob/living/user, obj/item/processed_object, list/processing_recipes)
-	//Only one recipe? use the first
+	//Только один рецепт? используем первый
 	if(processing_recipes.len == 1)
 		StartProcessingAtom(user, processed_object, processing_recipes[1])
 		return
-	//Otherwise, select one with a radial
+	//В противном случае выбираем один через радиальное меню
 	ShowProcessingGui(user, processed_object, processing_recipes)
 
-///Creates the radial and processes the selected option
+///Создает радиальное меню и обрабатывает выбранный вариант
 /atom/proc/ShowProcessingGui(mob/living/user, obj/item/processed_object, list/possible_options)
-	var/list/choices_to_options = list() //Dict of object name | dict of object processing settings
+	var/list/choices_to_options = list() //Словарь имени объекта | словарь настроек обработки объекта
 	var/list/choices = list()
 
 	for(var/list/current_option as anything in possible_options)
@@ -655,7 +657,7 @@
 /atom/proc/StartProcessingAtom(mob/living/user, obj/item/process_item, list/chosen_option)
 	var/processing_time = chosen_option[TOOL_PROCESSING_TIME]
 	var/sound_to_play = chosen_option[TOOL_PROCESSING_SOUND]
-	to_chat(user, span_notice("You start working on [src]."))
+	to_chat(user, span_notice("Вы начинаете работать над [RU_SRC_INS]."))
 	if(sound_to_play)
 		playsound(src, sound_to_play, 50, TRUE)
 	if(!process_item.use_tool(src, user, processing_time, volume=50))
@@ -674,7 +676,7 @@
 			created_atom.pixel_x += rand(-8,8)
 			created_atom.pixel_y += rand(-8,8)
 		created_atoms.Add(created_atom)
-	to_chat(user, span_notice("You manage to create [amount_to_create] [initial(atom_to_create.gender) == PLURAL ? "[initial(atom_to_create.name)]" : "[initial(atom_to_create.name)][plural_s(initial(atom_to_create.name))]"] from [src]."))
+	to_chat(user, span_notice("Вам удалось создать [amount_to_create] [initial(atom_to_create.gender) == PLURAL ? "[initial(atom_to_create.name)]" : "[initial(atom_to_create.name)][plural_s(initial(atom_to_create.name))]"] из [RU_SRC_GEN]."))
 	SEND_SIGNAL(src, COMSIG_ATOM_PROCESSED, user, process_item, created_atoms)
 	UsedforProcessing(user, process_item, chosen_option, created_atoms)
 
@@ -686,13 +688,13 @@
 	SHOULD_CALL_PARENT(TRUE)
 
 	if(HAS_TRAIT(original_atom, TRAIT_FOOD_SILVER))
-		ADD_TRAIT(src, TRAIT_FOOD_SILVER, INNATE_TRAIT) // stinky food always stinky
+		ADD_TRAIT(src, TRAIT_FOOD_SILVER, INNATE_TRAIT) // вонючая еда всегда вонючая
 
 	SEND_SIGNAL(src, COMSIG_ATOM_CREATEDBY_PROCESSING, original_atom, chosen_option)
 	if(user.mind)
 		ADD_TRAIT(src, TRAIT_FOOD_CHEF_MADE, REF(user.mind))
 
-///Connect this atom to a shuttle
+///Подключить этот атом к шаттлу
 /atom/proc/connect_to_shuttle(mapload, obj/docking_port/mobile/port, obj/docking_port/stationary/dock)
 	return
 
@@ -700,7 +702,7 @@
 	SHOULD_CALL_PARENT(TRUE)
 	. |= SEND_SIGNAL(src, COMSIG_ATOM_INTERCEPT_Z_FALL, falling_movables, levels)
 
-///Setter for the `density` variable to append behavior related to its changing.
+///Сеттер для переменной `density` для добавления поведения, связанного с ее изменением.
 /atom/proc/set_density(new_value)
 	SHOULD_CALL_PARENT(TRUE)
 	if(density == new_value)
@@ -709,7 +711,7 @@
 	density = new_value
 	SEND_SIGNAL(src, COMSIG_ATOM_DENSITY_CHANGED)
 
-///Setter for the `base_pixel_x` variable to append behavior related to its changing.
+///Сеттер для переменной `base_pixel_x` для добавления поведения, связанного с ее изменением.
 /atom/proc/set_base_pixel_x(new_value)
 	if(base_pixel_x == new_value)
 		return
@@ -718,7 +720,7 @@
 
 	pixel_x = pixel_x + base_pixel_x - .
 
-///Setter for the `base_pixel_y` variable to append behavior related to its changing.
+///Сеттер для переменной `base_pixel_y` для добавления поведения, связанного с ее изменением.
 /atom/proc/set_base_pixel_y(new_value)
 	if(base_pixel_y == new_value)
 		return
@@ -727,37 +729,37 @@
 
 	pixel_y = pixel_y + base_pixel_y - .
 
-// Not a valid operation, turfs and movables handle block differently
+// Не допустимая операция, тайлы и движущиеся объекты обрабатывают блок по-разному
 /atom/proc/set_explosion_block(explosion_block)
 	return
 
 /**
- * Returns true if this atom has gravity for the passed in turf
+ * Возвращает true, если этот атом имеет гравитацию для переданного тайла
  *
- * Sends signals [COMSIG_ATOM_HAS_GRAVITY] and [COMSIG_TURF_HAS_GRAVITY], both can force gravity with
- * the forced gravity var.
+ * Отправляет сигналы [COMSIG_ATOM_HAS_GRAVITY] и [COMSIG_TURF_HAS_GRAVITY], оба могут форсировать гравитацию с помощью
+ * переменной forced_gravity.
  *
- * micro-optimized to hell because this proc is very hot, being called several times per movement every movement.
+ * Микрооптимизировано до предела, потому что эта процедура очень горячая, вызывается несколько раз за движение при каждом движении.
  *
- * HEY JACKASS, LISTEN
- * IF YOU ADD SOMETHING TO THIS PROC, MAKE SURE /mob/living ACCOUNTS FOR IT
- * Living mobs treat gravity in an event based manner. We've decomposed this proc into different checks
- * for them to use. If you add more to it, make sure you do that, or things will behave strangely
+ * ЭЙ, ОЛУХ, СЛУШАЙ
+ * ЕСЛИ ТЫ ДОБАВИШЬ ЧТО-ТО В ЭТУ ПРОЦЕДУРУ, УБЕДИСЬ, ЧТО /mob/living УЧИТЫВАЕТ ЭТО
+ * Живые мобы обрабатывают гравитацию событийным образом. Мы разложили эту процедуру на различные проверки
+ * для них. Если вы добавите что-то еще, убедитесь, что вы это сделали, иначе все будет вести себя странно
  *
- * Gravity situations:
- * * No gravity if you're not in a turf
- * * No gravity if this atom is in is a space turf
- * * No gravity if the area has NO_GRAVITY flag (space, ordnance bomb site, nearstation, solars)
- * * Gravity if the area it's in always has gravity
- * * Gravity if there's a gravity generator on the z level
- * * Gravity if the Z level has an SSMappingTrait for ZTRAIT_GRAVITY
- * * otherwise no gravity
+ * Ситуации с гравитацией:
+ * * Нет гравитации, если вы не в тайле
+ * * Нет гравитации, если этот атом находится в космическом тайле
+ * * Нет гравитации, если у зоны есть флаг NO_GRAVITY (космос, место взрыва орбитальной бомбы, ближняя станция, соляры)
+ * * Гравитация, если зона, в которой он находится, всегда имеет гравитацию
+ * * Гравитация, если на Z-уровне есть генератор гравитации
+ * * Гравитация, если у Z-уровня есть SSMappingTrait для ZTRAIT_GRAVITY
+ * * в противном случае нет гравитации
  */
 /atom/proc/has_gravity(turf/gravity_turf)
 	if(!isturf(gravity_turf))
 		gravity_turf = get_turf(src)
 
-		if(!gravity_turf)//no gravity in nullspace
+		if(!gravity_turf)//нет гравитации в нуль-пространстве
 			return FALSE
 
 	var/list/forced_gravity = list()
@@ -765,11 +767,11 @@
 	SEND_SIGNAL(gravity_turf, COMSIG_TURF_HAS_GRAVITY, src, forced_gravity)
 	if(length(forced_gravity))
 		var/positive_grav = max(forced_gravity)
-		var/negative_grav = min(min(forced_gravity), 0) //negative grav needs to be below or equal to 0
+		var/negative_grav = min(min(forced_gravity), 0) //отрицательная гравитация должна быть ниже или равна 0
 
-		//our gravity is sum of the most massive positive and negative numbers returned by the signal
-		//so that adding two forced_gravity elements with an effect size of 1 each doesnt add to 2 gravity
-		//but negative force gravity effects can cancel out positive ones
+		//наша гравитация — это сумма самых больших положительных и отрицательных чисел, возвращенных сигналом
+		//чтобы добавление двух элементов forced_gravity с размером эффекта 1 каждый не складывалось в 2 гравитации
+		//но эффекты отрицательной силы гравитации могут компенсировать положительные
 
 		return (positive_grav + negative_grav)
 
@@ -778,34 +780,34 @@
 	return (!gravity_turf.force_no_gravity && !(turf_area.area_flags & NO_GRAVITY)) && (SSmapping.gravity_by_z_level[gravity_turf.z] || turf_area.default_gravity)
 
 /**
- * Used to set something as 'open' if it's being used as a supplypod
+ * Используется для установки чего-либо как 'открытого', если это используется в качестве грузового контейнера
  *
- * Override this if you want an atom to be usable as a supplypod.
+ * Переопределите это, если вы хотите, чтобы атом можно было использовать в качестве грузового контейнера.
  */
 /atom/proc/setOpened()
 	return
 
 /**
- * Used to set something as 'closed' if it's being used as a supplypod
+ * Используется для установки чего-либо как 'закрытого', если это используется в качестве грузового контейнера
  *
- * Override this if you want an atom to be usable as a supplypod.
+ * Переопределите это, если вы хотите, чтобы атом можно было использовать в качестве грузового контейнера.
  */
 /atom/proc/setClosed()
 	return
 
-///Called after the atom is 'tamed' for type-specific operations, Usually called by the tameable component but also other things.
+///Вызывается после того, как атом 'приручен' для операций, специфичных для типа. Обычно вызывается компонентом tameable, но также и другими вещами.
 /atom/proc/tamed(mob/living/tamer, obj/item/food)
 	return
 
 /**
- * Used to attempt to charge an object with a payment component.
+ * Используется для попытки зарядить объект с компонентом оплаты.
  *
- * Use this if an atom needs to attempt to charge another atom.
+ * Используйте это, если атому нужно попытаться зарядить другой атом.
  */
 /atom/proc/attempt_charge(atom/sender, atom/target, extra_fees = 0)
 	return SEND_SIGNAL(sender, COMSIG_OBJ_ATTEMPT_CHARGE, target, extra_fees)
 
-///Passes Stat Browser Panel clicks to the game and calls client click on an atom
+///Передает клики панели статистики браузера в игру и вызывает клик клиента на атоме
 /atom/Topic(href, list/href_list)
 	. = ..()
 	if(!usr?.client)
@@ -838,9 +840,9 @@
 /atom/MouseEntered(location, control, params)
 	SSmouse_entered.hovers[usr.client] = src
 
-/// Fired whenever this atom is the most recent to be hovered over in the tick.
-/// Preferred over MouseEntered if you do not need information such as the position of the mouse.
-/// Especially because this is deferred over a tick, do not trust that `client` is not null.
+/// Вызывается всякий раз, когда этот атом является самым последним, на который навели курсор за тик.
+/// Предпочтительнее MouseEntered, если вам не нужна информация, такая как позиция мыши.
+/// Особенно потому, что это отложено на тик, не доверяйте, что `client` не равен null.
 /atom/proc/on_mouse_enter(client/client)
 	SHOULD_NOT_SLEEP(TRUE)
 
@@ -850,7 +852,7 @@
 
 	SEND_SIGNAL(user, COMSIG_ATOM_MOUSE_ENTERED, src)
 
-	// Screentips
+	// Скрин-подсказки
 	var/datum/hud/active_hud = user.hud_used
 	if(!active_hud)
 		return
@@ -866,7 +868,7 @@
 	var/shift_lmb_ctrl_shift_lmb_line = ""
 	var/extra_lines = 0
 	var/extra_context = ""
-	var/used_name = declent_ru(NOMINATIVE)
+	var/used_name = RU_SRC_NOM
 
 	if(isliving(user) || isovermind(user) || iscameramob(user) || (ghost_screentips && isobserver(user)))
 		var/obj/item/held_item = user.get_active_held_item()
@@ -887,7 +889,7 @@
 
 			if (contextual_screentip_returns & CONTEXTUAL_SCREENTIP_SET)
 				var/screentip_images = active_hud.screentip_images
-				// LMB and RMB on one line...
+				// ЛКМ и ПКМ на одной строке...
 				var/lmb_text = build_context(context, SCREENTIP_CONTEXT_LMB, screentip_images)
 				var/rmb_text = build_context(context, SCREENTIP_CONTEXT_RMB, screentip_images)
 
@@ -898,7 +900,7 @@
 				else if (rmb_text != "")
 					lmb_rmb_line = rmb_text
 
-				// Ctrl-LMB, Ctrl-RMB on one line...
+				// Ctrl-ЛКМ, Ctrl-ПКМ на одной строке...
 				if (lmb_rmb_line != "")
 					lmb_rmb_line += "<br>"
 					extra_lines++
@@ -910,7 +912,7 @@
 						ctrl_lmb_ctrl_rmb_line += " | "
 					ctrl_lmb_ctrl_rmb_line += build_context(context, SCREENTIP_CONTEXT_CTRL_RMB, screentip_images)
 
-				// Alt-LMB, Alt-RMB on one line...
+				// Alt-ЛКМ, Alt-ПКМ на одной строке...
 				if (ctrl_lmb_ctrl_rmb_line != "")
 					ctrl_lmb_ctrl_rmb_line += "<br>"
 					extra_lines++
@@ -921,7 +923,7 @@
 						alt_lmb_alt_rmb_line += " | "
 					alt_lmb_alt_rmb_line += build_context(context, SCREENTIP_CONTEXT_ALT_RMB, screentip_images)
 
-				// Shift-LMB, Ctrl-Shift-LMB on one line...
+				// Shift-ЛКМ, Ctrl-Shift-ЛКМ на одной строке...
 				if (alt_lmb_alt_rmb_line != "")
 					alt_lmb_alt_rmb_line += "<br>"
 					extra_lines++
@@ -942,7 +944,7 @@
 	if (screentips_enabled == SCREENTIP_PREFERENCE_CONTEXT_ONLY && extra_context == "")
 		new_maptext = ""
 	else
-		//We inline a MAPTEXT() here, because there's no good way to statically add to a string like this
+		//Мы встраиваем здесь MAPTEXT(), потому что нет хорошего способа статически добавить к строке, подобной этой
 		new_maptext = "<span class='context' style='text-align: center; color: [active_hud.screentip_color]'>[used_name][extra_context]</span>"
 
 	if (length(used_name) * 10 > active_hud.screentip_text.maptext_width)
@@ -959,19 +961,19 @@
 	active_hud.screentip_text.maptext_y = 26 - map_height
 
 /**
- * This proc is used for telling whether something can pass by this atom in a given direction, for use by the pathfinding system.
+ * Эта процедура используется для определения, может ли что-то пройти мимо этого атома в заданном направлении, для использования системой поиска пути.
  *
- * Trying to generate one long path across the station will call this proc on every single object on every single tile that we're seeing if we can move through, likely
- * multiple times per tile since we're likely checking if we can access said tile from multiple directions, so keep these as lightweight as possible.
+ * Попытка сгенерировать один длинный путь через станцию вызовет эту процедуру на каждом объекте на каждом тайле, через который мы пытаемся пройти, вероятно,
+ * несколько раз на тайл, поскольку мы, скорее всего, проверяем, можем ли мы получить доступ к этому тайлу с нескольких направлений, так что делайте это как можно легче.
  *
- * For turfs this will only be used if pathing_pass_method is TURF_PATHING_PASS_PROC
+ * Для тайлов это будет использоваться только если pathing_pass_method равен TURF_PATHING_PASS_PROC
  *
- * Arguments:
- * * to_dir - What direction we're trying to move in, relevant for things like directional windows that only block movement in certain directions
- * * pass_info - Datum that stores info about the thing that's trying to pass us
+ * Аргументы:
+ * * to_dir - В каком направлении мы пытаемся двигаться, актуально для таких вещей, как направленные окна, которые блокируют движение только в определенных направлениях
+ * * pass_info - Датум, который хранит информацию о том, что пытается пройти через нас
  *
- * IMPORTANT NOTE: /turf/proc/LinkBlockedWithAccess assumes that overrides of CanAStarPass will always return true if density is FALSE
- * If this is NOT you, ensure you edit your can_astar_pass variable. Check __DEFINES/path.dm
+ * ВАЖНОЕ ПРИМЕЧАНИЕ: /turf/proc/LinkBlockedWithAccess предполагает, что переопределения CanAStarPass всегда возвращают true, если density равна FALSE
+ * Если это НЕ ваш случай, убедитесь, что вы редактируете свою переменную can_astar_pass. Проверьте __DEFINES/path.dm
  **/
 /atom/proc/CanAStarPass(to_dir, datum/can_pass_info/pass_info)
 	if(pass_info.pass_flags & pass_flags_self)
