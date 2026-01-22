@@ -1,19 +1,18 @@
-/// Create a "Type-B" contextual screentip interaction, registering to `add_context()`.
-/// This will run `add_context()` when the atom is hovered over by an item for context.
-/// `add_context()` will *not* be called unless this is run.
-/// This is not necessary for Type-B interactions, as you can just apply the flag and register to the signal yourself.
+/// Создать контекстную подсказку типа "Type-B", регистрируя `add_context()`.
+/// `add_context()` будет вызываться при наведении предмета на этот атом.
+/// `add_context()` *не* сработает без вызова этой процедуры.
+/// Для типа "Type-B" это не обязательно, можно вручную добавить флаг и сигнал.
 /atom/proc/register_context()
 	flags_1 |= HAS_CONTEXTUAL_SCREENTIPS_1
 	RegisterSignal(src, COMSIG_ATOM_REQUESTING_CONTEXT_FROM_ITEM, PROC_REF(add_context))
 
-/// Creates a "Type-B" contextual screentip interaction.
-/// When a user hovers over this, this proc will be called in order
-/// to provide context for contextual screentips.
-/// You must call `register_context()` in order for this to be registered.
-/// A screentip context list is a list that has context keys (SCREENTIP_CONTEXT_*, from __DEFINES/screentips.dm)
-/// that map to the action as text.
-/// If you mutate the list in this signal, you must return CONTEXTUAL_SCREENTIP_SET.
-/// `source` can, in all cases, be replaced with `src`, and only exists because this proc directly connects to a signal.
+/// Создать контекстную подсказку типа "Type-B".
+/// Вызывается при наведении предмета на этот атом для отображения подсказки.
+/// Для работы необходимо вызвать `register_context()`.
+/// Контекстный список использует ключи SCREENTIP_CONTEXT_* (из __DEFINES/screentips.dm),
+/// сопоставленные с текстом действия.
+/// При изменении списка внутри сигнала вернуть CONTEXTUAL_SCREENTIP_SET.
+/// `source` можно заменить на `src`, присутствует из-за связи с сигналом.
 /atom/proc/add_context(
 	atom/source,
 	list/context,
